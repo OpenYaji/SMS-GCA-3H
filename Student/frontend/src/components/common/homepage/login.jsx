@@ -6,38 +6,6 @@ import Bg from '../../../assets/img/bg.png';
 import Logo from '../../../assets/img/gymnazu.png';
 import SuccessModal from "../../modals/SuccessModal";
 
-const ROLES = {
-  STUDENT: {
-    id: 'student',
-    label: 'Student',
-    icon: GraduationCap
-  },
-  ADMIN: {
-    id: 'admin',
-    label: 'Admin',
-    icon: UserCog,
-    url: 'https://admin-gcanovaliches.netlify.app'
-  },
-  REGISTRAR: {
-    id: 'registrar',
-    label: 'Registrar',
-    icon: ClipboardList,
-    url: 'https://registrar-gcanovaliches.netlify.app'
-  },
-  TEACHER: {
-    id: 'teacher',
-    label: 'Teacher',
-    icon: BookOpen,
-    url: 'https://teacher-gcanovaliches.netlify.app'
-  },
-  GUARD: {
-    id: 'guard',
-    label: 'Guard',
-    icon: Shield,
-    url: 'https://guard-gcanovaliches.netlify.app'
-  }
-};
-
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -45,28 +13,10 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState('');
-  const [selectedRole, setSelectedRole] = useState(ROLES.STUDENT.id);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleRoleChange = (roleId) => {
-    if (roleId === selectedRole) return;
-
-    setIsTransitioning(true);
-    setError('');
-
-    setTimeout(() => {
-      setSelectedRole(roleId);
-      setUsername('');
-      setPassword('');
-      setIsTransitioning(false);
-    }, 200);
-  };
-
-  const handleStaffRedirect = (url) => {
-    window.location.href = url;
-  };
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -101,9 +51,6 @@ const Login = () => {
     }
   };
 
-  const isStudentRole = selectedRole === ROLES.STUDENT.id;
-  const currentRole = Object.values(ROLES).find(role => role.id === selectedRole);
-  const CurrentRoleIcon = currentRole?.icon;
 
   return (
     <>
@@ -117,7 +64,8 @@ const Login = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${Bg})` }}
         >
-          <div className="absolute inset-0 bg-stone-900/60 dark:bg-black/70 z-0 transition-colors duration-300"></div>
+          <div className="absolute inset-0 bg-stone-900/60 dark:bg-black/70 z-0 transition-colors duration-300">
+          </div>
         </div>
 
         <div className="relative z-10 w-full max-w-sm mx-4 p-5 sm:p-6 rounded-2xl shadow-xl bg-stone-800/60 dark:bg-gray-900/70 border border-stone-700 dark:border-gray-600 backdrop-blur-sm transition-all duration-300">
@@ -129,46 +77,9 @@ const Login = () => {
             />
           </div>
 
-          {/* Role Selector */}
-          <div className="mb-3 sm:mb-4">
-            <label className="block text-[10px] sm:text-xs text-gray-300 mb-1.5 font-medium tracking-wide">Login as:</label>
-            <div className="grid grid-cols-5 gap-1.5 p-1 bg-stone-900/50 dark:bg-gray-800/50 rounded-xl border border-stone-600 dark:border-gray-700">
-              {Object.values(ROLES).map((role) => {
-                const IconComponent = role.icon;
-                return (
-                  <button
-                    key={role.id}
-                    type="button"
-                    onClick={() => handleRoleChange(role.id)}
-                    className={`
-                      relative flex flex-col items-center justify-center py-2 px-1 rounded-lg
-                      transition-all duration-300 ease-in-out
-                      ${selectedRole === role.id
-                        ? 'bg-amber-400 text-gray-900 shadow-lg scale-105'
-                        : 'text-gray-300 hover:bg-stone-700/50 dark:hover:bg-gray-700/50'
-                      }
-                    `}
-                    aria-label={`Login as ${role.label}`}
-                  >
-                    <IconComponent className="w-5 h-5 mb-0.5" strokeWidth={2.5} />
-                    <span className="text-[9px] font-semibold leading-tight">{role.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {error && (
-            <div className="mb-3 p-2 sm:p-2.5 bg-red-500/20 border border-red-500 rounded-lg text-red-200 text-xs text-center">
-              {error}
-            </div>
-          )}
 
           {/* Student Login Form */}
-          <div className={`
-            transition-all duration-300 ease-in-out
-            ${isStudentRole && !isTransitioning ? 'opacity-100 max-h-80' : 'opacity-0 max-h-0 overflow-hidden'}
-          `}>
+          <div className="mb-4 sm:mb-5">
             <form className="space-y-2.5 sm:space-y-3" onSubmit={handleSubmit}>
               <div className="relative">
                 <input
@@ -225,43 +136,7 @@ const Login = () => {
             </form>
           </div>
 
-          {/* Staff Portal Redirect */}
-          <div className={`
-            transition-all duration-300 ease-in-out
-            ${!isStudentRole && !isTransitioning ? 'opacity-100 max-h-80' : 'opacity-0 max-h-0 overflow-hidden'}
-          `}>
-            <div className="space-y-3 py-3 sm:py-4">
-              <div className="text-center space-y-1">
-                {CurrentRoleIcon && (
-                  <div className="flex justify-center mb-2">
-                    <CurrentRoleIcon className="w-12 h-12 sm:w-14 sm:h-14 text-amber-400" strokeWidth={2} />
-                  </div>
-                )}
-                <h3 className="text-white text-base font-semibold">{currentRole?.label} Portal</h3>
-                <p className="text-gray-300 text-xs">You will be redirected to the {currentRole?.label.toLowerCase()} portal</p>
-              </div>
-
-              <button
-                onClick={() => handleStaffRedirect(currentRole?.url)}
-                className="w-full py-2 sm:py-2.5 text-gray-900 font-semibold rounded-full bg-amber-400 hover:bg-amber-300 transition duration-300 shadow-lg text-sm flex items-center justify-center gap-2 group"
-              >
-                <span>Continue to Portal</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              <div className="text-center">
-                <p className="text-xs text-gray-400">
-                  Or{' '}
-                  <button
-                    onClick={() => handleRoleChange(ROLES.STUDENT.id)}
-                    className="text-amber-400 hover:underline font-medium"
-                  >
-                    login as student
-                  </button>
-                </p>
-              </div>
-            </div>
-          </div>
+    
 
           <div className="text-center mt-3 sm:mt-4 text-xs text-gray-300">
             Need help? Contact the <Link to="/#contact-us" className="font-semibold text-amber-400 hover:underline">School Office</Link>

@@ -49,7 +49,7 @@ class ApplicantController {
     }
 }
 
-    // ✅ Refactored validateApplicant for current table structure
+    // Refactored validateApplicant for current table structure
     public function validateApplicant($applicantId) {
         $rows = $this->model->validateApplicant($applicantId);
         if ($rows > 0) {

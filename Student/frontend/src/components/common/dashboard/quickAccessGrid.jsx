@@ -2,10 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   NotebookText, 
-  CalendarDays, 
   FileText, 
   CreditCard, 
-  Library, 
   MessageCircleQuestion 
 } from 'lucide-react';
 
@@ -69,13 +67,6 @@ const QuickAccessGrid = () => {
       subtitle: 'View Balance',
       tooltipText: 'Go to Payment Portal',
       path: '/student-dashboard/transaction/payment-portal'
-    },
-    { 
-      icon: <Library size={20} />, 
-      title: 'Library Access', 
-      subtitle: 'No Books Available now',
-      tooltipText: 'Open Library Portal',
-      path: '/student-dashboard/library' 
     },
     { 
       icon: <MessageCircleQuestion size={20} />, 

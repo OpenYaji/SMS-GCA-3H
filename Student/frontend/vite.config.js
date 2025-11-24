@@ -9,8 +9,9 @@ export default defineConfig({
     
     proxy: {
       '/backend': {
-        target: 'http://localhost/Gymazo-Student-Side', 
+        target: 'http://localhost', 
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/backend/, '/SMS-GCA-3D/Student/backend')
       },
     },
   },

@@ -15,6 +15,7 @@ const TextSundoPage = () => {
     const [formData, setFormData] = useState({
         fullName: '',
         relationship: '',
+        customRelationship: '', // Added to store specific input (e.g., Driver)
         contactNumber: '',
         address: '',
         additionalNotes: ''
@@ -29,7 +30,7 @@ const TextSundoPage = () => {
         'Aunt',
         'Uncle',
         'Sibling',
-        'Other'
+        'Other' // This triggers the new input
     ];
 
     useEffect(() => {
@@ -38,19 +39,18 @@ const TextSundoPage = () => {
 
     const fetchEscorts = async () => {
         try {
-            const response = await axios.get('/backend/api/textsundo/getEscorts.php', {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            const response = await axios.get('http://localhost/SMS-GCA-3D/Student/backend/api/escorts/getAuthorizedEscort.php', {
+                withCredentials: true
             });
             if (response.data.success) {
                 setEscorts(response.data.escorts || []);
+            } else {
+                setError(response.data.message || 'Failed to load escorts');
             }
         } catch (err) {
             console.error('Error fetching escorts:', err);
-            // Sample data for demonstration
-            setEscorts([
-                { id: 1, fullName: 'Maria Santos', relationship: 'Mother', contactNumber: '09123456789', status: 'approved', dateAdded: '2024-01-15' },
-                { id: 2, fullName: 'Juan dela Cruz', relationship: 'Father', contactNumber: '09987654321', status: 'pending', dateAdded: '2024-01-20' }
-            ]);
+            console.error('Error response:', err.response?.data);
+            setError(err.response?.data?.message || 'Failed to load escorts');
         }
     };
 
@@ -67,21 +67,33 @@ const TextSundoPage = () => {
         setError('');
         setLoading(true);
 
-        if (!formData.fullName || !formData.relationship || !formData.contactNumber) {
+        const finalRelationship = formData.relationship === 'Other'
+            ? formData.customRelationship
+            : formData.relationship;
+
+        if (!formData.fullName || !finalRelationship || !formData.contactNumber) {
             setError('Please fill in all required fields');
             setLoading(false);
             return;
         }
 
+        const payload = {
+            fullName: formData.fullName,
+            relationship: finalRelationship,
+            contactNumber: formData.contactNumber,
+            address: formData.address || null,
+            additionalNotes: formData.additionalNotes || null
+        };
+
         try {
             const response = await axios.post(
-                '/backend/api/textsundo/addEscort.php',
-                formData,
+                'http://localhost/SMS-GCA-3D/Student/backend/api/escorts/postAuthorizedEscort.php',
+                payload,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
                 }
             );
 
@@ -90,6 +102,7 @@ const TextSundoPage = () => {
                 setFormData({
                     fullName: '',
                     relationship: '',
+                    customRelationship: '',
                     contactNumber: '',
                     address: '',
                     additionalNotes: ''
@@ -97,8 +110,12 @@ const TextSundoPage = () => {
                 setShowAddForm(false);
                 fetchEscorts();
                 setTimeout(() => setSubmitSuccess(false), 5000);
+            } else {
+                setError(response.data.message || 'Failed to submit escort request');
             }
         } catch (err) {
+            console.error('Error submitting escort:', err);
+            console.error('Error response:', err.response?.data);
             setError(err.response?.data?.message || 'Failed to submit escort request');
         } finally {
             setLoading(false);
@@ -134,7 +151,7 @@ const TextSundoPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+        <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300">
             <div className="max-w mx-auto">
 
                 {/* Back Button and Header */}
@@ -230,7 +247,7 @@ const TextSundoPage = () => {
                                     />
                                 </div>
 
-                                {/* Relationship */}
+                                {/* Relationship Dropdown */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Relationship <span className="text-red-500">*</span>
@@ -247,6 +264,22 @@ const TextSundoPage = () => {
                                             <option key={rel} value={rel}>{rel}</option>
                                         ))}
                                     </select>
+
+                                    {/* Custom Relationship Input - Shows only when 'Other' is selected */}
+                                    {formData.relationship === 'Other' && (
+                                        <div className="mt-3 animate-fadeIn">
+                                            <input
+                                                type="text"
+                                                name="customRelationship"
+                                                value={formData.customRelationship}
+                                                onChange={handleInputChange}
+                                                placeholder="Please specify (e.g., Driver, Nanny)"
+                                                className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-[#F4D77D] focus:border-[#F4D77D] transition"
+                                                required
+                                                autoFocus
+                                            />
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Contact Number */}
@@ -344,7 +377,7 @@ const TextSundoPage = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {escorts.map((escort) => (
                                 <div
-                                    key={escort.id}
+                                    key={escort.EscortID}
                                     className="p-4 border border-gray-200 dark:border-slate-700 rounded-lg hover:shadow-md transition-shadow"
                                 >
                                     <div className="flex items-start justify-between mb-3">
@@ -353,7 +386,7 @@ const TextSundoPage = () => {
                                                 <User size={24} className="text-gray-800" />
                                             </div>
                                             <div>
-                                                <h3 className="font-semibold text-gray-800 dark:text-white">{escort.fullName}</h3>
+                                                <h3 className="font-semibold text-gray-800 dark:text-white">{escort.FullName}</h3>
                                                 <p className="text-sm text-gray-600 dark:text-gray-400">{escort.relationship}</p>
                                             </div>
                                         </div>
@@ -361,8 +394,11 @@ const TextSundoPage = () => {
                                     </div>
 
                                     <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                                        <p>📱 {escort.contactNumber}</p>
-                                        {escort.address && <p>📍 {escort.address}</p>}
+                                        <p>📱 {escort.ContactNumber}</p>
+                                        {escort.Address && <p>📍 {escort.Address}</p>}
+                                        {escort.AdditionalNotes && (
+                                            <p className="text-xs italic">Note: {escort.AdditionalNotes}</p>
+                                        )}
                                         <p className="text-xs">Added: {escort.dateAdded}</p>
                                     </div>
                                 </div>

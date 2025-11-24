@@ -1,0 +1,166 @@
+import React, { useState } from "react";
+import ProfileInfo from "../components/profile/ProfileInfo";
+import MedicalInfo from "../components/profile/MedicalInfo";
+import ActivityLog from "../components/profile/ActivityLog";
+import Tabs from "../components/profile/Tabs";
+import ChangePasswordModal from "../components/profile/modals/ChangePasswordModal";
+import SuccessModal from "../components/profile/modals/SuccessModal";
+
+const Profile = () => {
+  const [activeTab, setActiveTab] = useState("profile");
+  const [showCurrentPasswordModal, setShowCurrentPasswordModal] =
+    useState(false);
+  const [showNewPasswordModal, setShowNewPasswordModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
+
+  const [profileData, setProfileData] = useState({
+    fullName: "Brian Dijamco",
+    email: "adminbrian1@gmail.com",
+    age: "20",
+    birthday: "2005-06-06",
+    address: "Brngy. Capri, Novaliches Quezon City Metro Manila",
+    phoneNumber: "09062343969",
+    sex: "Male",
+    nationality: "Filipino",
+    religion: "Iglesia Ni Cristo",
+    motherTongue: "English",
+  });
+
+  const [medicalData, setMedicalData] = useState({
+    weight: "65 kg",
+    height: "169 cm",
+    allergies: "None",
+    medicalConditions: "None",
+    emergencyContact: "Edgardo C. Dijamco",
+    emergencyNumber: "09087893578",
+  });
+
+  const [passwordData, setPasswordData] = useState({
+    current: "",
+    new: "",
+    confirm: "",
+  });
+
+  const togglePasswordVisibility = (field) => {
+    setPasswordVisibility((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
+  const handlePasswordChange = (field, value) => {
+    setPasswordData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleChangePassword = () => {
+    setShowCurrentPasswordModal(true);
+  };
+
+  const handleConfirmCurrentPassword = () => {
+    setShowCurrentPasswordModal(false);
+    setShowNewPasswordModal(true);
+  };
+
+  const handleSaveNewPassword = () => {
+    // Add API call here to change password
+    console.log("Password changed successfully");
+
+    setShowNewPasswordModal(false);
+    setShowSuccessModal(true);
+    setPasswordData({ current: "", new: "", confirm: "" });
+  };
+
+  const tabs = [
+    { id: "profile", label: "Profile" },
+    { id: "activity", label: "Activity Log" },
+  ];
+
+  return (
+    <div className="bg-[whitesmoke] dark:bg-gray-900 pl-6 min-h-screen p-3 transition-colors duration-300">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="font-spartan text-[3em] font-bold mb-2 text-[#404040] dark:text-white">
+            {activeTab === "profile" ? "Profile" : "Activity Log"}
+          </h1>
+        </div>
+        {activeTab === "profile" && (
+          <div className="profile-actions">
+            <button
+              onClick={handleChangePassword}
+              className="bg-yellow-400 dark:bg-gradient-to-r dark:from-blue-500 dark:to-blue-400 text-gray-900 dark:text-white px-6 py-3 rounded-lg font-kumbh font-medium hover:bg-yellow-500 dark:hover:from-blue-600 dark:hover:to-blue-500 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex items-center gap-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 48 48"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="3"
+                >
+                  <path d="M7.23 25q.049-.662.1-1.238c.228-2.505 2.235-4.311 4.746-4.446C15.013 19.16 19.576 19 26 19c6.425 0 10.987.16 13.924.316c2.511.135 4.518 1.941 4.745 4.446c.18 1.973.331 4.69.331 8.238s-.152 6.265-.33 8.238c-.228 2.505-2.235 4.312-4.746 4.446q-.657.035-1.424.07" />
+                  <path d="m31.532 19.043l-.238-4.052a5.303 5.303 0 0 0-10.587 0l-.239 4.052m18.89.244l-.44-5.283A12 12 0 0 0 26.957 3h-1.916a12 12 0 0 0-11.959 11.004l-.44 5.283M10 44a7 7 0 1 1 6.326-10H31a3 3 0 0 1 3 3v5a3 3 0 1 1-6 0v-2h-1v2a3 3 0 1 1-6 0v-2h-4.674A7 7 0 0 1 10 44m-1-7h2" />
+                </g>
+              </svg>
+              Change Password
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Tabs */}
+      <Tabs activeTab={activeTab} onTabChange={setActiveTab} tabs={tabs} />
+
+      {/* Tab Content */}
+      {activeTab === "profile" ? (
+        <div className="grid grid-cols-2 gap-6 max-w-7xl">
+          <ProfileInfo
+            profileData={profileData}
+            setProfileData={setProfileData}
+          />
+          <MedicalInfo
+            medicalData={medicalData}
+            setMedicalData={setMedicalData}
+          />
+        </div>
+      ) : (
+        <div className="max-w-7xl">
+          <ActivityLog />
+        </div>
+      )}
+
+      <ChangePasswordModal
+        showCurrentPasswordModal={showCurrentPasswordModal}
+        showNewPasswordModal={showNewPasswordModal}
+        passwordVisibility={passwordVisibility}
+        passwordData={passwordData}
+        togglePasswordVisibility={togglePasswordVisibility}
+        handlePasswordChange={handlePasswordChange}
+        setShowCurrentPasswordModal={setShowCurrentPasswordModal}
+        setShowNewPasswordModal={setShowNewPasswordModal}
+        handleConfirmCurrentPassword={handleConfirmCurrentPassword}
+        handleSaveNewPassword={handleSaveNewPassword}
+      />
+
+      <SuccessModal
+        showSuccessModal={showSuccessModal}
+        setShowSuccessModal={setShowSuccessModal}
+      />
+    </div>
+  );
+};
+
+export default Profile;

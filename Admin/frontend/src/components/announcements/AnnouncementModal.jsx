@@ -39,17 +39,12 @@ const AnnouncementModal = ({
   const [newBannerPreview, setNewBannerPreview] = useState(null);
   const bannerInputRef = useRef(null);
 
-  // Audience options
   const audienceOptions = ["All Users", "Students", "Teachers", "Parents"];
-
-  // Category options
   const categoryOptions = ["Academic", "Events", "General"];
 
   // Reset form when edit modal opens with current data
   React.useEffect(() => {
     if (type === "edit" && data) {
-      console.log("📝 Editing announcement data:", data);
-
       const backendAudience = data.TargetAudience || data.meta || "All Users";
       const backendCategory = data.Category || "General";
       const backendSummary = data.Summary || data.summary || "";
@@ -109,11 +104,6 @@ const AnnouncementModal = ({
 
     if (!editForm.content.trim()) {
       alert("Please enter some content for your announcement.");
-      return;
-    }
-
-    if (!editForm.summary.trim()) {
-      alert("Please enter a summary for your announcement.");
       return;
     }
 
@@ -293,7 +283,7 @@ const AnnouncementModal = ({
               {/* Summary Input */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-kumbh">
-                  Summary
+                  Summary (Optional)
                 </label>
                 <textarea
                   value={editForm.summary}
@@ -303,7 +293,7 @@ const AnnouncementModal = ({
                       summary: e.target.value,
                     }))
                   }
-                  placeholder="Enter a brief summary..."
+                  placeholder="Enter a brief summary (optional)..."
                   rows="3"
                   className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-600 border border-gray-300 dark:border-gray-500 rounded-xl outline-none resize-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 font-kumbh text-gray-900 dark:text-gray-100"
                   disabled={actionLoading.type === "edit"}

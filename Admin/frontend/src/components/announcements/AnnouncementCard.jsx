@@ -146,8 +146,6 @@ const AnnouncementCard = ({
   const handleTogglePin = (e) => {
     e.stopPropagation();
     if (!isCardLoading) {
-      console.log(`Pin button clicked for announcement ${announcementId}`);
-      console.log(`Current pin status: ${isPinned}`);
       onTogglePin();
     }
   };

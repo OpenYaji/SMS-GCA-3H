@@ -339,10 +339,6 @@ const AnnouncementForm = ({
       alert("Please enter some content.");
       return;
     }
-    if (!summary.trim()) {
-      alert("Please enter a summary.");
-      return;
-    }
 
     let calculatedExpiryDate = expiryDate;
     if (!calculatedExpiryDate) {
@@ -449,10 +445,7 @@ const AnnouncementForm = ({
     }
   };
 
-  const canPost =
-    title.trim().length > 0 &&
-    content.trim().length > 0 &&
-    summary.trim().length > 0;
+  const canPost = title.trim().length > 0 && content.trim().length > 0;
 
   const toggleTooltip = (tooltip, show) => {
     setShowTooltip((prev) => ({
@@ -463,7 +456,7 @@ const AnnouncementForm = ({
 
   return (
     <div className="space-y-0 rounded-xl">
-      {/* Collapsed State - Only Title Input */}
+      {/* Collapsed State  */}
       {!isExpanded && (
         <div
           className="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-yellow-400 dark:hover:border-yellow-500 transition-all duration-200 cursor-text"
@@ -666,19 +659,19 @@ const AnnouncementForm = ({
                 {/* Summary Input */}
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-3 shadow-inner border border-gray-200 dark:border-gray-600">
                   <label className="block text-xs font-kumbh font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Summary
+                    Summary (Optional)
                   </label>
                   <textarea
                     value={summary}
                     onChange={handleSummaryChange}
-                    placeholder="Enter a brief summary of your announcement..."
+                    placeholder="Enter a brief summary of your announcement (optional)..."
                     rows="2"
                     className="w-full px-3 py-2 bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 font-kumbh text-sm text-gray-700 dark:text-gray-300 placeholder-gray-500 dark:placeholder-gray-400"
                     disabled={isSubmitting}
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-kumbh">
                     A short summary that will be displayed in the announcement
-                    card
+                    card (optional)
                   </p>
                 </div>
 
@@ -861,7 +854,7 @@ const AnnouncementForm = ({
                         ? "Posting..."
                         : canPost
                         ? "Post Announcement"
-                        : "Add title, content, and summary to post"}
+                        : "Add title and content to post"}
                       <div
                         className={`absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent ${
                           canPost && !isSubmitting

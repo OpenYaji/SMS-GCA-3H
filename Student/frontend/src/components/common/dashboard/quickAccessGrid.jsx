@@ -70,9 +70,9 @@ const QuickAccessGrid = () => {
     },
     { 
       icon: <MessageCircleQuestion size={20} />, 
-      title: 'Text Sundo', 
-      subtitle: 'Add & Verify New  Sundo',
-      tooltipText: 'Ask a Teacher',
+      title: 'Escorts', 
+      subtitle: 'Add & Verify New Escorts',
+      tooltipText: 'View Authorized Escorts',
       path: '/student-dashboard/text-sundo' 
     }
   ];

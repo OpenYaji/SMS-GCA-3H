@@ -13,19 +13,15 @@ const AuthorizedEscorts = () => {
 
     const fetchEscorts = async () => {
         try {
-            const response = await axios.get('/backend/api/textsundo/getEscorts.php', {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            const response = await axios.get('/backend/api/escorts/getAuthorizedEscort.php', {
+                withCredentials: true
             });
             if (response.data.success) {
                 setEscorts(response.data.escorts || []);
             }
         } catch (err) {
             console.error('Error fetching escorts:', err);
-            // Sample data for demonstration
-            setEscorts([
-                { id: 1, fullName: 'Maria Santos', relationship: 'Mother', contactNumber: '09123456789', status: 'approved' },
-                { id: 2, fullName: 'Juan dela Cruz', relationship: 'Father', contactNumber: '09987654321', status: 'pending' }
-            ]);
+            console.error('Error response:', err.response?.data);
         } finally {
             setLoading(false);
         }
@@ -101,7 +97,7 @@ const AuthorizedEscorts = () => {
                 <div className="space-y-3">
                     {escorts.map((escort) => (
                         <div
-                            key={escort.id}
+                            key={escort.EscortID}
                             className="p-3 border border-gray-200 dark:border-slate-700 rounded-lg hover:shadow-sm transition-shadow"
                         >
                             <div className="flex items-start justify-between mb-2">
@@ -110,14 +106,14 @@ const AuthorizedEscorts = () => {
                                         <User size={18} className="text-gray-800" />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-sm text-gray-800 dark:text-white">{escort.fullName}</h3>
+                                        <h3 className="font-semibold text-sm text-gray-800 dark:text-white">{escort.FullName}</h3>
                                         <p className="text-xs text-gray-600 dark:text-gray-400">{escort.relationship}</p>
                                     </div>
                                 </div>
                                 {getStatusBadge(escort.status)}
                             </div>
                             <div className="ml-12 text-xs text-gray-600 dark:text-gray-400">
-                                <p>📱 {escort.contactNumber}</p>
+                                <p>📱 {escort.ContactNumber}</p>
                             </div>
                         </div>
                     ))}

@@ -1,7 +1,7 @@
 export default function Tabs({ activeTab, onChangeTab, darkMode }) {
   const tabs = [
     "Students",
-    "Parents",
+    "Parents/Escorts",
     "Teachers",
     "Guards",
     "Registrars",

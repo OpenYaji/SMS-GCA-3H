@@ -314,7 +314,7 @@ export default function ManageUsers() {
           </div>
         );
 
-      case "Parents":
+      case "Parents/Escorts":
         return (
           <div className="grid grid-cols-[1fr_320px] gap-6 mt-6">
             <ParentTable

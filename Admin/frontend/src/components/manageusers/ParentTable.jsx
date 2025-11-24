@@ -55,7 +55,7 @@ export default function ParentTable({ onSelectParent }) {
       child: "Mike R. Ross",
       outstandingBalance: 0,
       paymentStatus: "fully_paid",
-      createdAt: "2024-01-17T00:00:00Z",
+      createdAt: "2024-01-17T00:0000Z",
     },
     {
       id: "P-3924",
@@ -272,7 +272,7 @@ export default function ParentTable({ onSelectParent }) {
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           {/* Sort Dropdown */}
-          <div className="relative z-50" ref={sortDropdownRef}>
+          <div className="relative z-30" ref={sortDropdownRef}>
             {" "}
             <button
               onClick={() => setIsSortOpen(!isSortOpen)}
@@ -288,7 +288,7 @@ export default function ParentTable({ onSelectParent }) {
               </span>
             </button>
             {isSortOpen && (
-              <ul className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-[9999] py-1 max-h-60 overflow-y-auto">
+              <ul className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-30 py-1 max-h-60 overflow-y-auto">
                 {sortOptions.map((option) => (
                   <li
                     key={option.value}
@@ -394,9 +394,6 @@ export default function ParentTable({ onSelectParent }) {
                 <th className="px-2 py-2 text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider font-kumbh min-w-[180px]">
                   Child's Name
                 </th>
-                <th className="px-1 py-2 text-[.65rem] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider font-kumbh w-32">
-                  Balance Status
-                </th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -460,25 +457,6 @@ export default function ParentTable({ onSelectParent }) {
                       {truncateName(p.child)}
                     </span>
                   </td>
-                  <td
-                    className={`px-0 ${styles.padding} ${styles.fontSize} font-kumbh`}
-                  >
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        p.paymentStatus === "fully_paid"
-                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
-                          : p.paymentStatus === "partially_paid"
-                          ? "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
-                          : "bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200"
-                      }`}
-                    >
-                      {p.paymentStatus === "fully_paid"
-                        ? "Paid"
-                        : p.paymentStatus === "partially_paid"
-                        ? "Partial"
-                        : "Pending"}
-                    </span>
-                  </td>
                 </tr>
               ))}
             </tbody>
@@ -529,7 +507,7 @@ export default function ParentTable({ onSelectParent }) {
                   </span>
                 </button>
                 {isItemsPerPageOpen && (
-                  <ul className="absolute bottom-full left-0 mb-1 w-full bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-10 py-1 max-h-48 overflow-y-auto">
+                  <ul className="absolute bottom-full left-0 mb-1 w-full bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-30 py-1 max-h-48 overflow-y-auto">
                     {Array.from({ length: 11 }, (_, i) => i + 5).map((num) => (
                       <li
                         key={num}

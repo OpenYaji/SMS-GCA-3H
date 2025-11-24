@@ -476,6 +476,8 @@ export default function TeacherInformationModal({
       setSaving(false);
       setShowScheduleModal(false);
       setApiError("");
+      setSelectedImage(null);
+      setImagePreview(null);
     }
   }, [isOpen]);
 
@@ -586,6 +588,7 @@ export default function TeacherInformationModal({
         ...editData,
         name: formatName(editData),
         profilePicture:
+          imagePreview ||
           result.data?.Profile?.ProfilePictureURL ||
           teacherDetails.profilePicture,
       };
@@ -638,7 +641,14 @@ export default function TeacherInformationModal({
     // Create preview
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImagePreview(reader.result);
+      const previewUrl = reader.result;
+      setImagePreview(previewUrl);
+
+      // Update editData with the preview URL for immediate display
+      setEditData((prev) => ({
+        ...prev,
+        profilePicture: previewUrl,
+      }));
     };
     reader.readAsDataURL(file);
   };
@@ -658,6 +668,16 @@ export default function TeacherInformationModal({
 
   const displayData = isEditing ? editData : teacherDetails;
   const fullName = displayData ? formatName(displayData) : teacher?.name || "";
+
+  const getImageSource = () => {
+    if (imagePreview) return imagePreview;
+    if (isEditing && selectedImage) return imagePreview;
+    if (displayData?.profilePicture) return displayData.profilePicture;
+    if (teacherDetails?.profilePicture) return teacherDetails.profilePicture;
+    return null;
+  };
+
+  const imageSource = getImageSource();
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -811,9 +831,9 @@ export default function TeacherInformationModal({
                       </label>
                     )}
 
-                    {imagePreview || teacherDetails?.profilePicture ? (
+                    {imageSource ? (
                       <img
-                        src={imagePreview || teacherDetails.profilePicture}
+                        src={imageSource}
                         alt={fullName}
                         className="w-full h-full object-cover"
                         onError={(e) => {
@@ -826,11 +846,7 @@ export default function TeacherInformationModal({
                     <div
                       className={`w-full h-full flex items-center justify-center text-white text-2xl font-bold ${
                         darkMode ? "bg-yellow-600" : "bg-yellow-400"
-                      } ${
-                        imagePreview || teacherDetails?.profilePicture
-                          ? "hidden"
-                          : ""
-                      }`}
+                      } ${imageSource ? "hidden" : ""}`}
                     >
                       {fullName
                         .split(" ")

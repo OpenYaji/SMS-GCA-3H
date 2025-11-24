@@ -345,8 +345,6 @@ export default function AdminInformationModal({
     return true;
   };
 
-  // In AdminInformationModal.jsx, update the handleSave function:
-
   const handleSave = async () => {
     if (!validateForm()) return;
 
@@ -389,14 +387,20 @@ export default function AdminInformationModal({
 
       // Fetch fresh admin data to get updated profile picture
       const freshAdminData = await adminService.getAdminById(admin.id);
+      console.log("Fresh admin data after update:", freshAdminData);
+
+      // Extract the updated profile picture from the fresh data
+      const updatedProfilePicture =
+        freshAdminData?.Profile?.ProfilePictureURL ||
+        freshAdminData?.profilePicture ||
+        freshAdminData?.rawData?.Profile?.ProfilePictureURL;
 
       const updatedAdmin = {
         ...adminDetails,
         ...editData,
         ...freshAdminData,
         name: formatName(editData),
-        profilePicture:
-          freshAdminData.profilePicture || adminDetails.profilePicture,
+        profilePicture: updatedProfilePicture || adminDetails?.profilePicture,
       };
 
       setAdminDetails(updatedAdmin);
@@ -426,6 +430,7 @@ export default function AdminInformationModal({
     setSaveError("");
     setSaveSuccess(false);
   };
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -467,6 +472,11 @@ export default function AdminInformationModal({
 
   const displayData = isEditing ? editData : adminDetails;
   const fullName = displayData ? formatName(displayData) : admin?.name || "";
+
+  // Determine which image to display
+  const displayImage =
+    imagePreview ||
+    (isEditing && selectedImage ? imagePreview : adminDetails?.profilePicture);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -618,9 +628,9 @@ export default function AdminInformationModal({
                       </label>
                     )}
 
-                    {imagePreview || adminDetails?.profilePicture ? (
+                    {displayImage ? (
                       <img
-                        src={imagePreview || adminDetails.profilePicture}
+                        src={displayImage}
                         alt={fullName}
                         className="w-full h-full object-cover"
                         onError={(e) => {
@@ -633,11 +643,7 @@ export default function AdminInformationModal({
                     <div
                       className={`w-full h-full flex items-center justify-center text-white text-2xl font-bold ${
                         darkMode ? "bg-yellow-600" : "bg-yellow-400"
-                      } ${
-                        imagePreview || adminDetails?.profilePicture
-                          ? "hidden"
-                          : ""
-                      }`}
+                      } ${displayImage ? "hidden" : ""}`}
                     >
                       {fullName
                         .split(" ")

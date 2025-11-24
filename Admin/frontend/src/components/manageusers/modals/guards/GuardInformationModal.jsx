@@ -170,6 +170,26 @@ const formatNameWithMiddleInitial = (data) => {
   return fullName.trim();
 };
 
+// Helper function to get initials for avatar
+const getInitials = (data) => {
+  if (!data) return "GM";
+
+  if (data.firstName && data.lastName) {
+    return `${data.firstName.charAt(0)}${data.lastName.charAt(
+      0
+    )}`.toUpperCase();
+  }
+
+  return (
+    data.name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "GM"
+  );
+};
+
 export default function GuardInformationModal({
   isOpen,
   onClose,
@@ -289,6 +309,7 @@ export default function GuardInformationModal({
         barangay: "",
         nationality: "Filipino",
         accountEmail: guard.email || "",
+        profilePicture: guard.profilePicture || null,
       };
       setGuardDetails(basicData);
       setEditData(basicData);
@@ -314,7 +335,6 @@ export default function GuardInformationModal({
     }
   }, [guardDetails, isEditing]);
 
-  // Sync location data with editData when editing
   useEffect(() => {
     if (isEditing) {
       setEditData((prev) => ({
@@ -337,6 +357,8 @@ export default function GuardInformationModal({
       setSaveSuccess(false);
       setSaving(false);
       setApiError("");
+      setSelectedImage(null);
+      setImagePreview(null);
     }
   }, [isOpen]);
 
@@ -430,6 +452,7 @@ export default function GuardInformationModal({
           result.data?.Profile?.ProfilePictureURL ||
           guardDetails?.profilePicture,
       };
+
       setGuardDetails(updatedGuard);
 
       if (onGuardUpdate) {
@@ -501,6 +524,12 @@ export default function GuardInformationModal({
   const fullName = displayData
     ? formatNameWithMiddleInitial(displayData)
     : guard?.name || "";
+
+  const displayImage =
+    imagePreview ||
+    (isEditing && selectedImage ? imagePreview : guardDetails?.profilePicture);
+
+  const avatarInitials = getInitials(displayData || guard);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -652,9 +681,9 @@ export default function GuardInformationModal({
                       </label>
                     )}
 
-                    {imagePreview || guardDetails?.profilePicture ? (
+                    {displayImage ? (
                       <img
-                        src={imagePreview || guardDetails.profilePicture}
+                        src={displayImage}
                         alt={fullName}
                         className="w-full h-full object-cover"
                         onError={(e) => {
@@ -667,21 +696,9 @@ export default function GuardInformationModal({
                     <div
                       className={`w-full h-full flex items-center justify-center text-white text-2xl font-bold ${
                         darkMode ? "bg-yellow-600" : "bg-yellow-400"
-                      } ${
-                        imagePreview || guardDetails?.profilePicture
-                          ? "hidden"
-                          : ""
-                      }`}
+                      } ${displayImage ? "hidden" : ""}`}
                     >
-                      {guard?.firstName && guard?.lastName
-                        ? `${guard.firstName.charAt(0)}${guard.lastName.charAt(
-                            0
-                          )}`.toUpperCase()
-                        : guard?.name
-                            ?.split(" ")
-                            .map((n) => n[0])
-                            .join("")
-                            .slice(0, 2) || "GM"}
+                      {avatarInitials}
                     </div>
                   </div>
 
@@ -698,7 +715,8 @@ export default function GuardInformationModal({
                         darkMode ? "text-gray-300" : "text-gray-600"
                       }`}
                     >
-                      Guard ID: {guard.guardId || guard.id}
+                      Guard ID:{" "}
+                      {guardDetails?.guardId || guard?.guardId || guard?.id}
                     </p>
                     <p
                       className={`text-sm mb-1 ${

@@ -22,7 +22,9 @@ const formatNameWithMiddleInitial = (guard) => {
   }
 
   // Fallback to original name parsing
-  const nameParts = guard.name.split(" ").filter((part) => part.trim());
+  const nameParts = guard.name
+    ? guard.name.split(" ").filter((part) => part.trim())
+    : [];
   if (nameParts.length >= 3) {
     // Assume format: First Middle Last
     const firstName = nameParts[0];
@@ -31,7 +33,7 @@ const formatNameWithMiddleInitial = (guard) => {
     return `${firstName} ${middleInitial} ${lastName}`;
   }
 
-  return guard.name;
+  return guard.name || "";
 };
 
 // Helper function to get initials for avatar
@@ -45,12 +47,26 @@ const getInitials = (guard) => {
   }
 
   // Fallback to original logic
-  return guard.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+  return (
+    guard.name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "GM"
+  );
+};
+
+// Get profile picture URL with proper fallback
+const getProfilePicture = (guard) => {
+  if (!guard) return null;
+
+  return (
+    guard.profilePicture ||
+    guard.rawData?.Profile?.ProfilePictureURL ||
+    guard.Profile?.ProfilePictureURL ||
+    null
+  );
 };
 
 export default function GuardProfile({
@@ -66,10 +82,19 @@ export default function GuardProfile({
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [modalMessage, setModalMessage] = useState({ title: "", message: "" });
   const [currentGuard, setCurrentGuard] = useState(null);
+  const [imageError, setImageError] = useState(false);
+
+  // Reset image error when guard changes
+  useEffect(() => {
+    setImageError(false);
+  }, [guard]);
 
   // Update local guard state when prop changes
   useEffect(() => {
-    setCurrentGuard(guard);
+    if (guard) {
+      setCurrentGuard(guard);
+      setImageError(false); // Reset image error when guard changes
+    }
   }, [guard]);
 
   // ARCHIVE HANDLER
@@ -116,19 +141,43 @@ export default function GuardProfile({
 
   const handleGuardInfoUpdated = async (updatedGuard) => {
     try {
+      // Fetch fresh guard data to get updated profile picture
       const response = await guardService.getGuardById(
         updatedGuard.id || guard.id
       );
       const freshGuardData = response.guard || response.data || response;
 
-      setCurrentGuard(freshGuardData);
+      console.log("Fresh guard data after update:", freshGuardData);
+
+      // Extract profile picture from various possible locations
+      const updatedProfilePicture =
+        freshGuardData.profilePicture ||
+        freshGuardData.Profile?.ProfilePictureURL ||
+        freshGuardData.rawData?.Profile?.ProfilePictureURL ||
+        updatedGuard.profilePicture;
+
+      const enhancedGuardData = {
+        ...freshGuardData,
+        profilePicture: updatedProfilePicture,
+        // Ensure we have the basic fields
+        id: freshGuardData.id || updatedGuard.id,
+        name: formatNameWithMiddleInitial(freshGuardData) || updatedGuard.name,
+        email: freshGuardData.email || updatedGuard.email,
+        guardId: freshGuardData.guardId || updatedGuard.guardId,
+        archived: freshGuardData.archived || updatedGuard.archived,
+      };
+
+      setCurrentGuard(enhancedGuardData);
+      setImageError(false); // Reset image error after update
 
       if (onGuardInfoUpdated) {
-        onGuardInfoUpdated(freshGuardData);
+        onGuardInfoUpdated(enhancedGuardData);
       }
     } catch (error) {
       console.error("Error fetching updated guard data:", error);
+      // Fallback to the updated guard data we received
       setCurrentGuard(updatedGuard);
+      setImageError(false); // Reset image error after update
       if (onGuardInfoUpdated) {
         onGuardInfoUpdated(updatedGuard);
       }
@@ -139,6 +188,11 @@ export default function GuardProfile({
   const handleArchiveModalClose = () => setShowArchiveModal(false);
   const handleRestoreModalClose = () => setShowRestoreModal(false);
   const handleErrorModalClose = () => setShowErrorModal(false);
+
+  // Handle image error
+  const handleImageError = () => {
+    setImageError(true);
+  };
 
   // Use currentGuard instead of guard prop for display
   const displayGuard = currentGuard || guard;
@@ -151,35 +205,39 @@ export default function GuardProfile({
     );
   }
 
+  const profilePicture = getProfilePicture(displayGuard);
+  const avatarInitials = getInitials(displayGuard);
+  const formattedName = formatNameWithMiddleInitial(displayGuard);
+
+  // Determine whether to show image or initials
+  const shouldShowImage = profilePicture && !imageError;
+
   return (
     <>
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 font-kumbh">
         {/* Profile Header */}
         <div className="flex flex-col items-center text-center mb-4">
-          <div className="w-24 h-24 rounded-full mb-3 shadow-md overflow-hidden flex-shrink-0">
-            {displayGuard.profilePicture ? (
+          <div className="w-24 h-24 rounded-full mb-3 shadow-md overflow-hidden flex-shrink-0 relative">
+            {shouldShowImage ? (
               <img
-                src={displayGuard.profilePicture}
-                alt={formatNameWithMiddleInitial(displayGuard)}
+                src={profilePicture}
+                alt={formattedName}
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  // Fallback to initials if image fails to load
-                  e.target.style.display = "none";
-                  e.target.nextElementSibling.style.display = "flex";
-                }}
+                onError={handleImageError}
               />
-            ) : null}
-            <div
-              className={`w-full h-full flex items-center justify-center text-white text-3xl font-bold ${
-                darkMode ? "bg-yellow-600" : "bg-yellow-400"
-              } ${displayGuard.profilePicture ? "hidden" : ""}`}
-            >
-              {getInitials(displayGuard)}
-            </div>
+            ) : (
+              <div
+                className={`w-full h-full flex items-center justify-center text-white text-3xl font-bold ${
+                  darkMode ? "bg-yellow-600" : "bg-yellow-400"
+                }`}
+              >
+                {avatarInitials}
+              </div>
+            )}
           </div>
 
           <h2 className="font-semibold text-gray-800 dark:text-white text-lg">
-            {formatNameWithMiddleInitial(displayGuard)}
+            {formattedName}
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
             {displayGuard.guardId || displayGuard.id}

@@ -13,7 +13,7 @@ import guardService from "../../services/guardService";
 
 // Helper function to format name with middle initial
 const formatNameWithMiddleInitial = (guard) => {
-  if (!guard.name) return "";
+  if (!guard) return "";
 
   // If we have separate name fields, use them
   if (guard.firstName || guard.lastName) {
@@ -29,33 +29,48 @@ const formatNameWithMiddleInitial = (guard) => {
   }
 
   // Fallback to original name parsing
-  const nameParts = guard.name.split(" ").filter((part) => part.trim());
+  const nameParts = guard.name
+    ? guard.name.split(" ").filter((part) => part.trim())
+    : [];
   if (nameParts.length >= 3) {
-    // Assume format: First Middle Last
     const firstName = nameParts[0];
     const middleInitial = nameParts[1].charAt(0).toUpperCase() + ".";
     const lastName = nameParts.slice(2).join(" ");
     return `${firstName} ${middleInitial} ${lastName}`;
   }
 
-  return guard.name;
+  return guard.name || "";
 };
 
 // Helper function to get initials for avatar
 const getInitials = (guard) => {
+  if (!guard) return "GM";
+
   if (guard.firstName && guard.lastName) {
     return `${guard.firstName.charAt(0)}${guard.lastName.charAt(
       0
     )}`.toUpperCase();
   }
 
-  // Fallback to original logic
-  return guard.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+  return (
+    guard.name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "GM"
+  );
+};
+
+const getProfilePicture = (guard) => {
+  if (!guard) return null;
+
+  return (
+    guard.profilePicture ||
+    guard.rawData?.Profile?.ProfilePictureURL ||
+    guard.Profile?.ProfilePictureURL ||
+    null
+  );
 };
 
 const GuardTable = forwardRef(({ onSelectGuard, darkMode }, ref) => {
@@ -106,7 +121,11 @@ const GuardTable = forwardRef(({ onSelectGuard, darkMode }, ref) => {
       setError(null);
       const response = await guardService.getGuards();
       if (response.guards && Array.isArray(response.guards)) {
-        setGuards(response.guards);
+        const enhancedGuards = response.guards.map((guard) => ({
+          ...guard,
+          profilePicture: getProfilePicture(guard),
+        }));
+        setGuards(enhancedGuards);
       } else {
         setGuards([]);
       }
@@ -156,7 +175,6 @@ const GuardTable = forwardRef(({ onSelectGuard, darkMode }, ref) => {
   const handleOptionClick = (option) => {
     setSortOption(option.value);
     setIsSortOpen(false);
-    // Reset selected guard when filter changes
     setSelectedGuardId(null);
     if (onSelectGuard) {
       onSelectGuard(null);
@@ -165,12 +183,19 @@ const GuardTable = forwardRef(({ onSelectGuard, darkMode }, ref) => {
 
   // Select guard
   const handleSelectGuard = (guard) => {
-    onSelectGuard?.(guard);
+    const enhancedGuard = {
+      ...guard,
+      profilePicture: getProfilePicture(guard),
+    };
+
+    console.log("Selecting guard:", enhancedGuard);
+    console.log("Guard profile picture:", enhancedGuard.profilePicture);
+
+    onSelectGuard?.(enhancedGuard);
     setSelectedGuardEmail(guard.email);
     setSelectedGuardId(guard.id);
   };
 
-  // After new guard is added
   const handleGuardAdded = async () => {
     await fetchGuards();
     setShowAddModal(false);
@@ -342,6 +367,7 @@ const GuardTable = forwardRef(({ onSelectGuard, darkMode }, ref) => {
               {currentData.map((guard, i) => {
                 const formattedName = formatNameWithMiddleInitial(guard);
                 const initials = getInitials(guard);
+                const profilePicture = getProfilePicture(guard);
 
                 return (
                   <tr
@@ -367,9 +393,9 @@ const GuardTable = forwardRef(({ onSelectGuard, darkMode }, ref) => {
                         <div
                           className={`${styles.avatarSize} rounded-full flex-shrink-0 overflow-hidden`}
                         >
-                          {guard.profilePicture ? (
+                          {profilePicture ? (
                             <img
-                              src={guard.profilePicture}
+                              src={profilePicture}
                               alt={formattedName}
                               className="w-full h-full object-cover"
                               onError={(e) => {
@@ -387,7 +413,7 @@ const GuardTable = forwardRef(({ onSelectGuard, darkMode }, ref) => {
                               darkMode
                                 ? "bg-yellow-600 text-white"
                                 : "bg-yellow-500 text-white"
-                            } ${guard.profilePicture ? "hidden" : ""}`}
+                            } ${profilePicture ? "hidden" : ""}`}
                           >
                             {initials}
                           </div>

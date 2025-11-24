@@ -271,7 +271,7 @@ export default function TeacherProfile({
         </div>
       </div>
 
-      {/* Archive Modal - Using Reusable Component */}
+      {/* Archive Modal */}
       <ArchiveUserModal
         isOpen={showArchiveModal}
         onClose={handleArchiveModalClose}
@@ -282,7 +282,7 @@ export default function TeacherProfile({
         darkMode={darkMode}
       />
 
-      {/* Restore Modal - Using Reusable Component */}
+      {/* Restore Modal */}
       <RestoreUserModal
         isOpen={showRestoreModal}
         onClose={handleRestoreModalClose}

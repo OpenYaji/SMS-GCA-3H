@@ -53,8 +53,9 @@ try {
     
     // Get teacher information
     $teacherQuery = "
-        SELECT p.FirstName, p.LastName, p.Email
+        SELECT p.FirstName, p.LastName, u.EmailAddress as Email
         FROM profile p
+        JOIN user u ON p.UserID = u.UserID
         WHERE p.UserID = :userId
     ";
     $stmt = $db->prepare($teacherQuery);
@@ -73,38 +74,34 @@ try {
     $parentNames = [];
     
     if ($recipientType === 'all') {
-        // Get all parents of students in this section
+        // Get all parents/guardians of students in this section
         $parentQuery = "
             SELECT DISTINCT 
-                p.Email,
-                p.FirstName,
-                p.LastName,
-                sp.StudentProfileID
-            FROM studentprofile sp
-            JOIN profile sp_prof ON sp.ProfileID = sp_prof.ProfileID
-            JOIN enrollment e ON sp.StudentProfileID = e.StudentProfileID
-            JOIN profile p ON sp_prof.ParentID = p.ProfileID
+                CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR) AS Email,
+                g.FullName,
+                g.GuardianID
+            FROM enrollment e
+            JOIN studentprofile sp ON e.StudentProfileID = sp.StudentProfileID
+            JOIN studentguardian sg ON sp.StudentProfileID = sg.StudentProfileID
+            JOIN guardian g ON sg.GuardianID = g.GuardianID
             WHERE e.SectionID = :sectionId
-            AND p.Email IS NOT NULL
-            AND p.Email != ''
+            AND g.EncryptedEmailAddress IS NOT NULL
         ";
         $stmt = $db->prepare($parentQuery);
         $stmt->bindParam(':sectionId', $sectionId, PDO::PARAM_INT);
     } else {
-        // Get specific parent
+        // Get specific parent/guardian
         if (!$parentId) {
             throw new Exception('Parent ID is required for specific recipient');
         }
         
         $parentQuery = "
             SELECT 
-                p.Email,
-                p.FirstName,
-                p.LastName
-            FROM profile p
-            WHERE p.ProfileID = :parentId
-            AND p.Email IS NOT NULL
-            AND p.Email != ''
+                CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR) AS Email,
+                g.FullName
+            FROM guardian g
+            WHERE g.GuardianID = :parentId
+            AND g.EncryptedEmailAddress IS NOT NULL
         ";
         $stmt = $db->prepare($parentQuery);
         $stmt->bindParam(':parentId', $parentId, PDO::PARAM_INT);
@@ -119,7 +116,7 @@ try {
     
     foreach ($parents as $parent) {
         $parentEmails[] = $parent['Email'];
-        $parentNames[] = $parent['FirstName'] . ' ' . $parent['LastName'];
+        $parentNames[] = $parent['FullName'];
     }
     
     // Create email content
@@ -233,7 +230,9 @@ try {
         }
     }
     
-    // Log the notification in the database
+    // Log the notification in the database (table doesn't exist yet, skipping for now)
+    // TODO: Create notifications table in database
+    /*
     $logQuery = "
         INSERT INTO notifications 
         (SenderID, RecipientType, SectionID, Title, Message, NotificationDate, Status)
@@ -247,23 +246,33 @@ try {
     $stmt->bindParam(':title', $emailSubject, PDO::PARAM_STR);
     $stmt->bindParam(':message', $message, PDO::PARAM_STR);
     $stmt->execute();
+    */
     
     http_response_code(200);
     echo json_encode([
         'success' => true,
-        'message' => "Notification sent successfully to $successCount parent(s)",
+        'message' => "✅ Notification sent successfully to $successCount parent(s)" . (count($failedEmails) > 0 ? " ($failedEmails failed)" : ""),
         'data' => [
             'totalSent' => $successCount,
             'totalFailed' => count($failedEmails),
-            'failedEmails' => $failedEmails
+            'failedEmails' => $failedEmails,
+            'recipients' => $parentNames,
+            'timestamp' => date('Y-m-d H:i:s')
         ]
     ]);
     
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Database error: ' . $e->getMessage()
+    ]);
 } catch (Exception $e) {
     http_response_code(400);
     echo json_encode([
         'success' => false,
-        'message' => $e->getMessage()
+        'message' => $e->getMessage(),
+        'line' => $e->getLine()
     ]);
 }
 ?>

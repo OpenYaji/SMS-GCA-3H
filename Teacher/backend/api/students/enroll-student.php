@@ -215,7 +215,7 @@ try {
             'enrollmentId' => $enrollmentId,
             'studentName' => $student['FirstName'] . ' ' . $student['LastName'],
             'studentNumber' => $student['StudentNumber'],
-            'gradeLevel' => 'Grade ' . $gradeLevel['LevelName'],
+            'gradeLevel' => $gradeLevel['LevelName'],
             'sectionName' => $sectionName,
             'sectionId' => $sectionId,
             'currentStudentCount' => $availableSection['CurrentStudentCount'] + 1

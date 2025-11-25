@@ -79,6 +79,8 @@ Route::prefix('v1')->group(function () {
 
     //Authorized Escorts
     Route::apiResource('authorized-escorts', AuthorizedEscortController::class)->only(['index']);
+    Route::patch('authorized-escorts/{authorized_escort}/approve', [AuthorizedEscortController::class, 'approve']);
+    Route::patch('authorized-escorts/{authorized_escort}/reject', [AuthorizedEscortController::class, 'reject']);
 
     //Sections
     Route::apiResource('sections', SectionController::class)->only(['store', 'update']);

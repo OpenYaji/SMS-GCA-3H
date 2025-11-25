@@ -11,18 +11,18 @@ class AuthorizedEscort extends Model
     protected $primaryKey = 'EscortID';
     public $timestamps = false;
 
-    // protected $fillable = [
-    //     'StudentProfileID',
-    //     'FullName',
-    //     'RelationshipToStudent',
-    //     'ContactNumber',
-    //     'Address',
-    //     'AdditionalNotes',
-    //     'EscortStatus',
-    //     'IsActive',
-    //     'DateAdded',
-    //     'ApprovedByUserID'
-    // ];
+    protected $fillable = [
+        'StudentProfileID',
+        'FullName',
+        'RelationshipToStudent',
+        'ContactNumber',
+        'Address',
+        'AdditionalNotes',
+        'EscortStatus',
+        'IsActive',
+        'DateAdded',
+        'ApprovedByUserID'
+    ];
     
     //Relationship: AuthorizedEscort belongs to a StudentProfile
     public function studentProfile()

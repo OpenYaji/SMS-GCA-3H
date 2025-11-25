@@ -109,13 +109,13 @@ const TransactionsHistory = ({ darkmode }) => {
     <div className="min-h-screen bg-[whitesmoke] dark:bg-gray-900 pl-5 pr-6 pb-6 pt-4 font-kumbh">
       <div className="max-w-7xl mx-auto mt-0">
         {/* Banner */}
-        <div className="rounded-3xl px-8 py-3 mb-6 shadow-md bg-gradient-to-r from-yellow-500 to-yellow-400 dark:from-gray-700 dark:to-gray-800">
+        <div className="rounded-3xl px-8 py-3 mb-6 shadow-md bg-[linear-gradient(135deg,#ffbc0d_0%,#f59e0b_100%)] dark:bg-gradient-to-r dark:from-gray-700 dark:to-gray-800">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="font-spartan text-[2.5em] font-extrabold text-white mb-[0px] [text-shadow:5px_1px_2px_rgba(0,0,0,0.3)]">
                 Transaction History
               </h1>
-              <p className="text-white font-regular font-spartan text-[1.1em]">
+              <p className="text-white font-semibold font-spartan text-[1.1em] [text-shadow:2px_1px_2px_rgba(0,0,0,0.5)]">
                 View all payment transactions and history
               </p>
             </div>

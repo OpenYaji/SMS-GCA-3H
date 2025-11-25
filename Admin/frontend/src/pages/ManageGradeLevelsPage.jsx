@@ -169,8 +169,8 @@ export default function ManageGradeLevels() {
 
   // Banner styles based on dark mode
   const bannerStyle = darkMode
-    ? { background: "linear-gradient(135deg, #374151 0%, #1f2937 100%)" }
-    : { background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)" };
+    ? { background: "linear-gradient(135deg, #374151 0%, #1f2937 100%)" } //DARKMODE
+    : { background: "linear-gradient(135deg, #ffbc0d 0%, #f59e0b 100%)" }; //LIGHTMODE
 
   // Button styles for light mode (yellow theme)
   const newAcademicYearButtonClass = darkMode
@@ -235,7 +235,7 @@ export default function ManageGradeLevels() {
           <h1 className="font-spartan text-[2.5em] font-extrabold text-white mb-[0px] [text-shadow:5px_1px_2px_rgba(0,0,0,0.3)]">
             Manage Grade Levels
           </h1>
-          <p className="text-white font-regular font-spartan text-[1.1em]">
+          <p className="text-white font-semibold font-spartan text-[1.1em] [text-shadow:2px_1px_2px_rgba(0,0,0,0.5)]">
             Here are the grade levels and their sections at Gymnazo Christian
             Academy - Novaliches
           </p>

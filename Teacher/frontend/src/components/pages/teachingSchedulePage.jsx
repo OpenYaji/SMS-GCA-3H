@@ -44,6 +44,7 @@ const TeachingSchedulePage = () => {
     gradeLevelId: '',
     sectionId: '',
     roomNumber: '',
+    classShift: 'Morning',
     teachers: []
   });
   const [teacherSections, setTeacherSections] = useState([]);
@@ -350,6 +351,7 @@ const TeachingSchedulePage = () => {
       gradeLevelId: '',
       sectionId: '',
       roomNumber: '',
+      classShift: 'Morning',
       teachers: teachers || []
     });
     setSectionsData([]);
@@ -428,7 +430,8 @@ const TeachingSchedulePage = () => {
         {
           teacherId: addClassFormData.teacherId,
           sectionId: addClassFormData.sectionId,
-          roomNumber: addClassFormData.roomNumber || 'TBD'
+          roomNumber: addClassFormData.roomNumber || 'TBD',
+          classShift: addClassFormData.classShift || 'Morning'
         },
         { withCredentials: true }
       );

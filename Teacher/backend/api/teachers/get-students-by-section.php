@@ -61,8 +61,8 @@ try {
             sp.DateOfBirth as birthdate,
             TIMESTAMPDIFF(YEAR, sp.DateOfBirth, CURDATE()) as age,
             sp.StudentNumber as studentNumber,
-            CAST(p.EncryptedAddress AS CHAR) as address,
-            CAST(p.EncryptedPhoneNumber AS CHAR) as contactNumber,
+            CAST(AES_DECRYPT(p.EncryptedAddress, 'encryption_key') AS CHAR) as address,
+            CAST(AES_DECRYPT(p.EncryptedPhoneNumber, 'encryption_key') AS CHAR) as contactNumber,
             p.ProfilePictureURL as profilePicture,
             'Present' as attendance,
             NULL as grade

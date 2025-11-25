@@ -510,12 +510,61 @@ const TeachingSchedulePage = () => {
     setCreateFormData({ 
       teacher: teacherId,
       gradeSection: '',
+      sectionId: '',
       day: 'Monday to Friday',
       schedule: []
     });
     
     await fetchTeacherSections(teacherId);
-    await fetchTeacherScheduleDetail(teacherId);
+    // Don't auto-load schedule, wait for section selection
+  };
+
+  const handleSectionChange = async (sectionId) => {
+    const selectedSectionData = teacherSections.find(s => s.id === parseInt(sectionId));
+    
+    if (!selectedSectionData) {
+      setCreateFormData(prev => ({
+        ...prev,
+        sectionId: '',
+        gradeSection: '',
+        schedule: []
+      }));
+      return;
+    }
+
+    setCreateFormData(prev => ({
+      ...prev,
+      sectionId: sectionId,
+      gradeSection: `${selectedSectionData.gradeLevel} - Section ${selectedSectionData.sectionName}`
+    }));
+
+    // Fetch schedule for this specific section
+    try {
+      const response = await axios.get(
+        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/get-section-schedule.php?sectionId=${sectionId}`,
+        { withCredentials: true }
+      );
+
+      if (response.data.success && response.data.data.schedule.length > 0) {
+        setCreateFormData(prev => ({
+          ...prev,
+          schedule: response.data.data.schedule
+        }));
+      } else {
+        // No existing schedule, start fresh
+        setCreateFormData(prev => ({
+          ...prev,
+          schedule: []
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching section schedule:', error);
+      // Start with empty schedule if error
+      setCreateFormData(prev => ({
+        ...prev,
+        schedule: []
+      }));
+    }
   };
 
   const fetchTeacherScheduleDetail = async (teacherId) => {
@@ -790,9 +839,11 @@ const TeachingSchedulePage = () => {
         formData={createFormData}
         teachers={teachers}
         subjects={subjects}
+        teacherSections={teacherSections}
         onClose={handleCancelCreate}
         onSubmit={handleSubmitSchedule}
         onTeacherChange={handleTeacherChange}
+        onSectionChange={handleSectionChange}
         onSubjectChange={handleSubjectChange}
         onAddTimeSlot={handleAddTimeSlot}
         onRemoveTimeSlot={handleRemoveTimeSlot}

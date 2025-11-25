@@ -100,6 +100,14 @@ const EmergencyDismissalPage = () => {
   };
 
   const handleSendNotification = async () => {
+    console.log('🚀 Send notification clicked!', {
+      message: message.trim(),
+      dismissalTime,
+      selectedRecipient,
+      selectedParent,
+      scheduleData
+    });
+
     if (!message.trim()) {
       toast.error('Please enter a message');
       return;
@@ -115,6 +123,7 @@ const EmergencyDismissalPage = () => {
       return;
     }
 
+    console.log('✅ Validation passed, sending notification...');
     setLoading(true);
 
     try {
@@ -135,8 +144,24 @@ const EmergencyDismissalPage = () => {
         { withCredentials: true }
       );
 
+      console.log('📬 API Response:', response.data);
+      
       if (response.data.success) {
-        toast.success('Notification sent successfully!');
+        const { totalSent, totalFailed, recipients } = response.data.data || {};
+        const recipientList = recipients?.slice(0, 3).join(', ') + (recipients?.length > 3 ? '...' : '');
+        
+        console.log('✅ Email sent successfully!', {
+          totalSent,
+          totalFailed,
+          recipients,
+          timestamp: response.data.data?.timestamp
+        });
+        
+        toast.success(
+          `✅ Notification sent to ${totalSent} parent(s)!${totalFailed > 0 ? ` (${totalFailed} failed)` : ''}`,
+          { duration: 6000 }
+        );
+        
         setMessage('');
         setDismissalTime({ hour: '00', minute: '00', period: 'PM' });
         setSelectedRecipient('all');
@@ -145,8 +170,16 @@ const EmergencyDismissalPage = () => {
         toast.error(response.data.message || 'Failed to send notification');
       }
     } catch (error) {
-      console.error('Error sending notification:', error);
-      toast.error('Error sending notification. Please try again.');
+      console.error('❌ Error sending notification:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response,
+        responseData: error.response?.data,
+        responseStatus: error.response?.status,
+        responseHeaders: error.response?.headers
+      });
+      const errorMsg = error.response?.data?.message || error.message || 'Error sending notification. Please try again.';
+      toast.error('❌ ' + errorMsg, { duration: 5000 });
     } finally {
       setLoading(false);
     }
@@ -164,7 +197,7 @@ const EmergencyDismissalPage = () => {
         <div className="mt-6 mb-8">
           <h1 className="text-5xl font-bold text-[#404040] dark:text-white mb-1">Class Schedule</h1>
           <h2 className="text-2xl font-medium text-[#945c42] dark:text-amber-400">
-            Grade {scheduleData.gradeLevel} - Section {scheduleData.section}
+            {scheduleData.gradeLevel.replace(/^Grade\s+/i, '')} - Section {scheduleData.section}
           </h2>
         </div>
 
@@ -195,7 +228,7 @@ const EmergencyDismissalPage = () => {
                     {scheduleData.subject}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    Grade {scheduleData.gradeLevel} - Section {scheduleData.section}
+                    {scheduleData.gradeLevel.replace(/^Grade\s+/i, '')} - Section {scheduleData.section}
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Teacher: {scheduleData.teacher}
@@ -224,7 +257,7 @@ const EmergencyDismissalPage = () => {
           <div className="mb-6 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800/50 rounded-xl p-4 space-y-2">
             <div className="flex justify-between">
               <span className="font-medium text-gray-600 dark:text-gray-400">Grade Level:</span>
-              <span className="font-semibold">Grade {scheduleData.gradeLevel}</span>
+              <span className="font-semibold">{scheduleData.gradeLevel.replace(/^Grade\s+/i, '')}</span>
             </div>
             <div className="flex justify-between">
               <span className="font-medium text-gray-600 dark:text-gray-400">Section:</span>

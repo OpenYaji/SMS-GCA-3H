@@ -30,7 +30,7 @@ const MySchedule = ({ schedules, loading, onToggleFavorite, onSectionClick }) =>
           {/* Table Header */}
           <div className="bg-amber-300 px-3 md:px-6 lg:px-8 py-3 md:py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <h3 className="text-base md:text-lg font-semibold text-gray-900">
-              {schedule.grade}
+              {schedule.grade.replace(/^Grade\s+/i, '')}
             </h3>
             <p className="text-sm md:text-base lg:text-lg font-medium text-gray-900">
               Adviser: {schedule.adviser}

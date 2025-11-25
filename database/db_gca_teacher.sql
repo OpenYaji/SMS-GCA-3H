@@ -1864,6 +1864,10 @@ ALTER TABLE `applieddiscount`
 ALTER TABLE `attendance`
   MODIFY `AttendanceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
+-- ADD NEW Column in section table
+ALTER TABLE section
+ADD COLUMN ClassShift ENUM ('Morning', 'Afternoon');
+
 --
 -- AUTO_INCREMENT for table `attendancemethod`
 --

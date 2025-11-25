@@ -3,12 +3,14 @@ import GradeLevelTabs from "../components/managegradelevels/GradeLevelTabs";
 import GradeLevelTable from "../components/managegradelevels/GradeLevelTable";
 import NewSchoolYearModal from "../components/managegradelevels/modals/NewSchoolYearModal";
 import UpdateSchoolYearModal from "../components/managegradelevels/modals/UpdateSchoolYearModal";
+import SetDeadlineModal from "../components/managegradelevels/modals/SetDeadlineModal";
 import manageGradeLevelsService from "../services/manageGradeLevelsService";
 
 export default function ManageGradeLevels() {
   const [activeTab, setActiveTab] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeadlineModalOpen, setIsDeadlineModalOpen] = useState(false);
   const [currentSchoolYear, setCurrentSchoolYear] = useState(null);
   const [allSchoolYears, setAllSchoolYears] = useState([]);
   const [isSchoolYearDropdownOpen, setIsSchoolYearDropdownOpen] =
@@ -121,6 +123,12 @@ export default function ManageGradeLevels() {
     await fetchSchoolYearsList();
   };
 
+  const handleSetDeadline = async (deadlineData) => {
+    setIsDeadlineModalOpen(false);
+    // Handle the deadline data here
+    // wala pa sa database saka backend e wait ko update nila.
+  };
+
   const handleSectionAdded = async () => {
     if (currentSchoolYear) {
       await fetchSchoolYearByPage(
@@ -130,6 +138,7 @@ export default function ManageGradeLevels() {
       );
     }
   };
+
   const handleUpdateSchoolYear = async (updatedData) => {
     if (currentSchoolYear && updatedData.data) {
       const updatedSchoolYear = {
@@ -174,6 +183,10 @@ export default function ManageGradeLevels() {
 
   // Button styles for light mode (yellow theme)
   const newAcademicYearButtonClass = darkMode
+    ? "bg-white text-[#1e40af] font-spartan font-bold py-2 px-6 rounded-2xl shadow-md hover:bg-gray-50 hover:text-[#1e3a8a] hover:-translate-y-1 transform transition-all duration-200 ease-in-out whitespace-nowrap hover:shadow-lg"
+    : "bg-white text-[#d97706] font-spartan font-bold py-2 px-6 rounded-2xl shadow-md hover:bg-yellow-50 hover:text-[#b45309] hover:-translate-y-1 transform transition-all duration-200 ease-in-out whitespace-nowrap hover:shadow-lg";
+
+  const deadlineButtonClass = darkMode
     ? "bg-white text-[#1e40af] font-spartan font-bold py-2 px-6 rounded-2xl shadow-md hover:bg-gray-50 hover:text-[#1e3a8a] hover:-translate-y-1 transform transition-all duration-200 ease-in-out whitespace-nowrap hover:shadow-lg"
     : "bg-white text-[#d97706] font-spartan font-bold py-2 px-6 rounded-2xl shadow-md hover:bg-yellow-50 hover:text-[#b45309] hover:-translate-y-1 transform transition-all duration-200 ease-in-out whitespace-nowrap hover:shadow-lg";
 
@@ -241,87 +254,97 @@ export default function ManageGradeLevels() {
           </p>
         </div>
 
-        <div className="flex flex-col items-end gap-3">
+        <div className="flex items-start gap-4">
+          {/* Set Deadline Button */}
           <button
-            onClick={() => setIsModalOpen(true)}
-            className={newAcademicYearButtonClass}
+            onClick={() => setIsDeadlineModalOpen(true)}
+            className={deadlineButtonClass}
           >
-            New Academic Year
+            Set a deadline of grades
           </button>
 
-          {currentSchoolYear && (
-            <div className="flex flex-col items-end gap-2">
-              <div className="relative">
-                <button
-                  onClick={() =>
-                    setIsSchoolYearDropdownOpen(!isSchoolYearDropdownOpen)
-                  }
-                  className={dropdownButtonClass}
-                >
-                  <span className="font-bold text-white group-hover:text-yellow-100 transition-colors">
-                    {currentSchoolYear.yearName}
-                  </span>
-                  <svg
-                    className={`w-4 h-4 transition-transform ${
-                      isSchoolYearDropdownOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
+          <div className="flex flex-col items-center gap-3">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className={newAcademicYearButtonClass}
+            >
+              New Academic Year
+            </button>
 
-                {isSchoolYearDropdownOpen && (
-                  <div className="absolute top-full right-0 mt-1 w-64 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-20 max-h-60 overflow-y-auto">
-                    {allSchoolYears.map((schoolYearItem) => (
-                      <button
-                        key={schoolYearItem.page}
-                        onClick={() => handleSchoolYearSelect(schoolYearItem)}
-                        className={dropdownItemClass(
-                          currentSchoolYear?.yearName ===
-                            schoolYearItem.yearName
-                        )}
-                      >
-                        <div className="font-medium">
-                          {schoolYearItem.yearName}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+            {currentSchoolYear && (
+              <div className="flex flex-col items-center gap-2">
+                <div className="relative">
+                  <button
+                    onClick={() =>
+                      setIsSchoolYearDropdownOpen(!isSchoolYearDropdownOpen)
+                    }
+                    className={dropdownButtonClass}
+                  >
+                    <span className="font-bold text-white group-hover:text-yellow-100 transition-colors">
+                      {currentSchoolYear.yearName}
+                    </span>
+                    <svg
+                      className={`w-4 h-4 transition-transform ${
+                        isSchoolYearDropdownOpen ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+
+                  {isSchoolYearDropdownOpen && (
+                    <div className="absolute top-full right-0 mt-1 w-64 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-20 max-h-60 overflow-y-auto">
+                      {allSchoolYears.map((schoolYearItem) => (
+                        <button
+                          key={schoolYearItem.page}
+                          onClick={() => handleSchoolYearSelect(schoolYearItem)}
+                          className={dropdownItemClass(
+                            currentSchoolYear?.yearName ===
+                              schoolYearItem.yearName
+                          )}
+                        >
+                          <div className="font-medium">
+                            {schoolYearItem.yearName}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {isCurrentSchoolYearEditable() && (
+                  <button
+                    onClick={handleAcademicYearClick}
+                    className={editButtonClass}
+                    title="Edit current school year"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                    <span>Edit Current A.Y.</span>
+                  </button>
                 )}
               </div>
-
-              {isCurrentSchoolYearEditable() && (
-                <button
-                  onClick={handleAcademicYearClick}
-                  className={editButtonClass}
-                  title="Edit current school year"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
-                  <span>Edit Current A.Y.</span>
-                </button>
-              )}
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
@@ -363,6 +386,12 @@ export default function ManageGradeLevels() {
         onClose={() => setIsUpdateModalOpen(false)}
         onUpdateSchoolYear={handleUpdateSchoolYear}
         schoolYear={currentSchoolYear}
+      />
+
+      <SetDeadlineModal
+        isOpen={isDeadlineModalOpen}
+        onClose={() => setIsDeadlineModalOpen(false)}
+        onSetDeadline={handleSetDeadline}
       />
     </div>
   );

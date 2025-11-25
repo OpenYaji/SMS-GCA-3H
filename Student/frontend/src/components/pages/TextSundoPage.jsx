@@ -39,7 +39,7 @@ const TextSundoPage = () => {
 
     const fetchEscorts = async () => {
         try {
-            const response = await axios.get('http://localhost/SMS-GCA-3D/Student/backend/api/escorts/getAuthorizedEscort.php', {
+            const response = await axios.get('/backend/api/escorts/getAuthorizedEscort.php', {
                 withCredentials: true
             });
             if (response.data.success) {
@@ -87,7 +87,7 @@ const TextSundoPage = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost/SMS-GCA-3D/Student/backend/api/escorts/postAuthorizedEscort.php',
+                '/backend/api/escorts/postAuthorizedEscort.php',
                 payload,
                 {
                     headers: {

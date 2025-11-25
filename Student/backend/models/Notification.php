@@ -2,7 +2,7 @@
 class Notification
 {
     private $conn;
-    private $table = 'notification';
+    private $table = 'notificationlog';
 
     public function __construct($db)
     {
@@ -12,22 +12,21 @@ class Notification
     public function getByUserId($userId, $limit = 10)
     {
         $query = "SELECT 
-                    n.NotificationID as id,
+                    n.LogID as id,
+                    n.Title as title,
                     n.Message as message,
-                    n.Type as type,
                     n.IsRead as isRead,
-                    n.RelatedEntityType as relatedEntityType,
-                    n.RelatedEntityID as relatedEntityId,
-                    DATE_FORMAT(n.CreatedAt, '%Y-%m-%d %H:%i:%s') as createdAt,
+                    n.NotificationStatus as status,
+                    DATE_FORMAT(n.SentAt, '%Y-%m-%d %H:%i:%s') as sentAt,
                     CASE
-                        WHEN TIMESTAMPDIFF(MINUTE, n.CreatedAt, NOW()) < 1 THEN 'Just now'
-                        WHEN TIMESTAMPDIFF(MINUTE, n.CreatedAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.CreatedAt, NOW()), 'm ago')
-                        WHEN TIMESTAMPDIFF(HOUR, n.CreatedAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, n.CreatedAt, NOW()), 'h ago')
-                        ELSE CONCAT(TIMESTAMPDIFF(DAY, n.CreatedAt, NOW()), 'd ago')
+                        WHEN TIMESTAMPDIFF(MINUTE, n.SentAt, NOW()) < 1 THEN 'Just now'
+                        WHEN TIMESTAMPDIFF(MINUTE, n.SentAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.SentAt, NOW()), 'm ago')
+                        WHEN TIMESTAMPDIFF(HOUR, n.SentAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, n.SentAt, NOW()), 'h ago')
+                        ELSE CONCAT(TIMESTAMPDIFF(DAY, n.SentAt, NOW()), 'd ago')
                     END as timeAgo
                   FROM " . $this->table . " n
-                  WHERE n.UserID = :userId
-                  ORDER BY n.CreatedAt DESC
+                  WHERE n.RecipientUserID = :userId
+                  ORDER BY n.SentAt DESC
                   LIMIT :limit";
 
         $stmt = $this->conn->prepare($query);
@@ -42,7 +41,7 @@ class Notification
     {
         $query = "SELECT COUNT(*) as count 
                   FROM " . $this->table . " 
-                  WHERE UserID = :userId AND IsRead = 0";
+                  WHERE RecipientUserID = :userId AND IsRead = 0";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
@@ -56,7 +55,7 @@ class Notification
     {
         $query = "UPDATE " . $this->table . " 
                   SET IsRead = 1 
-                  WHERE NotificationID = :notificationId AND UserID = :userId";
+                  WHERE LogID = :notificationId AND RecipientUserID = :userId";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':notificationId', $notificationId, PDO::PARAM_INT);
@@ -69,7 +68,7 @@ class Notification
     {
         $query = "UPDATE " . $this->table . " 
                   SET IsRead = 1 
-                  WHERE UserID = :userId AND IsRead = 0";
+                  WHERE RecipientUserID = :userId AND IsRead = 0";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);

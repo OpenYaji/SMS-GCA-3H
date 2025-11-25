@@ -30,9 +30,10 @@ const Footer = () => {
             </p>
             
             <div className="pt-4 text-sm">
-              268 Zabala St. Cor. Luahati St. Tondo,
+            <a href="#">268 Zabala St. Cor. Luahati St. Tondo
               <br />
               Manila, Manila, Philippines
+              </a>
             </div>
           </div>
           

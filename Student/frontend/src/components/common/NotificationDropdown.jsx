@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Bell, CheckCheck } from 'lucide-react';
+import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 
 const NotificationDropdown = () => {
@@ -34,14 +35,13 @@ const NotificationDropdown = () => {
 
         setLoadingNotifications(true);
         try {
-            const response = await fetch(
-                `http://localhost/Gymazo-Student-Side/backend/api/notification/getNotifications.php?userId=${user.userId}&limit=10`
+            const response = await axios.get(
+                `/backend/api/notification/getNotifications.php?userId=${user.userId}&limit=10`
             );
-            const data = await response.json();
 
-            if (data.success) {
-                setNotifications(data.data.notifications);
-                setUnreadCount(data.data.unreadCount);
+            if (response.data.success) {
+                setNotifications(response.data.data.notifications);
+                setUnreadCount(response.data.data.unreadCount);
             }
         } catch (error) {
             console.error('Error fetching notifications:', error);
@@ -52,22 +52,15 @@ const NotificationDropdown = () => {
 
     const handleMarkAsRead = async (notificationId) => {
         try {
-            const response = await fetch(
-                'http://localhost/Gymazo-Student-Side/backend/api/notification/markAsRead.php',
+            const response = await axios.post(
+                '/backend/api/notification/markAsRead.php',
                 {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        notificationId,
-                        userId: user.userId,
-                    }),
+                    notificationId,
+                    userId: user.userId,
                 }
             );
 
-            const data = await response.json();
-            if (data.success) {
+            if (response.data.success) {
                 fetchNotifications();
             }
         } catch (error) {
@@ -77,21 +70,14 @@ const NotificationDropdown = () => {
 
     const handleMarkAllAsRead = async () => {
         try {
-            const response = await fetch(
-                'http://localhost/Gymazo-Student-Side/backend/api/notification/markAllAsRead.php',
+            const response = await axios.post(
+                '/backend/api/notification/markAllAsRead.php',
                 {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        userId: user.userId,
-                    }),
+                    userId: user.userId,
                 }
             );
 
-            const data = await response.json();
-            if (data.success) {
+            if (response.data.success) {
                 fetchNotifications();
             }
         } catch (error) {
@@ -111,7 +97,7 @@ const NotificationDropdown = () => {
             >
                 <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                 {unreadCount > 0 && (
-                    <span className="absolute top-1.5 right-1.5 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                    <span className="absolute top-1.5 right-1.5 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
                         <span className="text-white text-xs font-bold">
                             {unreadCount > 9 ? '9+' : unreadCount}
                         </span>
@@ -163,14 +149,14 @@ const NotificationDropdown = () => {
                                     key={notif.id}
                                     onClick={() => !notif.isRead && handleMarkAsRead(notif.id)}
                                     className={`px-4 py-3 hover:bg-gray-100 dark:hover:bg-slate-600 cursor-pointer border-l-4 ${notif.isRead
-                                            ? 'border-transparent'
-                                            : 'border-amber-500 bg-amber-50 dark:bg-slate-800'
+                                        ? 'border-transparent'
+                                        : 'border-amber-500 bg-amber-50 dark:bg-slate-800'
                                         }`}
                                 >
                                     <p
                                         className={`text-sm ${notif.isRead
-                                                ? 'text-gray-600 dark:text-gray-400'
-                                                : 'text-gray-800 dark:text-gray-200 font-medium'
+                                            ? 'text-gray-600 dark:text-gray-400'
+                                            : 'text-gray-800 dark:text-gray-200 font-medium'
                                             }`}
                                     >
                                         {notif.message}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Girl from '../../../assets/img/girl.png';
-import Bg from '../../../assets/img/cambridge.jpg';
+import Bg from '../../../assets/img/school2.png';
 import Logo from '../../../assets/img/gymnazu.png';
 import SplitText from "../../ui/SplitText";
 import ShinyText from '../../ui/ShinyText';
@@ -94,12 +94,12 @@ const Home = () => {
                     <img
                         src={Girl}
                         alt="Student"
-                        className="h-[50vh] lg:h-[70vh] object-cover relative z-10 block dark:opacity-90"
+                        className="h-[50vh] lg:h-[70vh] object-cover relative z-10 block"
                     />
                     <img
                         src={Logo}
                         alt="Gymnazo Logo Overlay"
-                        className="absolute right-24 lg:top-24 w-100 h-100 opacity-70 dark:opacity-50 z-1 hidden xl:block transition-opacity duration-300"
+                        className="absolute right-24 lg:top-24 w-100 h-100 z-1 hidden xl:block transition-opacity duration-300"
                     />
                 </motion.div>
             </div>

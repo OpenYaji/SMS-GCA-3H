@@ -35,9 +35,13 @@ class NotificationController
             $notifications = $this->notification->getByUserId($userId, $limit);
             $unreadCount = $this->notification->getUnreadCount($userId);
 
-            // Convert isRead to boolean
+            // Convert isRead to boolean and ensure proper structure
             foreach ($notifications as &$notif) {
                 $notif['isRead'] = (bool)$notif['isRead'];
+                // Ensure message exists, fallback to title if not
+                if (empty($notif['message']) && !empty($notif['title'])) {
+                    $notif['message'] = $notif['title'];
+                }
             }
 
             echo json_encode([

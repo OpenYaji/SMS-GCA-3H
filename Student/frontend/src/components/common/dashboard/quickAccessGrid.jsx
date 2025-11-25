@@ -74,6 +74,13 @@ const QuickAccessGrid = () => {
       subtitle: 'Add & Verify New Escorts',
       tooltipText: 'View Authorized Escorts',
       path: '/student-dashboard/text-sundo' 
+    },
+    { 
+      icon: <MessageCircleQuestion size={20} />, 
+      title: 'Enroll', 
+      subtitle: 'Enrollment for SY 2025-26 is open now!',
+      tooltipText: 'View Enrollment Status',
+      path: '/student-dashboard/text-sundo' 
     }
   ];
 

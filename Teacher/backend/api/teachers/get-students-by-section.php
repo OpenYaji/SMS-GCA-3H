@@ -2,8 +2,13 @@
 /**
  * API Endpoint: Get Students by Section
  * Method: GET
- * Returns all students in a specific section
+ * Returns all students in a specific section with today's attendance status
  * Query Parameters: sectionId
+ * 
+ * Attendance Logic:
+ * - If student has attendance record for today: Show status (Present, Absent, Late, Excused)
+ * - If no record for today: Show "Unmarked"
+ * - Past days without record are automatically considered "Absent"
  */
 
 session_start();
@@ -38,6 +43,7 @@ if (!isset($_GET['sectionId'])) {
 }
 
 $sectionId = $_GET['sectionId'];
+$today = date('Y-m-d');
 
 // Get database connection
 $database = new Database();
@@ -50,8 +56,8 @@ if (!$db) {
 }
 
 try {
-    // Get students in the section with their attendance status
-    // Students are linked to sections through the enrollment table
+    // Get students in the section with their attendance status for today
+    // Uses LEFT JOIN to include students without attendance records
     $studentQuery = "
         SELECT 
             sp.StudentProfileID as id,
@@ -64,11 +70,17 @@ try {
             CAST(AES_DECRYPT(p.EncryptedAddress, 'encryption_key') AS CHAR) as address,
             CAST(AES_DECRYPT(p.EncryptedPhoneNumber, 'encryption_key') AS CHAR) as contactNumber,
             p.ProfilePictureURL as profilePicture,
-            'Present' as attendance,
+            CASE 
+                WHEN a.AttendanceStatus IS NOT NULL THEN a.AttendanceStatus
+                ELSE 'Unmarked'
+            END as attendance,
+            a.AttendanceDate as attendanceDate,
             NULL as grade
         FROM studentprofile sp
         JOIN profile p ON sp.ProfileID = p.ProfileID
         JOIN enrollment e ON sp.StudentProfileID = e.StudentProfileID
+        LEFT JOIN attendance a ON sp.StudentProfileID = a.StudentProfileID 
+            AND DATE(a.AttendanceDate) = :today
         WHERE e.SectionID = :sectionId
         AND e.EnrollmentID IN (
             SELECT MAX(EnrollmentID) 
@@ -81,6 +93,7 @@ try {
     
     $stmt = $db->prepare($studentQuery);
     $stmt->bindParam(':sectionId', $sectionId, PDO::PARAM_INT);
+    $stmt->bindParam(':today', $today, PDO::PARAM_STR);
     $stmt->execute();
     
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -88,7 +101,8 @@ try {
     http_response_code(200);
     echo json_encode([
         'success' => true,
-        'data' => $students
+        'data' => $students,
+        'date' => $today
     ]);
     
 } catch (Exception $e) {

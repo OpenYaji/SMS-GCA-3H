@@ -10,9 +10,8 @@ const AttendanceReportPage = () => {
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedQuarter, setSelectedQuarter] = useState('');
+  const [selectedQuarter, setSelectedQuarter] = useState('First');
   const [showQuarterDropdown, setShowQuarterDropdown] = useState(false);
-  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -27,11 +26,11 @@ const AttendanceReportPage = () => {
   // Quarter options
   const quarters = ['First', 'Second', 'Third', 'Fourth'];
 
-  // Fetch attendance report data
+  // Fetch attendance report data on load and when quarter changes
   useEffect(() => {
-    if (classData?.id && selectedQuarter) {
+    if (classData?.id) {
       fetchAttendanceReport();
-    } else if (!selectedQuarter) {
+    } else {
       setLoading(false);
       setStudents([]);
       setFilteredStudents([]);
@@ -110,37 +109,8 @@ const AttendanceReportPage = () => {
 
         {/* Search Bar and Quarter Selector */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          {/* Search Bar with Filter */}
-          <div className="flex items-center bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden max-w-[594px] w-full">
-            {/* Add Filter Button */}
-            <button
-              onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-              className="relative bg-gray-50 dark:bg-gray-700 px-4 py-3 flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors border-r border-gray-200 dark:border-gray-600"
-            >
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300 whitespace-nowrap">
-                Add filter
-              </span>
-              <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              
-              {/* Filter Dropdown */}
-              {showFilterDropdown && (
-                <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-10 min-w-[200px]">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 font-medium">Filter by Quarter:</p>
-                  <div className="space-y-2">
-                    {quarters.map((quarter) => (
-                      <label key={quarter} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded">
-                        <input 
-                          type="checkbox" 
-                          className="rounded text-amber-500 focus:ring-amber-500" 
-                        />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">{quarter}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </button>
-
+          {/* Search Bar */}
+          <div className="flex items-center bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden max-w-[400px] w-full">
             {/* Search Input */}
             <div className="flex-1 px-4 py-3 flex items-center gap-3 bg-white dark:bg-gray-800">
               <Search className="w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -161,7 +131,7 @@ const AttendanceReportPage = () => {
               className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 flex items-center justify-between gap-3 hover:border-gray-400 dark:hover:border-gray-600 transition-colors shadow-sm"
             >
               <span className="text-sm text-gray-700 dark:text-gray-200">
-                {selectedQuarter || 'Select Quarter'}
+                {selectedQuarter} Quarter
               </span>
               <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
@@ -173,9 +143,13 @@ const AttendanceReportPage = () => {
                   <button
                     key={quarter}
                     onClick={() => handleQuarterSelect(quarter)}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                      selectedQuarter === quarter 
+                        ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 font-medium' 
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
                   >
-                    {quarter}
+                    {quarter} Quarter
                   </button>
                 ))}
               </div>
@@ -186,18 +160,27 @@ const AttendanceReportPage = () => {
         {/* Attendance Report Table */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden mb-6">
           {/* Table Header */}
-          <div className="bg-amber-300 dark:bg-amber-400 px-6 py-4 grid grid-cols-12 gap-4 items-center">
-            <div className="col-span-4 font-semibold text-gray-800">
+          <div className="bg-amber-300 dark:bg-amber-400 px-4 py-4 grid grid-cols-12 gap-2 items-center text-center">
+            <div className="col-span-3 font-semibold text-gray-800 text-left pl-2">
               Name
             </div>
-            <div className="col-span-2 font-semibold text-gray-800">
-              Quarter
+            <div className="col-span-2 font-semibold text-gray-800 text-sm">
+              Present
             </div>
-            <div className="col-span-3 font-semibold text-gray-800">
-              Total Present Day
+            <div className="col-span-2 font-semibold text-gray-800 text-sm">
+              Absent
             </div>
-            <div className="col-span-3 font-semibold text-gray-800">
-              Total Absence Day
+            <div className="col-span-1 font-semibold text-gray-800 text-sm">
+              Late
+            </div>
+            <div className="col-span-1 font-semibold text-gray-800 text-sm">
+              Excused
+            </div>
+            <div className="col-span-2 font-semibold text-gray-800 text-sm">
+              School Days
+            </div>
+            <div className="col-span-1 font-semibold text-gray-800 text-sm">
+              Rate
             </div>
           </div>
 
@@ -224,13 +207,10 @@ const AttendanceReportPage = () => {
                   />
                 </svg>
                 <p className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  No class and section found
+                  No attendance records found
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {selectedQuarter 
-                    ? `No attendance records available for ${selectedQuarter} quarter`
-                    : 'Please select a quarter to view the attendance report'
-                  }
+                  No attendance data available for {selectedQuarter} Quarter
                 </p>
               </div>
             </div>
@@ -238,19 +218,44 @@ const AttendanceReportPage = () => {
             filteredStudents.map((student, index) => (
               <div
                 key={student.id || index}
-                className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 last:border-b-0 px-6 py-5 grid grid-cols-12 gap-4 items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 last:border-b-0 px-4 py-4 grid grid-cols-12 gap-2 items-center text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                <div className="col-span-4 text-gray-700 dark:text-gray-300 font-medium">
+                <div className="col-span-3 text-gray-700 dark:text-gray-300 font-medium text-left pl-2 truncate">
                   {student.name}
                 </div>
+                <div className="col-span-2">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+                    {student.totalPresent}
+                  </span>
+                </div>
+                <div className="col-span-2">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
+                    {student.totalAbsent}
+                  </span>
+                </div>
+                <div className="col-span-1">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400">
+                    {student.totalLate}
+                  </span>
+                </div>
+                <div className="col-span-1">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
+                    {student.totalExcused}
+                  </span>
+                </div>
                 <div className="col-span-2 text-gray-700 dark:text-gray-300">
-                  {student.quarter}
+                  {student.totalSchoolDays}
                 </div>
-                <div className="col-span-3 text-gray-700 dark:text-gray-300 text-center">
-                  {student.totalPresent}
-                </div>
-                <div className="col-span-3 text-gray-700 dark:text-gray-300 text-center">
-                  {student.totalAbsent}
+                <div className="col-span-1">
+                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${
+                    parseFloat(student.attendanceRate) >= 90 
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                      : parseFloat(student.attendanceRate) >= 75 
+                        ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                        : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                  }`}>
+                    {student.attendanceRate}%
+                  </span>
                 </div>
               </div>
             ))

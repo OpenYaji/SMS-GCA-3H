@@ -264,9 +264,21 @@ const StudentRow = ({ studentData, onViewStudentInfo }) => (
         <span className="inline-block bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400 font-medium py-1 px-3 rounded-full text-sm">
           Present ✓
         </span>
-      ) : (
+      ) : studentData.attendance === 'Absent' ? (
         <span className="inline-block bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-400 font-medium py-1 px-3 rounded-full text-sm">
-          Absent →
+          Absent ✗
+        </span>
+      ) : studentData.attendance === 'Late' ? (
+        <span className="inline-block bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-400 font-medium py-1 px-3 rounded-full text-sm">
+          Late ⏰
+        </span>
+      ) : studentData.attendance === 'Excused' ? (
+        <span className="inline-block bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-400 font-medium py-1 px-3 rounded-full text-sm">
+          Excused 📝
+        </span>
+      ) : (
+        <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium py-1 px-3 rounded-full text-sm">
+          Unmarked
         </span>
       )}
     </div>

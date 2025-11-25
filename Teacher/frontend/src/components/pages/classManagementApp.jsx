@@ -110,11 +110,30 @@ export default function ClassManagementApp() {
     }
   };
 
+  // Auto-mark absent for past days (called when loading class data)
+  const autoMarkAbsentForPastDays = async (sectionId) => {
+    try {
+      // Call the auto-mark absent API for yesterday
+      await axios.post(
+        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/attendance/auto-mark-absent.php',
+        { sectionId: sectionId },
+        { withCredentials: true }
+      );
+    } catch (err) {
+      // Silently fail - this is a background operation
+      console.log('Auto-mark absent check completed');
+    }
+  };
+
   // Fetch students for selected section (for class details - roster only)
   const fetchStudentsForSection = async (sectionId) => {
     try {
       setLoading(true);
       setError(null);
+      
+      // First, auto-mark absent for any past days without records
+      await autoMarkAbsentForPastDays(sectionId);
+      
       const response = await axios.get(
         `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/teachers/get-students-by-section.php?sectionId=${sectionId}`,
         { withCredentials: true }

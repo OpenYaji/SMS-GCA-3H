@@ -94,32 +94,32 @@ export default function ClassDetailsPage({
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen p-4 md:p-8">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 md:p-8">
       {/* Back Button */}
       <button 
         onClick={onBack}
-        className="text-sm text-gray-600 hover:text-gray-900 mb-4 flex items-center gap-2 transition-colors"
+        className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4 flex items-center gap-2 transition-colors"
       >
         <span>&larr;</span>
         <span>Grade Levels & Sections</span>
       </button>
 
       {/* Breadcrumbs */}
-      <p className="text-sm text-gray-500 mb-4">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
         Grade Levels & Sections &gt; Class Details
       </p>
 
       {/* Dynamic Header - Shows selected class info with action buttons */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <header>
-          <h1 className="text-5xl font-bold text-gray-900">
+          <h1 className="text-5xl font-bold text-gray-900 dark:text-white">
             {classData.grade}
           </h1>
-          <h2 className="text-xl text-orange-600 mt-2">
+          <h2 className="text-xl text-orange-600 dark:text-orange-400 mt-2">
             {classData.section}
-            {classData.subject && <span className="text-gray-500"> • {classData.subject}</span>}
+            {classData.subject && <span className="text-gray-500 dark:text-gray-400"> • {classData.subject}</span>}
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Total Students: {students.length} | Present: {students.filter(s => s.attendance === 'Present').length} | Absent: {students.filter(s => s.attendance === 'Absent').length}
           </p>
         </header>
@@ -128,7 +128,7 @@ export default function ClassDetailsPage({
         <div className="flex gap-2">
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             title="Export to CSV"
           >
             <Download size={18} />
@@ -136,7 +136,7 @@ export default function ClassDetailsPage({
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             title="Print"
           >
             <Printer size={18} />
@@ -147,7 +147,7 @@ export default function ClassDetailsPage({
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg">
           <p className="font-medium">Error loading students</p>
           <p className="text-sm mt-1">{error}</p>
         </div>
@@ -164,9 +164,9 @@ export default function ClassDetailsPage({
 
       {/* Loading State or Student List */}
       {loading ? (
-        <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-12 text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400"></div>
-          <p className="mt-4 text-gray-600">Loading students...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading students...</p>
         </div>
       ) : (
         <StudentList students={filteredStudents} onViewStudentInfo={onViewStudentInfo} />
@@ -201,19 +201,19 @@ export default function ClassDetailsPage({
  * @param {function} onViewStudentInfo - Callback when View Info button is clicked
  */
 const StudentList = ({ students, onViewStudentInfo }) => (
-  <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
     {/* Table Header */}
-    <div className="bg-amber-300 px-6 py-4 grid grid-cols-12 gap-4 items-center">
-      <div className="col-span-3 font-semibold text-gray-700">
+    <div className="bg-amber-300 dark:bg-amber-500 px-6 py-4 grid grid-cols-12 gap-4 items-center">
+      <div className="col-span-3 font-semibold text-gray-700 dark:text-gray-900">
         Last Name
       </div>
-      <div className="col-span-3 font-semibold text-gray-700">
+      <div className="col-span-3 font-semibold text-gray-700 dark:text-gray-900">
         First Name
       </div>
-      <div className="col-span-3 font-semibold text-gray-700">
+      <div className="col-span-3 font-semibold text-gray-700 dark:text-gray-900">
         Attendance
       </div>
-      <div className="col-span-2 font-semibold text-gray-700">
+      <div className="col-span-2 font-semibold text-gray-700 dark:text-gray-900">
         Grade
       </div>
       <div className="col-span-1"></div>
@@ -226,7 +226,7 @@ const StudentList = ({ students, onViewStudentInfo }) => (
           <StudentRow key={student.id} studentData={student} onViewStudentInfo={onViewStudentInfo} />
         ))
       ) : (
-        <div className="px-6 py-12 text-center text-gray-500">
+        <div className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
           <p className="text-lg font-medium">No students found</p>
           <p className="text-sm mt-2">Try adjusting your search or filter criteria</p>
         </div>
@@ -247,32 +247,32 @@ const StudentList = ({ students, onViewStudentInfo }) => (
  */
 const StudentRow = ({ studentData, onViewStudentInfo }) => (
   <div 
-    className="px-6 py-5 grid grid-cols-12 gap-4 items-center border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors">
+    className="px-6 py-5 grid grid-cols-12 gap-4 items-center border-b border-gray-200 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
     {/* Last Name */}
-    <div className="col-span-3 text-gray-700 font-medium">
+    <div className="col-span-3 text-gray-700 dark:text-gray-200 font-medium">
       {studentData.lastName}
     </div>
 
     {/* First Name */}
-    <div className="col-span-3 text-gray-700">
+    <div className="col-span-3 text-gray-700 dark:text-gray-300">
       {studentData.firstName}
     </div>
 
     {/* Attendance Lozenge - Conditional styling based on status */}
     <div className="col-span-3">
       {studentData.attendance === 'Present' ? (
-        <span className="inline-block bg-green-100 text-green-800 font-medium py-1 px-3 rounded-full text-sm">
+        <span className="inline-block bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400 font-medium py-1 px-3 rounded-full text-sm">
           Present ✓
         </span>
       ) : (
-        <span className="inline-block bg-red-100 text-red-800 font-medium py-1 px-3 rounded-full text-sm">
+        <span className="inline-block bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-400 font-medium py-1 px-3 rounded-full text-sm">
           Absent →
         </span>
       )}
     </div>
 
     {/* Grade */}
-    <div className="col-span-2 text-gray-600 text-center">
+    <div className="col-span-2 text-gray-600 dark:text-gray-400 text-center">
       {studentData.grade}
     </div>
 
@@ -283,7 +283,7 @@ const StudentRow = ({ studentData, onViewStudentInfo }) => (
           e.stopPropagation();
           onViewStudentInfo(studentData);
         }}
-        className="bg-amber-300 hover:bg-amber-400 text-gray-800 font-medium py-2 px-4 rounded-full text-sm transition-colors whitespace-nowrap"
+        className="bg-amber-300 hover:bg-amber-400 dark:bg-amber-400 dark:hover:bg-amber-500 text-gray-800 font-medium py-2 px-4 rounded-full text-sm transition-colors whitespace-nowrap"
       >
         View Info
       </button>

@@ -185,15 +185,15 @@ const AttendancePage = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Present':
-        return 'text-green-600 bg-green-50';
+        return 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30';
       case 'Absent':
-        return 'text-red-600 bg-red-50';
+        return 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30';
       case 'Late':
-        return 'text-yellow-600 bg-yellow-50';
+        return 'text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/30';
       case 'Excused':
-        return 'text-blue-600 bg-blue-50';
+        return 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30';
       default:
-        return 'text-gray-600 bg-gray-50';
+        return 'text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700';
     }
   };
 
@@ -391,28 +391,28 @@ const AttendancePage = () => {
                   
                   {/* Dropdown Menu */}
                   {openDropdownId === student.id && (
-                    <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-20">
+                    <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-20">
                       <button
                         onClick={() => handleStatusChange(student.id, 'Present')}
-                        className="w-full text-left px-4 py-2 text-sm text-green-700 hover:bg-green-50 dark:hover:bg-green-900 transition-colors"
+                        className="w-full text-left px-4 py-2 text-sm text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 transition-colors"
                       >
                         Present
                       </button>
                       <button
                         onClick={() => handleStatusChange(student.id, 'Absent')}
-                        className="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50 dark:hover:bg-red-900 transition-colors"
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
                       >
                         Absent
                       </button>
                       <button
                         onClick={() => handleStatusChange(student.id, 'Late')}
-                        className="w-full text-left px-4 py-2 text-sm text-yellow-700 hover:bg-yellow-50 dark:hover:bg-yellow-900 transition-colors"
+                        className="w-full text-left px-4 py-2 text-sm text-yellow-600 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/30 transition-colors"
                       >
                         Late
                       </button>
                       <button
                         onClick={() => handleStatusChange(student.id, 'Excused')}
-                        className="w-full text-left px-4 py-2 text-sm text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900 transition-colors"
+                        className="w-full text-left px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
                       >
                         Excused
                       </button>

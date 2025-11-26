@@ -47,7 +47,7 @@ const getSectionColor = (current, max) => {
 };
 
 // **API CONFIGURATION**
-const API_BASE_URL = 'http://localhost/registrar-gca-main/backend/api/sections/getSection.php'; 
+const API_BASE_URL = 'http://localhost/SMS-GCA-3H/Registrar/backend/api/sections/getSection.php'; 
 
 // HELPER: Function for transform flat API data to frontend-friendly format
 const transformApiData = (apiData) => {

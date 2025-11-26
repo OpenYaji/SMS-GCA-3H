@@ -76,7 +76,7 @@ public function login($identifier, $password) {
                 $dashboardRoute = '/';
         }
 
-        $redirectUrl = "http://192.168.0.110:" . $port . $dashboardRoute;
+        $redirectUrl = "http://localhost:" . $port . $dashboardRoute;
 
         return [
             'success' => true, 

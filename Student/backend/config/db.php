@@ -2,8 +2,8 @@
 
 class Database
 {
-    private $host = '192.168.0.110';
-    private $db_name = 'adb';
+    private $host = '127.0.0.1';
+    private $db_name = 'a';
     private $username = 'root';
     private $password = '';
     public $conn;

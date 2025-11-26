@@ -16,8 +16,8 @@ const ReviewHeader = () => {
           animate ? "translate-x-0 opacity-100" : "-translate-x-10 opacity-0"
         }`}
       >
-        Section Assignment and Final Acceptance
-      </h2>
+        Section Assigning and Enrollment Completion
+       </h2>
     </div>
   );
 };

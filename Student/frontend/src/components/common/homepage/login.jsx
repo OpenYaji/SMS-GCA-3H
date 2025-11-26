@@ -35,9 +35,22 @@ const Login = () => {
       if (result.success) {
         setLoggedInUser(result.user.fullName);
         setShowSuccessModal(true);
-        console.log('nicewan po');
+        
+        console.log(`User Type: ${result.user.userType}`);
+        console.log(`Redirecting to: ${result.redirectUrl}`);
+
         setTimeout(() => {
-          navigate('/student-dashboard');
+          // KEY CHANGE: Check if we are already on the correct port
+          const currentPort = window.location.port;
+          const targetUrl = new URL(result.redirectUrl);
+          
+          if (targetUrl.port === currentPort) {
+            // If on same port, use React Router
+            navigate(targetUrl.pathname); 
+        } else {
+            // If different port, force browser reload to new app
+            window.location.href = result.redirectUrl; 
+          }
         }, 2000);
       }
     } catch (err) {

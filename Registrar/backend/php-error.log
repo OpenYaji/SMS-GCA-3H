@@ -1,0 +1,1043 @@
+[26-Nov-2025 17:38:58 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:06 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:11 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:11 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:11 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:17 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:22 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:27 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:39:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:40:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:19 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:41:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:19 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:42:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:03 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:07 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:43:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:11 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:11 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:17 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:22 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:28 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:44:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:12 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:12 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:12 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:45:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(6): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:42 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:48 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:52 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:52 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:52 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:53 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:46:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:47:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:48:42 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(10): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:49:08 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:49:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:49:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:49:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:49:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:49:11 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:49:11 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:49:42 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:50:42 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:51:42 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:52:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:52:42 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:53:03 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:53:42 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:54:31 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:54:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:105
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(105): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 105
+[26-Nov-2025 17:54:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:105
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(105): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 105
+[26-Nov-2025 17:54:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:54:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:54:37 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:54:37 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:54:43 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:54:48 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:54:53 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[26-Nov-2025 17:54:58 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.MotherTongue' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:64
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(64): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64

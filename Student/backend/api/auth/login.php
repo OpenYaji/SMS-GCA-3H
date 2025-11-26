@@ -28,21 +28,24 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['message' => 'Method not allowed.']);
     exit();
 }
+// ... imports ...
 
 $input_data = json_decode(file_get_contents("php://input"));
 
+// Change 'username' validation if needed, but 'username' covers all IDs
 if (!isset($input_data->username) || !isset($input_data->password)) {
     http_response_code(400); 
-    echo json_encode(['message' => 'Missing username or password.']);
+    echo json_encode(['message' => 'Missing credentials.']);
     exit();
 }
 
-$studentNumber = trim(htmlspecialchars(strip_tags($input_data->username)));
-
+// Rename variable for clarity
+$identifier = trim(htmlspecialchars(strip_tags($input_data->username)));
 $password = $input_data->password;
 
-$result = $authController->login($studentNumber, $password);
+$result = $authController->login($identifier, $password);
 
+// ... rest of the file
 if ($result['success']) {
     http_response_code(200);
     echo json_encode($result);

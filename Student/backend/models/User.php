@@ -9,37 +9,48 @@ class User
         $this->conn = $db;
     }
 
-    public function getStudentByStudentNumber($studentNumber)
-    {
-        $query = "
-            SELECT 
-                u.UserID,
-                sp.StudentNumber,
-                pp.PasswordHash,
-                CONCAT(p.FirstName, ' ', p.LastName) AS FullName,
-                u.UserType,
-                u.AccountStatus
-            FROM 
-                studentprofile sp
-            JOIN 
-                profile p ON sp.ProfileID = p.ProfileID
-            JOIN 
-                user u ON p.UserID = u.UserID
-            JOIN 
-                passwordpolicy pp ON u.UserID = pp.UserID
-            WHERE 
-                sp.StudentNumber = :studentNumber AND u.UserType = 'Student'
-        ";
+// models/User.php
 
-        try {
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':studentNumber', $studentNumber);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return false;
-        }
+public function getUserByIdentifier($identifier)
+{
+    // This query checks if the input matches:
+    // 1. Email in user table
+    // 2. StudentNumber in studentprofile
+    // 3. EmployeeNumber in teacher/admin/registrar/guard profiles
+    $query = "
+        SELECT 
+            u.UserID,
+            u.UserType,
+            u.AccountStatus,
+            pp.PasswordHash,
+            CONCAT(p.FirstName, ' ', p.LastName) AS FullName
+        FROM user u
+        JOIN profile p ON u.UserID = p.UserID
+        JOIN passwordpolicy pp ON u.UserID = pp.UserID
+        LEFT JOIN studentprofile sp ON p.ProfileID = sp.ProfileID
+        LEFT JOIN teacherprofile tp ON p.ProfileID = tp.ProfileID
+        LEFT JOIN adminprofile ap ON p.ProfileID = ap.ProfileID
+        LEFT JOIN registrarprofile rp ON p.ProfileID = rp.ProfileID
+        LEFT JOIN guardprofile gp ON p.ProfileID = gp.ProfileID
+        WHERE 
+            (u.EmailAddress = :identifier) OR 
+            (sp.StudentNumber = :identifier) OR 
+            (tp.EmployeeNumber = :identifier) OR
+            (ap.EmployeeNumber = :identifier) OR
+            (rp.EmployeeNumber = :identifier) OR
+            (gp.EmployeeNumber = :identifier)
+        LIMIT 1
+    ";
+
+    try {
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':identifier', $identifier);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        return false;
     }
+}
 
 
     public function getStudentByUserId($userId)

@@ -46,9 +46,11 @@ export const AuthProvider = ({ children }) => {
 
       if (response.data.success) {
         await fetchCurrentUser();
-        return { success: true, user: response.data.user };
+        
+        return response.data; 
       }
     } catch (error) {
+      console.error("Login error:", error);
       throw error;
     }
   };

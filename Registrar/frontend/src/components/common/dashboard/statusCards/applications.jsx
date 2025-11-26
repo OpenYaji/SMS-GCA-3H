@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Inbox } from "lucide-react";
 
 const API_BASE =
-  "http://localhost/registrar-gca-main/backend/api/dashboard/applications.php"; // SSE endpoint
+  "http://localhost/SMS-GCA-3H/Registrar/backend/api/dashboard/applications.php"; // SSE endpoint
 
 const Applications = () => {
   const [isVisible, setIsVisible] = useState(false);

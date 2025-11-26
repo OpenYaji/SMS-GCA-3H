@@ -14,7 +14,7 @@ const InboxTable = ({ filtersState = {}, onProceedToScreening }) => {
   const prevDataRef = useRef(null);
   const [removingIds, setRemovingIds] = useState([]);
 
-  const API_BASE = "http://localhost/registrar-gca-main/backend/api/applicants";
+  const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
 
   // Fetch applicants from backend
   const fetchApplicants = async () => {
@@ -105,7 +105,7 @@ const InboxTable = ({ filtersState = {}, onProceedToScreening }) => {
   if (error) return <p className="text-center mt-5 text-red-500">Error: {error}</p>;
   if (filteredApplicants.length === 0) return <p className="text-center mt-5">No applicants found.</p>;
 
-  return (
+ return (
     <div>
       <style>{`
         @keyframes slideUp {
@@ -119,22 +119,39 @@ const InboxTable = ({ filtersState = {}, onProceedToScreening }) => {
         <div className="rounded-2xl overflow-x-auto">
           <table className="min-w-[700px] w-full border-collapse relative z-10">
             <thead>
+              {/* Bulk Proceed button row */}
+              <tr className="bg-gray-100 dark:bg-slate-700 border-b border-gray-400 dark:border-slate-500">
+                <th colSpan="7" className="px-4 py-3">
+                  <div className="flex justify-between items-center">
+                    <button
+                      onClick={() => setShowBulkModal(true)}
+                      disabled={selectedRows.length === 0}
+                      className={`px-4 py-2 text-sm font-semibold rounded-lg transition
+                        ${selectedRows.length > 0 ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+                    >
+                      Proceed to Screening ({selectedRows.length})
+                    </button>
+                    <span className="text-sm font-semibold text-gray-800 dark:text-white">
+                      Total: {filteredApplicants.length} applicant(s)
+                    </span>
+                  </div>
+                </th>
+              </tr>
+
+              {/* Column headers */}
               <tr className="bg-gray-100 dark:bg-slate-700 text-left border-b border-gray-400 dark:border-slate-500">
                 <th className="px-4 py-3 w-12 text-center relative">
-                  <div className="relative flex items-center justify-center">
+                  <div className="relative flex items-center justify-center group">
                     <input
                       type="checkbox"
-                      onChange={(e) => toggleSelectAll(e.target.checked)}
                       checked={selectedRows.length === filteredApplicants.length && filteredApplicants.length > 0}
-                      onMouseEnter={() => setHoveredHeader(true)}
-                      onMouseLeave={() => setHoveredHeader(false)}
+                      onChange={(e) => toggleSelectAll(e.target.checked)}
                       className="cursor-pointer"
                     />
-                    {hoveredHeader && (
-                      <span className="absolute left-full ml-2 bg-black text-white text-xs font-medium rounded-md px-2 py-1 whitespace-nowrap z-[9999]">
-                        Select all
-                      </span>
-                    )}
+                    {/* Tooltip */}
+                    <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-black text-white text-xs font-medium rounded-md px-2 py-1 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-[9999]">
+                      Select all
+                    </span>
                   </div>
                 </th>
                 <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Applicant Name</th>
@@ -153,53 +170,43 @@ const InboxTable = ({ filtersState = {}, onProceedToScreening }) => {
                   className={`transition-all duration-300 border-b border-gray-400 dark:border-slate-600
                     ${removingIds.includes(applicant.id) ? "opacity-0" : "opacity-100"}
                     ${isSelected(applicant.id) ? "bg-[#F8C471] dark:bg-[#C29134]" : "hover:bg-gray-50 dark:hover:bg-slate-700"}
-                    ${index === filteredApplicants.length - 1 ? "rounded-b-2xl" : ""}
-                  `}
+                    ${index === filteredApplicants.length - 1 ? "rounded-b-2xl" : ""}`}
                 >
                   <td className="px-4 py-3 text-center relative">
-                    <div className="relative flex items-center justify-center">
+                    <div className="relative flex items-center justify-center group">
                       <input
                         type="checkbox"
                         checked={isSelected(applicant.id)}
                         onChange={() => toggleRow(applicant.id)}
-                        onMouseEnter={() => setHoveredId(applicant.id)}
-                        onMouseLeave={() => setHoveredId(null)}
                         className="cursor-pointer"
                       />
-                      {hoveredId === applicant.id && (
-                        <span className="absolute left-full ml-2 bg-black text-white text-xs font-medium rounded-md px-2 py-1 whitespace-nowrap z-[9999]">
-                          Select
-                        </span>
-                      )}
+                      {/* Tooltip */}
+                      <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-black text-white text-xs font-medium rounded-md px-2 py-1 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-[9999]">
+                        Select
+                      </span>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-800 dark:text-white font-medium">
-                    {applicant.lastName}, {applicant.firstName} {applicant.middleInitial}.
+                    {applicant.StudentLastName}, {applicant.StudentFirstName} {applicant.StudentMiddleName}.
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.studentType}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.grade}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.created_at}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.EnrolleeType}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.ApplyingForGradeLevelID}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.SubmissionDate}</td>
                   <td className="px-4 py-3 text-center">
-                    <span className="text-xs font-semibold px-2 py-1 rounded-full bg-yellow-300 text-black">
-                      {applicant.status}
-                    </span>
+                    <span className="text-xs font-semibold px-2 py-1 rounded-full bg-yellow-300 text-black">{applicant.ApplicationStatus}</span>
                   </td>
                   <td className="px-4 py-3 text-center relative">
-                    <div className="relative flex flex-col items-center gap-2">
+                    <div className="relative flex flex-col items-center gap-2 group">
                       <button
                         className="inline-flex items-center gap-2 border border-gray-400 text-black dark:text-white px-3 py-1.5 rounded-md text-sm font-semibold bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition cursor-pointer"
                         onClick={() => setSelectedApplicant(applicant)}
-                        onMouseEnter={() => setHoveredId(`view-${applicant.id}`)}
-                        onMouseLeave={() => setHoveredId(null)}
                       >
-                        <Eye className="w-4 h-4" />
-                        View
+                        <Eye className="w-4 h-4" /> View
                       </button>
-                      {hoveredId === `view-${applicant.id}` && (
-                        <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium rounded-md px-2 py-1 whitespace-nowrap z-[9999]">
-                          View applicant details
-                        </span>
-                      )}
+                      {/* Tooltip */}
+                      <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium rounded-md px-2 py-1 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-[9999]">
+                        View applicant details
+                      </span>
                     </div>
                   </td>
                 </tr>

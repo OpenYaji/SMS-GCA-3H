@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ClipboardList } from "lucide-react";
 
-const LIVE_API = "http://localhost/registrar-gca-main/backend/api/dashboard/tasks.php";
+const LIVE_API = "http://localhost/SMS-GCA-3H/Registrar/backend/api/dashboard/tasks.php";
 
 const Tasks = () => {
   const [isVisible, setIsVisible] = useState(false);

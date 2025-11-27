@@ -3,18 +3,19 @@
 use App\Models\SchoolYear;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\DashboardController;
-use App\Http\Controllers\Api\V1\TeacherScheduleController;
-use App\Http\Controllers\Api\V1\CurrentUserController;
 use App\Http\Controllers\Api\V1\SectionController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\SchoolYearController;
+use App\Http\Controllers\Api\V1\CurrentUserController;
+use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\AdminProfileController;
 use App\Http\Controllers\Api\V1\AnnouncementController;
 use App\Http\Controllers\Api\V1\GuardProfileController;
 use App\Http\Controllers\Api\V1\StudentProfileController;
 use App\Http\Controllers\Api\V1\TeacherProfileController;
+use App\Http\Controllers\Api\V1\TeacherScheduleController;
+use App\Http\Controllers\Api\V1\AuthorizedEscortController;
 use App\Http\Controllers\Api\V1\RegistrarProfileController;
-use App\Http\Controllers\Api\V1\TransactionController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -75,6 +76,11 @@ Route::prefix('v1')->group(function () {
 
     //School Years
     Route::apiResource('school-years', SchoolYearController::class)->only(['index', 'show', 'store', 'update']);
+
+    //Authorized Escorts
+    Route::apiResource('authorized-escorts', AuthorizedEscortController::class)->only(['index']);
+    Route::patch('authorized-escorts/{authorized_escort}/approve', [AuthorizedEscortController::class, 'approve']);
+    Route::patch('authorized-escorts/{authorized_escort}/reject', [AuthorizedEscortController::class, 'reject']);
 
     //Sections
     Route::apiResource('sections', SectionController::class)->only(['store', 'update']);

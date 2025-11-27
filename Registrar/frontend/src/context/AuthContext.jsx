@@ -9,25 +9,6 @@
 //   const [loading, setLoading] = useState(true);
 //   const navigate = useNavigate();
 
-//   const fetchCurrentUser = async () => {
-//     try {
-//       const response = await axios.get(
-//         'http://localhost/Gymazo-Student-Side/backend/api/auth/getCurrentUser.php',
-//         { withCredentials: true }
-//       );
-
-//       if (response.data.success) {
-//         setUser(response.data.user);
-//       } else {
-//         setUser(null);
-//       }
-//     } catch(error) {
-//       setUser(null);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
 //   useEffect(() => {
 //     const publicRoutes = ['/', '/login'];
     
@@ -41,7 +22,7 @@
 //   const login = async (username, password) => {
 //     try {
 //       const response = await axios.post(
-//         'http://localhost/Gymazo-Student-Side/backend/api/auth/login.php', // need pa to ng enhancement
+//         '/backend/api/auth/login.php', // need pa to ng enhancement
 //         { username, password },
 //         {
 //           withCredentials: true,
@@ -50,7 +31,6 @@
 //       );
 
 //       if (response.data.success) {
-//         await fetchCurrentUser();
 //         return { success: true, user: response.data.user };
 //       }
 //     } catch (error) {
@@ -61,7 +41,7 @@
 //   const logout = async () => {
 //     try {
 //       await axios.post(
-//         'http://localhost/Gymazo-Student-Side/backend/api/auth/logout.php', // need pa to ng enhancement
+//         '/backend/api/auth/logout.php', // need pa to ng enhancement
 //         {},
 //         { withCredentials: true }
 //       );
@@ -78,7 +58,6 @@
 //     loading,
 //     login,
 //     logout,
-//     refreshUser: fetchCurrentUser
 //   };
 
 //   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

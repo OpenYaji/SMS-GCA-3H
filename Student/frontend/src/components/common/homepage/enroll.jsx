@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Bg from '../../../assets/img/bg.png';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = 'http://localhost/Gymazo-Student-Side/backend/api/admission.php';
+const API_URL = 'http://localhost/SMS-GCA-3H/Student/backend/api/admission.php';
 
 const PrivacyModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Users } from "lucide-react";
 
 const API_BASE =
-  "http://localhost/registrar-gca-main/backend/api/dashboard/enrollments.php";
+  "http://localhost/SMS-GCA-3H/Registrar/backend/api/dashboard/enrollments.php";
 
 const Enrollments = () => {
   const [isVisible, setIsVisible] = useState(false);

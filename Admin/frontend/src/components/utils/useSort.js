@@ -83,7 +83,44 @@ export default function useSort(data, sortOption) {
           );
           break;
 
-        // Parent options
+        // Parent options - Updated to handle escort status
+        case "All Escorts":
+          // Show only approved escorts by default
+          filtered = filtered.filter(
+            (item) => item.EscortStatus === "Approved" && item.archived !== true
+          );
+          console.log(
+            `All Escorts filter: ${filtered.length} approved escorts`
+          );
+          break;
+
+        case "Approved Only":
+          filtered = filtered.filter(
+            (item) => item.EscortStatus === "Approved" && item.archived !== true
+          );
+          console.log(
+            `Approved Only filter: ${filtered.length} approved escorts`
+          );
+          break;
+
+        case "Pending Only":
+          filtered = filtered.filter(
+            (item) => item.EscortStatus === "Pending" && item.archived !== true
+          );
+          console.log(
+            `Pending Only filter: ${filtered.length} pending escorts`
+          );
+          break;
+
+        case "Declined Only":
+          filtered = filtered.filter(
+            (item) => item.EscortStatus === "Rejected" && item.archived !== true
+          );
+          console.log(
+            `Declined Only filter: ${filtered.length} declined escorts`
+          );
+          break;
+
         case "All Parents":
           filtered = filtered.filter((item) => item.archived !== true);
           console.log(
@@ -192,12 +229,14 @@ export default function useSort(data, sortOption) {
             a.name ||
             a.formattedName ||
             a.user ||
+            a.FullName ||
             ""
           ).toLowerCase();
           const nameB = (
             b.name ||
             b.formattedName ||
             b.user ||
+            b.FullName ||
             ""
           ).toLowerCase();
           return nameA.localeCompare(nameB);
@@ -211,12 +250,14 @@ export default function useSort(data, sortOption) {
             a.name ||
             a.formattedName ||
             a.user ||
+            a.FullName ||
             ""
           ).toLowerCase();
           const nameB = (
             b.name ||
             b.formattedName ||
             b.user ||
+            b.FullName ||
             ""
           ).toLowerCase();
           return nameB.localeCompare(nameA);

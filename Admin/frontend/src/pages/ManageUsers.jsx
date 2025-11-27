@@ -97,6 +97,26 @@ export default function ManageUsers() {
     }
   };
 
+  const handleParentTableRefresh = () => {
+    if (parentTableRef.current?.refreshParents) {
+      parentTableRef.current.refreshParents();
+    }
+  };
+
+  // Handler for when parent information is updated (including status changes)
+  const handleParentInfoUpdated = (updatedParent) => {
+    console.log("Parent information updated in ManageUsers:", updatedParent);
+
+    if (parentTableRef.current?.refreshParents) {
+      console.log("Triggering parent table refresh after info update");
+      parentTableRef.current.refreshParents();
+    }
+
+    if (selectedParent && selectedParent.id === updatedParent.id) {
+      setSelectedParent(updatedParent);
+    }
+  };
+
   const handleSelectGuard = (guard) => {
     setSelectedGuard(guard);
   };
@@ -249,20 +269,6 @@ export default function ManageUsers() {
     }
   };
 
-  // Handler for when parent information is updated
-  const handleParentInfoUpdated = (updatedParent) => {
-    console.log("Parent information updated in ManageUsers:", updatedParent);
-
-    if (parentTableRef.current?.refreshParents) {
-      console.log("Triggering parent table refresh after info update");
-      parentTableRef.current.refreshParents();
-    }
-
-    if (selectedParent && selectedParent.id === updatedParent.id) {
-      setSelectedParent(updatedParent);
-    }
-  };
-
   // Handler for student sort option change
   const handleStudentSortChange = (sortOption) => {
     setStudentSortOption(sortOption);
@@ -321,12 +327,14 @@ export default function ManageUsers() {
               ref={parentTableRef}
               onSelectParent={setSelectedParent}
               onParentArchived={handleParentArchived}
+              onParentTableRefresh={handleParentTableRefresh}
               darkMode={isDarkMode}
             />
             <ParentProfile
               parent={selectedParent}
               onParentArchived={handleParentArchived}
               onParentInfoUpdated={handleParentInfoUpdated}
+              onParentTableRefresh={handleParentTableRefresh}
               darkMode={isDarkMode}
             />
           </div>

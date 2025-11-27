@@ -26,14 +26,16 @@ class AuthorizedEscortResource extends JsonResource
             'IsActive' => $this->IsActive,
             'DateAdded' => $this->DateAdded,
             'ApprovedByUserID' => $this->ApprovedByUserID,
-            'Student' => [
+            'Student' => $this->whenLoaded('studentProfile', function (){
+                return [
                 'StudentProfileID' => $this->studentProfile->StudentProfileID,
                 'FirstName' => $this->studentProfile->profile->FirstName,
                 'LastName' => $this->studentProfile->profile->LastName,
                 'MiddleName' => $this->studentProfile->profile->MiddleName,
                 'GradeLevel' => $this->studentProfile->enrollments()?->orderByDesc('EnrollmentID')->first()?->section?->gradeLevel?->LevelName,
                 'Section' => $this->studentProfile->enrollments()?->orderByDesc('EnrollmentID')->first()?->section?->SectionName,
-            ],
+                ];
+            }),
         ];
     }
 }

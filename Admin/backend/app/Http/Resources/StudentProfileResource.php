@@ -69,6 +69,8 @@ class StudentProfileResource extends JsonResource
 
             'Guardians' => GuardianResource::collection($this->guardians),
 
+            'AuthorizedEscorts' => AuthorizedEscortResource::collection($this->authorizedEscorts()->where('EscortStatus', 'Approved')->get()),
+
             'GradeLevel' => $this->enrollments()->orderByDesc('EnrollmentID')->first()?->section?->gradeLevel?->LevelName,
             'Section' => $this->enrollments()->orderByDesc('EnrollmentID')->first()?->section?->SectionName,
 

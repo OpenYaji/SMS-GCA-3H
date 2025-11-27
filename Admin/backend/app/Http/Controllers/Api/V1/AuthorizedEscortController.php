@@ -17,7 +17,7 @@ class AuthorizedEscortController extends Controller
      */
     public function index()
     {
-        return AuthorizedEscortResource::collection(AuthorizedEscort::all());
+        return AuthorizedEscortResource::collection(AuthorizedEscort::with('studentProfile.profile.user')->get());
     }
 
     /**

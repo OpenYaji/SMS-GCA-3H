@@ -10,6 +10,7 @@ import GradingPage from './components/pages/gradingPage';
 import RecordPage from './components/pages/recordPage';
 import ReportsPage from './components/pages/reportsPage';
 import HelpSupportPage from './components/pages/helpSupportPage';
+import TransactionPage from './components/pages/transactionPage';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
               <Route path="record-and-archives" element={<RecordPage />} />
               <Route path="report-and-analytics" element={<ReportsPage />} />
               <Route path="help-and-support" element={<HelpSupportPage />} />
+              <Route path="transaction" element={<TransactionPage />} />
             </Route>
           </Routes>
         </DarkModeProvider>

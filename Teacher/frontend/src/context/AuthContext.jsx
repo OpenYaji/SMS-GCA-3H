@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(
         //change this when deploying
-        //'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/auth/login.php',
+        //'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/auth/login.php',
         API_ENDPOINTS.LOGIN,
         { employee_number: username, password }, // Fixed: backend expects employee_number
         {
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await axios.post(
         API_ENDPOINTS.LOGOUT,
-        //'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/auth/logout.php',
+        //'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/auth/logout.php',
         {},
         { withCredentials: true }
       );

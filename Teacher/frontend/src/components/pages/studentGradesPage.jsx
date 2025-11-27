@@ -111,7 +111,7 @@ export default function StudentGradesPage({
       });
       
       const response = await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/students/update-student-profile.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/students/update-student-profile.php',
         {
           studentId: student.id,
           ...studentData
@@ -160,7 +160,7 @@ export default function StudentGradesPage({
 
       // Fetch subjects for this grade level
       const subjectsResponse = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/subjects/get-subjects-by-grade.php?gradeLevelId=${classData.gradeLevelId}`,
+        `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/subjects/get-subjects-by-grade.php?gradeLevelId=${classData.gradeLevelId}`,
         { withCredentials: true }
       );
 
@@ -184,7 +184,7 @@ export default function StudentGradesPage({
     for (const subject of subjectsList) {
       try {
         const response = await axios.get(
-          `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/grades/get-section-grades.php?sectionId=${classData.id}&subjectId=${subject.id}`,
+          `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/grades/get-section-grades.php?sectionId=${classData.id}&subjectId=${subject.id}`,
           { withCredentials: true }
         );
         

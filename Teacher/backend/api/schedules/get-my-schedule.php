@@ -68,7 +68,7 @@ try {
             gl.LevelName as grade,
             sec.SectionID,
             sec.SectionName as sectionName,
-            COALESCE(sec.RoomNumber, 'TBD') as room,
+            COALESCE(cs.RoomNumber, 'TBD') as room,
             CASE 
                 WHEN COUNT(cs.ScheduleID) > 0 THEN 'Approved'
                 ELSE 'Pending'
@@ -77,7 +77,7 @@ try {
         JOIN gradelevel gl ON sec.GradeLevelID = gl.GradeLevelID
         LEFT JOIN classschedule cs ON cs.SectionID = sec.SectionID
         WHERE sec.AdviserTeacherID = :teacherProfileId
-        GROUP BY gl.GradeLevelID, gl.LevelName, sec.SectionID, sec.SectionName, sec.RoomNumber
+        GROUP BY gl.GradeLevelID, gl.LevelName, sec.SectionID, sec.SectionName
         ORDER BY gl.LevelName, sec.SectionName
     ";
     

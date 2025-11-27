@@ -48,7 +48,7 @@ const AttendanceReportPage = () => {
       }
       
       const response = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/attendance/get-attendance-report.php?sectionId=${classData.id}&quarter=${selectedQuarter}`,
+        `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/attendance/get-attendance-report.php?sectionId=${classData.id}&quarter=${selectedQuarter}`,
         { withCredentials: true }
       );
       

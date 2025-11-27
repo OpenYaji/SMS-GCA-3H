@@ -80,7 +80,7 @@ const TeachingSchedulePage = () => {
     try {
       console.log('Fetching options (grade levels, subjects, teachers)...');
       const response = await axios.get(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/get-options.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/get-options.php',
         { withCredentials: true }
       );
 
@@ -118,7 +118,7 @@ const TeachingSchedulePage = () => {
       if (activeTab === 'my-schedule') {
         // Fetch My Schedule (teacher's assigned classes)
         const response = await axios.get(
-          'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/get-my-schedule.php',
+          'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/get-my-schedule.php',
           { withCredentials: true }
         );
 
@@ -131,7 +131,7 @@ const TeachingSchedulePage = () => {
       } else {
         // Fetch All Teacher Schedules
         const response = await axios.get(
-          'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/get-all-schedules.php',
+          'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/get-all-schedules.php',
           { withCredentials: true }
         );
 
@@ -163,7 +163,7 @@ const TeachingSchedulePage = () => {
     try {
       console.log('Fetching sections for teacher:', teacherId);
       const response = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/get-teacher-sections.php?teacherId=${teacherId}`,
+        `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/get-teacher-sections.php?teacherId=${teacherId}`,
         { withCredentials: true }
       );
 
@@ -318,7 +318,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/delete-schedule.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/delete-schedule.php',
         { scheduleId },
         { withCredentials: true }
       );
@@ -365,7 +365,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/get-sections-with-students.php?gradeLevelId=${gradeLevelId}`,
+        `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/get-sections-with-students.php?gradeLevelId=${gradeLevelId}`,
         { withCredentials: true }
       );
 
@@ -426,7 +426,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/assign-teacher-to-section.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/assign-teacher-to-section.php',
         {
           teacherId: addClassFormData.teacherId,
           sectionId: addClassFormData.sectionId,
@@ -483,7 +483,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/create-sections.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/create-sections.php',
         {
           gradeLevelId,
           schoolYearId: activeSchoolYear.id
@@ -544,7 +544,7 @@ const TeachingSchedulePage = () => {
     // Fetch schedule for this specific section
     try {
       const response = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/get-section-schedule.php?sectionId=${sectionId}`,
+        `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/get-section-schedule.php?sectionId=${sectionId}`,
         { withCredentials: true }
       );
 
@@ -575,7 +575,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/get-teacher-schedule-detail.php?teacherId=${teacherId}`,
+        `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/get-teacher-schedule-detail.php?teacherId=${teacherId}`,
         { withCredentials: true }
       );
 
@@ -661,7 +661,7 @@ const TeachingSchedulePage = () => {
     
     try {
       const response = await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/submit-schedule.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/schedules/submit-schedule.php',
         {
           teacherProfileId: createFormData.teacherProfileId,
           sectionId: createFormData.sectionId,

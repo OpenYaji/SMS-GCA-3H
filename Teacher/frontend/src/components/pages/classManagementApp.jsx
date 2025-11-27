@@ -93,7 +93,7 @@ export default function ClassManagementApp() {
       setLoading(true);
       setError(null);
       const response = await axios.get(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/teachers/get-teacher-classes.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/teachers/get-teacher-classes.php',
         { withCredentials: true }
       );
       
@@ -115,7 +115,7 @@ export default function ClassManagementApp() {
     try {
       // Call the auto-mark absent API for yesterday
       await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/attendance/auto-mark-absent.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/attendance/auto-mark-absent.php',
         { sectionId: sectionId },
         { withCredentials: true }
       );
@@ -135,7 +135,7 @@ export default function ClassManagementApp() {
       await autoMarkAbsentForPastDays(sectionId);
       
       const response = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/teachers/get-students-by-section.php?sectionId=${sectionId}`,
+        `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/teachers/get-students-by-section.php?sectionId=${sectionId}`,
         { withCredentials: true }
       );
       
@@ -165,7 +165,7 @@ export default function ClassManagementApp() {
       setLoading(true);
       setError(null);
       const response = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/grades/get-section-quarterly-grades.php?sectionId=${sectionId}`,
+        `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/grades/get-section-quarterly-grades.php?sectionId=${sectionId}`,
         { withCredentials: true }
       );
       
@@ -280,7 +280,7 @@ export default function ClassManagementApp() {
       
       // Send to backend
       const response = await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/grades/save-quarterly-grade.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/grades/save-quarterly-grade.php',
         {
           studentProfileId: studentId,
           sectionId: selectedClass.id,

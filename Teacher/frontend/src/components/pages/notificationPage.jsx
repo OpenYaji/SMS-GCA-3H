@@ -42,7 +42,7 @@ const NotificationPage = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/announcements/get-announcements.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/announcements/get-announcements.php',
         { withCredentials: true }
       );
 

@@ -45,7 +45,7 @@ const EmergencyDismissalPage = () => {
       if (!scheduleData?.sectionId) return;
 
       const response = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/notifications/get-section-parents.php?sectionId=${scheduleData.sectionId}`,
+        `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/notifications/get-section-parents.php?sectionId=${scheduleData.sectionId}`,
         { withCredentials: true }
       );
 
@@ -128,7 +128,7 @@ const EmergencyDismissalPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/notifications/send-dismissal-notification.php',
+        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/notifications/send-dismissal-notification.php',
         {
           scheduleId: scheduleData?.scheduleId,
           sectionId: scheduleData?.sectionId,

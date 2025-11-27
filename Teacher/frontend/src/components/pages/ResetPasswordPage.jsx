@@ -33,7 +33,7 @@ const ResetPasswordPage = () => {
   const verifyToken = async () => {
     try {
       const response = await axios.post(
-        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/auth/reset-password.php',
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/auth/reset-password.php',
         { action: 'verify', token }
       );
 
@@ -95,7 +95,7 @@ const ResetPasswordPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/auth/reset-password.php',
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/auth/reset-password.php',
         {
           token,
           password,

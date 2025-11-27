@@ -13,7 +13,7 @@ const AdvisoryClass = () => {
     const fetchAdvisoryClasses = async () => {
       try {
         const response = await axios.get(
-          'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/teachers/get-advisory-classes.php',
+          'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/get-advisory-classes.php',
           { withCredentials: true }
         );
         

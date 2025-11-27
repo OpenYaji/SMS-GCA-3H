@@ -30,6 +30,13 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Check Authorization (Head Teacher only)
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'Head Teacher') {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Access denied. Only Head Teachers can create sections.']);
+    exit();
+}
+
 // Get database connection
 $database = new Database();
 $db = $database->getConnection();

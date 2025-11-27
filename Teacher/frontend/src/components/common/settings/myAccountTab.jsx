@@ -38,7 +38,7 @@ export default function MyAccountTab() {
       console.log('Fetching teacher profile...');
       
       const response = await axios.get(
-        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/teachers/get-teacher-profile.php',
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/get-teacher-profile.php',
         { withCredentials: true }
       );
 
@@ -98,7 +98,7 @@ export default function MyAccountTab() {
       console.log('Sending profile data:', profileData);
       
       const response = await axios.post(
-        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/teachers/update-teacher-profile.php',
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/update-teacher-profile.php',
         profileData,
         { withCredentials: true }
       );
@@ -211,7 +211,7 @@ export default function MyAccountTab() {
                       src={
                         profileData.profilePicture.startsWith('data:') 
                           ? profileData.profilePicture 
-                          : `http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/${profileData.profilePicture}`
+                          : `http://localhost/SMS-GCA-3H/Teacher/backend/${profileData.profilePicture}`
                       }
                       alt="Profile"
                       className="w-full h-full object-cover"

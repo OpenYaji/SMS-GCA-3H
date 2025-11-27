@@ -42,7 +42,7 @@ export default function DashboardSidebar({ collapsed, setCollapsed, mobileOpen, 
             setLogoutModalOpen(false);
             
             // Perform logout operations on backend
-            const response = await fetch('http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/auth/logout.php', {
+            const response = await fetch('http://localhost/SMS-GCA-3H/Teacher/backend/api/auth/logout.php', {
                 method: 'POST',
                 credentials: 'include'
             });

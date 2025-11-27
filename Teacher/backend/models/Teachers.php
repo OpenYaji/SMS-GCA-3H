@@ -51,7 +51,8 @@ class Teachers{
             LEFT JOIN 
                 passwordpolicy pp ON u.UserID = pp.UserID
             WHERE 
-                tp.EmployeeNumber = :EmployeeNumber AND u.UserType = 'Teacher'";
+                tp.EmployeeNumber = :EmployeeNumber 
+                AND (u.UserType = 'Teacher' OR u.UserType = 'Head Teacher')";
 
         try {
             $stmt = $this->conn->prepare($query);
@@ -65,3 +66,4 @@ class Teachers{
         }
     }
 }
+?>

@@ -74,7 +74,7 @@ const RegisterTeacher = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/auth/register-teacher.php',
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/auth/register-teacher.php',
         {
           email: formData.email,
           password: formData.password,

@@ -50,20 +50,19 @@ function App() {
           <Routes>
             {/* Login Route - Default landing page */}
             <Route path="/login" element={<LoginPage />} />
-            
-            {/* Registration Route */}
-            <Route path="/register-teacher" element={<RegisterTeacher />} />
-            
-            {/* Password Reset Routes */}
+
+            {/* Password Reset Routes 
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
-            
-            {/* Root path redirects to login */}
+            */}
+
+            {/* Root path redirects to login
             <Route path="/" element={<Navigate to="/login" replace />} />
-            
+            */}
+
             {/* Protected Dashboard Routes */}
-            <Route 
-              path="/teacher-dashboard" 
+            <Route
+              path="/teacher-dashboard"
               element={
                 <ProtectedRoute>
                   <DashboardLayout />

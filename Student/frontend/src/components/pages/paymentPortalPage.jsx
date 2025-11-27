@@ -121,12 +121,17 @@ const PaymentPortalPage = () => {
         formData.append('receipt', paymentDetails.receipt);
       }
 
-      await axios.post('/backend/api/transactions/submitPayment.php', formData, {
+      const response = await axios.post('/backend/api/transactions/submitPayment.php', formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+
+      // Refresh payment data after successful submission
+      if (response.data.success) {
+        await fetchPaymentData();
+      }
 
       setTimeout(() => {
         setStep(7);

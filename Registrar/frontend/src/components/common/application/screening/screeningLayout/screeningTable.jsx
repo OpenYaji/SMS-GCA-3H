@@ -181,7 +181,7 @@ const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
 
           <tbody>
             {filteredApplicants.map((a) => {
-              const requiredDocs = getRequiredDocuments(a.studentType);
+              const requiredDocs = getRequiredDocuments(a.EnrolleeType);
               const submittedDocs = a.documents || [];
               const totalDocs = requiredDocs.length;
               const receivedCount = submittedDocs.filter((doc) =>
@@ -222,8 +222,8 @@ const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
                     a.id
                   )}`}
                 >
-                  <td className="px-4 py-3 text-sm font-medium text-gray-800 dark:text-white">{`${a.lastName}, ${a.firstName} ${a.middleInitial}.`}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{a.studentType}</td>
+                  <td className="px-4 py-3 text-sm font-medium text-gray-800 dark:text-white">{`${a.StudentLastName}, ${a.StudentFirstName} ${a.StudentMiddleName}.`}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{a.EnrolleeType}</td>
                   <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 break-words max-w-[200px]">
                     {requiredDocs.join(", ")}
                   </td>

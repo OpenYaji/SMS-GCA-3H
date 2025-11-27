@@ -98,7 +98,7 @@ const InboxView = ({ applicant, onClose, onProceedToScreening }) => {
               <div className="grid grid-cols-2 gap-4">
                 {[
                   { label: "Student Type", value: fieldValue(applicant.EnrolleeType) },
-                  { label: "Grade Level", value: fieldValue(applicant.ApplyingForGradeLevelID) },
+                  { label: "Grade Level", value: fieldValue(applicant.grade) },
                 ].map((item, idx) => (
                   <div key={idx}>
                     <label className="block font-semibold text-sm mb-1">{item.label}</label>
@@ -109,9 +109,9 @@ const InboxView = ({ applicant, onClose, onProceedToScreening }) => {
 
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { label: "Age", value: fieldValue(applicant.age) },
+                  { label: "Age", value: fieldValue(applicant.Age) },
                   { label: "Gender", value: fieldValue(applicant.Gender) },
-                  { label: "Nationality", value: fieldValue(applicant.nationality) },
+                  { label: "Nationality", value: fieldValue(applicant.Nationality) },
                 ].map((item, idx) => (
                   <div key={idx}>
                     <label className="block font-semibold text-sm mb-1">{item.label}</label>
@@ -138,7 +138,7 @@ const InboxView = ({ applicant, onClose, onProceedToScreening }) => {
           <div>
             <label className="block font-semibold text-sm mb-1">Full Address</label>
             <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">
-              {fieldValue(applicant.address)}
+              {fieldValue(applicant.Address)}
             </p>
           </div>
 

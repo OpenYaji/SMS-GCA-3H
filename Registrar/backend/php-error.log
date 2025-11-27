@@ -1041,3 +1041,1844 @@ Stack trace:
 #2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
 #3 {main}
   thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 64
+[27-Nov-2025 06:28:22 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:28:27 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:28:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:28:38 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:28:43 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:28:48 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:28:53 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:28:58 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:02 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:03 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:29:03 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:29:03 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:97
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(97): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(24): Applicant->getValidatedApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getValidatedApplicants.php(6): ApplicantController->getValidatedApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 97
+[27-Nov-2025 06:29:03 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:97
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(97): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(24): Applicant->getValidatedApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getValidatedApplicants.php(6): ApplicantController->getValidatedApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 97
+[27-Nov-2025 06:29:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:29:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:29:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:11 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:16 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:31 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:32 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:32 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:36 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:41 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:51 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:29:56 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:11 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:16 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:21 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:26 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:31 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:36 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:41 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:46 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:51 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:30:56 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:01 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:06 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'a.studentprofiletable' doesn't exist in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:12 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:12 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:17 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:17 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:22 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:27 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:32 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:37 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:37 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:31:37 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:31:37 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:97
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(97): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(24): Applicant->getValidatedApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getValidatedApplicants.php(6): ApplicantController->getValidatedApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 97
+[27-Nov-2025 06:31:37 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:97
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(97): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(24): Applicant->getValidatedApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getValidatedApplicants.php(6): ApplicantController->getValidatedApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 97
+[27-Nov-2025 06:31:38 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:38 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:38 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:31:38 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:31:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:31:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:08 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sp.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:97
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(97): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(24): Applicant->getValidatedApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getValidatedApplicants.php(6): ApplicantController->getValidatedApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 97
+[27-Nov-2025 06:32:08 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sp.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:97
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(97): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(24): Applicant->getValidatedApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getValidatedApplicants.php(6): ApplicantController->getValidatedApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 97
+[27-Nov-2025 06:32:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sp.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:97
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(97): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(24): Applicant->getValidatedApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getValidatedApplicants.php(6): ApplicantController->getValidatedApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 97
+[27-Nov-2025 06:32:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sp.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:97
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(97): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(24): Applicant->getValidatedApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getValidatedApplicants.php(6): ApplicantController->getValidatedApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 97
+[27-Nov-2025 06:32:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:32:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:73
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(73): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(18): Applicant->getScreeningApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getScreeningApplicants.php(6): ApplicantController->getScreeningApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 73
+[27-Nov-2025 06:32:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:21 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:28 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:38 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:32:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:18 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:33:58 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:03 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:19 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:34:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:19 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:35:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:36:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:36:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:36:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:36:19 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:36:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:36:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:36:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:36:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:36:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:55
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(55): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 55
+[27-Nov-2025 06:37:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:37:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:37:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:37:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:37:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:37:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:37:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:37:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:37:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:37:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:19 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:38:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:39:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:39:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:39:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:39:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:39:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:39:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:39:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:39:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:39:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:40:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:41:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:42:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:43:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:44:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:44:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:44:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:44:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:44:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:44:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:44:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:44:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:44:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:45:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:20 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:25 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:53
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(53): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 53
+[27-Nov-2025 06:46:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:46:51 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:46:51 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:46:56 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:02 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:07 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:12 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:17 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:22 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:27 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:32 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:37 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:42 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:47 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:52 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:47:57 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'field list' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:62
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(62): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 62
+[27-Nov-2025 06:48:21 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:48:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:48:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:48:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:48:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:48:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:48:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:48:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:48:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:48:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:49:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:49:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:49:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:49:19 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:49:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:49:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:50:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:50:28 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:50:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:50:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:50:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:50:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:50:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:50:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:19 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:29 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:51:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:52:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:52:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:52:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:52:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:53:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58
+[27-Nov-2025 06:54:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.StudentProfileID' in 'on clause' in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php:58
+Stack trace:
+#0 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php(58): PDOStatement->execute()
+#1 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\controllers\ApplicantController.php(12): Applicant->getApplicants()
+#2 C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\getApplicants.php(12): ApplicantController->getApplicants()
+#3 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\models\Applicant.php on line 58

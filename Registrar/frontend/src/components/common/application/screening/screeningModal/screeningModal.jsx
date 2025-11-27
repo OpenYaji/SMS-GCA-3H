@@ -61,7 +61,7 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
         {/* HEADER */}
         <div className="flex justify-between items-center bg-yellow-400 text-black dark:text-white px-6 py-4">
           <h2 className="text-lg font-semibold">
-            Screening – {fieldValue(applicant.lastName)}, {fieldValue(applicant.firstName)} {fieldValue(applicant.middleInitial)}.
+            Screening – {fieldValue(applicant.StudentLastName)}, {fieldValue(applicant.StudentFirstName)} {fieldValue(applicant.StudentMiddleName)}.
           </h2>
           <span className="text-2xl cursor-pointer hover:text-gray-700 dark:hover:text-gray-300" onClick={handleClose}>
             &times;
@@ -77,13 +77,13 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
               <div>
                 <label className="block font-semibold text-sm mb-1">Student Name</label>
                 <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">
-                  {fieldValue(`${applicant.lastName}, ${applicant.firstName} ${applicant.middleInitial}.`)}
+                  {fieldValue(`${applicant.StudentFirstName}, ${applicant.StudentFirstName} ${applicant.StudentMiddleName}.`)}
                 </p>
               </div>
               <div>
                 <label className="block font-semibold text-sm mb-1">Birthdate</label>
                 <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">
-                  {fieldValue(applicant.birthdate)}
+                  {fieldValue(applicant.DateOfBirth)}
                 </p>
               </div>
               <div>
@@ -100,7 +100,7 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
                 <div>
                   <label className="block font-semibold text-sm mb-1">Student Type</label>
                   <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">
-                    {fieldValue(applicant.studentType)}
+                    {fieldValue(applicant.EnrolleeType)}
                   </p>
                 </div>
                 <div>
@@ -121,7 +121,7 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
                 <div>
                   <label className="block font-semibold text-sm mb-1">Gender</label>
                   <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">
-                    {fieldValue(applicant.gender)}
+                    {fieldValue(applicant.Gender)}
                   </p>
                 </div>
                 <div>
@@ -136,7 +136,7 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
                 <div>
                   <label className="block font-semibold text-sm mb-1">Nationality</label>
                   <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">
-                    {fieldValue(applicant.nationality)}
+                    {fieldValue(applicant.Nationality)}
                   </p>
                 </div>
                 <div>
@@ -153,32 +153,27 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
           <div className="w-full mt-4">
             <label className="block font-semibold text-sm mb-1">Full Address</label>
             <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm w-full">
-              {fieldValue(applicant.address)}
+              {fieldValue(applicant.Address)}
             </p>
           </div>
 
-          {/* Parent Info */}
-          <div>
-            <h3 className="text-sm font-semibold mb-1">Parent / Guardian Information</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div>
-                <label className="block font-semibold text-sm mb-1">Parent / Guardian Name</label>
-                <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">
-                  {fieldValue(applicant.guardian)}
-                </p>
-              </div>
-              <div>
-                <label className="block font-semibold text-sm mb-1">Relationship</label>
-                <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">
-                  {fieldValue(applicant.relationship)}
-                </p>
-              </div>
-              <div>
-                <label className="block font-semibold text-sm mb-1">Contact Number</label>
-                <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">
-                  {fieldValue(applicant.contact)}
-                </p>
-              </div>
+         
+          {/* PARENT/GUARDIAN */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold">Parent / Guardian Information</h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+              {[
+                { label: "Guardian Name", value: `${fieldValue(applicant.GuardianFirstName)} ${fieldValue(applicant.GuardianLastName)}` },
+                { label: "Relationship", value: fieldValue(applicant.GuardianRelationship) },
+                { label: "Contact Number", value: fieldValue(applicant.GuardianContact) },
+                { label: "Email", value: fieldValue(applicant.GuardianEmail) },
+              ].map((item, idx) => (
+                <div key={idx}>
+                  <label className="block font-semibold text-sm mb-1">{item.label}</label>
+                  <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">{item.value}</p>
+                </div>
+              ))}
             </div>
           </div>
 

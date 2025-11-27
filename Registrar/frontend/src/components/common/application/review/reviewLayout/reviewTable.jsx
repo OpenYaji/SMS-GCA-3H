@@ -415,7 +415,7 @@ const ReviewTable = ({ selectedFinalRows = [], toggleFinalRow = () => {}, status
                                         </td>
 
                                         <td className="px-4 py-3 text-sm text-gray-800 dark:text-white font-medium">
-                                            {a.StudentLastName}, {a.StudentFirstName} {a.middleInitial || ""}
+                                            {a.StudentLastName}, {a.StudentFirstName} {a.StudentMiddleName || ""}
                                         </td>
 
                                         <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
@@ -423,7 +423,7 @@ const ReviewTable = ({ selectedFinalRows = [], toggleFinalRow = () => {}, status
                                         </td>
 
                                         <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
-                                            {a.studentType || "—"}
+                                            {a.EnrolleeType || "—"}
                                         </td>
                                             
                                         <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
@@ -432,7 +432,7 @@ const ReviewTable = ({ selectedFinalRows = [], toggleFinalRow = () => {}, status
 
                                         <td className="px-4 py-3 text-center">
                                             <span className="text-xs font-semibold px-2 py-1 rounded-full bg-blue-600 text-white dark:bg-blue-500">
-                                                {a.status || "—"}
+                                                {a.ApplicationStatus || "—"}
                                             </span>
                                         </td>
 

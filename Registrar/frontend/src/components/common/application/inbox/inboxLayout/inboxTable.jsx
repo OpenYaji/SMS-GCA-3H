@@ -190,7 +190,7 @@ const InboxTable = ({ filtersState = {}, onProceedToScreening }) => {
                     {applicant.StudentLastName}, {applicant.StudentFirstName} {applicant.StudentMiddleName}.
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.EnrolleeType}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.ApplyingForGradeLevelID}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.grade}</td>
                   <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{applicant.SubmissionDate}</td>
                   <td className="px-4 py-3 text-center">
                     <span className="text-xs font-semibold px-2 py-1 rounded-full bg-yellow-300 text-black">{applicant.ApplicationStatus}</span>

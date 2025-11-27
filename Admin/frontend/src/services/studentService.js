@@ -40,6 +40,7 @@ const formatStudentData = (student) => {
   const medicalInfo = student.MedicalInfo || {};
   const emergencyContact = student.EmergencyContact || {};
   const guardians = student.Guardians || [];
+  const authorizedEscorts = student.AuthorizedEscorts || [];
 
   const calculateAge = (dob) => {
     if (!dob) return "";
@@ -103,10 +104,24 @@ const formatStudentData = (student) => {
     emergencyContactPerson: emergencyContact.ContactPerson || "",
     emergencyContactNumber: emergencyContact.ContactNumber || "",
     guardians: guardians.map((guardian) => ({
-      relationship: guardian.Relationship || "",
+      guardianID: guardian.GuardianID || null,
+      relationshipType: guardian.RelationshipType || "Guardian",
       fullName: guardian.FullName || "",
-      contactNumber: guardian.ContactNumber || "",
-      email: guardian.Email || "",
+      phoneNumber: guardian.PhoneNumber || "",
+      emailAddress: guardian.EmailAddress || "",
+    })),
+    // Authorized Escorts
+    authorizedEscorts: authorizedEscorts.map((escort) => ({
+      EscortID: escort.EscortID,
+      FullName: escort.FullName || "",
+      RelationshipToStudent: escort.RelationshipToStudent || "",
+      ContactNumber: escort.ContactNumber || "",
+      Address: escort.Address || "",
+      AdditionalNotes: escort.AdditionalNotes || "",
+      EscortStatus: escort.EscortStatus || "",
+      IsActive: escort.IsActive || false,
+      DateAdded: escort.DateAdded || "",
+      ApprovedByUserID: escort.ApprovedByUserID || null,
     })),
     archiveDate: student.ArchiveDate,
     isRecordArchived: !!student.ArchiveDate,

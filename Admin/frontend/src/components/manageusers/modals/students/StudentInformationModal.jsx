@@ -31,6 +31,7 @@ import {
   BookOpen,
   ClipboardList,
   Shield,
+  UserCheck,
 } from "lucide-react";
 
 const EditableInfoRow = ({
@@ -547,62 +548,26 @@ const MedicalInfoSection = ({
   );
 };
 
-// Escorts (Authorized to Pick-up)
-const EscortsSection = ({
-  escorts = [],
-  isEditing = false,
-  onEscortsChange,
-  darkMode = false,
-}) => {
-  const [newEscort, setNewEscort] = useState({
-    fullName: "",
-    relationship: "",
-    phoneNumber: "",
-  });
-
-  const handleAddEscort = () => {
-    if (newEscort.fullName.trim()) {
-      const updatedEscorts = [...escorts, { ...newEscort }];
-      onEscortsChange("escorts", updatedEscorts);
-      setNewEscort({
-        fullName: "",
-        relationship: "",
-        phoneNumber: "",
-      });
-    }
-  };
-
-  const handleRemoveEscort = (index) => {
-    const updatedEscorts = escorts.filter((_, i) => i !== index);
-    onEscortsChange("escorts", updatedEscorts);
-  };
-
-  const handleNewEscortChange = (field, value) => {
-    setNewEscort((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  if (!isEditing && escorts.length === 0) {
+// Authorized Escorts Display Component
+const EscortInfoSection = ({ escorts = [], darkMode = false }) => {
+  if (!escorts || escorts.length === 0) {
     return (
       <div className="space-y-3">
         <h4
-          className={`text-base font-semibold border-b pb-1 flex items-center gap-2 ${
+          className={`text-base font-semibold border-b pb-1 ${
             darkMode
               ? "text-white border-gray-700"
               : "text-gray-800 border-gray-200"
           }`}
         >
-          <Shield className="w-5 h-5" />
-          Escorts (Authorized to Pick-up)
+          Authorized Escorts
         </h4>
         <div
           className={`text-center py-4 ${
             darkMode ? "text-gray-400" : "text-gray-500"
           }`}
         >
-          No escorts authorized for pick-up.
+          No authorized escorts recorded.
         </div>
       </div>
     );
@@ -611,279 +576,121 @@ const EscortsSection = ({
   return (
     <div className="space-y-4">
       <h4
-        className={`text-base font-semibold border-b pb-1 flex items-center gap-2 ${
+        className={`text-base font-semibold border-b pb-1 ${
           darkMode
             ? "text-white border-gray-700"
             : "text-gray-800 border-gray-200"
         }`}
       >
-        <Shield className="w-5 h-5" />
-        Escorts (Authorized to Pick-up)
+        Authorized Escorts
       </h4>
 
-      {/* Existing Escorts */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {escorts.map((escort, index) => (
           <div
-            key={index}
+            key={escort.EscortID || index}
             className={`rounded-lg p-4 border ${
               darkMode
                 ? "bg-gray-700 border-gray-600 text-white"
                 : "bg-gray-50 border-gray-200 text-gray-900"
             }`}
           >
-            <div className="flex justify-between items-start mb-3">
-              <span
-                className={`text-sm font-semibold ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Escort {index + 1}
-              </span>
-              {isEditing && (
-                <button
-                  onClick={() => handleRemoveEscort(index)}
-                  className="text-red-500 hover:text-red-700 transition-colors p-1"
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <UserCheck className="w-5 h-5 text-green-500" />
+                <h5 className="font-semibold text-lg">{escort.FullName}</h5>
+              </div>
+              {escort.EscortStatus && (
+                <span
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    escort.EscortStatus === "Approved"
+                      ? "bg-green-100 text-green-800"
+                      : escort.EscortStatus === "Pending"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
+                  }`}
                 >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                  {escort.EscortStatus}
+                </span>
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <span
-                  className={`text-xs font-semibold uppercase tracking-wider mb-1 block ${
-                    darkMode ? "text-gray-300" : "text-gray-500"
-                  }`}
-                >
-                  Full Name
-                </span>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={escort.fullName || ""}
-                    onChange={(e) => {
-                      const updatedEscorts = [...escorts];
-                      updatedEscorts[index].fullName =
-                        inputValidation.allowOnlyLetters(e.target.value);
-                      onEscortsChange("escorts", updatedEscorts);
-                    }}
-                    placeholder="Enter full name"
-                    className={`w-full px-3 py-2 border-2 rounded-lg text-sm font-medium transition-all focus:ring-3 ${
-                      darkMode
-                        ? "bg-gray-600 border-yellow-500 text-white focus:border-yellow-400 focus:ring-yellow-500 placeholder-gray-400"
-                        : "bg-white border-yellow-500 focus:border-yellow-600 focus:ring-yellow-200 placeholder-gray-400"
-                    }`}
-                  />
-                ) : (
-                  <span
-                    className={`text-sm font-medium block min-h-[28px] py-1 ${
-                      darkMode ? "text-white" : "text-gray-900"
-                    }`}
-                  >
-                    {escort.fullName || "N/A"}
-                  </span>
-                )}
-              </div>
-
-              <div>
-                <span
-                  className={`text-xs font-semibold uppercase tracking-wider mb-1 block ${
+                  className={`text-xs font-semibold uppercase tracking-wider block mb-1 ${
                     darkMode ? "text-gray-300" : "text-gray-500"
                   }`}
                 >
                   Relationship
                 </span>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={escort.relationship || ""}
-                    onChange={(e) => {
-                      const updatedEscorts = [...escorts];
-                      updatedEscorts[index].relationship =
-                        inputValidation.allowOnlyLetters(e.target.value);
-                      onEscortsChange("escorts", updatedEscorts);
-                    }}
-                    placeholder="Enter relationship"
-                    className={`w-full px-3 py-2 border-2 rounded-lg text-sm font-medium transition-all focus:ring-3 ${
-                      darkMode
-                        ? "bg-gray-600 border-yellow-500 text-white focus:border-yellow-400 focus:ring-yellow-500 placeholder-gray-400"
-                        : "bg-white border-yellow-500 focus:border-yellow-600 focus:ring-yellow-200 placeholder-gray-400"
-                    }`}
-                  />
-                ) : (
-                  <span
-                    className={`text-sm font-medium block min-h-[28px] py-1 ${
-                      darkMode ? "text-white" : "text-gray-900"
-                    }`}
-                  >
-                    {escort.relationship || "N/A"}
-                  </span>
-                )}
+                <p className="font-medium">
+                  {escort.RelationshipToStudent || "N/A"}
+                </p>
               </div>
 
-              <div className="md:col-span-2">
+              <div>
                 <span
-                  className={`text-xs font-semibold uppercase tracking-wider mb-1 block ${
+                  className={`text-xs font-semibold uppercase tracking-wider block mb-1 ${
                     darkMode ? "text-gray-300" : "text-gray-500"
                   }`}
                 >
                   Contact Number
                 </span>
-                {isEditing ? (
-                  <div className="relative">
-                    <Phone
-                      className={`absolute left-3 top-2.5 w-4 h-4 ${
-                        darkMode ? "text-gray-400" : "text-gray-400"
-                      }`}
-                    />
-                    <input
-                      type="text"
-                      value={escort.phoneNumber || ""}
-                      onChange={(e) => {
-                        const updatedEscorts = [...escorts];
-                        updatedEscorts[index].phoneNumber =
-                          inputValidation.handleEnhancedPhoneInput(e);
-                        onEscortsChange("escorts", updatedEscorts);
-                      }}
-                      placeholder="Enter contact number (11-13 digits)"
-                      className={`w-full pl-10 px-3 py-2 border-2 rounded-lg text-sm font-medium transition-all focus:ring-3 ${
-                        darkMode
-                          ? "bg-gray-600 border-yellow-500 text-white focus:border-yellow-400 focus:ring-yellow-500 placeholder-gray-400"
-                          : "bg-white border-yellow-500 focus:border-yellow-600 focus:ring-yellow-200 placeholder-gray-400"
-                      }`}
-                    />
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <Phone
-                      className={`w-4 h-4 ${
-                        darkMode ? "text-gray-400" : "text-gray-400"
-                      }`}
-                    />
-                    <span
-                      className={`text-sm font-medium block min-h-[28px] py-1 ${
-                        darkMode ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      {escort.phoneNumber || "N/A"}
-                    </span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-gray-400" />
+                  <p className="font-medium">{escort.ContactNumber || "N/A"}</p>
+                </div>
               </div>
+
+              <div className="md:col-span-2">
+                <span
+                  className={`text-xs font-semibold uppercase tracking-wider block mb-1 ${
+                    darkMode ? "text-gray-300" : "text-gray-500"
+                  }`}
+                >
+                  Address
+                </span>
+                <div className="flex items-start gap-2">
+                  <MapPin className="w-4 h-4 text-gray-400 mt-0.5" />
+                  <p className="font-medium">{escort.Address || "N/A"}</p>
+                </div>
+              </div>
+
+              {escort.AdditionalNotes && (
+                <div className="md:col-span-2">
+                  <span
+                    className={`text-xs font-semibold uppercase tracking-wider block mb-1 ${
+                      darkMode ? "text-gray-300" : "text-gray-500"
+                    }`}
+                  >
+                    Additional Notes
+                  </span>
+                  <p className="font-medium italic">{escort.AdditionalNotes}</p>
+                </div>
+              )}
+
+              {escort.DateAdded && (
+                <div>
+                  <span
+                    className={`text-xs font-semibold uppercase tracking-wider block mb-1 ${
+                      darkMode ? "text-gray-300" : "text-gray-500"
+                    }`}
+                  >
+                    Date Added
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <p className="font-medium">
+                      {new Date(escort.DateAdded).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </div>
-
-      {/* Add New Escort Form */}
-      {isEditing && (
-        <div className="border-2 border-dashed rounded-lg p-4 border-yellow-400">
-          <h5
-            className={`text-sm font-semibold mb-3 ${
-              darkMode ? "text-gray-300" : "text-gray-700"
-            }`}
-          >
-            Add New Escort
-          </h5>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-            <div>
-              <span
-                className={`text-xs font-semibold uppercase tracking-wider mb-1 block ${
-                  darkMode ? "text-gray-300" : "text-gray-500"
-                }`}
-              >
-                Full Name
-              </span>
-              <input
-                type="text"
-                value={newEscort.fullName}
-                onChange={(e) =>
-                  handleNewEscortChange(
-                    "fullName",
-                    inputValidation.allowOnlyLetters(e.target.value)
-                  )
-                }
-                placeholder="Enter full name"
-                className={`w-full px-3 py-2 border-2 rounded-lg text-sm font-medium transition-all focus:ring-3 ${
-                  darkMode
-                    ? "bg-gray-600 border-yellow-500 text-white focus:border-yellow-400 focus:ring-yellow-500 placeholder-gray-400"
-                    : "bg-white border-yellow-500 focus:border-yellow-600 focus:ring-yellow-200 placeholder-gray-400"
-                }`}
-              />
-            </div>
-
-            <div>
-              <span
-                className={`text-xs font-semibold uppercase tracking-wider mb-1 block ${
-                  darkMode ? "text-gray-300" : "text-gray-500"
-                }`}
-              >
-                Relationship
-              </span>
-              <input
-                type="text"
-                value={newEscort.relationship}
-                onChange={(e) =>
-                  handleNewEscortChange(
-                    "relationship",
-                    inputValidation.allowOnlyLetters(e.target.value)
-                  )
-                }
-                placeholder="Enter relationship"
-                className={`w-full px-3 py-2 border-2 rounded-lg text-sm font-medium transition-all focus:ring-3 ${
-                  darkMode
-                    ? "bg-gray-600 border-yellow-500 text-white focus:border-yellow-400 focus:ring-yellow-500 placeholder-gray-400"
-                    : "bg-white border-yellow-500 focus:border-yellow-600 focus:ring-yellow-200 placeholder-gray-400"
-                }`}
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <span
-                className={`text-xs font-semibold uppercase tracking-wider mb-1 block ${
-                  darkMode ? "text-gray-300" : "text-gray-500"
-                }`}
-              >
-                Contact Number
-              </span>
-              <div className="relative">
-                <Phone
-                  className={`absolute left-3 top-2.5 w-4 h-4 ${
-                    darkMode ? "text-gray-400" : "text-gray-400"
-                  }`}
-                />
-                <input
-                  type="text"
-                  value={newEscort.phoneNumber}
-                  onChange={(e) =>
-                    handleNewEscortChange(
-                      "phoneNumber",
-                      inputValidation.handleEnhancedPhoneInput(e)
-                    )
-                  }
-                  placeholder="Enter contact number (11-13 digits)"
-                  className={`w-full pl-10 px-3 py-2 border-2 rounded-lg text-sm font-medium transition-all focus:ring-3 ${
-                    darkMode
-                      ? "bg-gray-600 border-yellow-500 text-white focus:border-yellow-400 focus:ring-yellow-500 placeholder-gray-400"
-                      : "bg-white border-yellow-500 focus:border-yellow-600 focus:ring-yellow-200 placeholder-gray-400"
-                  }`}
-                />
-              </div>
-            </div>
-          </div>
-
-          <button
-            onClick={handleAddEscort}
-            disabled={!newEscort.fullName.trim()}
-            className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Plus className="w-4 h-4" />
-            Add Escort
-          </button>
-        </div>
-      )}
     </div>
   );
 };
@@ -1138,11 +945,8 @@ export default function StudentInformationModal({
         // Get emergency contact from EmergencyContact
         const emergencyContact = studentData.rawData?.EmergencyContact || {};
 
-        // Get escorts/authorized pick-up persons
-        const escorts =
-          studentData.rawData?.Escorts ||
-          studentData.rawData?.AuthorizedPickup ||
-          [];
+        // Get authorized escorts
+        const authorizedEscorts = studentData.rawData?.AuthorizedEscorts || [];
 
         const enhancedData = {
           ...studentData,
@@ -1167,8 +971,8 @@ export default function StudentInformationModal({
           // Guardian information
           guardians: guardianData,
 
-          // Escorts information
-          escorts: escorts,
+          // Authorized escorts information
+          authorizedEscorts: authorizedEscorts,
 
           emergencyContactPerson: studentData.emergencyContactPerson || "",
           emergencyContactNumber: studentData.emergencyContactNumber || "",
@@ -1238,9 +1042,8 @@ export default function StudentInformationModal({
                 },
               ],
 
-        // Escorts info
-        escorts:
-          student.rawData?.Escorts || student.rawData?.AuthorizedPickup || [],
+        // Authorized escorts info
+        authorizedEscorts: student.rawData?.AuthorizedEscorts || [],
 
         // Emergency contact
         emergencyContactPerson: student.emergencyContactPerson || "",
@@ -1422,13 +1225,6 @@ export default function StudentInformationModal({
     }));
   };
 
-  const handleEscortsChange = (field, value) => {
-    setEditData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
   const handleSectionChange = async (newSectionId) => {
     if (!newSectionId || newSectionId === selectedSectionId) return;
 
@@ -1555,29 +1351,6 @@ export default function StudentInformationModal({
           return formattedGuardian;
         });
 
-      const formattedEscorts = (editData.escorts || [])
-        .filter((escort) => {
-          return escort.fullName && escort.fullName.trim() !== "";
-        })
-        .map((escort, index) => {
-          const formattedEscort = {
-            EscortID: escort.escortID || null,
-            FullName: escort.fullName?.trim() || "",
-            PhoneNumber: formatAllPhoneNumbers(escort.phoneNumber),
-            Relationship: escort.relationship?.trim() || "",
-            IsActive: Boolean(
-              escort.IsActive !== false && escort.isActive !== false
-            ),
-            SortOrder: Math.max(
-              1,
-              parseInt(escort.SortOrder || escort.sortOrder) || index + 1
-            ),
-          };
-
-          console.log(`Escort ${index}:`, formattedEscort);
-          return formattedEscort;
-        });
-
       const updateData = {
         FirstName: editData.firstName || studentDetails.firstName,
         LastName: editData.lastName || studentDetails.lastName,
@@ -1608,8 +1381,8 @@ export default function StudentInformationModal({
             "",
         Medications: editData.medications || studentDetails.medications || "",
 
+        // Only include guardians if there are valid ones
         Guardians: formattedGuardians.length > 0 ? formattedGuardians : [],
-        Escorts: formattedEscorts.length > 0 ? formattedEscorts : [],
 
         // Optional fields
         Religion: editData.religion || studentDetails.religion || "",
@@ -2507,20 +2280,6 @@ export default function StudentInformationModal({
                           validationType="phone"
                         />
                       </div>
-
-                      {/* Escorts Section */}
-                      <div className="pt-4 border-t border-gray-300 dark:border-gray-600">
-                        <EscortsSection
-                          escorts={
-                            isEditing
-                              ? editData.escorts
-                              : studentDetails?.escorts
-                          }
-                          isEditing={isEditing}
-                          onEscortsChange={handleEscortsChange}
-                          darkMode={darkMode}
-                        />
-                      </div>
                     </div>
                   </div>
 
@@ -2550,6 +2309,18 @@ export default function StudentInformationModal({
                       isEditing={isEditing}
                       onMedicalDataChange={handleMedicalDataChange}
                       onHeightWeightChange={handleHeightWeightChange}
+                      darkMode={darkMode}
+                    />
+                  </div>
+
+                  {/* Authorized Escorts Information */}
+                  <div
+                    className={`rounded-xl p-6 ${
+                      darkMode ? "bg-gray-800" : "bg-gray-50"
+                    }`}
+                  >
+                    <EscortInfoSection
+                      escorts={studentDetails?.authorizedEscorts || []}
                       darkMode={darkMode}
                     />
                   </div>

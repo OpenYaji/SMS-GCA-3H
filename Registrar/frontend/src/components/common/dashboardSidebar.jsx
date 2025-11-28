@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   X,
+  BadgeDollarSign
 } from "lucide-react";
 
 export default function DashboardSidebar({
@@ -61,6 +62,11 @@ export default function DashboardSidebar({
       name: "Applicant Management",
       icon: <FileUser size={18} />,
       path: "/registrar-dashboard/application-management",
+    },
+     {
+      name: "Transaction",
+      icon: <BadgeDollarSign size={18} />,
+      path: "/registrar-dashboard/transaction",
     },
     {
       name: "Student Management",

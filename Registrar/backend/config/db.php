@@ -2,7 +2,7 @@
 // db.php
 class Database {
     private $host = '127.0.0.1';
-    private $db_name = 'a'; 
+    private $db_name = 'aa'; 
     private $username = 'root';
     private $password = '';
     public $conn;

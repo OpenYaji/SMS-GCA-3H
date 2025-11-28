@@ -36,13 +36,25 @@ class Transaction
     /**
      * Get total unpaid balance for a student
      */
+   /**
+     * Get total unpaid balance for a student
+     * FIX: Calculates dynamically to match the Breakdown Card
+     */
     public function getTotalBalance($studentProfileId)
     {
+        // Calculate Total Due - Verified Payments
         $query = "
-            SELECT SUM(t.BalanceAmount) as totalBalance
+            SELECT 
+                SUM(t.TotalAmount - (
+                    SELECT COALESCE(SUM(p.AmountPaid), 0) 
+                    FROM payment p 
+                    WHERE p.TransactionID = t.TransactionID 
+                    AND p.VerificationStatus = 'Verified'
+                )) as totalBalance
             FROM transaction t
-            JOIN TransactionStatus ts ON t.TransactionStatusID = ts.StatusID
-            WHERE t.StudentProfileID = :student_profile_id AND ts.StatusName != 'Paid'
+            JOIN schoolyear sy ON t.SchoolYearID = sy.SchoolYearID
+            WHERE t.StudentProfileID = :student_profile_id 
+            AND sy.IsActive = 1
         ";
 
         try {
@@ -50,20 +62,46 @@ class Transaction
             $stmt->bindParam(':student_profile_id', $studentProfileId, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result['totalBalance'] ?? 0.00;
+            
+            // Ensure result is not negative (just in case)
+            $balance = $result['totalBalance'] ?? 0.00;
+            return max(0, floatval($balance)); 
         } catch (PDOException $e) {
             error_log("Error in getTotalBalance: " . $e->getMessage());
-            return false;
+            return 0.00;
         }
     }
 
     /**
      * Get current transaction for active school year
      */
+  /**
+     * Get current transaction - Calculates Balance Dynamically to prevent negative errors
+     */
     public function getCurrentTransaction($studentProfileId)
     {
+        // We use subqueries to calculate PaidAmount and BalanceAmount on the fly
+        // based strictly on 'Verified' payments.
         $query = "
-            SELECT t.TransactionID, t.TotalAmount, t.PaidAmount, t.BalanceAmount, t.DueDate
+            SELECT 
+                t.TransactionID, 
+                t.TotalAmount, 
+                
+                -- Calculate Real Paid Amount (Sum of Verified Payments)
+                (SELECT COALESCE(SUM(p.AmountPaid), 0) 
+                 FROM payment p 
+                 WHERE p.TransactionID = t.TransactionID 
+                 AND p.VerificationStatus = 'Verified') as PaidAmount,
+                 
+                -- Calculate Real Balance (Total - Verified Paid)
+                (t.TotalAmount - (
+                    SELECT COALESCE(SUM(p.AmountPaid), 0) 
+                    FROM payment p 
+                    WHERE p.TransactionID = t.TransactionID 
+                    AND p.VerificationStatus = 'Verified'
+                )) as BalanceAmount,
+                
+                t.DueDate
             FROM transaction t
             JOIN schoolyear sy ON t.SchoolYearID = sy.SchoolYearID
             WHERE t.StudentProfileID = :student_profile_id AND sy.IsActive = 1

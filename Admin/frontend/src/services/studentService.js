@@ -333,7 +333,9 @@ export const studentService = {
    */
   async getStudentAttendance(id) {
     try {
-      const response = await api.get(`/student-profiles/${id}/attendance`);
+      const response = await api.get(
+        `/student-profiles/${id}/attendance?period=100`
+      );
       const attendanceData = response.data.data || response.data;
 
       if (attendanceData) {

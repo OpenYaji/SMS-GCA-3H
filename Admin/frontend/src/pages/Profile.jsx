@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfileInfo from "../components/profile/ProfileInfo";
-import MedicalInfo from "../components/profile/MedicalInfo";
 import ActivityLog from "../components/profile/ActivityLog";
 import Tabs from "../components/profile/Tabs";
 import ChangePasswordModal from "../components/profile/modals/ChangePasswordModal";
 import SuccessModal from "../components/profile/modals/SuccessModal";
+import { profileService } from "../services/profileService";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -17,28 +17,58 @@ const Profile = () => {
     new: false,
     confirm: false,
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Initialize profile data with empty values
   const [profileData, setProfileData] = useState({
-    fullName: "Brian Dijamco",
-    email: "adminbrian1@gmail.com",
-    age: "20",
-    birthday: "2005-06-06",
-    address: "Brngy. Capri, Novaliches Quezon City Metro Manila",
-    phoneNumber: "09062343969",
-    sex: "Male",
-    nationality: "Filipino",
-    religion: "Iglesia Ni Cristo",
-    motherTongue: "English",
+    fullName: "",
+    email: "",
+    age: "",
+    birthday: "",
+    address: "",
+    phoneNumber: "",
+    sex: "",
+    nationality: "",
+    religion: "",
+    motherTongue: "",
   });
 
-  const [medicalData, setMedicalData] = useState({
-    weight: "65 kg",
-    height: "169 cm",
-    allergies: "None",
-    medicalConditions: "None",
-    emergencyContact: "Edgardo C. Dijamco",
-    emergencyNumber: "09087893578",
-  });
+  // Fetch profile data from API using profileService
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await profileService.getProfile();
+
+        if (response.data) {
+          const profile = response.data;
+          // Map API data to our component's state structure
+          setProfileData({
+            fullName: `${profile.FirstName} ${
+              profile.MiddleName ? profile.MiddleName + " " : ""
+            }${profile.LastName}`.trim(),
+            email: profile.User?.EmailAddress || "",
+            age: "", // You might need to calculate this from birthdate if available
+            birthday: "", // Add if available from API
+            address: profile.Address || "",
+            phoneNumber: profile.PhoneNumber || "",
+            sex: "", // Add if available from API
+            nationality: "", // Add if available from API
+            religion: "", // Add if available from API
+            motherTongue: "", // Add if available from API
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const [passwordData, setPasswordData] = useState({
     current: "",
@@ -69,19 +99,58 @@ const Profile = () => {
     setShowNewPasswordModal(true);
   };
 
-  const handleSaveNewPassword = () => {
-    // Add API call here to change password
-    console.log("Password changed successfully");
+  const handleSaveNewPassword = async () => {
+    try {
+      // Use profileService to change password
+      await profileService.changePassword({
+        current_password: passwordData.current,
+        new_password: passwordData.new,
+        new_password_confirmation: passwordData.confirm,
+      });
 
-    setShowNewPasswordModal(false);
-    setShowSuccessModal(true);
-    setPasswordData({ current: "", new: "", confirm: "" });
+      console.log("Password changed successfully");
+      setShowNewPasswordModal(false);
+      setShowSuccessModal(true);
+      setPasswordData({ current: "", new: "", confirm: "" });
+    } catch (err) {
+      console.error("Error changing password:", err);
+      // You might want to show an error message to the user here
+    }
   };
 
   const tabs = [
     { id: "profile", label: "Profile" },
     { id: "activity", label: "Activity Log" },
   ];
+
+  if (loading) {
+    return (
+      <div className="bg-[whitesmoke] dark:bg-gray-900 pl-6 min-h-screen p-3 transition-colors duration-300 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
+            Loading profile...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-[whitesmoke] dark:bg-gray-900 pl-6 min-h-screen p-3 transition-colors duration-300 flex items-center justify-center">
+        <div className="text-center text-red-500">
+          <p>Error loading profile: {error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[whitesmoke] dark:bg-gray-900 pl-6 min-h-screen p-3 transition-colors duration-300">
@@ -126,15 +195,16 @@ const Profile = () => {
 
       {/* Tab Content */}
       {activeTab === "profile" ? (
-        <div className="grid grid-cols-2 gap-6 max-w-7xl">
+        <div className="grid grid-cols-1 gap-6 max-w-7xl">
+          {/* FIXED: No userId prop needed - API uses authentication token */}
           <ProfileInfo
             profileData={profileData}
             setProfileData={setProfileData}
           />
-          <MedicalInfo
+          {/* <MedicalInfo
             medicalData={medicalData}
             setMedicalData={setMedicalData}
-          />
+          /> */}
         </div>
       ) : (
         <div className="max-w-7xl">

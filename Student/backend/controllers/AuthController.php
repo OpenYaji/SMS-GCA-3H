@@ -89,7 +89,7 @@ class AuthController {
                     break;
                 case 'Admin':
                     $port = '5175';
-                    $dashboardRoute = '/admin-dashboard';
+                    $dashboardRoute = '/dashboard';
                     break;
                 case 'Guard':
                     $port = '5176';

@@ -8,7 +8,6 @@ header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
@@ -16,22 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../config/db.php';
 
-class Applicant {
-    private $conn;
+class Applicant
+{
+    public $conn; // Changed to public so validateApplicant.php can access it
 
-    public function __construct() {
+    public function __construct()
+    {
         $database = new Database();
         $this->conn = $database->getConnection();
     }
 
-    // 🔄 Map & Add Aliases
-    private function mapId($rows) {
+    private function mapId($rows)
+    {
         foreach ($rows as &$row) {
-
-            // React-friendly alias
             $row['id'] = $row['ApplicationID'];
-
-            // Add grade alias if JOIN returned the LevelName
             if (isset($row['LevelName'])) {
                 $row['grade'] = $row['LevelName'];
             }
@@ -39,33 +36,30 @@ class Applicant {
         return $rows;
     }
 
-    // 📌 Get all applicants in Inbox stage
-    public function getApplicants() {
+    public function getApplicants()
+    {
         $stmt = $this->conn->prepare("
-           SELECT a.*, g.LevelName
-FROM application a
-LEFT JOIN gradelevel g ON g.GradeLevelID = a.ApplyingForGradeLevelID
-WHERE a.ApplicationStatus = 'Pending'
-
+            SELECT a.*, g.LevelName
+            FROM application a
+            LEFT JOIN gradelevel g ON g.GradeLevelID = a.ApplyingForGradeLevelID
+            WHERE a.ApplicationStatus = 'Pending'
         ");
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $this->mapId($rows);
     }
 
-    // 📌 Get applicants in Screening stage
-    public function getScreeningApplicants() {
+    public function getScreeningApplicants()
+    {
         $stmt = $this->conn->prepare("
-           SELECT a.*, g.LevelName
-FROM application a
-LEFT JOIN gradelevel g ON g.GradeLevelID = a.ApplyingForGradeLevelID
-WHERE a.ApplicationStatus = 'For Review'
-
+            SELECT a.*, g.LevelName
+            FROM application a
+            LEFT JOIN gradelevel g ON g.GradeLevelID = a.ApplyingForGradeLevelID
+            WHERE a.ApplicationStatus = 'For Review'
         ");
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Add documents array (if needed)
         foreach ($rows as &$row) {
             $row['documents'] = [];
         }
@@ -73,22 +67,24 @@ WHERE a.ApplicationStatus = 'For Review'
         return $this->mapId($rows);
     }
 
-    // 📌 Get validated applicants
-    public function getValidatedApplicants() {
+    public function getValidatedApplicants()
+    {
         $stmt = $this->conn->prepare("
-            SELECT a.*, g.LevelName
-FROM application a
-LEFT JOIN gradelevel g ON g.GradeLevelID = a.ApplyingForGradeLevelID
-WHERE a.ApplicationStatus = 'Approved'
-
+            SELECT a.*, g.LevelName,
+                   t.TransactionID, t.TotalAmount, t.PaidAmount,
+                   (t.TotalAmount - t.PaidAmount) as OutstandingBalance
+            FROM application a
+            LEFT JOIN gradelevel g ON g.GradeLevelID = a.ApplyingForGradeLevelID
+            LEFT JOIN transaction t ON t.TransactionID = a.TransactionID
+            WHERE a.ApplicationStatus = 'Approved'
         ");
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $this->mapId($rows);
     }
 
-    // 🔄 Update applicant to Screening
-    public function updateStage($applicantId) {
+    public function updateStage($applicantId)
+    {
         $stmt = $this->conn->prepare("
             UPDATE application
             SET ApplicationStatus = 'For Review'
@@ -99,8 +95,8 @@ WHERE a.ApplicationStatus = 'Approved'
         return $stmt->rowCount();
     }
 
-    // 🔄 Validate applicant
-    public function validateApplicant($applicantId) {
+    public function validateApplicant($applicantId)
+    {
         $stmt = $this->conn->prepare("
             UPDATE application
             SET ApplicationStatus = 'Approved'
@@ -111,14 +107,45 @@ WHERE a.ApplicationStatus = 'Approved'
         return $stmt->rowCount();
     }
 
-    // 📌 Get one applicant by ID
-    public function getApplicantById($applicantId) {
-        $stmt = $this->conn->prepare("
-           SELECT a.*, g.LevelName
-FROM application a
-LEFT JOIN gradelevel g ON g.GradeLevelID = a.ApplyingForGradeLevelID
-WHERE a.ApplicationID = :id
+    public function validateApplicantWithPayment($applicantId, $paymentData)
+    {
+        // Get applicant data first
+        $applicant = $this->getApplicantById($applicantId);
 
+        $stmt = $this->conn->prepare("
+            UPDATE application
+            SET 
+                ApplicationStatus = 'Approved',
+                PaymentMode = :paymentMode,
+                DownPayment = :downPayment,
+                OutstandingBalance = :outstandingBalance,
+                TotalFee = :totalFee,
+                RegistrarNotes = :notes,
+                ReviewedDate = NOW()
+            WHERE ApplicationID = :id
+        ");
+
+        $stmt->bindParam(':paymentMode', $paymentData['paymentMode']);
+        $stmt->bindParam(':downPayment', $paymentData['downPayment']);
+        $stmt->bindParam(':outstandingBalance', $paymentData['outstandingBalance']);
+        $stmt->bindParam(':totalFee', $paymentData['totalFee']);
+        $stmt->bindParam(':notes', $paymentData['notes']);
+        $stmt->bindParam(':id', $applicantId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return [
+            'applicant' => $applicant,
+            'payment' => $paymentData
+        ];
+    }
+
+    public function getApplicantById($applicantId)
+    {
+        $stmt = $this->conn->prepare("
+            SELECT a.*, g.LevelName
+            FROM application a
+            LEFT JOIN gradelevel g ON g.GradeLevelID = a.ApplyingForGradeLevelID
+            WHERE a.ApplicationID = :id
         ");
         $stmt->bindParam(':id', $applicantId, PDO::PARAM_INT);
         $stmt->execute();

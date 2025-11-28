@@ -11,7 +11,7 @@ const ScreeningTable = ({ filterOptions = {}, onValidated }) => {
   const [error, setError] = useState(null);
   const prevDataRef = useRef(null);
 
-const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
+  const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
 
   // Fetch applicants
   const fetchApplicants = async () => {
@@ -45,24 +45,31 @@ const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
   }, []);
 
   // Validate applicant
-  const handleValidateApplicant = async (applicant) => {
+  const handleValidateApplicant = async (applicantData) => {
     try {
       const res = await fetch(`${API_BASE}/validateApplicant.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ applicantId: applicant.id }),
+        body: JSON.stringify({
+          applicantId: applicantData.id,
+          paymentMode: applicantData.paymentMode,
+          downPayment: applicantData.downPayment,
+          notes: applicantData.notes
+        }),
       });
       const result = await res.json();
       if (!result.success) throw new Error(result.message || "Validation failed");
 
-      setRemovingIds((prev) => [...prev, applicant.id]);
+      setRemovingIds((prev) => [...prev, applicantData.id]);
       setTimeout(() => {
-        setApplicants((prev) => prev.filter((a) => a.id !== applicant.id));
-        setRemovingIds((prev) => prev.filter((id) => id !== applicant.id));
+        setApplicants((prev) => prev.filter((a) => a.id !== applicantData.id));
+        setRemovingIds((prev) => prev.filter((id) => id !== applicantData.id));
       }, 300);
 
       onValidated?.(result.data);
       setSelectedApplicant(null);
+
+      alert('Applicant validated successfully! Email notification sent.');
     } catch (err) {
       console.error("Error validating applicant:", err);
       alert(`Error validating applicant: ${err.message}`);
@@ -165,13 +172,11 @@ const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
               ].map((title) => (
                 <th
                   key={title}
-                  className={`px-4 py-3 ${
-                    ["Document Status", "Profile Status", "Actions"].includes(title)
-                      ? "text-center"
-                      : "text-left"
-                  } text-sm font-semibold text-gray-800 dark:text-white ${
-                    title === "Required Documents" ? "max-w-[200px] break-words" : ""
-                  }`}
+                  className={`px-4 py-3 ${["Document Status", "Profile Status", "Actions"].includes(title)
+                    ? "text-center"
+                    : "text-left"
+                    } text-sm font-semibold text-gray-800 dark:text-white ${title === "Required Documents" ? "max-w-[200px] break-words" : ""
+                    }`}
                 >
                   {title}
                 </th>

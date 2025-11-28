@@ -1,39 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RequestInfo from "./submodal/requestInfo";
 
 const ScreeningModal = ({ applicant, onClose, onValidate }) => {
   const [closing, setClosing] = useState(false);
   const [notes, setNotes] = useState("");
   const [isSubModalOpen, setSubModalOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true); // ✅ Prevent black screen after fade-out
+  const [isVisible, setIsVisible] = useState(true);
 
-  if (!applicant || !isVisible) return null; // only render if visible
+  // Payment states
+  const [paymentMode, setPaymentMode] = useState("full");
+  const [downPayment, setDownPayment] = useState(0);
+  const [feeStructure, setFeeStructure] = useState(null);
 
- const fieldValue = (value) => {
-  if (value === null || value === undefined) return "—";
-  if (typeof value === "number") return value.toString();
-  if (typeof value === "string" && value.trim() !== "") return value;
-  return "—";
-};
+  useEffect(() => {
+    if (applicant?.grade) {
+      const fees = getFeeStructure(applicant.grade);
+      setFeeStructure(fees);
+      setDownPayment(fees.downPayments[paymentMode]);
+    }
+  }, [applicant, paymentMode]);
 
+  const getFeeStructure = (grade) => {
+    const feeTable = {
+      'Nursery': { registration: 1500, miscellaneous: 3000, tuition: 10000, full: 14500, quarterly: 2500, monthly: 1000 },
+      'Kinder 1': { registration: 1500, miscellaneous: 3000, tuition: 10000, full: 14500, quarterly: 2500, monthly: 1000 },
+      'Kinder 2': { registration: 1500, miscellaneous: 3000, tuition: 10000, full: 14500, quarterly: 2500, monthly: 1000 },
+      'Grade 1': { registration: 2000, miscellaneous: 4500, tuition: 12000, full: 18500, quarterly: 2400, monthly: 1200 },
+      'Grade 2': { registration: 2000, miscellaneous: 4500, tuition: 12000, full: 18500, quarterly: 2400, monthly: 1200 },
+      'Grade 3': { registration: 2000, miscellaneous: 4500, tuition: 12000, full: 18500, quarterly: 2400, monthly: 1200 },
+      'Grade 4': { registration: 2000, miscellaneous: 5000, tuition: 13000, full: 20000, quarterly: 2600, monthly: 1300 },
+      'Grade 5': { registration: 2000, miscellaneous: 5000, tuition: 13000, full: 20000, quarterly: 2600, monthly: 1300 },
+      'Grade 6': { registration: 2000, miscellaneous: 5000, tuition: 13000, full: 20000, quarterly: 2600, monthly: 1300 }
+    };
+
+    const fees = feeTable[grade] || feeTable['Grade 1'];
+
+    return {
+      ...fees,
+      downPayments: {
+        full: fees.registration + fees.miscellaneous + fees.tuition,
+        quarterly: fees.registration + fees.miscellaneous + fees.quarterly,
+        monthly: fees.registration + fees.miscellaneous + fees.monthly
+      }
+    };
+  };
+
+  if (!applicant || !isVisible) return null;
+
+  const fieldValue = (value) => {
+    if (value === null || value === undefined) return "—";
+    if (typeof value === "number") return value.toString();
+    if (typeof value === "string" && value.trim() !== "") return value;
+    return "—";
+  };
 
   const handleClose = () => {
     setClosing(true);
     setTimeout(() => {
-      setIsVisible(false); // Hide after animation
-      onClose(); // Call parent close
+      setIsVisible(false);
+      onClose();
       setClosing(false);
     }, 250);
   };
 
-  const handleValidateClick = () => {
+  const handleValidateClick = async () => {
     if (onValidate) {
-      onValidate(applicant); // Pass control to parent
-      handleClose(); // Close modal after validation
+      await onValidate({
+        ...applicant,
+        paymentMode,
+        downPayment,
+        notes
+      });
+      handleClose();
     }
   };
 
-  // Determine required documents by type
   const getRequiredDocuments = (type) => {
     if (!type) return ["No required documents specified."];
     const t = type.toLowerCase();
@@ -51,11 +92,12 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
     }
   };
 
+  const outstandingBalance = feeStructure ? feeStructure.full - downPayment : 0;
+
   return (
     <div
-      className={`fixed inset-0 bg-black/40 flex justify-center items-start z-50 overflow-auto pt-10 transition-opacity ${
-        closing ? "opacity-0" : "opacity-100"
-      }`}
+      className={`fixed inset-0 bg-black/40 flex justify-center items-start z-50 overflow-auto pt-10 transition-opacity ${closing ? "opacity-0" : "opacity-100"
+        }`}
     >
       <div className="bg-white dark:bg-slate-800 max-w-[1200px] w-[90%] rounded-lg shadow-md border border-gray-200 dark:border-slate-600 flex flex-col max-h-[95vh] overflow-y-auto animate-fade-in">
         {/* HEADER */}
@@ -157,7 +199,6 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
             </p>
           </div>
 
-         
           {/* PARENT/GUARDIAN */}
           <div className="space-y-2">
             <h3 className="text-sm font-semibold">Parent / Guardian Information</h3>
@@ -177,13 +218,90 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
             </div>
           </div>
 
+          {/* PAYMENT SECTION */}
+          {feeStructure && (
+            <div className="border-t pt-4 mt-4">
+              <h3 className="text-sm font-semibold mb-3">Payment Information</h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Fee Breakdown */}
+                <div className="space-y-2 bg-gray-50 dark:bg-slate-700 p-4 rounded">
+                  <h4 className="font-semibold text-sm">Fee Breakdown ({applicant.grade})</h4>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span>Registration Fee:</span>
+                      <span className="font-semibold">₱ {feeStructure.registration.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Miscellaneous Fee:</span>
+                      <span className="font-semibold">₱ {feeStructure.miscellaneous.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Tuition Fee:</span>
+                      <span className="font-semibold">₱ {feeStructure.tuition.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between border-t pt-1 mt-1 font-bold">
+                      <span>Total Fee:</span>
+                      <span>₱ {feeStructure.full.toLocaleString()}</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    * Uniforms and books NOT included
+                  </p>
+                </div>
+
+                {/* Payment Mode Selection */}
+                <div className="space-y-3">
+                  <div>
+                    <label className="block font-semibold text-sm mb-2">Payment Mode</label>
+                    <select
+                      value={paymentMode}
+                      onChange={(e) => setPaymentMode(e.target.value)}
+                      className="w-full border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-slate-700 text-sm"
+                    >
+                      <option value="full">Full Payment</option>
+                      <option value="quarterly">Quarterly (4 months)</option>
+                      <option value="monthly">Monthly (8 months)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-sm mb-2">Down Payment</label>
+                    <input
+                      type="number"
+                      value={downPayment}
+                      onChange={(e) => setDownPayment(parseFloat(e.target.value) || 0)}
+                      min={feeStructure.registration + feeStructure.miscellaneous}
+                      max={feeStructure.full}
+                      className="w-full border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-slate-700 text-sm"
+                    />
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Minimum: ₱ {(feeStructure.registration + feeStructure.miscellaneous).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div className="bg-blue-50 dark:bg-blue-900 p-3 rounded">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>Down Payment:</span>
+                      <span className="font-semibold">₱ {downPayment.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between text-sm font-bold">
+                      <span>Outstanding Balance:</span>
+                      <span className="text-red-600 dark:text-red-400">₱ {outstandingBalance.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Screening Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 items-start">
             {/* Required Documents */}
             <div>
               <h3 className="text-sm font-semibold mb-2">Required Documents</h3>
               <div className="flex flex-col gap-2">
-                {getRequiredDocuments(applicant.studentType).map((doc, i) => {
+                {getRequiredDocuments(applicant.EnrolleeType).map((doc, i) => {
                   const received = applicant.documents?.includes(doc);
                   return (
                     <div
@@ -194,9 +312,8 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
                         {doc}
                       </span>
                       <span
-                        className={`px-3 py-1 rounded text-xs font-semibold ${
-                          received ? "w-20 bg-green-500 text-black" : "bg-yellow-400 text-black"
-                        }`}
+                        className={`px-3 py-1 rounded text-xs font-semibold ${received ? "w-20 bg-green-500 text-black" : "bg-yellow-400 text-black"
+                          }`}
                       >
                         {received ? "Received" : "Requested"}
                       </span>
@@ -234,7 +351,7 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
                   onClick={handleValidateClick}
                   className="w-[190px] px-3.5 py-1.5 rounded bg-green-600 text-black font-semibold hover:bg-green-700 transition"
                 >
-                  Validate
+                  Validate & Notify
                 </button>
               </div>
             </div>

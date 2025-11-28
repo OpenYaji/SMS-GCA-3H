@@ -5,7 +5,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { Eye, Pencil, Plus, Check, X } from "lucide-react";
+import { Eye, Pencil, Plus, Check, X, Sparkles } from "lucide-react";
 import useSearch from "../utils/useSearch";
 import useSort from "../utils/useSort";
 import usePagination from "../utils/usePagination";
@@ -34,6 +34,7 @@ const GradeLevelTable = forwardRef(
     const sortDropdownRef = React.useRef(null);
     const [showViewModal, setShowViewModal] = useState(false);
     const [selectedViewSection, setSelectedViewSection] = useState(null);
+    const [isAutoCreating, setIsAutoCreating] = useState(false);
 
     const sortOptions = [
       "All Sections",
@@ -51,6 +52,42 @@ const GradeLevelTable = forwardRef(
       const today = new Date();
       return endDate >= today;
     }, [currentSchoolYear]);
+
+    const handleAutoCreate = async () => {
+      if (!isSchoolYearEditable || !currentSchoolYear) return;
+
+      const gradeLevelData = currentSchoolYear.gradeLevels?.find(
+        (gl) => gl.levelName === gradeLevel
+      );
+
+      if (!gradeLevelData) {
+        alert("Grade level not found");
+        return;
+      }
+
+      if (!confirm(`Are you sure you want to auto-create sections for ${gradeLevel}? This will create default sections based on the theme.`)) {
+        return;
+      }
+
+      setIsAutoCreating(true);
+      try {
+        const result = await manageGradeLevelsService.autoCreateSections(
+          parseInt(gradeLevelData.id),
+          parseInt(currentSchoolYear.id)
+        );
+
+        if (result.success) {
+          alert(result.message);
+          await fetchSections();
+          if (onSectionAdded) onSectionAdded();
+        }
+      } catch (error) {
+        console.error("Error auto-creating sections:", error);
+        alert(error.message);
+      } finally {
+        setIsAutoCreating(false);
+      }
+    };
 
     // GET SECTIONS
     const fetchSections = async () => {
@@ -349,9 +386,8 @@ const GradeLevelTable = forwardRef(
               >
                 <span>{sortOption}</span>
                 <span
-                  className={`transition-transform ${
-                    isSortOpen ? "rotate-180" : ""
-                  }`}
+                  className={`transition-transform ${isSortOpen ? "rotate-180" : ""
+                    }`}
                 >
                   ▼
                 </span>
@@ -362,11 +398,10 @@ const GradeLevelTable = forwardRef(
                     <li
                       key={option}
                       onClick={() => handleSortOptionClick(option)}
-                      className={`px-4 py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 text-sm font-kumbh ${
-                        sortOption === option
-                          ? "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300"
-                          : "text-gray-700 dark:text-gray-300"
-                      }`}
+                      className={`px-4 py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 text-sm font-kumbh ${sortOption === option
+                        ? "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300"
+                        : "text-gray-700 dark:text-gray-300"
+                        }`}
                     >
                       {option}
                     </li>
@@ -423,13 +458,28 @@ const GradeLevelTable = forwardRef(
 
             {/* Add Button - Conditionally rendered */}
             {isSchoolYearEditable && (
-              <button
-                onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-kumbh px-4 py-2 rounded-lg shadow-md transition-all duration-300 hover:-translate-y-[2px] w-full sm:w-auto justify-center text-sm flex-shrink-0"
-              >
-                <Plus className="w-5 h-5" />
-                Add Section
-              </button>
+              <div className="flex gap-2 w-full sm:w-auto">
+                <button
+                  onClick={handleAutoCreate}
+                  disabled={isAutoCreating}
+                  className="flex items-center gap-2 bg-purple-100 hover:bg-purple-200 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 font-kumbh px-4 py-2 rounded-lg shadow-sm transition-all duration-300 hover:-translate-y-[2px] justify-center text-sm flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Auto-create sections based on theme"
+                >
+                  {isAutoCreating ? (
+                    <div className="w-5 h-5 border-2 border-purple-700 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Sparkles className="w-5 h-5" />
+                  )}
+                  <span className="hidden sm:inline">Auto Create</span>
+                </button>
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-kumbh px-4 py-2 rounded-lg shadow-md transition-all duration-300 hover:-translate-y-[2px] justify-center text-sm flex-shrink-0 flex-1 sm:flex-none"
+                >
+                  <Plus className="w-5 h-5" />
+                  Add Section
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -442,9 +492,8 @@ const GradeLevelTable = forwardRef(
                 {headers.map((header, index) => (
                   <th
                     key={header}
-                    className={`px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider font-kumbh ${
-                      index === 0 ? "pl-8" : ""
-                    } ${index === headers.length - 1 ? "pr-8" : ""}`}
+                    className={`px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider font-kumbh ${index === 0 ? "pl-8" : ""
+                      } ${index === headers.length - 1 ? "pr-8" : ""}`}
                   >
                     {header}
                   </th>
@@ -689,11 +738,10 @@ const GradeLevelTable = forwardRef(
                       <button
                         key={pageNum}
                         onClick={() => goToPage(pageNum)}
-                        className={`min-w-[40px] h-10 rounded-lg border transition-all duration-200 font-kumbh text-sm font-medium ${
-                          currentPage === pageNum
-                            ? "bg-yellow-500 border-yellow-500 text-white shadow-sm"
-                            : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-yellow-50 dark:hover:bg-gray-500 hover:border-yellow-300"
-                        }`}
+                        className={`min-w-[40px] h-10 rounded-lg border transition-all duration-200 font-kumbh text-sm font-medium ${currentPage === pageNum
+                          ? "bg-yellow-500 border-yellow-500 text-white shadow-sm"
+                          : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-yellow-50 dark:hover:bg-gray-500 hover:border-yellow-300"
+                          }`}
                       >
                         {pageNum}
                       </button>

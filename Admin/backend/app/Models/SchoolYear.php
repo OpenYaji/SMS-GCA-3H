@@ -37,4 +37,9 @@ class SchoolYear extends Model
         return static::where('EndDate', '>=', now())->latest('StartDate')->first();
     }
 
+    //Relationship: SchoolYear has many GradeSubmissionDeadline
+    public function gradeSubmissionDeadlines()
+    {
+        return $this->hasMany(GradeSubmissionDeadline::class, 'SchoolYearID', 'SchoolYearID');
+    }
 }

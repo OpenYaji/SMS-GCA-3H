@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\TeacherProfileController;
 use App\Http\Controllers\Api\V1\TeacherScheduleController;
 use App\Http\Controllers\Api\V1\AuthorizedEscortController;
 use App\Http\Controllers\Api\V1\RegistrarProfileController;
+use App\Http\Controllers\Api\V1\GradeSubmissionDeadlineController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -76,6 +77,9 @@ Route::prefix('v1')->group(function () {
 
     //School Years
     Route::apiResource('school-years', SchoolYearController::class)->only(['index', 'show', 'store', 'update']);
+
+    //Grade Submission Deadlines
+    Route::apiResource('grade-submission-deadlines', GradeSubmissionDeadlineController::class)->only(['store', 'update']);
 
     //Authorized Escorts
     Route::apiResource('authorized-escorts', AuthorizedEscortController::class)->only(['index']);

@@ -59,7 +59,6 @@ try {
         LEFT JOIN attendance a ON sp.StudentProfileID = a.StudentProfileID 
             AND DATE(a.AttendanceDate) = :attendanceDate
         WHERE e.SectionID = :sectionId
-        GROUP BY sp.StudentProfileID
         ORDER BY p.LastName ASC, p.FirstName ASC
     ";
     

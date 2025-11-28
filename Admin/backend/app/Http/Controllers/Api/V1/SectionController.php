@@ -50,64 +50,6 @@ class SectionController extends Controller
     }
 
     /**
-     * Auto-create sections based on grade level theme.
-     */
-    public function autoCreate(Request $request)
-    {
-        $request->validate([
-            'gradeLevelId' => 'required|integer',
-            'schoolYearId' => 'required|integer',
-        ]);
-
-        $gradeLevelId = $request->gradeLevelId;
-        $schoolYearId = $request->schoolYearId;
-        $maxCapacity = 15;
-
-        $sectionThemes = [
-            1 => ['Rose', 'Lily', 'Tulip', 'Daisy', 'Sunflower'], // Flowers
-            2 => ['Tarsier', 'Carabao', 'Tamaraw', 'Philippine Eagle', 'Pawikan'], // Philippine Animals
-            3 => ['Rizal', 'Bonifacio', 'Mabini', 'Del Pilar', 'Luna'], // Philippine National Heroes
-            4 => ['Granite', 'Marble', 'Limestone', 'Sandstone', 'Basalt'], // Rocks and Stones
-            5 => ['Cumulus', 'Stratus', 'Cirrus', 'Nimbus', 'Altostratus'], // Different Clouds
-            6 => ['Oxygen', 'Hydrogen', 'Carbon', 'Nitrogen', 'Helium'], // Elements in Periodic Table
-            7 => ['Bulacan', 'Palawan', 'Pampanga', 'Tarlac', 'Metro Manila'], // Philippine Provinces
-            8 => ['Quezon', 'Quirino', 'Aguinaldo', 'Magsaysay', 'Aquino'], // Philippine Presidents
-        ];
-
-        // Default to flowers if grade level not found in themes
-        $sectionNames = $sectionThemes[$gradeLevelId] ?? $sectionThemes[1];
-        $createdSections = [];
-
-        foreach ($sectionNames as $sectionName) {
-            // Check if exists
-            $exists = Section::where('SectionName', $sectionName)
-                ->where('GradeLevelID', $gradeLevelId)
-                ->where('SchoolYearID', $schoolYearId)
-                ->exists();
-
-            if ($exists) {
-                continue;
-            }
-
-            $section = Section::create([
-                'SectionName' => $sectionName,
-                'GradeLevelID' => $gradeLevelId,
-                'SchoolYearID' => $schoolYearId,
-                'MaxCapacity' => $maxCapacity,
-                'CurrentEnrollment' => 0,
-            ]);
-            
-            $createdSections[] = $section;
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => count($createdSections) . ' section(s) created successfully.',
-            'data' => $createdSections
-        ], 201);
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(string $id)

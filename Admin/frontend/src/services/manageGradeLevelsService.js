@@ -537,19 +537,6 @@ export const manageGradeLevelsService = {
     }
   },
 
-  async autoCreateSections(gradeLevelId, schoolYearId) {
-    try {
-      const response = await api.post("/sections/auto-create", {
-        gradeLevelId,
-        schoolYearId,
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error auto-creating sections:", error);
-      throw this.handleError(error);
-    }
-  },
-
   async updateSection(sectionId, sectionData) {
     try {
       const response = await api.put(`/sections/${sectionId}`, sectionData);

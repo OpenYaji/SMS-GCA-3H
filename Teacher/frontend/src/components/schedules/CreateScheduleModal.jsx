@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { X, ChevronDown, Plus, Trash2 } from 'lucide-react';
 import TimePicker from '../common/TimePicker';
 
-const CreateScheduleModal = ({
-  isOpen,
-  formData,
-  teachers,
+const CreateScheduleModal = ({ 
+  isOpen, 
+  formData, 
+  teachers, 
   subjects,
   teacherSections = [],
-  onClose,
-  onSubmit,
+  onClose, 
+  onSubmit, 
   onTeacherChange,
   onSectionChange,
   onSubjectChange,
@@ -49,9 +49,9 @@ const CreateScheduleModal = ({
               >
                 <option value="" className="bg-[#342825]">Select Teacher</option>
                 {teachers.map((teacher) => (
-                  <option
-                    key={teacher.id}
-                    value={teacher.id}
+                  <option 
+                    key={teacher.id} 
+                    value={teacher.id} 
                     className="bg-[#342825]"
                   >
                     {teacher.fullName}
@@ -75,12 +75,12 @@ const CreateScheduleModal = ({
                 >
                   <option value="" className="bg-[#342825]">Select Section</option>
                   {teacherSections.map((section) => (
-                    <option
-                      key={section.id}
-                      value={section.id}
+                    <option 
+                      key={section.id} 
+                      value={section.id} 
                       className="bg-[#342825]"
                     >
-                      {section.gradeLevel} - {section.sectionName.startsWith('Section') ? section.sectionName : `Section ${section.sectionName}`}
+                      {section.gradeLevel} - Section {section.sectionName}
                     </option>
                   ))}
                 </select>
@@ -162,9 +162,9 @@ const CreateScheduleModal = ({
                           >
                             <option value="" className="bg-[#342825]">Select Subject</option>
                             {subjects.map((subject) => (
-                              <option
-                                key={subject.id}
-                                value={subject.id}
+                              <option 
+                                key={subject.id} 
+                                value={subject.id} 
                                 className="bg-[#342825]"
                               >
                                 {subject.name}

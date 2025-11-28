@@ -69,7 +69,6 @@ try {
     $teachersQuery = "
         SELECT 
             u.UserID as id,
-            tp.TeacherProfileID as teacherProfileId,
             tp.EmployeeNumber as employeeNumber,
             CONCAT(p.FirstName, ' ', p.LastName) as name,
             CONCAT(p.LastName, ', ', p.FirstName) as fullName,
@@ -78,7 +77,7 @@ try {
         FROM user u
         JOIN profile p ON u.UserID = p.UserID
         JOIN teacherprofile tp ON p.ProfileID = tp.ProfileID
-        WHERE u.UserType IN ('Teacher', 'Head Teacher')
+        WHERE u.UserType = 'Teacher'
             AND u.IsDeleted = 0
         ORDER BY p.LastName, p.FirstName
     ";

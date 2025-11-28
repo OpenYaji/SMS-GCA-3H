@@ -16,7 +16,7 @@ const TeachingSchedulePage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const userCanManageAllSchedules = canManageAllSchedules(user);
-
+  
   const [activeTab, setActiveTab] = useState('my-schedule');
   const [searchQuery, setSearchQuery] = useState('');
   const [schedules, setSchedules] = useState([]);
@@ -90,11 +90,11 @@ const TeachingSchedulePage = () => {
         const gradeLevelsData = response.data.data.gradeLevels || [];
         const subjectsData = response.data.data.subjects || [];
         const teachersData = response.data.data.teachers || [];
-
+        
         console.log('Grade Levels:', gradeLevelsData);
         console.log('Subjects:', subjectsData);
         console.log('Teachers:', teachersData);
-
+        
         setGradeLevels(gradeLevelsData);
         setSubjects(subjectsData);
         setActiveSchoolYear(response.data.data.activeSchoolYear);
@@ -191,16 +191,20 @@ const TeachingSchedulePage = () => {
       prevSchedules.map(schedule =>
         schedule.id === scheduleId
           ? {
-            ...schedule,
-            sections: schedule.sections.map(section =>
-              section.id === sectionId
-                ? { ...section, isFavorite: !section.isFavorite }
-                : section
-            )
-          }
+              ...schedule,
+              sections: schedule.sections.map(section =>
+                section.id === sectionId
+                  ? { ...section, isFavorite: !section.isFavorite }
+                  : section
+              )
+            }
           : schedule
       )
     );
+    
+    // Optional: Show a toast notification
+    // You can add a toast library or use a simple alert
+    // toast.success('Favorite updated');
   };
 
   // Handle section click to create/edit schedule or navigate to emergency dismissal
@@ -242,10 +246,10 @@ const TeachingSchedulePage = () => {
     { label: 'Teaching Schedule', path: '/teacher-dashboard/teaching-schedule' }
   ];
 
-  const filteredSchedules = schedules.filter(schedule =>
+  const filteredSchedules = schedules.filter(schedule => 
     schedule.grade.toLowerCase().includes(searchQuery.toLowerCase()) ||
     schedule.adviser.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    schedule.sections.some(section =>
+    schedule.sections.some(section => 
       section.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       section.room.toLowerCase().includes(searchQuery.toLowerCase())
     )
@@ -261,8 +265,8 @@ const TeachingSchedulePage = () => {
   const handleEdit = (schedule) => {
     setEditingSchedule(schedule);
     setEditFormData({
-      teacher: schedule.TeacherProfileID, // Use ID
-      subject: schedule.SubjectID, // Use ID
+      teacher: schedule.teacher,
+      subject: schedule.subject,
       day: schedule.day,
       time: schedule.time,
       room: schedule.room
@@ -270,59 +274,29 @@ const TeachingSchedulePage = () => {
     setIsEditModalOpen(true);
   };
 
-  const handleSaveEdit = async () => {
+  const handleSaveEdit = () => {
     if (!editFormData.teacher || !editFormData.subject || !editFormData.day || !editFormData.time || !editFormData.room) {
       alert('Please fill in all fields');
       return;
     }
 
-    // Parse time string "08:00 AM - 09:00 AM"
-    const timeParts = editFormData.time.split('-').map(t => t.trim());
-    let startTime = null;
-    let endTime = null;
+    setTeacherSchedules(prev =>
+      prev.map(schedule =>
+        schedule.id === editingSchedule.id
+          ? { ...schedule, ...editFormData }
+          : schedule
+      )
+    );
 
-    if (timeParts.length === 2) {
-      startTime = timeParts[0];
-      endTime = timeParts[1];
-    } else {
-      toast.error('Invalid time format. Please use "HH:MM AM - HH:MM PM"');
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/update-schedule.php',
-        {
-          scheduleId: editingSchedule.id,
-          teacherProfileId: editFormData.teacher,
-          subjectId: editFormData.subject,
-          day: editFormData.day,
-          startTime: startTime,
-          endTime: endTime,
-          room: editFormData.room
-        },
-        { withCredentials: true }
-      );
-
-      if (response.data.success) {
-        toast.success(response.data.message);
-        setIsEditModalOpen(false);
-        setEditingSchedule(null);
-        setEditFormData({
-          teacher: '',
-          subject: '',
-          day: '',
-          time: '',
-          room: ''
-        });
-        fetchData(); // Refresh the list
-      } else {
-        toast.error(response.data.message || 'Failed to update schedule');
-      }
-    } catch (error) {
-      console.error('Error updating schedule:', error);
-      toast.error(error.response?.data?.message || 'Error updating schedule. Please try again.');
-    }
+    setIsEditModalOpen(false);
+    setEditingSchedule(null);
+    setEditFormData({
+      teacher: '',
+      subject: '',
+      day: '',
+      time: '',
+      room: ''
+    });
   };
 
   const handleCancelEdit = () => {
@@ -415,7 +389,7 @@ const TeachingSchedulePage = () => {
       console.error('Error fetching sections:', error);
       console.error('Error response:', error.response?.data);
       setSectionsData([]);
-
+      
       const errorMsg = error.response?.data?.message || error.message || 'Failed to load sections';
       toast.error(errorMsg);
     }
@@ -424,13 +398,13 @@ const TeachingSchedulePage = () => {
   const handleGradeLevelChange = (gradeLevelId) => {
     // Clear sections first to show loading state
     setSectionsData([]);
-
+    
     setAddClassFormData({
       ...addClassFormData,
       gradeLevelId,
       sectionId: ''
     });
-
+    
     // Fetch sections for the new grade level
     if (gradeLevelId) {
       fetchSectionsForGrade(gradeLevelId);
@@ -483,9 +457,7 @@ const TeachingSchedulePage = () => {
       3: { name: 'Philippine National Heroes', sections: 'Rizal, Bonifacio, Mabini, Del Pilar, Luna' },
       4: { name: 'Rocks and Stones', sections: 'Granite, Marble, Limestone, Sandstone, Basalt' },
       5: { name: 'Different Clouds', sections: 'Cumulus, Stratus, Cirrus, Nimbus, Altostratus' },
-      6: { name: 'Elements in Periodic Table', sections: 'Oxygen, Hydrogen, Carbon, Nitrogen, Helium' },
-      7: { name: 'Philippine Provinces', sections: 'Bulacan, Palawan, Pampanga, Tarlac, Metro Manila' },
-      8: { name: 'Former Philippine Presidents', sections: 'Quezon, Quirino, Aguinaldo, Magsaysay, Aquino' },
+      6: { name: 'Elements in Periodic Table', sections: 'Oxygen, Hydrogen, Carbon, Nitrogen, Helium' }
     };
     return themes[gradeLevelId] || themes[1];
   };
@@ -504,7 +476,7 @@ const TeachingSchedulePage = () => {
 
     const theme = getSectionTheme(parseInt(gradeLevelId));
     const themeText = `${theme.name} (${theme.sections})`;
-
+    
     if (!window.confirm(`This will create 5 sections with theme: ${themeText}. Continue?`)) {
       return;
     }
@@ -538,28 +510,21 @@ const TeachingSchedulePage = () => {
   };
 
   const handleTeacherChange = async (teacherId) => {
-    console.log('handleTeacherChange called with:', teacherId);
-    const selectedTeacher = teachers.find(t => t.id == teacherId);
-    console.log('Selected teacher found:', selectedTeacher);
-
-    setCreateFormData({
+    setCreateFormData({ 
       teacher: teacherId,
-      teacherProfileId: selectedTeacher ? selectedTeacher.teacherProfileId : '',
       gradeSection: '',
       sectionId: '',
       day: 'Monday to Friday',
       schedule: []
     });
-
+    
     await fetchTeacherSections(teacherId);
     // Don't auto-load schedule, wait for section selection
   };
 
   const handleSectionChange = async (sectionId) => {
-    console.log('handleSectionChange called with:', sectionId);
     const selectedSectionData = teacherSections.find(s => s.id === parseInt(sectionId));
-    console.log('Selected section data:', selectedSectionData);
-
+    
     if (!selectedSectionData) {
       setCreateFormData(prev => ({
         ...prev,
@@ -573,9 +538,36 @@ const TeachingSchedulePage = () => {
     setCreateFormData(prev => ({
       ...prev,
       sectionId: sectionId,
-      gradeSection: `${selectedSectionData.gradeLevel} - ${selectedSectionData.sectionName.startsWith('Section') ? selectedSectionData.sectionName : 'Section ' + selectedSectionData.sectionName}`,
-      schedule: []
+      gradeSection: `${selectedSectionData.gradeLevel} - Section ${selectedSectionData.sectionName}`
     }));
+
+    // Fetch schedule for this specific section
+    try {
+      const response = await axios.get(
+        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-section-schedule.php?sectionId=${sectionId}`,
+        { withCredentials: true }
+      );
+
+      if (response.data.success && response.data.data.schedule.length > 0) {
+        setCreateFormData(prev => ({
+          ...prev,
+          schedule: response.data.data.schedule
+        }));
+      } else {
+        // No existing schedule, start fresh
+        setCreateFormData(prev => ({
+          ...prev,
+          schedule: []
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching section schedule:', error);
+      // Start with empty schedule if error
+      setCreateFormData(prev => ({
+        ...prev,
+        schedule: []
+      }));
+    }
   };
 
   const fetchTeacherScheduleDetail = async (teacherId) => {
@@ -600,6 +592,7 @@ const TeachingSchedulePage = () => {
       }
     } catch (error) {
       console.error('Error fetching teacher schedule detail:', error);
+      // Don't show error toast here as it's okay if there's no schedule yet
     }
   };
 
@@ -641,19 +634,14 @@ const TeachingSchedulePage = () => {
 
   const handleSubmitSchedule = async (e) => {
     e.preventDefault();
-    console.log('Submitting schedule with data:', createFormData);
-
+    
     // Validate form
     if (!createFormData.teacher) {
       toast.error('Please select a teacher');
       return;
     }
-
+    
     if (!createFormData.teacherProfileId || !createFormData.sectionId) {
-      console.error('Missing teacherProfileId or sectionId:', {
-        teacherProfileId: createFormData.teacherProfileId,
-        sectionId: createFormData.sectionId
-      });
       toast.error('Teacher has no assigned section. Please assign a section first.');
       return;
     }
@@ -670,7 +658,7 @@ const TeachingSchedulePage = () => {
       toast.error('Please fill in start time, end time, and subject for all time slots');
       return;
     }
-
+    
     try {
       const response = await axios.post(
         'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/submit-schedule.php',
@@ -699,7 +687,7 @@ const TeachingSchedulePage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-0 w-full max-w-full overflow-x-hidden">
       <Toaster position="top-right" />
-
+      
       {/* Breadcrumb */}
       <Breadcrumb items={breadcrumbItems} />
 
@@ -724,10 +712,11 @@ const TeachingSchedulePage = () => {
               setActiveTab('my-schedule');
               setSearchQuery(''); // Clear search when switching tabs
             }}
-            className={`px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium transition-all text-sm md:text-base whitespace-nowrap ${activeTab === 'my-schedule'
-              ? 'bg-amber-300 text-gray-900 border border-gray-900/20'
-              : 'bg-transparent text-gray-900 dark:text-white border border-gray-900/20 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
+            className={`px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium transition-all text-sm md:text-base whitespace-nowrap ${
+              activeTab === 'my-schedule'
+                ? 'bg-amber-300 text-gray-900 border border-gray-900/20'
+                : 'bg-transparent text-gray-900 dark:text-white border border-gray-900/20 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
           >
             My Class Schedule
           </button>
@@ -738,10 +727,11 @@ const TeachingSchedulePage = () => {
                 setActiveTab('teacher-schedules');
                 setSearchQuery(''); // Clear search when switching tabs
               }}
-              className={`px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium transition-all text-sm md:text-base whitespace-nowrap ${activeTab === 'teacher-schedules'
-                ? 'bg-amber-300 text-gray-900 border border-gray-900/20'
-                : 'bg-transparent text-gray-900 dark:text-white border border-gray-900/20 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+              className={`px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium transition-all text-sm md:text-base whitespace-nowrap ${
+                activeTab === 'teacher-schedules'
+                  ? 'bg-amber-300 text-gray-900 border border-gray-900/20'
+                  : 'bg-transparent text-gray-900 dark:text-white border border-gray-900/20 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`}
             >
               Teacher Schedules
             </button>
@@ -797,7 +787,7 @@ const TeachingSchedulePage = () => {
       {/* Search Results Info */}
       {searchQuery && (
         <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-          {activeTab === 'my-schedule'
+          {activeTab === 'my-schedule' 
             ? `Found ${filteredSchedules.length} schedule(s) matching "${searchQuery}"`
             : `Found ${filteredTeacherSchedules.length} schedule(s) matching "${searchQuery}"`
           }
@@ -806,14 +796,14 @@ const TeachingSchedulePage = () => {
 
       {/* Content - Conditional based on active tab */}
       {activeTab === 'my-schedule' ? (
-        <MySchedule
+        <MySchedule 
           schedules={filteredSchedules}
           loading={loading}
           onToggleFavorite={toggleFavorite}
           onSectionClick={handleSectionClick}
         />
       ) : (
-        <TeacherSchedules
+        <TeacherSchedules 
           schedules={filteredTeacherSchedules}
           loading={loading}
           onEdit={handleEdit}
@@ -826,8 +816,6 @@ const TeachingSchedulePage = () => {
         isOpen={isEditModalOpen}
         schedule={editingSchedule}
         formData={editFormData}
-        teachers={teachers}
-        subjects={subjects}
         onClose={handleCancelEdit}
         onSave={handleSaveEdit}
         onChange={setEditFormData}

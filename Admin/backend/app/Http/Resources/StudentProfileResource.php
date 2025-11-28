@@ -32,12 +32,8 @@ class StudentProfileResource extends JsonResource
                 'FirstName' => $this->profile?->FirstName,
                 'LastName' => $this->profile?->LastName,
                 'MiddleName' => $this->profile?->MiddleName,
-                'PhoneNumber' => $this->profile?->EncryptedPhoneNumber
-                    ? Crypt::decryptString($this->profile->EncryptedPhoneNumber)
-                    : null,
-                'Address' => $this->profile?->EncryptedAddress
-                    ? Crypt::decryptString($this->profile->EncryptedAddress)
-                    : null,
+                'PhoneNumber' =>  $this->safeDecrypt($this->profile?->EncryptedPhoneNumber),
+                'Address' => $this->safeDecrypt($this->profile?->EncryptedAddress),
                 'ProfilePictureURL' => $this->profile?->ProfilePictureURL,
             ],
 

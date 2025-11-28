@@ -69,6 +69,7 @@ try {
     $teachersQuery = "
         SELECT 
             u.UserID as id,
+            tp.TeacherProfileID as teacherProfileId,
             tp.EmployeeNumber as employeeNumber,
             CONCAT(p.FirstName, ' ', p.LastName) as name,
             CONCAT(p.LastName, ', ', p.FirstName) as fullName,

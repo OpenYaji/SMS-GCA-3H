@@ -70,7 +70,9 @@ try {
         3 => ['Rizal', 'Bonifacio', 'Mabini', 'Del Pilar', 'Luna'], // Philippine National Heroes
         4 => ['Granite', 'Marble', 'Limestone', 'Sandstone', 'Basalt'], // Rocks and Stones
         5 => ['Cumulus', 'Stratus', 'Cirrus', 'Nimbus', 'Altostratus'], // Different Clouds
-        6 => ['Oxygen', 'Hydrogen', 'Carbon', 'Nitrogen', 'Helium'] // Elements in Periodic Table
+        6 => ['Oxygen', 'Hydrogen', 'Carbon', 'Nitrogen', 'Helium'], // Elements in Periodic Table
+        7 => ['Bulacan', 'Palawan', 'Pampanga', 'Tarlac', 'Metro Manila'], // Philippine Provinces
+        8 => ['Quezon', 'Quirino', 'Aguinaldo', 'Magsaysay', 'Aquino'], // Philippine Presidents
     ];
     
     // Get section names for this grade level, default to flowers if grade > 6

@@ -83,6 +83,7 @@ Route::prefix('v1')->group(function () {
     Route::patch('authorized-escorts/{authorized_escort}/reject', [AuthorizedEscortController::class, 'reject']);
 
     //Sections
+    Route::post('sections/auto-create', [SectionController::class, 'autoCreate']);
     Route::apiResource('sections', SectionController::class)->only(['store', 'update']);
     Route::get('sections/{section}/students', [SectionController::class, 'students'])->name('sections.students');
     Route::get('sections/{section}/schedule', [SectionController::class, 'schedule'])->name('sections.schedule');

@@ -77,7 +77,7 @@ try {
         FROM user u
         JOIN profile p ON u.UserID = p.UserID
         JOIN teacherprofile tp ON p.ProfileID = tp.ProfileID
-        WHERE u.UserType = 'Teacher'
+        WHERE u.UserType IN ('Teacher', 'Head Teacher')
             AND u.IsDeleted = 0
         ORDER BY p.LastName, p.FirstName
     ";

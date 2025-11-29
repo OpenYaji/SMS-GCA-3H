@@ -408,15 +408,48 @@ const TeachingSchedulePage = () => {
     await fetchTeacherSections(teacherId);
   };
 
-  const handleSectionChange = async (sectionId) => {
-    const selectedSectionData = teacherSections.find(s => s.id === parseInt(sectionId, 10));
+  const handleSectionChange = async (sectionId, sectionData = null) => {
+    let selectedSectionData = sectionData;
 
+    // If sectionData is not passed (e.g. from teacherSections), try to find it in teacherSections
     if (!selectedSectionData) {
-      setCreateFormData(prev => ({ ...prev, sectionId: '', gradeSection: '', schedule: [] }));
-      return;
+      selectedSectionData = teacherSections.find(s => s.id === parseInt(sectionId, 10));
     }
 
-    setCreateFormData(prev => ({ ...prev, sectionId: sectionId, gradeSection: `${selectedSectionData.gradeLevel} - Section ${selectedSectionData.sectionName}` }));
+    if (!selectedSectionData) {
+      // If still not found (shouldn't happen with the new modal logic, but good for safety)
+      // We might be in a state where we just selected a grade level and then a section.
+      // But wait, if sectionData is passed from the modal, we are good.
+      // If it's NOT passed, and teacherSections is empty, we can't construct the full name easily without fetching or looking up gradeLevels.
+
+      // However, we can try to find the grade level name from gradeLevels state if we have the gradeLevelId in formData
+      const gradeLevel = gradeLevels.find(g => g.id == createFormData.gradeLevelId);
+      const gradeName = gradeLevel ? gradeLevel.name : 'Grade Level';
+
+      // We don't have section name if sectionData is null.
+      // But let's assume sectionData IS passed from the modal now.
+      setCreateFormData(prev => ({ ...prev, sectionId: sectionId, gradeSection: '', schedule: [] }));
+      // We can try to fetch section details if we really need them, but for now let's rely on what we have.
+    } else {
+      // We have section data.
+      // Check if it has gradeLevel name. The object from get-sections-by-grade.php does NOT have gradeLevel name.
+      // It has: id, sectionName, advisorName, advisorId.
+      // So we need to get grade level name from createFormData.gradeLevelId
+
+      let gradeName = selectedSectionData.gradeLevel; // From teacherSections it has gradeLevel
+      if (!gradeName && createFormData.gradeLevelId) {
+        const gradeLevel = gradeLevels.find(g => g.id == createFormData.gradeLevelId);
+        gradeName = gradeLevel ? gradeLevel.name : '';
+      }
+
+      const sectionName = selectedSectionData.sectionName || selectedSectionData.name; // Handle different property names
+
+      setCreateFormData(prev => ({
+        ...prev,
+        sectionId: sectionId,
+        gradeSection: `${gradeName} - Section ${sectionName}`
+      }));
+    }
 
     try {
       const response = await axios.get(
@@ -501,13 +534,8 @@ const TeachingSchedulePage = () => {
   const handleSubmitSchedule = async (e) => {
     e.preventDefault();
 
-    if (!createFormData.teacher) {
-      toast.error('Please select a teacher');
-      return;
-    }
-
-    if (!createFormData.teacherProfileId || !createFormData.sectionId) {
-      toast.error('Teacher has no assigned section. Please assign a section first.');
+    if (!createFormData.sectionId) {
+      toast.error('Please select a section first.');
       return;
     }
 
@@ -659,6 +687,8 @@ const TeachingSchedulePage = () => {
         isOpen={isEditModalOpen}
         schedule={editingSchedule}
         formData={editFormData}
+        teachers={teachers}
+        subjects={subjects}
         onClose={handleCancelEdit}
         onSave={handleSaveEdit}
         onChange={setEditFormData}
@@ -686,6 +716,7 @@ const TeachingSchedulePage = () => {
         formData={createFormData}
         teachers={teachers}
         subjects={subjects}
+        gradeLevels={gradeLevels}
         teacherSections={teacherSections}
         onClose={handleCancelCreate}
         onSubmit={handleSubmitSchedule}

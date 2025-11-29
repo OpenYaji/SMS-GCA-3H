@@ -16,7 +16,7 @@ const CreateScheduleModal = ({
   onAddTimeSlot,
   onRemoveTimeSlot,
   onTimeChange,
-  onTeacherChange
+  onSlotTeacherChange
 }) => {
   const [sections, setSections] = useState([]);
   const [loadingSections, setLoadingSections] = useState(false);
@@ -160,7 +160,10 @@ const CreateScheduleModal = ({
               <div className="relative">
                 <select
                   value={formData.sectionId || ''}
-                  onChange={(e) => onSectionChange(e.target.value)}
+                  onChange={(e) => {
+                    const selectedSection = sections.find(s => s.id == e.target.value);
+                    onSectionChange(e.target.value, selectedSection);
+                  }}
                   className="w-full h-[32px] px-3 text-sm rounded-lg border border-[#f4d77d] bg-transparent text-[#f4d77d] focus:ring-2 focus:ring-[#f4d77d] focus:border-transparent outline-none appearance-none cursor-pointer disabled:opacity-50"
                   disabled={loadingSections}
                   required
@@ -293,7 +296,7 @@ const CreateScheduleModal = ({
                         <div className="relative">
                           <select
                             value={slot.teacherId || ''}
-                            onChange={(e) => onTeacherChange(index, e.target.value)}
+                            onChange={(e) => onSlotTeacherChange(index, e.target.value)}
                             className="w-full h-[34px] px-2.5 text-xs rounded border border-white/20 bg-[#342825] text-white focus:ring-2 focus:ring-[#f4d77d] focus:border-transparent outline-none appearance-none cursor-pointer hover:border-[#f4d77d]/50 transition-colors disabled:opacity-50"
                             disabled={!slot.subject || loadingTeachers[index]}
                             required={!!slot.subject}

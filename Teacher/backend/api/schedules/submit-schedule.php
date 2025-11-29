@@ -30,9 +30,14 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Check Authorization (Head Teacher only)
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'Head Teacher') {
+// Check Authorization (Head Teacher or Teacher)
+// Note: UserType might be 'Head Teacher' or 'HeadTeacher' depending on DB version
+if (!isset($_SESSION['user_type']) || 
+    ($_SESSION['user_type'] !== 'Head Teacher' && 
+     $_SESSION['user_type'] !== 'HeadTeacher' && 
+     $_SESSION['user_type'] !== 'Teacher')) {
     http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Access denied. Only Head Teachers can submit schedules.']);
+    echo json_encode(['success' => false, 'message' => 'Access denied. User type: ' . ($_SESSION['user_type'] ?? 'None')]);
     exit();
 }
 

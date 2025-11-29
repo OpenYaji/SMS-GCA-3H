@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ClipboardList } from "lucide-react";
+import { HOST_IP } from './config';
 
-const LIVE_API = "http://192.168.254.176/SMS-GCA-3H/Registrar/backend/api/dashboard/tasks.php";
+const LIVE_API = `http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/dashboard/tasks.php`;
 
 const Tasks = () => {
   const [isVisible, setIsVisible] = useState(false);

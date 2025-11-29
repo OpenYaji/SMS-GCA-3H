@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Inbox } from "lucide-react";
+import { HOST_IP } from './config';
 
 const API_BASE =
-  "http://192.168.254.176/SMS-GCA-3H/Registrar/backend/api/dashboard/applications.php"; // SSE endpoint
+  `http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/dashboard/applications.php`; // SSE endpoint
 
 const Applications = () => {
   const [isVisible, setIsVisible] = useState(false);

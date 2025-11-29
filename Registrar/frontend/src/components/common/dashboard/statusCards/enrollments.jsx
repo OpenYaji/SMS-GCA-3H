@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Users } from "lucide-react";
+import { HOST_IP } from './config';
 
 const API_BASE =
-  "http://192.168.254.176/SMS-GCA-3H/Registrar/backend/api/dashboard/enrollments.php";
+  `http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/dashboard/enrollments.php`;
 
 const Enrollments = () => {
   const [isVisible, setIsVisible] = useState(false);

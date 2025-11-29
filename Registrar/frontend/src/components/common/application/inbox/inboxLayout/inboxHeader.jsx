@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FileDown, CheckCircle } from "lucide-react";
 
 const InboxHeader = () => {
   const [animate, setAnimate] = useState(false);
@@ -56,48 +55,6 @@ const InboxHeader = () => {
         className={`flex gap-2 transition-all duration-500 
           ${animate ? "animate-slideInRight" : "opacity-0"}`}
       >
-        {/* Export Button with tooltip */}
-        <div className="relative group">
-          <button
-            className="flex items-center gap-2 border border-gray-300 dark:border-slate-600 
-            text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-md text-sm font-semibold 
-            transition transform duration-200 hover:scale-105 hover:bg-gray-100 dark:hover:bg-slate-700"
-          >
-            <FileDown className="w-4 h-4" />
-            Export
-          </button>
-
-          {/* Tooltip */}
-          <span
-            className="absolute -top-8 left-1/2 -translate-x-1/2 
-            bg-black text-white text-xs font-semibold rounded-md px-2 py-1 
-            opacity-0 group-hover:opacity-100 transition-all duration-300 
-            whitespace-nowrap z-50"
-          >
-            Export all pending applications
-          </span>
-        </div>
-
-        {/* Validate Button with tooltip */}
-        <div className="relative group">
-          <button
-            className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1.5 
-            rounded-md text-sm font-semibold transition transform duration-200 hover:scale-105 hover:bg-blue-500"
-          >
-            <CheckCircle className="w-4 h-4" />
-            Validate Selected
-          </button>
-
-          {/* Tooltip */}
-          <span
-            className="absolute -top-8 left-1/2 -translate-x-1/2 
-            bg-black text-white text-xs font-semibold rounded-md px-2 py-1 
-            opacity-0 group-hover:opacity-100 transition-all duration-300 
-            whitespace-nowrap z-50"
-          >
-            Validate selected applications
-          </span>
-        </div>
       </div>
     </div>
   );

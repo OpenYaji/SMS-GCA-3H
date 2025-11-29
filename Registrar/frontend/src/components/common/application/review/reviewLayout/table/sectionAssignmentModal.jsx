@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { HOST_IP } from './config';
+import { HOST_IP } from "../../../../../../../config";
 
 const SectionAssignmentModal = ({ isOpen, onClose, applicant, onSave }) => {
   const [sectionOptions, setSectionOptions] = useState([]);

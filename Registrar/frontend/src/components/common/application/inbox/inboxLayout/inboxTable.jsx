@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Eye } from "lucide-react";
 import InboxView from "../inboxModal/inboxView";
-import { HOST_IP } from './config';
+import { HOST_IP } from "../../../../../../config";
 
 const InboxTable = ({ filtersState = {}, onProceedToScreening }) => {
   const [applicants, setApplicants] = useState([]);

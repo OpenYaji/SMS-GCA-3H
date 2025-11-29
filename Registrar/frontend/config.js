@@ -1,1 +1,1 @@
-export const HOST_IP = "192.168.254.176";
+export const HOST_IP = "localhost";

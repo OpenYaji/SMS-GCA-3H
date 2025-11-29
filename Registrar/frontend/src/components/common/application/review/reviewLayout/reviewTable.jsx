@@ -5,7 +5,7 @@ import SuccessToast from "../../../../ui/SuccessToast";
 import BulkSectionModal from "./table/BulkSectionModal";
 import EnrollmentConfirmationModal from "./table/EnrollmentConfirmationModal";
 import EnrollmentSuccessModal from "./table/EnrollmentSuccessModal";
-import { HOST_IP } from './config';
+import { HOST_IP } from "../../../../../../config";
 
 const BASE_API = `http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/applicants`;
 

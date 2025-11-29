@@ -4,7 +4,7 @@ import ReviewSectionButtons from "./section/reviewSectionButtons";
 import GradeCardList from "./section/GradeCardList"; 
 import EditSectionModal from "./section/editSectionModal"; 
 import RemoveGradeConfirmation from "./section/removeGradeConfirmation"; 
-
+import { HOST_IP } from "../../../../../../config";
 // --- HELPER FUNCTIONS ---
 
 // Helper: Scroll functionality
@@ -47,7 +47,7 @@ const getSectionColor = (current, max) => {
 };
 
 // **API CONFIGURATION**
-const API_BASE_URL = 'http://192.168.254.176/SMS-GCA-3H/Registrar/backend/api/sections/getSection.php'; 
+const API_BASE_URL = 'http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/sections/getSection.php'; 
 
 // HELPER: Function for transform flat API data to frontend-friendly format
 const transformApiData = (apiData) => {

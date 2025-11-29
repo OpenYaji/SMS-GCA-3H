@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ClipboardList } from "lucide-react";
-import { HOST_IP } from './config';
-
+import { HOST_IP } from "../../../../../config";
 const LIVE_API = `http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/dashboard/tasks.php`;
 
 const Tasks = () => {

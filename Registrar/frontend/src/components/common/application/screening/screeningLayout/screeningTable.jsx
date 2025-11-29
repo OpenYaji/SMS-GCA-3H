@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { FileCheck } from "lucide-react";
 import ScreeningModal from "../screeningModal/screeningModal";
-import { HOST_IP } from './config';
+import { HOST_IP } from "../../../../../../config";
 
 const ScreeningTable = ({ filterOptions = {}, onValidated }) => {
   const [selectedApplicant, setSelectedApplicant] = useState(null);

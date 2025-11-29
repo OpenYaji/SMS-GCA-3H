@@ -2,24 +2,22 @@ import React, { useState } from "react";
 
 const SerialQrScanner = () => {
   const [qrData, setQrData] = useState("");
-  const [smsStatus, setSmsStatus] = useState("");
+  const [student, setStudent] = useState(null);
+  const [status, setStatus] = useState("");
   const [error, setError] = useState("");
 
   const connectSerial = async () => {
     try {
       setError("");
-      setSmsStatus("");
+      setStudent(null);
 
-      // 1️⃣ Prompt user to select the T-D4 COM port
       const port = await navigator.serial.requestPort();
-      await port.open({ baudRate: 9600 }); // default T-D4 baud rate
+      await port.open({ baudRate: 9600 });
 
-      // 2️⃣ Setup text decoder to read serial input
       const decoder = new TextDecoderStream();
       port.readable.pipeTo(decoder.writable);
       const reader = decoder.readable.getReader();
 
-      // 3️⃣ Read serial data continuously
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
@@ -27,11 +25,9 @@ const SerialQrScanner = () => {
           const scanned = value.trim();
           setQrData(scanned);
 
-          // 4️⃣ Send scanned QR to PHP backend
-          setSmsStatus("Sending SMS...");
           try {
             const response = await fetch(
-              "http://localhost/guardphpwithsms/backend/server/send_sms_from_qr.php",
+              "http://localhost/sms-gca-3h/guard/backend/server/tap_qr.php",
               {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -40,18 +36,21 @@ const SerialQrScanner = () => {
             );
 
             const text = await response.text();
+            console.log("Raw PHP response:", text);
+
             try {
               const result = JSON.parse(text);
-             /*  if (response.ok) {
-                setSmsStatus(`✅ SMS sent successfully: ${JSON.stringify(result)}`);
+              if (result.success) {
+                setStudent(result.student);
+                setStatus(result.message); // Tap In / Tap Out message
               } else {
-                setSmsStatus(`❌ SMS failed: ${result.message || "Unknown error"}`);
-              } */
+                setError(result.message || "Student not found");
+              }
             } catch (jsonErr) {
-              setSmsStatus(`❌ SMS failed (invalid JSON): ${text.substring(0, 100)}...`);
+              setError(`Invalid JSON: ${text.substring(0, 200)}`);
             }
           } catch (fetchErr) {
-            setSmsStatus(`🚨 Network/Error sending SMS: ${fetchErr.message}`);
+            setError(`Network error: ${fetchErr.message}`);
           }
         }
       }
@@ -72,8 +71,23 @@ const SerialQrScanner = () => {
       </button>
 
       {error && <p className="text-red-600 mb-2">Error: {error}</p>}
-      {qrData && <p className="mb-2">Scanned QR Data: <strong>{qrData}</strong></p>}
-      {smsStatus && <p className="mb-2">{smsStatus}</p>}
+      {qrData && <p className="mb-2">Scanned QR Code ID: <strong>{qrData}</strong></p>}
+      {status && <p className="mb-2 font-semibold">{status}</p>}
+
+      {student && (
+        <div className="border p-4 rounded-md bg-gray-100">
+          <h2 className="text-xl font-semibold mb-2">Student Details</h2>
+          <p><strong>Name:</strong> {student.studentName}</p>
+          <p><strong>Number:</strong> {student.StudentNumber}</p>
+          <p><strong>QR Code ID:</strong> {student.QRCodeID}</p>
+          <p><strong>Date of Birth:</strong> {student.DateOfBirth}</p>
+          <p><strong>Gender:</strong> {student.Gender}</p>
+          <p><strong>Nationality:</strong> {student.Nationality}</p>
+          <p><strong>Phone:</strong> {student.PhoneNumber}</p>
+          {student.TapTimeIn && <p><strong>Tap In:</strong> {student.TapTimeIn}</p>}
+          {student.TapTimeOut && <p><strong>Tap Out:</strong> {student.TapTimeOut}</p>}
+        </div>
+      )}
     </div>
   );
 };

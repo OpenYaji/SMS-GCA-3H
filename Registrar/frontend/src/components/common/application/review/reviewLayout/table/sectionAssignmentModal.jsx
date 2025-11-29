@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { HOST_IP } from './config';
 
 const SectionAssignmentModal = ({ isOpen, onClose, applicant, onSave }) => {
   const [sectionOptions, setSectionOptions] = useState([]);
@@ -8,7 +7,7 @@ const SectionAssignmentModal = ({ isOpen, onClose, applicant, onSave }) => {
   // Load sections when applicant is set
   useEffect(() => {
     if (applicant?.grade) {
-      fetch(`http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/sections/getByGrade.php?grade=${applicant.grade}`)
+      fetch(`http://localhost/SMS-GCA-3H/Registrar/backend/api/sections/getByGrade.php?grade=${applicant.grade}`)
         .then((res) => res.json())
         .then((data) => setSectionOptions(data))
         .catch((err) => console.error(err));

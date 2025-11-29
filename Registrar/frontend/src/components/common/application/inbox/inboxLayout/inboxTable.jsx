@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Eye } from "lucide-react";
 import InboxView from "../inboxModal/inboxView";
-import { HOST_IP } from './config';
 
 const InboxTable = ({ filtersState = {}, onProceedToScreening }) => {
   const [applicants, setApplicants] = useState([]);
@@ -15,8 +14,7 @@ const InboxTable = ({ filtersState = {}, onProceedToScreening }) => {
   const prevDataRef = useRef(null);
   const [removingIds, setRemovingIds] = useState([]);
 
-
-  const API_BASE = `http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/applicants`;
+  const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
 
   // Fetch applicants from backend
   const fetchApplicants = async () => {

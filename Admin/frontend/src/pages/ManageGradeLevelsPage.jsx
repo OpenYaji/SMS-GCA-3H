@@ -19,6 +19,8 @@ export default function ManageGradeLevels() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+  const [gradeDeadlines, setGradeDeadlines] = useState([]);
+  const [currentQuarter, setCurrentQuarter] = useState(null);
 
   // Ref to access GradeLevelTable methods
   const gradeLevelTableRef = useRef(null);
@@ -29,6 +31,39 @@ export default function ManageGradeLevels() {
     const isDarkMode = document.documentElement.classList.contains("dark");
     setDarkMode(isDarkMode);
   }, []);
+
+  // Fetch deadlines whenever currentSchoolYear changes
+  useEffect(() => {
+    if (currentSchoolYear?.id) {
+      fetchGradeDeadlines();
+    }
+  }, [currentSchoolYear?.id]);
+
+  const fetchGradeDeadlines = async () => {
+    try {
+      if (currentSchoolYear?.id) {
+        const deadlines =
+          await manageGradeLevelsService.getGradeSubmissionDeadlines(
+            currentSchoolYear.id
+          );
+        setGradeDeadlines(deadlines || []);
+
+        // Determine current quarter based on today's date
+        const today = new Date();
+        const activeQuarter = deadlines.find((deadline) => {
+          const startDate = new Date(deadline.startDate);
+          const endDate = new Date(deadline.deadlineDate);
+          return today >= startDate && today <= endDate;
+        });
+
+        setCurrentQuarter(activeQuarter || null);
+      }
+    } catch (error) {
+      console.error("Error fetching grade deadlines:", error);
+      setGradeDeadlines([]);
+      setCurrentQuarter(null);
+    }
+  };
 
   const fetchSchoolYearsList = async () => {
     try {
@@ -109,6 +144,14 @@ export default function ManageGradeLevels() {
     });
   };
 
+  const formatShortDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   const handleSchoolYearSelect = async (schoolYearItem) => {
     setIsSchoolYearDropdownOpen(false);
     await fetchSchoolYearByPage(schoolYearItem.page);
@@ -124,9 +167,9 @@ export default function ManageGradeLevels() {
   };
 
   const handleSetDeadline = async (deadlineData) => {
+    // Refresh deadlines after setting
+    await fetchGradeDeadlines();
     setIsDeadlineModalOpen(false);
-    // Handle the deadline data here
-    // wala pa sa database saka backend e wait ko update nila.
   };
 
   const handleSectionAdded = async () => {
@@ -205,8 +248,8 @@ export default function ManageGradeLevels() {
             ? "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300"
             : "text-gray-700 dark:text-gray-300"
         }`
-      : `w-full text-left px-4 py-3 hover:bg-yellow-50 transition-colors border-b border-gray-100 last:border-b-0 ${
-          isSelected ? "bg-yellow-100 text-yellow-800" : "text-gray-700"
+      : `w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 ${
+          isSelected ? "bg-yellow-50 text-yellow-700" : "text-gray-700"
         }`;
 
   if (isLoading) {
@@ -256,12 +299,51 @@ export default function ManageGradeLevels() {
 
         <div className="flex items-start gap-4">
           {/* Set Deadline Button */}
-          <button
-            onClick={() => setIsDeadlineModalOpen(true)}
-            className={deadlineButtonClass}
-          >
-            Set a deadline of grades
-          </button>
+          <div className="flex flex-col items-center gap-3">
+            <button
+              onClick={() => setIsDeadlineModalOpen(true)}
+              className={deadlineButtonClass}
+            >
+              Set a deadline of grades
+            </button>
+
+            {/* Current Quarter Indicator - Same style as School Year */}
+            {currentQuarter && (
+              <div className="flex flex-col items-center gap-2">
+                <div className={dropdownButtonClass}>
+                  <div className="flex flex-col items-center">
+                    <span className="font-bold text-white group-hover:text-yellow-100 transition-colors">
+                      {currentQuarter.quarter}
+                    </span>
+                    <span className="text-white/90 text-xs font-normal group-hover:text-yellow-100 transition-colors">
+                      Deadline: {formatShortDate(currentQuarter.deadlineDate)}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsDeadlineModalOpen(true)}
+                  className={editButtonClass}
+                  title="Edit grade deadlines"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                  <span>Edit Deadline</span>
+                </button>
+              </div>
+            )}
+          </div>
 
           <div className="flex flex-col items-center gap-3">
             <button
@@ -281,7 +363,7 @@ export default function ManageGradeLevels() {
                     className={dropdownButtonClass}
                   >
                     <span className="font-bold text-white group-hover:text-yellow-100 transition-colors">
-                      {currentSchoolYear.yearName}
+                      A.Y. {currentSchoolYear.yearName}
                     </span>
                     <svg
                       className={`w-4 h-4 transition-transform ${
@@ -392,6 +474,7 @@ export default function ManageGradeLevels() {
         isOpen={isDeadlineModalOpen}
         onClose={() => setIsDeadlineModalOpen(false)}
         onSetDeadline={handleSetDeadline}
+        currentSchoolYear={currentSchoolYear}
       />
     </div>
   );

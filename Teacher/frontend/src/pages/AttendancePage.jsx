@@ -58,7 +58,7 @@ const AttendancePage = () => {
       }
       
       const response = await axios.get(
-        `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/attendance/get-section-attendance.php?sectionId=${classData.id}&date=${selectedDate}`,
+        `http://localhost/SMS-GCA-3H/Teacher/backend/api/attendance/get-section-attendance.php?sectionId=${classData.id}&date=${selectedDate}`,
         { withCredentials: true }
       );
       
@@ -145,7 +145,7 @@ const AttendancePage = () => {
       setUpdatingAttendance(true);
       
       const response = await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/attendance/update-attendance.php',
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/attendance/update-attendance.php',
         {
           studentId: studentId,
           status: newStatus,

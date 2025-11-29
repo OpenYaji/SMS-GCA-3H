@@ -11,7 +11,7 @@ const MySchedule = () => {
     const fetchSchedules = async () => {
       try {
         const response = await axios.get(
-          'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/schedules/get-teacher-schedule.php',
+          'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-teacher-schedule.php',
           { withCredentials: true }
         );
         

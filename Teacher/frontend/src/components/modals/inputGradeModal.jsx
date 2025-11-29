@@ -46,7 +46,7 @@ export default function InputGradeModal({
       try {
         setLoadingSubjects(true);
         const response = await axios.get(
-          `http://localhost/gymnazo-christian-academy-teacher-side/backend/api/subjects/get-subjects-by-grade.php?gradeLevelId=${gradeLevelId}`,
+          `http://localhost/SMS-GCA-3H/Teacher/backend/api/subjects/get-subjects-by-grade.php?gradeLevelId=${gradeLevelId}`,
           { withCredentials: true }
         );
         

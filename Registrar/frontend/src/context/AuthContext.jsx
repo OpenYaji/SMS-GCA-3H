@@ -1,72 +1,131 @@
-// import { createContext, useContext, useState, useEffect } from 'react';
-// import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
+// src/context/AuthContext.jsx
+import React, { createContext, useState, useEffect, useContext } from 'react';
 
-// const AuthContext = createContext(null);
+const AuthContext = createContext();
 
-// export const AuthProvider = ({ children }) => {
-//   const [user, setUser] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const navigate = useNavigate();
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [token, setToken] = useState(localStorage.getItem('authToken'));
 
-//   useEffect(() => {
-//     const publicRoutes = ['/', '/login'];
-    
-//     if (!publicRoutes.includes(location.pathname)) {
-//       fetchCurrentUser();
-//     } else {
-//       setLoading(false);
-//     }
-//   }, [location.pathname]);
+    // Verify token on mount and when token changes
+    useEffect(() => {
+        const verifyToken = async () => {
+            if (!token) {
+                setLoading(false);
+                return;
+            }
 
-//   const login = async (username, password) => {
-//     try {
-//       const response = await axios.post(
-//         '/backend/api/auth/login.php', // need pa to ng enhancement
-//         { username, password },
-//         {
-//           withCredentials: true,
-//           headers: { 'Content-Type': 'application/json' }
-//         }
-//       );
+            try {
+                const response = await fetch('http://localhost/your-api-path/auth/verify-token.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    credentials: 'include'
+                });
 
-//       if (response.data.success) {
-//         return { success: true, user: response.data.user };
-//       }
-//     } catch (error) {
-//       throw error;
-//     }
-//   };
+                const data = await response.json();
 
-//   const logout = async () => {
-//     try {
-//       await axios.post(
-//         '/backend/api/auth/logout.php', // need pa to ng enhancement
-//         {},
-//         { withCredentials: true }
-//       );
-//     } catch (error) {
-//       console.error('Logout error:', error);
-//     } finally {
-//       setUser(null);
-//       navigate('/');
-//     }
-//   };
+                if (data.success) {
+                    setUser(data.user);
+                } else {
+                    // Token invalid, clear it
+                    localStorage.removeItem('authToken');
+                    setToken(null);
+                    setUser(null);
+                }
+            } catch (error) {
+                console.error('Token verification failed:', error);
+                localStorage.removeItem('authToken');
+                setToken(null);
+                setUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-//   const value = {
-//     user,
-//     loading,
-//     login,
-//     logout,
-//   };
+        verifyToken();
+    }, [token]);
 
-//   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-// };
+    const login = async (username, password) => {
+        try {
+            const response = await fetch('http://localhost/your-api-path/auth/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ username, password })
+            });
 
-// export const useAuth = () => {
-//   const context = useContext(AuthContext);
-//   if (!context) {
-//     throw new Error('useAuth must be used within an AuthProvider');
-//   }
-//   return context;
-// };
+            const data = await response.json();
+
+            if (data.success) {
+                // Store token in localStorage
+                localStorage.setItem('authToken', data.token);
+                setToken(data.token);
+                setUser(data.user);
+                
+                // Redirect to appropriate dashboard
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
+                }
+                
+                return { success: true };
+            } else {
+                return { success: false, message: data.message };
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            return { success: false, message: 'Login failed. Please try again.' };
+        }
+    };
+
+    const logout = async () => {
+        try {
+            if (token) {
+                await fetch('http://localhost/your-api-path/auth/logout.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ token }),
+                    credentials: 'include'
+                });
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+        } finally {
+            localStorage.removeItem('authToken');
+            setToken(null);
+            setUser(null);
+            window.location.href = 'http://localhost:5173'; // Redirect to login
+        }
+    };
+
+    const value = {
+        user,
+        token,
+        loading,
+        login,
+        logout,
+        isAuthenticated: !!user
+    };
+
+    return (
+        <AuthContext.Provider value={value}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};

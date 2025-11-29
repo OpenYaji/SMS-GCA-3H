@@ -1,82 +1,198 @@
 <?php
-header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
+// Prevent any output before JSON
+ob_start();
 
 require_once __DIR__ . '/../../config/db.php';
-require_once __DIR__ . '/../../config/mailer.php';
+require_once __DIR__ . '/../../config/cors.php';
+require_once __DIR__ . '/../../config/fee_structure.php';
+require_once __DIR__ . '/../../models/Applicant.php';
 
-try {
-    $db = new Database();
-    $conn = $db->getConnection();
+// Clear any previous output
+ob_clean();
 
-    $data = json_decode(file_get_contents("php://input"), true);
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+
     $applicantId = $data['applicantId'] ?? null;
+    $paymentMode = $data['paymentMode'] ?? 'full';
+    $downPayment = $data['downPayment'] ?? 0;
+    $notes = $data['notes'] ?? '';
 
     if (!$applicantId) {
-        throw new Exception("Applicant ID is required");
+        echo json_encode(['success' => false, 'message' => 'Applicant ID is required']);
+        exit;
     }
 
-    // Get applicant details
-    $stmt = $conn->prepare("
-        SELECT 
-            a.ApplicationID,
-            a.TrackingNumber,
-            a.StudentFirstName,
-            a.StudentLastName,
-            a.EmailAddress,
-            a.GuardianFirstName,
-            a.GuardianLastName,
-            a.GuardianEmail,
-            a.EnrolleeType,
-            g.LevelName as GradeLevel
-        FROM application a
-        LEFT JOIN gradelevel g ON a.ApplyingForGradeLevelID = g.GradeLevelID
-        WHERE a.ApplicationID = ?
-    ");
-    $stmt->execute([$applicantId]);
-    $applicant = $stmt->fetch(PDO::FETCH_ASSOC);
+    $conn = null;
 
-    if (!$applicant) {
-        throw new Exception("Applicant not found");
+    try {
+        $applicantModel = new Applicant();
+        $conn = $applicantModel->conn;
+
+        $conn->beginTransaction();
+
+        $applicant = $applicantModel->getApplicantById($applicantId);
+
+        if (!$applicant) {
+            echo json_encode(['success' => false, 'message' => 'Applicant not found']);
+            exit;
+        }
+
+        $fees = FeeStructure::getFeesByGrade($applicant['grade']);
+        $totalFee = $fees['full_payment'];
+        $outstandingBalance = $totalFee - $downPayment;
+
+        // Create transaction record WITHOUT StudentProfileID
+        $stmt = $conn->prepare("
+            INSERT INTO transaction (StudentProfileID, SchoolYearID, IssueDate, DueDate, TotalAmount, PaidAmount, TransactionStatusID)
+            VALUES (NULL, :schoolYearId, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), :totalAmount, :paidAmount, :statusId)
+        ");
+
+        $schoolYearId = $applicant['SchoolYearID'];
+        $statusId = ($outstandingBalance > 0) ? 2 : 3;
+
+        $stmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
+        $stmt->bindParam(':totalAmount', $totalFee);
+        $stmt->bindParam(':paidAmount', $downPayment);
+        $stmt->bindParam(':statusId', $statusId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $transactionId = $conn->lastInsertId();
+
+        // Create transaction items
+        $items = [
+            ['type' => 1, 'desc' => 'Registration Fee', 'amount' => $fees['registration']],
+            ['type' => 2, 'desc' => 'Miscellaneous Fee', 'amount' => $fees['miscellaneous']],
+            ['type' => 1, 'desc' => 'Tuition Fee', 'amount' => $fees['tuition']]
+        ];
+
+        $stmt = $conn->prepare("
+            INSERT INTO transactionitem (TransactionID, ItemTypeID, Description, Amount, Quantity)
+            VALUES (:transactionId, :itemTypeId, :description, :amount, 1)
+        ");
+
+        foreach ($items as $item) {
+            $stmt->bindParam(':transactionId', $transactionId, PDO::PARAM_INT);
+            $stmt->bindParam(':itemTypeId', $item['type'], PDO::PARAM_INT);
+            $stmt->bindParam(':description', $item['desc']);
+            $stmt->bindParam(':amount', $item['amount']);
+            $stmt->execute();
+        }
+
+        // Record down payment with 'Verified' status
+        if ($downPayment > 0) {
+            $refNumber = 'DOWNPAY-' . $applicantId . '-' . time();
+
+            $stmt = $conn->prepare("
+                INSERT INTO payment (TransactionID, PaymentMethodID, AmountPaid, PaymentDateTime, ReferenceNumber, VerificationStatus, VerifiedByUserID, VerifiedAt)
+                VALUES (:transactionId, 1, :amountPaid, NOW(), :refNumber, 'Verified', 1, NOW())
+            ");
+
+            $stmt->bindParam(':transactionId', $transactionId, PDO::PARAM_INT);
+            $stmt->bindParam(':amountPaid', $downPayment);
+            $stmt->bindParam(':refNumber', $refNumber);
+            $stmt->execute();
+        }
+
+        // Update application with payment info and transaction ID
+        $stmt = $conn->prepare("
+            UPDATE application 
+            SET 
+                ApplicationStatus = 'Approved',
+                PaymentMode = :paymentMode,
+                TransactionID = :transactionId,
+                RegistrarNotes = :notes,
+                ReviewedDate = NOW()
+            WHERE ApplicationID = :id
+        ");
+
+        $stmt->bindParam(':paymentMode', $paymentMode);
+        $stmt->bindParam(':transactionId', $transactionId, PDO::PARAM_INT);
+        $stmt->bindParam(':notes', $notes);
+        $stmt->bindParam(':id', $applicantId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $conn->commit();
+
+        // Send email notification
+        $emailSent = false;
+        try {
+            require_once __DIR__ . '/../../config/mailer.php';
+            $mail = getMailer();
+            $mail->addAddress($applicant['GuardianEmail']);
+            $mail->Subject = 'Application Approved - Gymnazo Christian Academy';
+
+            $requiredDocs = FeeStructure::getRequiredDocuments($applicant['EnrolleeType']);
+            $docsList = implode("\n", array_map(fn($doc) => "• $doc", $requiredDocs));
+
+            $paymentModeText = ucfirst($paymentMode);
+
+            $mail->Body = "
+Dear {$applicant['GuardianFirstName']} {$applicant['GuardianLastName']},
+
+Congratulations! We are pleased to inform you that the application for {$applicant['StudentFirstName']} {$applicant['StudentLastName']} has been APPROVED for enrollment in {$applicant['grade']} for School Year 2025-2026.
+
+PAYMENT INFORMATION:
+--------------------
+Payment Mode: {$paymentModeText} Payment
+Total Fee: PHP " . number_format($totalFee, 2) . "
+Down Payment: PHP " . number_format($downPayment, 2) . "
+Outstanding Balance: PHP " . number_format($outstandingBalance, 2) . "
+
+REQUIRED DOCUMENTS:
+-------------------
+{$docsList}
+
+NEXT STEPS:
+-----------
+1. Submit all required documents to the Registrar's Office
+2. Complete the down payment of PHP " . number_format($downPayment, 2) . "
+3. Wait for the section assignment notification
+
+NOTE: Uniforms and books are NOT included in the fees above.
+
+For any concerns, please contact our Registrar's Office.
+
+Best regards,
+Gymnazo Christian Academy
+Registrar's Office
+            ";
+
+            $mail->send();
+            $emailSent = true;
+        } catch (Exception $mailError) {
+            error_log("Email sending failed: " . $mailError->getMessage());
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Applicant validated successfully',
+            'data' => [
+                'applicantId' => $applicantId,
+                'transactionId' => $transactionId,
+                'paymentMode' => $paymentMode,
+                'downPayment' => $downPayment,
+                'outstandingBalance' => $outstandingBalance,
+                'totalFee' => $totalFee,
+                'emailSent' => $emailSent
+            ]
+        ]);
+    } catch (Exception $e) {
+        if ($conn && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
+
+        error_log("Validation Error: " . $e->getMessage());
+
+        echo json_encode([
+            'success' => false,
+            'message' => 'Error: ' . $e->getMessage()
+        ]);
     }
-
-    // Update status to "Approved"
-    $updateStmt = $conn->prepare("
-        UPDATE application
-        SET ApplicationStatus = 'Approved'
-        WHERE ApplicationID = ?
-    ");
-    $updateStmt->execute([$applicantId]);
-
-    // Send approval notification email
-    $mailer = new Mailer();
-    $emailData = [
-        'trackingNumber' => $applicant['TrackingNumber'],
-        'studentName' => trim($applicant['StudentFirstName'] . ' ' . $applicant['StudentLastName']),
-        'guardianName' => trim($applicant['GuardianFirstName'] . ' ' . $applicant['GuardianLastName']),
-        'gradeLevel' => $applicant['GradeLevel'],
-        'studentEmail' => $applicant['StudentEmail'] ?? null
-    ];
-
-    $emailSent = $mailer->sendApprovalNotification($applicant['GuardianEmail'], $emailData);
-
-    echo json_encode([
-        "success" => true,
-        "message" => "Applicant validated successfully",
-        "emailSent" => $emailSent,
-        "data" => [
-            "id" => $applicant['ApplicationID'],
-            "name" => $emailData['studentName'],
-            "status" => "Approved"
-        ]
-    ]);
-
-} catch (Exception $e) {
-    echo json_encode([
-        "success" => false,
-        "message" => $e->getMessage()
-    ]);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
-?>
+
+ob_end_flush();

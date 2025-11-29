@@ -227,6 +227,58 @@ export const manageGradeLevelsService = {
       throw this.handleError(error);
     }
   },
+  // GRADE SUBMISSION DEADLINES METHODS
+  async createGradeSubmissionDeadline(deadlineData) {
+    try {
+      const response = await api.post(
+        "/grade-submission-deadlines",
+        deadlineData
+      );
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  },
+
+  async updateGradeSubmissionDeadline(deadlineId, deadlineData) {
+    try {
+      const response = await api.put(
+        `/grade-submission-deadlines/${deadlineId}`,
+        deadlineData
+      );
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  },
+
+  async getGradeSubmissionDeadlines(schoolYearId) {
+    try {
+      const response = await api.get(`/school-years/${schoolYearId}`);
+
+      if (response.data && response.data.data) {
+        const schoolYearData = response.data.data;
+        const deadlines = schoolYearData.GradeSubmissionDeadlines || [];
+
+        // Transform the deadlines data to match our frontend format
+        const transformedDeadlines = deadlines.map((deadline) => ({
+          id: deadline.DeadlineID,
+          schoolYearId: deadline.SchoolYearID,
+          quarter: deadline.Quarter,
+          startDate: deadline.StartDate,
+          deadlineDate: deadline.DeadlineDate,
+          createdByUserId: deadline.CreatedByUserID,
+        }));
+
+        return transformedDeadlines;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error fetching grade submission deadlines:", error);
+      return [];
+    }
+  },
 
   // GET SCHEDULE OF THAT SPECIFIC SECTION
   async getSectionSchedule(sectionId) {

@@ -46,3 +46,19 @@ CREATE TABLE `authorized_escort` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 hello
+
+
+CREATE TABLE `gradesubmissiondeadline` (
+  `DeadlineID` int(11) NOT NULL AUTO_INCREMENT,
+  `SchoolYearID` int(11) NOT NULL,
+  `Quarter` enum('First Quarter','Second Quarter','Third Quarter','Fourth Quarter') NOT NULL,
+  `StartDate` datetime NOT NULL,
+  `DeadlineDate` datetime NOT NULL,
+  `CreatedByUserID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`DeadlineID`),
+  UNIQUE KEY `unique_schoolyear_quarter` (`SchoolYearID`,`Quarter`),
+  KEY `fk_GradeDeadline_SchoolYear` (`SchoolYearID`),
+  KEY `fk_GradeDeadline_CreatedByUser` (`CreatedByUserID`),
+  CONSTRAINT `fk_GradeDeadline_CreatedByUser` FOREIGN KEY (`CreatedByUserID`) REFERENCES `user` (`UserID`) ON DELETE SET NULL,
+  CONSTRAINT `fk_GradeDeadline_SchoolYear` FOREIGN KEY (`SchoolYearID`) REFERENCES `schoolyear` (`SchoolYearID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

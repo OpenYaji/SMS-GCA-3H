@@ -11,16 +11,21 @@ import RecordPage from './components/pages/recordPage';
 import ReportsPage from './components/pages/reportsPage';
 import HelpSupportPage from './components/pages/helpSupportPage';
 import TransactionPage from './components/pages/transactionPage';
+import { AuthProvider } from './context/AuthContext';
+// import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
   return (
     <>
+            <AuthProvider>
+
       <BrowserRouter>
         <DarkModeProvider>
           <Routes>
             <Route path="/" element={<Navigate to="/registrar-dashboard" replace />} />
-            <Route path="/registrar-dashboard" element={<DashboardLayout />}>
+            <Route path="/registrar-dashboard" element={                    
+            <DashboardLayout />                    }>
               <Route index element={<DashboardPage />} />
               <Route path="application-management" element={<ApplicationPage />} />
               <Route path="student-management" element={<StudentPage />} />
@@ -33,6 +38,7 @@ function App() {
           </Routes>
         </DarkModeProvider>
       </BrowserRouter>
+      </AuthProvider>
     </>
   );
 }

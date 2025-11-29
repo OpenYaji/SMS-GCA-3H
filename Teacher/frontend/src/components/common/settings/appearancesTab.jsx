@@ -45,7 +45,7 @@ export default function AppearancesTab() {
   const fetchUserPreferences = async () => {
     try {
       const response = await axios.get(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/teachers/get-appearance-settings.php',
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/get-appearance-settings.php',
         { withCredentials: true }
       );
 
@@ -82,7 +82,7 @@ export default function AppearancesTab() {
     try {
       setSaving(true);
       const response = await axios.post(
-        'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/teachers/update-appearance-settings.php',
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/update-appearance-settings.php',
         {
           theme: selectedTheme,
           accentColor: selectedAccent,

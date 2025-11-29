@@ -1,30 +1,40 @@
 import React from 'react';
+import { CheckCircle, FileDown } from 'lucide-react';
 
-const ActionButtons = ({ 
-  selectedCount, 
-  totalCount, 
-  onExport, 
-  onCompleteSelected 
-}) => {
+const ActionButtons = ({ selectedCount, totalCount, onExport, onVerifySelected }) => {
   return (
-    <div className="flex justify-between items-center mb-4">
-      <div>
-        <button 
-          className="bg-[#3C2F2F] hover:bg-amber-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-4 py-2 rounded mr-2 transition-colors"
-          onClick={onExport}
-        >
-          Export List
-        </button>
-        <button 
-          className="bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700 text-white px-4 py-2 rounded transition-colors disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed"
-          onClick={onCompleteSelected}
-          disabled={selectedCount === 0}
-        >
-          Complete Selected ({selectedCount})
-        </button>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="text-sm text-gray-600 dark:text-gray-400">
+        {selectedCount > 0 ? (
+          <span className="font-medium text-blue-600 dark:text-blue-400">
+            {selectedCount} of {totalCount} selected
+          </span>
+        ) : (
+          <span>No payments selected</span>
+        )}
       </div>
-      <div className="text-sm text-gray-800 dark:text-white">
-        Showing {totalCount} students
+      
+      <div className="flex gap-3">
+        <button
+          onClick={onExport}
+          className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+        >
+          <FileDown size={18} />
+          <span>Export List</span>
+        </button>
+        
+        <button
+          onClick={onVerifySelected}
+          disabled={selectedCount === 0}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+            selectedCount === 0
+              ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-500 cursor-not-allowed'
+              : 'bg-green-600 hover:bg-green-700 text-white'
+          }`}
+        >
+          <CheckCircle size={18} />
+          <span>Verify Selected ({selectedCount})</span>
+        </button>
       </div>
     </div>
   );

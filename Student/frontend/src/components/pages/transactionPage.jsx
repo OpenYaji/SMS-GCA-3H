@@ -12,33 +12,45 @@ const TransactionPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchTransactionData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('/backend/api/transactions/getTransactionData.php', {
-          withCredentials: true,
-        });
-        
-        console.log('API Response:', response.data);
-        
-        if (response.data.success) {
-          console.log('Transaction data received:', response.data.data);
-          setTransactionData(response.data.data);
-        } else {
-          console.error('API returned success=false:', response.data.message);
-          setError(response.data.message || 'Failed to fetch transaction data.');
-        }
-      } catch (err) {
-        console.error('Error fetching transaction data:', err);
-        console.error('Error response:', err.response?.data);
-        setError('An error occurred while fetching transactions.');
-      } finally {
-        setLoading(false);
+  const fetchTransactionData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('/backend/api/transactions/getTransactionData.php', {
+        withCredentials: true,
+      });
+      
+      console.log('API Response:', response.data);
+      
+      if (response.data.success) {
+        console.log('Transaction data received:', response.data.data);
+        setTransactionData(response.data.data);
+      } else {
+        console.error('API returned success=false:', response.data.message);
+        setError(response.data.message || 'Failed to fetch transaction data.');
       }
+    } catch (err) {
+      console.error('Error fetching transaction data:', err);
+      console.error('Error response:', err.response?.data);
+      setError('An error occurred while fetching transactions.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactionData();
+
+    // Listen for payment completion events to refresh data
+    const handlePaymentComplete = () => {
+      console.log('Payment completed event received, refreshing data...');
+      fetchTransactionData();
     };
 
-    fetchTransactionData();
+    window.addEventListener('paymentCompleted', handlePaymentComplete);
+
+    return () => {
+      window.removeEventListener('paymentCompleted', handlePaymentComplete);
+    };
   }, []);
 
   console.log('Current state - Loading:', loading, 'Error:', error, 'TransactionData:', transactionData);
@@ -91,7 +103,7 @@ const TransactionPage = () => {
         </div>
 
         <div className="lg:col-span-2">
-        <BalanceBreakdownCard breakdownData={transactionData.balanceBreakdown} />
+          <BalanceBreakdownCard breakdownData={transactionData.balanceBreakdown} />
         </div>
 
         <div className="lg:col-span-3">

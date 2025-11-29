@@ -11,7 +11,7 @@ const Announcements = () => {
     const fetchAnnouncements = async () => {
       try {
         const response = await axios.get(
-          'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/announcements/get-announcements.php?limit=3',
+          'http://localhost/SMS-GCA-3H/Teacher/backend/api/announcements/get-announcements.php?limit=3',
           { withCredentials: true }
         );
         

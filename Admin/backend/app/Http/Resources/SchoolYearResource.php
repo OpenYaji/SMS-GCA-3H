@@ -24,6 +24,8 @@ class SchoolYearResource extends JsonResource
             'GradeLevels' => $this->whenLoaded('gradeLevels', function () {
                 return GradeLevelResource::collection($this->gradeLevels);
             }),
+
+            'GradeSubmissionDeadlines' => GradeSubmissionDeadlineResource::collection($this->gradeSubmissionDeadlines),
         ];
     }
 }

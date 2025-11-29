@@ -11,7 +11,7 @@ const Notifications = () => {
     const fetchNotifications = async () => {
       try {
         const response = await axios.get(
-          'http://localhost/gymnazo-christian-academy-teacher-side/backend/api/notifications/get-notifications.php?limit=3',
+          'http://localhost/SMS-GCA-3H/Teacher/backend/api/notifications/get-notifications.php?limit=3',
           { withCredentials: true }
         );
         

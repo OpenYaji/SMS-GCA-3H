@@ -11,6 +11,9 @@ header("Access-Control-Max-Age: 3600");
 // Specify allowed headers
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
+// Start Session
+session_start();
+
 // --- Handle Preflight OPTIONS Request ---
 // The OPTIONS method is used by browsers to check CORS settings
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -37,6 +40,16 @@ $gradeLevel = new GradeLevel($db);
 
 // --- Handle Request Method ---
 $requestMethod = $_SERVER["REQUEST_METHOD"];
+
+// Function to check if user is authorized (Head Teacher)
+function isAuthorized() {
+    if (!isset($_SESSION['user_id'])) {
+        return false;
+    }
+    // Allow Head Teacher (RoleID 6 or UserType 'Head Teacher')
+    // We use UserType from session as set in login
+    return isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'Head Teacher';
+}
 
 try {
     switch ($requestMethod) {
@@ -84,6 +97,13 @@ try {
             break;
 
         case 'POST':
+            // Check Authorization
+            if (!isAuthorized()) {
+                http_response_code(403);
+                echo json_encode(array("message" => "Access denied. Only Head Teachers can create grade levels."));
+                exit();
+            }
+
             // Create a new grade level
             $data = json_decode(file_get_contents("php://input"));
 
@@ -105,6 +125,13 @@ try {
             break;
 
         case 'PUT':
+            // Check Authorization
+            if (!isAuthorized()) {
+                http_response_code(403);
+                echo json_encode(array("message" => "Access denied. Only Head Teachers can update grade levels."));
+                exit();
+            }
+
             // Update a grade level
             $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
             $data = json_decode(file_get_contents("php://input"));
@@ -128,6 +155,13 @@ try {
             break;
 
         case 'DELETE':
+            // Check Authorization
+            if (!isAuthorized()) {
+                http_response_code(403);
+                echo json_encode(array("message" => "Access denied. Only Head Teachers can delete grade levels."));
+                exit();
+            }
+
             // Delete a grade level
             $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 

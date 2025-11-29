@@ -16,13 +16,13 @@ class CurrentUserController extends Controller
     /**
      * Display the authenticated user's profile
      */
-    public function show()
+    public function show()  
     {
         // TODO: Replace with actual authenticated user
         // $adminprofile = AdminProfile::with(['profile.user'])->where('ProfileID', auth()->id())->first();
 
         // For now, hardcoded to user ID 1 for testing
-       $adminprofile = AdminProfile::with(['profile.user'])->where('ProfileID', 1)->first();
+       $adminprofile = AdminProfile::with(['profile.user'])->where('ProfileID', 12)->first();
 
         if (!$adminprofile) {
             return response()->json(['message' => 'Profile not found'], 404);
@@ -39,7 +39,7 @@ class CurrentUserController extends Controller
         // TODO: Replace with actual authenticated user later
         // $adminprofile = AdminProfile::with(['profile.user'])->where('ProfileID', auth()->id())->first();
 
-       $adminprofile = AdminProfile::with(['profile.user'])->where('ProfileID', 1)->first();
+       $adminprofile = AdminProfile::with(['profile.user'])->where('ProfileID', 12)->first();
 
         if (!$adminprofile) {
             return response()->json(['message' => 'Profile not found'], 404);

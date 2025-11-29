@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class GuardProfileResource extends JsonResource
 {
@@ -26,12 +27,8 @@ class GuardProfileResource extends JsonResource
                 'FirstName' => $this->profile?->FirstName,
                 'LastName' => $this->profile?->LastName,
                 'MiddleName' => $this->profile?->MiddleName,
-                'PhoneNumber' => $this->profile?->EncryptedPhoneNumber
-                    ? Crypt::decryptString($this->profile->EncryptedPhoneNumber)
-                    : null,
-                'Address' => $this->profile?->EncryptedAddress
-                    ? Crypt::decryptString($this->profile->EncryptedAddress)
-                    : null,
+                'PhoneNumber' =>  $this->safeDecrypt($this->profile?->EncryptedPhoneNumber),
+                'Address' => $this->safeDecrypt($this->profile?->EncryptedAddress),
                 'ProfilePictureURL' => $this->profile?->ProfilePictureURL,
             ],
 
@@ -46,5 +43,24 @@ class GuardProfileResource extends JsonResource
                 'IsArchived' => (bool) $this->profile?->user?->IsDeleted
             ],
         ];
+    }
+
+    /**
+     * Safely decrypts a given value.
+     *
+     * @param  string|null  $value
+     * @return string|null
+     */
+    private function safeDecrypt(?string $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        try {
+            return Crypt::decryptString($value);
+        } catch (DecryptException $e) {
+            return null;
+        }
     }
 }

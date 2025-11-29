@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Check, X } from "lucide-react";
+import { profileService } from "../../services/profileService";
 
 const ProfileInfoItem = ({
   label,
@@ -39,26 +40,23 @@ const ProfileInfoItem = ({
   </div>
 );
 
-const ProfileInfo = ({ profileData, setProfileData }) => {
+const ProfileInfo = ({ profileData, setProfileData, userId }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState(null);
 
   // Function to calculate age from birthday
   const calculateAge = (birthday) => {
     if (!birthday) return "";
 
     try {
-      // Try to parse the birthday string
       let birthDate;
 
-      // Handle different date formats
       if (birthday.includes(",")) {
-        // Format like "June 6, 2005"
         birthDate = new Date(birthday);
       } else if (birthday.includes("-")) {
-        // Format like "2005-06-06"
         birthDate = new Date(birthday);
       } else {
-        // Try direct parsing
         birthDate = new Date(birthday);
       }
 
@@ -71,7 +69,6 @@ const ProfileInfo = ({ profileData, setProfileData }) => {
       let age = today.getFullYear() - birthDate.getFullYear();
       const monthDiff = today.getMonth() - birthDate.getMonth();
 
-      // Adjust age if birthday hasn't occurred this year yet
       if (
         monthDiff < 0 ||
         (monthDiff === 0 && today.getDate() < birthDate.getDate())
@@ -94,10 +91,8 @@ const ProfileInfo = ({ profileData, setProfileData }) => {
       let birthDate;
 
       if (birthday.includes(",")) {
-        // Format like "June 6, 2005" to "2005-06-06"
         birthDate = new Date(birthday);
       } else if (birthday.includes("-")) {
-        // Already in correct format
         return birthday;
       } else {
         birthDate = new Date(birthday);
@@ -163,30 +158,123 @@ const ProfileInfo = ({ profileData, setProfileData }) => {
     setProfileData(updatedData);
   };
 
-  const handleSaveProfile = () => {
-    setIsEditing(false);
-    console.log("Profile saved:", profileData);
+  // FIXED: Function to map frontend fields to backend API fields
+  const mapToApiFormat = (data) => {
+    // Split fullName into FirstName, MiddleName, and LastName
+    const nameParts = data.fullName?.trim().split(" ") || [];
+
+    let firstName = "";
+    let middleName = "";
+    let lastName = "";
+
+    if (nameParts.length === 1) {
+      firstName = nameParts[0];
+    } else if (nameParts.length === 2) {
+      firstName = nameParts[0];
+      lastName = nameParts[1];
+    } else if (nameParts.length >= 3) {
+      firstName = nameParts[0];
+      middleName = nameParts[1];
+      lastName = nameParts.slice(2).join(" ");
+    }
+
+    // Match your API documentation - send what the API expects
+    return {
+      EmailAddress: data.email,
+      FirstName: firstName,
+      LastName: lastName,
+      MiddleName: middleName,
+      PhoneNumber: data.phoneNumber,
+      Address: data.address,
+      // Add these if your API supports them:
+      // Age: data.age,
+      // Birthday: data.birthday,
+      // Sex: data.sex,
+      // Nationality: data.nationality,
+      // Religion: data.religion,
+      // MotherTongue: data.motherTongue,
+    };
+  };
+
+  const handleSaveProfile = async () => {
+    setIsSaving(true);
+    setError(null);
+
+    try {
+      // Map the data to API format
+      const apiData = mapToApiFormat(profileData);
+
+      // Log for debugging
+      console.log("Sending profile update to API:");
+      console.log("Endpoint: PUT /api/v1/profile (authenticated user)");
+      console.log("API Data:", apiData);
+
+      // FIXED: Use updateProfile WITHOUT ID - it uses the authenticated user's token
+      const response = await profileService.updateProfile(apiData);
+
+      console.log("Profile saved successfully:", response);
+      setIsEditing(false);
+
+      // Optionally show success message
+      // You can add a success toast/notification here
+    } catch (error) {
+      console.error("Failed to save profile:", error);
+      setError(error.message || "Failed to update profile. Please try again.");
+
+      // Keep editing mode open on error so user can fix issues
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
+    setError(null);
   };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden font-kumbh transition-colors duration-300">
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 mx-6 mt-4 rounded-lg">
+          <p className="text-sm">{error}</p>
+        </div>
+      )}
+
       {/* Profile Header - Yellow in light mode, gradient in dark mode */}
       <div className="px-8 py-4 flex items-center gap-6 relative bg-gradient-to-r from-yellow-400 to-yellow-500 dark:bg-gradient-to-r dark:from-blue-500 dark:to-blue-400">
         {isEditing ? (
           <div className="flex gap-2 absolute top-6 right-6">
             <button
               onClick={handleSaveProfile}
-              className="w-11 h-11 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition-all duration-300 hover:scale-110 shadow-lg"
+              disabled={isSaving}
+              className="w-11 h-11 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition-all duration-300 hover:scale-110 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Check size={20} />
+              {isSaving ? (
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+              ) : (
+                <Check size={20} />
+              )}
             </button>
             <button
               onClick={handleCancelEdit}
-              className="w-11 h-11 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-all duration-300 hover:scale-110 shadow-lg"
+              disabled={isSaving}
+              className="w-11 h-11 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-all duration-300 hover:scale-110 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <X size={20} />
             </button>
@@ -266,7 +354,6 @@ const ProfileInfo = ({ profileData, setProfileData }) => {
             isEditing={isEditing}
             type={isEditing ? "date" : "text"}
             onProfileChange={(field, value) => {
-              // When saving, format the date for display
               if (!isEditing) return;
               handleProfileChange(field, value);
             }}

@@ -158,14 +158,9 @@ class TransactionController
             return;
         }
 
-        // Handle file upload
-        $receiptPath = null;
-        if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === UPLOAD_ERR_OK) {
-            $receiptPath = $this->handleReceiptUpload($_FILES['receipt'], $userId);
-            if (!$receiptPath) {
-                $this->sendResponse(500, false, 'Failed to upload receipt.');
-                return;
-            }
+        if ($paymentAmount <= 0) {
+            $this->sendResponse(400, false, 'Payment amount must be greater than zero.');
+            return;
         }
 
         // Prepare payment data
@@ -173,9 +168,7 @@ class TransactionController
             'amount' => $paymentAmount,
             'method' => $_POST['method'],
             'reference' => $_POST['reference'] ?? '',
-            'phoneNumber' => $_POST['phoneNumber'] ?? '',
-            'receiptPath' => $receiptPath,
-            'selectedFee' => $_POST['selectedFee'] ?? ''
+            'phoneNumber' => $_POST['phoneNumber'] ?? ''
         ];
 
         // Submit payment
@@ -192,42 +185,6 @@ class TransactionController
         } else {
             $this->sendResponse(500, false, 'Failed to submit payment.');
         }
-    }
-
-    /**
-     * Handle receipt image upload
-     */
-    private function handleReceiptUpload($file, $userId)
-    {
-        $uploadDir = __DIR__ . '/../uploads/receipts/';
-
-        // Create directory if it doesn't exist
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-
-        // Generate unique filename
-        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $filename = 'receipt_' . $userId . '_' . time() . '.' . $extension;
-        $targetPath = $uploadDir . $filename;
-
-        // Validate file type
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-        if (!in_array($file['type'], $allowedTypes)) {
-            return false;
-        }
-
-        // Validate file size (max 5MB)
-        if ($file['size'] > 5 * 1024 * 1024) {
-            return false;
-        }
-
-        // Move uploaded file
-        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-            return 'uploads/receipts/' . $filename;
-        }
-
-        return false;
     }
 
     private function calculatePayAnalysis($currentTransaction)

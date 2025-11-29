@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost/gymnazo-christian-academy-teacher-side/backend';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost/SMS-GCA-3H/Teacher/backend';
 
 // Helper function to build API URLs
 export const getApiUrl = (endpoint) => {

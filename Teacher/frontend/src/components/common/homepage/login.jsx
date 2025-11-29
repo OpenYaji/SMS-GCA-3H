@@ -173,15 +173,13 @@ const Login = () => {
             Need help? Contact the <Link to="/#contact-us" className="font-semibold text-amber-400 hover:underline">School Office</Link>
           </div>
 
-          {/* Registration Link for Admins */}
+          {/* Registration Link for Admins 
           <div className="text-center mt-4 text-xs text-gray-300">
-            { /*
-                Admin: <Link to="/register-teacher" className="font-semibold text-amber-400 hover:underline">Register New Teacher</Link>
-             */}
+              Admin: <Link to="/register-teacher" className="font-semibold text-amber-400 hover:underline">Register New Teacher</Link>
           </div>
+          */}
         </div>
       </div>
-      
     </>
   );
 }

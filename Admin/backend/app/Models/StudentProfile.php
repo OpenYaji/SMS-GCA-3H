@@ -78,4 +78,10 @@ class StudentProfile extends Model
     {
         return $this->hasMany(Attendance::class, 'StudentProfileID', 'StudentProfileID');
     }
+
+    //Relationship: StudentProfile has many AuthorizedEscort
+    public function authorizedEscorts()
+    {
+        return $this->hasMany(AuthorizedEscort::class, 'StudentProfileID', 'StudentProfileID');
+    }
 }

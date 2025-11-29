@@ -22,8 +22,8 @@ class TransactionResource extends JsonResource
             'IssueDate' => $this->IssueDate,
             'DueDate' => $this->DueDate,
             'Student' => [
-                'FirstName' => $this->studentProfile->profile->FirstName,
-                'LastName' => $this->studentProfile->profile->LastName
+                'FirstName' => $this->studentProfile?->profile?->FirstName,
+                'LastName' => $this->studentProfile?->profile?->LastName
             ],
             'Items' => $this->transactionItems->map(function ($item) {
                 return [

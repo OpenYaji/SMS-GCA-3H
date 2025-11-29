@@ -26,7 +26,7 @@ const ForgotPasswordPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/sms-gca-3H/SMS-GCA-3H/Teacher/backend/api/auth/forgot-password.php',
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/auth/forgot-password.php',
         { email }
       );
 

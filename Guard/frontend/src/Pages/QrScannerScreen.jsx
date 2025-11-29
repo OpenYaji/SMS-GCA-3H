@@ -42,11 +42,11 @@ const SerialQrScanner = () => {
             const text = await response.text();
             try {
               const result = JSON.parse(text);
-              if (response.ok) {
+             /*  if (response.ok) {
                 setSmsStatus(`✅ SMS sent successfully: ${JSON.stringify(result)}`);
               } else {
                 setSmsStatus(`❌ SMS failed: ${result.message || "Unknown error"}`);
-              }
+              } */
             } catch (jsonErr) {
               setSmsStatus(`❌ SMS failed (invalid JSON): ${text.substring(0, 100)}...`);
             }
@@ -63,7 +63,7 @@ const SerialQrScanner = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">TekLead T-D4 Serial QR Scanner</h1>
+      <h1 className="text-2xl font-bold mb-4">TekLead T-D4 QR Scanner</h1>
       <button
         onClick={connectSerial}
         className="px-4 py-2 bg-blue-600 text-white rounded-md mb-4"

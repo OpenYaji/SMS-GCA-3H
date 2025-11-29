@@ -55,9 +55,9 @@ const App = () => {
     
     // Filtering based on the 'user' field (Student Name)
     return students.filter(s => 
-      s.user && typeof s.user === 'string' && s.user.toLowerCase().startsWith(lower)
+      s.UserID && typeof s.UserID === 'string' && s.UserID.toLowerCase().startsWith(lower)
     );
-  }, [students, searchTerm]);
+  }, [students, searchTerm]); 
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
@@ -126,7 +126,7 @@ const App = () => {
     <div className="p-6 md:p-10 max-w-5xl mx-auto font-[Inter] min-h-screen bg-stone-50">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-extrabold text-stone-900 border-b-4 border-amber-400 pb-1">
-          Enrollment Log
+          Student List
         </h1>
       </div>
 
@@ -163,7 +163,7 @@ const App = () => {
       <div className="bg-white rounded-2xl shadow-2xl overflow-hidden ring-1 ring-stone-200">
         
         {/* Table Header */}
-        <div className="grid grid-cols-4 text-left font-extrabold text-stone-900 bg-amber-400 p-4 min-w-[500px] sticky top-0 z-10">
+        <div className="grid grid-cols-3 text-left font-extrabold text-stone-900 bg-amber-400 p-4 min-w-[500px] sticky top-0 z-10">
           <div className='col-span-1'>ID</div>
           <div className="col-span-1">Student Name</div>
           <div className="col-span-1">Section/Grade</div>
@@ -175,16 +175,16 @@ const App = () => {
             {filtered.map((student, index) => (
                 <div 
                     key={student.id || index} 
-                    className={`grid grid-cols-4 items-center p-4 border-b border-stone-200 last:border-b-0 min-w-[500px] ${index % 2 === 1 ? 'bg-white' : 'bg-stone-50'} hover:bg-amber-50 transition-colors`} 
+                    className={`grid grid-cols-3 items-center p-4 border-b border-stone-300 last:border-b-0 min-w-[500px] ${index % 2 === 1 ? 'bg-white' : 'bg-stone-50'} hover:bg-amber-50 transition-colors`} 
                 >
-                    <div className="col-span-1 text-stone-800 font-mono text-sm">{student.id ?? 'N/A'}</div>
-                    <div className="col-span-1 text-stone-900 font-semibold truncate">{student.user || 'N/A'}</div>
-                    <div className="col-span-1 text-stone-600 font-medium">{student.section || 'N/A'}</div>
-                    <div className="col-span-1 text-right">
+                    <div className="col-span-1 text-stone-800 font-mono text-sm">{student.UserID ?? 'N/A'}</div>
+                    <div className="col-span-1 text-stone-900 font-semibold truncate">{student.FirstName || 'N/A'}</div>
+                    <div className="col-span-1 text-stone-600 font-medium">{student.Gender || 'N/A'}</div>
+                    {/* <div className="col-span-1 text-right">
                          <button className="text-amber-600 hover:text-amber-800 font-semibold text-sm transition-colors">
                             View Profile
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             ))}
             {filtered.length === 0 && (

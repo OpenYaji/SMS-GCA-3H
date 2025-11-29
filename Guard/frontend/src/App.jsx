@@ -1,6 +1,7 @@
 // App.jsx
 import React, { useState, useEffect } from 'react';
 import jsQR from 'jsqr'; 
+import Logo1 from './logo/logo1.png';
 import LogOut from './Components/LogOut.jsx';
 
 import NavItem from './Components/NavItem.jsx';
@@ -95,9 +96,13 @@ const App = () => {
               </div>
 
               <div className="hidden sm:block">
-                <div className="w-16 h-16 rounded-full bg-yellow-400 flex items-center justify-center border-2 border-stone-800 shadow-md">
-                  <span className="text-sm font-black text-stone-800 p-1 text-center">LOGO</span>
-                </div>
+                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-amber-300 shadow-inner">
+  <img 
+    src={Logo1} 
+    alt="School Logo" 
+    className="w-full h-full object-cover"
+  />
+</div>
               </div>
             </header>
             <DashboardScreen />
@@ -155,7 +160,11 @@ const App = () => {
       >
         <div className="flex flex-col items-center py-6">
           <div className="w-24 h-24 rounded-full bg-yellow-400 flex items-center justify-center border-2 border-amber-300 overflow-hidden shadow-inner">
-            <span className="text-xl font-black text-stone-800">LOGO</span>
+           <img 
+    src={Logo1} 
+    alt="School Logo" 
+    className="w-full h-full object-cover"
+  />
           </div>
 
           <h1 className="text-xl font-bold text-white mt-3 text-center">GYMNAZO CHRISTIAN ACADEMY</h1>

@@ -429,6 +429,7 @@ const TeacherTable = forwardRef(({ onSelectTeacher, darkMode }, ref) => {
             >
               {currentData.map((teacher, i) => {
                 const formattedName = formatName(teacher);
+                const isHeadTeacher = teacher.userType === "Head Teacher";
                 return (
                   <tr
                     key={teacher.id}
@@ -516,6 +517,17 @@ const TeacherTable = forwardRef(({ onSelectTeacher, darkMode }, ref) => {
                               }`}
                             >
                               Archived
+                            </span>
+                          )}
+                          {isHeadTeacher && (
+                            <span
+                              className={`text-xs px-2 py-1 rounded-full font-medium flex-shrink-0 ${
+                                darkMode
+                                  ? "bg-purple-900 text-purple-200"
+                                  : "bg-purple-100 text-purple-800"
+                              }`}
+                            >
+                              Head Teacher
                             </span>
                           )}
                         </div>

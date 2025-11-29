@@ -85,12 +85,10 @@ export default function useSort(data, sortOption) {
 
         // Parent options - Updated to handle escort status
         case "All Escorts":
-          // Show only approved escorts by default
-          filtered = filtered.filter(
-            (item) => item.EscortStatus === "Approved" && item.archived !== true
-          );
+          // Show ALL escorts regardless of status, only filter out archived
+          filtered = filtered.filter((item) => item.archived !== true);
           console.log(
-            `All Escorts filter: ${filtered.length} approved escorts`
+            `All Escorts filter: ${filtered.length} escorts (all statuses)`
           );
           break;
 

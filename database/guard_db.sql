@@ -51,7 +51,7 @@ CREATE TABLE `student_logs` (
   `type` enum('in','out','','') NOT NULL DEFAULT 'in',
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
+  
 --
 -- Indexes for dumped tables
 --

@@ -1,19 +1,14 @@
 // ProfileScreen.jsx
 import React, { useState, useEffect } from 'react';
-import Edit2 from '../Components/Edit2.jsx'; // Icon for Edit
-import Mail from '../Components/Mail.jsx';   // Icon for Mail
-import ProfileField from '../Components/ProfileField.jsx'; // Display component
-// Inalis ang: import Save from '../Components/Save.jsx'; 
+import Edit2 from '../Components/Edit2.jsx';
+import Mail from '../Components/Mail.jsx';
+import ProfileField from '../Components/ProfileField.jsx';
 
-// DAHIL HINDI KO MA-ACCESS ANG AUTH CONTEXT MO, GAGAMIT TAYO NG HARDCODED ID MUNA.
-// PALITAN ITO NG TAMANG MECHANISM (e.g., const { employeeId } = useAuth();)
-const GUARD_EMPLOYEE_ID = 'employee_id'; // Palitan ito ng tamang mekanismo para makuha ang employee ID
+const GUARD_EMPLOYEE_ID = 'GRD-00101';
 
-// Helper function to map front-end keys to back-end/DB keys
+// Map front-end keys to backend
 const mapToBackendKeys = (data) => ({
-    // Note: Sa simpleng pag-e-edit, kailangan mo ng logic para hatiin ang fullName pabalik sa fname/middle_name/last_name
-    // Para sa simpleng demo, gagamitin natin ang fname muna.
-    fname: data.fullName.split(' ')[0] || '', // Simplified: assuming only first name is used
+    fname: data.fullName.split(' ')[0] || '',
     email: data.email || '',
     employee_id: data.employeeId || '',
     sex: data.sex || '',
@@ -27,18 +22,17 @@ const mapToBackendKeys = (data) => ({
     height: data.height ? parseFloat(data.height.replace(' cm', '')) : null,
 });
 
-
 const ProfileScreen = () => {
-    const employeeId = GUARD_EMPLOYEE_ID; 
+    const employeeId = GUARD_EMPLOYEE_ID;
 
     const [profileData, setProfileData] = useState(null);
-    const [editData, setEditData] = useState({}); // Data currently being edited
-    const [isEditing, setIsEditing] = useState(false); // New state for edit mode
+    const [editData, setEditData] = useState({});
+    const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState(null);
+    const [showErrorModal, setShowErrorModal] = useState(false);
 
-    // Helper function to map DB keys to display keys/format
     const mapToDisplayData = (data) => {
         const nameParts = [data.fname, data.middle_name, data.last_name].filter(Boolean);
         return {
@@ -46,7 +40,7 @@ const ProfileScreen = () => {
             email: data.email || '',
             employeeId: data.employee_id || '',
             sex: data.sex || '',
-            dateOfBirth: data.birthday || '', // Assume date format is fine for now
+            dateOfBirth: data.birthday || '',
             phoneNumber: data.phone_number || '',
             address: data.address || '',
             religion: data.religion || '',
@@ -58,10 +52,10 @@ const ProfileScreen = () => {
         };
     };
 
-    // --- Data Fetching Logic ---
     const fetchProfile = async () => {
         if (!employeeId) {
             setError("Employee ID is missing. Please log in.");
+            setShowErrorModal(true);
             setIsLoading(false);
             return;
         }
@@ -69,20 +63,16 @@ const ProfileScreen = () => {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch(`http://localhost:5174/api/profile/${employeeId}`);
-            
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorText}`);
-            }
+            const response = await fetch(`http://localhost:5174/server/server.php/profile/${employeeId}`);
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             const data = await response.json();
-            
             const mappedData = mapToDisplayData(data);
-            setProfileData(mappedData); 
-            setEditData(mappedData); // Initialize editData with fetched data
+            setProfileData(mappedData);
+            setEditData(mappedData);
         } catch (err) {
-            console.error("Fetch profile error:", err.message);
+            console.error(err);
             setError(err.message);
+            setShowErrorModal(true);
         } finally {
             setIsLoading(false);
         }
@@ -90,97 +80,89 @@ const ProfileScreen = () => {
 
     useEffect(() => {
         fetchProfile();
-    }, [employeeId]); 
+    }, [employeeId]);
 
-    // --- Editing Functions ---
     const handleEditToggle = () => {
-        if (isEditing) {
-            // Cancel Editing: Revert temporary changes
-            setEditData(profileData);
-        }
+        if (isEditing) setEditData(profileData); // cancel edits
         setIsEditing(!isEditing);
+        setError(null);
     };
 
     const handleInputChange = (key, value) => {
+        // If editing phone number, allow only numbers and max 11 digits
+        if (key === 'phoneNumber') {
+            // Remove non-numeric characters
+            value = value.replace(/\D/g, '');
+            // Limit length to 11
+            if (value.length > 11) value = value.slice(0, 11);
+        }
         setEditData(prev => ({
             ...prev,
             [key]: value,
         }));
     };
 
+    const validateFields = () => {
+        const requiredFields = ['fullName', 'email', 'dateOfBirth', 'phoneNumber', 'address'];
+        const emptyFields = requiredFields.filter(key => !editData[key] || editData[key].trim() === '');
+
+        // Phone number validation
+        if (editData.phoneNumber && !/^09\d{9}$/.test(editData.phoneNumber)) {
+            setError("Phone number must start with '09' and be exactly 11 digits.");
+            setShowErrorModal(true);
+            return false;
+        }
+
+        if (emptyFields.length > 0) {
+            setError(`Please fill out all required fields: ${emptyFields.join(', ')}`);
+            setShowErrorModal(true);
+            return false;
+        }
+        return true;
+    };
+
     const handleSave = async () => {
+        if (!validateFields()) return;
+
         setIsSaving(true);
         setError(null);
-        
-        // 1. Map the front-end editData back to the expected DB structure
+
         const dataToUpdate = mapToBackendKeys(editData);
 
         try {
-            const response = await fetch(`http://localhost:5174/api/profile/${employeeId}`, {
-                method: 'PUT', // Use PUT or PATCH for update
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+            const response = await fetch(`http://localhost:5174/server/server.php/profile/${employeeId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dataToUpdate),
             });
-
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`Failed to update profile. Status: ${response.status}. Message: ${errorText}`);
             }
 
-            // 2. Successful update: Fetch the profile again to get the latest, clean data
-            await fetchProfile(); // Re-fetch data to update profileData state
-
-            setIsEditing(false); // Exit edit mode
-            // alert("Profile successfully updated!"); // Maaari mong gamitin ito
+            await fetchProfile();
+            setIsEditing(false);
         } catch (err) {
-            console.error("Update profile error:", err.message);
+            console.error(err);
             setError(err.message);
+            setShowErrorModal(true);
         } finally {
             setIsSaving(false);
         }
     };
-    
-    // --- Loading and Error States ---
-    if (isLoading) {
-        return (
-            <div className="text-center p-20 text-stone-500">
-                <p className="text-2xl font-bold">Loading Profile...</p>
-            </div>
-        );
-    }
 
-    // Kung may error, at hindi ka nagse-save, ipakita ang error message
-    if (error && !isSaving) {
-        return (
-            <div className="text-center p-8 text-red-700 bg-red-100 border-2 border-red-300 rounded-xl">
-                <p className="text-xl font-bold mb-2">Error!</p>
-                <p className="text-sm">Details: {error}</p>
-                <button 
-                    onClick={fetchProfile} 
-                    className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                    Try Reloading
-                </button>
-            </div>
-        );
-    }
-    
-    // Use the current data (editData if editing, profileData if displaying)
+    if (isLoading) return <div className="text-center p-20">Loading Profile...</div>;
+
     const currentData = isEditing ? editData : profileData;
 
-    // --- Data Preparation for Rendering ---
-
-    // List of all profile fields with their display logic
     const allProfileFields = [
-        { label: "Full Name", key: 'fullName', isMain: true, editable: true },
-        { label: "Employee ID", key: 'employeeId', editable: false }, // Should not be editable
-        { label: "Email", key: 'email', isHeader: true, editable: true },
-        { label: "Sex", key: 'sex', editable: true },
-        { label: "Date of Birth", key: 'dateOfBirth', editable: true, type: 'date' },
-        { label: "Phone Number", key: 'phoneNumber', isLink: true, editable: true },
-        { label: "Address", key: 'address', editable: true },
+        { label: "Full Name", key: 'fullName', isMain: true, editable: true, required: true },
+        { label: "Employee ID", key: 'employeeId', editable: false },
+        { label: "Email", key: 'email', isHeader: true, editable: true, required: true },
+        { label: "Sex", key: 'sex', editable: false },
+        { label: "Date of Birth", key: 'dateOfBirth', editable: true, type: 'date', required: true },
+        { label: "Phone Number", key: 'phoneNumber', isLink: true, editable: true, required: true },
+        { label: "Address", key: 'address', editable: true, required: true },
         { label: "Religion", key: 'religion', editable: true },
         { label: "Mother Tongue", key: 'motherTongue', editable: true },
         { label: "Nationality", key: 'nationality', isExtra: true, editable: true },
@@ -188,25 +170,40 @@ const ProfileScreen = () => {
         { label: "Height", key: 'height', isExtra: true, editable: true, type: 'number' },
     ];
 
-    // Filter fields: Only include fields with a valid value
-    const filteredFields = allProfileFields.map(field => ({
+    const displayFields = allProfileFields.map(field => ({
         ...field,
-        value: currentData[field.key], // Get value from currentData
-    })).filter(field => 
-        field.value !== null && field.value !== undefined && String(field.value).trim() !== ''
-    );
+        value: currentData[field.key],
+    }));
 
-    // Separate fields for layout
-    const mainHeader = filteredFields.find(field => field.isMain) || { value: 'Guard Profile' };
-    const emailHeader = filteredFields.find(field => field.key === 'email');
-    const mainFields = filteredFields.filter(field => !field.isExtra && !field.isMain && field.key !== 'email');
-    const extraFields = filteredFields.filter(field => field.isExtra);
+    const filteredFields = isEditing
+        ? displayFields
+        : displayFields.filter(field => field.value !== null && field.value !== undefined && String(field.value).trim() !== '');
+
+    const mainHeader = filteredFields.find(f => f.isMain) || { value: 'Guard Profile' };
+    const emailHeader = filteredFields.find(f => f.key === 'email');
+    const mainFields = filteredFields.filter(f => !f.isExtra && !f.isMain && f.key !== 'email');
+    const extraFields = filteredFields.filter(f => f.isExtra);
 
     return (
         <div className="p-4 sm:p-0">
+            {/* Error Modal */}
+            {showErrorModal && error && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-xl p-6 w-96">
+                        <h2 className="text-xl font-bold text-red-600 mb-2">Error</h2>
+                        <p className="mb-4 text-sm">{error}</p>
+                        <button
+                            onClick={() => setShowErrorModal(false)}
+                            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <header className="flex justify-between items-start mb-8">
                 <h1 className="text-4xl font-extrabold text-stone-900">My Profile</h1>
-                
                 {isEditing ? (
                     <div className="flex space-x-3">
                         {isSaving ? (
@@ -215,18 +212,16 @@ const ProfileScreen = () => {
                                 <span>Saving...</span>
                             </button>
                         ) : (
-                            <button 
-                                onClick={handleSave} 
+                            <button
+                                onClick={handleSave}
                                 className="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition-colors"
                             >
-                                {/* Gumamit ng simpleng checkmark at text imbes na Save.jsx */}
                                 <span>✔</span>
                                 <span>Save Changes</span>
                             </button>
                         )}
-                        
-                        <button 
-                            onClick={handleEditToggle} 
+                        <button
+                            onClick={handleEditToggle}
                             disabled={isSaving}
                             className="px-4 py-2 bg-stone-200 text-stone-700 font-semibold rounded-lg shadow-md hover:bg-stone-300 transition-colors"
                         >
@@ -234,8 +229,8 @@ const ProfileScreen = () => {
                         </button>
                     </div>
                 ) : (
-                    <button 
-                        onClick={handleEditToggle} 
+                    <button
+                        onClick={handleEditToggle}
                         className="flex items-center space-x-2 px-4 py-2 bg-amber-400 text-stone-900 font-semibold rounded-lg shadow-md hover:bg-amber-500 transition-colors"
                     >
                         <Edit2 className="w-4 h-4" />
@@ -248,11 +243,10 @@ const ProfileScreen = () => {
                 <div className="relative pb-16">
                     <div className="absolute top-0 left-0 right-0 h-24 bg-amber-200 rounded-t-2xl"></div>
                     <div className="relative z-10 flex items-end -mb-12">
-                        {/* Profile Picture */}
                         <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-stone-200">
-                            <div 
-                                className="w-full h-full flex items-center justify-center bg-cover bg-center" 
-                                style={{ backgroundImage: `url('${currentData.avatar_url}')` }} 
+                            <div
+                                className="w-full h-full flex items-center justify-center bg-cover bg-center"
+                                style={{ backgroundImage: `url('${currentData.avatar_url}')` }}
                             >
                                 <span className="text-stone-800 text-2xl font-bold">
                                     {mainHeader.value && !currentData.avatar_url ? mainHeader.value.split(' ').map(n => n[0]).join('') : ''}
@@ -273,61 +267,41 @@ const ProfileScreen = () => {
                 </div>
 
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                    {/* Display Main Fields */}
                     {mainFields.map(field => {
-                        const isEditableField = isEditing && field.editable;
-
-                        if (isEditableField) {
+                        if (isEditing && field.editable) {
                             return (
                                 <div key={field.key}>
                                     <label className="text-sm font-medium text-stone-500">{field.label}</label>
                                     <input
                                         type={field.type || 'text'}
-                                        value={editData[field.key]}
+                                        value={editData[field.key] || ''}
                                         onChange={(e) => handleInputChange(field.key, e.target.value)}
                                         className="w-full mt-1 p-2 border border-stone-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"
-                                        readOnly={!field.editable}
                                     />
                                 </div>
                             );
                         } else {
-                            return (
-                                <ProfileField 
-                                    key={field.key} 
-                                    label={field.label} 
-                                    value={field.value} 
-                                    isLink={field.isLink} 
-                                />
-                            );
+                            return <ProfileField key={field.key} label={field.label} value={field.value} isLink={field.isLink} />;
                         }
                     })}
 
-                    {/* Display Extra Fields (3 Columns, spans full width) */}
                     {extraFields.length > 0 && (
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 col-span-1 md:col-span-2">
                             {extraFields.map(field => {
-                                const isEditableField = isEditing && field.editable;
-
-                                if (isEditableField) {
+                                if (isEditing && field.editable) {
                                     return (
                                         <div key={field.key}>
                                             <label className="text-sm font-medium text-stone-500">{field.label}</label>
                                             <input
                                                 type={field.type || 'text'}
-                                                value={editData[field.key]}
+                                                value={editData[field.key] || ''}
                                                 onChange={(e) => handleInputChange(field.key, e.target.value)}
                                                 className="w-full mt-1 p-2 border border-stone-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"
                                             />
                                         </div>
                                     );
                                 } else {
-                                    return (
-                                        <ProfileField 
-                                            key={field.key} 
-                                            label={field.label} 
-                                            value={field.value} 
-                                        />
-                                    );
+                                    return <ProfileField key={field.key} label={field.label} value={field.value} />;
                                 }
                             })}
                         </div>

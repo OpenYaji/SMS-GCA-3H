@@ -13,7 +13,7 @@ const StudentLogScreen = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch('http://localhost:5174/api/student-log');
+        const response = await fetch('http://localhost:5174/server/server.php/student-log/');
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorText}`);

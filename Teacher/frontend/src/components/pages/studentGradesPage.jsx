@@ -17,9 +17,9 @@ import UpdateStudentModal from '../modals/UpdateStudentModal';
  * @param {function} onBack - Callback to navigate back
  * @param {function} onInputGrade - Callback to open grade input modal
  */
-export default function StudentGradesPage({ 
-  student, 
-  classData, 
+export default function StudentGradesPage({
+  student,
+  classData,
   onBack,
   onInputGrade
 }) {
@@ -104,12 +104,12 @@ export default function StudentGradesPage({
   const handleSaveStudentInfo = async () => {
     try {
       setSaving(true);
-      
+
       console.log('Updating student with data:', {
         studentId: student.id,
         ...studentData
       });
-      
+
       const response = await axios.post(
         'http://localhost/SMS-GCA-3H/Teacher/backend/api/students/update-student-profile.php',
         {
@@ -147,7 +147,7 @@ export default function StudentGradesPage({
     const validGrades = Object.values(grades)
       .map(g => g[quarterKey])
       .filter(g => g && !isNaN(g));
-    
+
     if (validGrades.length === 0) return '-';
     const sum = validGrades.reduce((acc, grade) => acc + parseFloat(grade), 0);
     return (sum / validGrades.length).toFixed(2);
@@ -166,7 +166,7 @@ export default function StudentGradesPage({
 
       if (subjectsResponse.data.success) {
         setSubjects(subjectsResponse.data.data);
-        
+
         // Fetch grades for each subject
         await fetchGradesForAllSubjects(subjectsResponse.data.data);
       }
@@ -180,14 +180,14 @@ export default function StudentGradesPage({
 
   const fetchGradesForAllSubjects = async (subjectsList) => {
     const gradesData = {};
-    
+
     for (const subject of subjectsList) {
       try {
         const response = await axios.get(
           `http://localhost/SMS-GCA-3H/Teacher/backend/api/grades/get-section-grades.php?sectionId=${classData.id}&subjectId=${subject.id}`,
           { withCredentials: true }
         );
-        
+
         if (response.data.success) {
           const studentGrade = response.data.data.find(s => s.id === student.id);
           if (studentGrade) {
@@ -198,7 +198,7 @@ export default function StudentGradesPage({
         console.error(`Error fetching grades for subject ${subject.id}:`, err);
       }
     }
-    
+
     setGrades(gradesData);
   };
 
@@ -209,7 +209,7 @@ export default function StudentGradesPage({
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 md:p-8">
       {/* Back Button */}
-      <button 
+      <button
         onClick={onBack}
         className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 mb-4 flex items-center gap-2 transition-colors"
       >
@@ -223,9 +223,9 @@ export default function StudentGradesPage({
       </p>
 
       {/* Student Information Card */}
-      <StudentInfoCard 
-        student={student} 
-        onUpdateClick={() => setShowUpdateModal(true)} 
+      <StudentInfoCard
+        student={student}
+        onUpdateClick={() => setShowUpdateModal(true)}
       />
 
       {/* Report Title */}
@@ -234,7 +234,7 @@ export default function StudentGradesPage({
       </h2>
 
       {/* Grades Table */}
-      <GradesTable 
+      <GradesTable
         subjects={subjects}
         grades={grades}
         loading={loading}
@@ -252,72 +252,72 @@ export default function StudentGradesPage({
             Input Grade
           </button>
         )}
-        
+
         <div className="flex gap-4">
-        <button className="bg-amber-300 hover:bg-amber-400 px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-          Send via Email
-        </button>
-        
-        {/* Print Report Card Dropdown Button */}
-        <div className="relative" ref={dropdownRef}>
-          <button 
-            onClick={() => setShowQuarterDropdown(!showQuarterDropdown)}
-            className="bg-amber-300 hover:bg-amber-400 px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors"
-          >
+          <button className="bg-amber-300 hover:bg-amber-400 px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            Print Report Card
-            <svg 
-              className={`w-4 h-4 transition-transform ${showQuarterDropdown ? 'rotate-180' : ''}`} 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+            Send via Email
           </button>
-          
-          {/* Dropdown Menu */}
-          {showQuarterDropdown && (
-            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
-              <button
-                onClick={() => handleQuarterSelect(1)}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
+
+          {/* Print Report Card Dropdown Button */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setShowQuarterDropdown(!showQuarterDropdown)}
+              className="bg-amber-300 hover:bg-amber-400 px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              Print Report Card
+              <svg
+                className={`w-4 h-4 transition-transform ${showQuarterDropdown ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                1st Quarter
-              </button>
-              <button
-                onClick={() => handleQuarterSelect(2)}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
-              >
-                2nd Quarter
-              </button>
-              <button
-                onClick={() => handleQuarterSelect(3)}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
-              >
-                3rd Quarter
-              </button>
-              <button
-                onClick={() => handleQuarterSelect(4)}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
-              >
-                4th Quarter
-              </button>
-              <hr className="my-1 border-gray-200 dark:border-gray-700" />
-              <button
-                onClick={() => handleQuarterSelect('whole-year')}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold transition-colors"
-              >
-                Whole Year
-              </button>
-            </div>
-          )}
-        </div>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {/* Dropdown Menu */}
+            {showQuarterDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
+                <button
+                  onClick={() => handleQuarterSelect(1)}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
+                >
+                  1st Quarter
+                </button>
+                <button
+                  onClick={() => handleQuarterSelect(2)}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
+                >
+                  2nd Quarter
+                </button>
+                <button
+                  onClick={() => handleQuarterSelect(3)}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
+                >
+                  3rd Quarter
+                </button>
+                <button
+                  onClick={() => handleQuarterSelect(4)}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
+                >
+                  4th Quarter
+                </button>
+                <hr className="my-1 border-gray-200 dark:border-gray-700" />
+                <button
+                  onClick={() => handleQuarterSelect('whole-year')}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold transition-colors"
+                >
+                  Whole Year
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

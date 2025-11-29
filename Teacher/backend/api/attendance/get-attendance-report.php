@@ -78,6 +78,13 @@ try {
     $startDate = $quarterDates[$quarter]['start'] ?? $quarterDates['First']['start'];
     $endDate = $quarterDates[$quarter]['end'] ?? $quarterDates['First']['end'];
     
+    // Get SchoolYearID for the section
+    $sectionQuery = "SELECT SchoolYearID FROM section WHERE SectionID = :sectionId";
+    $sectionStmt = $db->prepare($sectionQuery);
+    $sectionStmt->bindParam(':sectionId', $sectionId, PDO::PARAM_INT);
+    $sectionStmt->execute();
+    $schoolYearId = $sectionStmt->fetchColumn();
+
     // Get attendance summary for the quarter
     $query = "
         SELECT 
@@ -94,10 +101,12 @@ try {
             AND DATE(a.AttendanceDate) >= :startDate
             AND DATE(a.AttendanceDate) <= :endDate
         WHERE e.SectionID = :sectionId
+        AND e.SchoolYearID = :schoolYearId
         AND e.EnrollmentID IN (
             SELECT MAX(EnrollmentID) 
             FROM enrollment 
             WHERE StudentProfileID = sp.StudentProfileID
+            AND SchoolYearID = :schoolYearId
             GROUP BY StudentProfileID
         )
         GROUP BY sp.StudentProfileID, p.LastName, p.FirstName
@@ -106,6 +115,7 @@ try {
     
     $stmt = $db->prepare($query);
     $stmt->bindParam(':sectionId', $sectionId, PDO::PARAM_INT);
+    $stmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
     $stmt->bindParam(':startDate', $startDate, PDO::PARAM_STR);
     $stmt->bindParam(':endDate', $endDate, PDO::PARAM_STR);
     $stmt->execute();

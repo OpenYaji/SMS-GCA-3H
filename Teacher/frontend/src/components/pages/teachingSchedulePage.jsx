@@ -16,7 +16,7 @@ const TeachingSchedulePage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const userCanManageAllSchedules = canManageAllSchedules(user);
-  
+
   const [activeTab, setActiveTab] = useState('my-schedule');
   const [searchQuery, setSearchQuery] = useState('');
   const [schedules, setSchedules] = useState([]);
@@ -39,6 +39,7 @@ const TeachingSchedulePage = () => {
     time: '',
     room: ''
   });
+
   const [addClassFormData, setAddClassFormData] = useState({
     teacherId: '',
     gradeLevelId: '',
@@ -47,6 +48,7 @@ const TeachingSchedulePage = () => {
     classShift: 'Morning',
     teachers: []
   });
+
   const [teacherSections, setTeacherSections] = useState([]);
   const [selectedSection, setSelectedSection] = useState(null);
   const [createFormData, setCreateFormData] = useState({
@@ -56,56 +58,38 @@ const TeachingSchedulePage = () => {
     schedule: []
   });
 
-  // Fetch initial options on mount
+  // initial fetch
   useEffect(() => {
     fetchOptions();
   }, []);
 
-  // Fetch data based on active tab
+  // fetch schedules when tab changes
   useEffect(() => {
     fetchData();
   }, [activeTab]);
 
-  // Update addClassFormData when teachers are loaded
+  // keep addClassFormData teachers updated
   useEffect(() => {
-    if (teachers.length > 0) {
-      setAddClassFormData(prev => ({
-        ...prev,
-        teachers: teachers
-      }));
-    }
+    setAddClassFormData(prev => ({ ...prev, teachers }));
   }, [teachers]);
 
   const fetchOptions = async () => {
     try {
-      console.log('Fetching options (grade levels, subjects, teachers)...');
       const response = await axios.get(
         'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-options.php',
         { withCredentials: true }
       );
 
-      console.log('Options response:', response.data);
-
-      if (response.data.success) {
-        const gradeLevelsData = response.data.data.gradeLevels || [];
-        const subjectsData = response.data.data.subjects || [];
-        const teachersData = response.data.data.teachers || [];
-        
-        console.log('Grade Levels:', gradeLevelsData);
-        console.log('Subjects:', subjectsData);
-        console.log('Teachers:', teachersData);
-        
-        setGradeLevels(gradeLevelsData);
-        setSubjects(subjectsData);
-        setActiveSchoolYear(response.data.data.activeSchoolYear);
-        setTeachers(teachersData);
+      if (response.data?.success) {
+        setGradeLevels(response.data.data.gradeLevels || []);
+        setSubjects(response.data.data.subjects || []);
+        setActiveSchoolYear(response.data.data.activeSchoolYear || null);
+        setTeachers(response.data.data.teachers || []);
       } else {
-        console.error('Failed to fetch options:', response.data.message);
         toast.error('Failed to load form options');
       }
-    } catch (error) {
-      console.error('Error fetching options:', error);
-      console.error('Error details:', error.response?.data);
+    } catch (err) {
+      console.error('Error fetching options:', err?.response || err);
       toast.error('Error loading grade levels and subjects');
     }
   };
@@ -116,35 +100,31 @@ const TeachingSchedulePage = () => {
       setError(null);
 
       if (activeTab === 'my-schedule') {
-        // Fetch My Schedule (teacher's assigned classes)
         const response = await axios.get(
           'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-my-schedule.php',
           { withCredentials: true }
         );
-
-        if (response.data.success) {
-          setSchedules(response.data.data);
+        if (response.data?.success) {
+          setSchedules(response.data.data || []);
         } else {
-          setError(response.data.message);
-          toast.error(response.data.message);
+          setError(response.data?.message || 'Failed to load schedules');
+          toast.error(response.data?.message || 'Failed to load schedules');
         }
       } else {
-        // Fetch All Teacher Schedules
         const response = await axios.get(
           'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-all-schedules.php',
           { withCredentials: true }
         );
-
-        if (response.data.success) {
-          setTeacherSchedules(response.data.data);
+        if (response.data?.success) {
+          setTeacherSchedules(response.data.data || []);
         } else {
-          setError(response.data.message);
-          toast.error(response.data.message);
+          setError(response.data?.message || 'Failed to load schedules');
+          toast.error(response.data?.message || 'Failed to load schedules');
         }
       }
-    } catch (error) {
-      console.error('Error fetching schedules:', error);
-      const errorMessage = error.response?.data?.message || 'Failed to load schedules. Please try again.';
+    } catch (err) {
+      console.error('Error fetching schedules:', err?.response || err);
+      const errorMessage = err?.response?.data?.message || 'Failed to load schedules. Please try again.';
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -152,7 +132,32 @@ const TeachingSchedulePage = () => {
     }
   };
 
-  // Fetch teacher's assigned sections
+  const fetchSectionsForGrade = async (gradeLevelId) => {
+    if (!gradeLevelId) {
+      setSectionsData([]);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-sections-with-students.php?gradeLevelId=${gradeLevelId}`,
+        { withCredentials: true }
+      );
+
+      if (response.data?.success) {
+        const sections = response.data.data[0]?.sections || [];
+        setSectionsData(sections);
+      } else {
+        setSectionsData([]);
+        toast.error(response.data?.message || 'Failed to load sections');
+      }
+    } catch (err) {
+      console.error('Error fetching sections:', err?.response || err);
+      setSectionsData([]);
+      toast.error(err?.response?.data?.message || 'Failed to load sections');
+    }
+  };
+
   const fetchTeacherSections = async (teacherId) => {
     if (!teacherId) {
       setTeacherSections([]);
@@ -161,56 +166,44 @@ const TeachingSchedulePage = () => {
     }
 
     try {
-      console.log('Fetching sections for teacher:', teacherId);
       const response = await axios.get(
         `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-teacher-sections.php?teacherId=${teacherId}`,
         { withCredentials: true }
       );
 
-      if (response.data.success) {
-        console.log('Teacher sections:', response.data.data);
-        setTeacherSections(response.data.data);
-        // Auto-select first section if available
-        if (response.data.data.length > 0) {
+      if (response.data?.success) {
+        setTeacherSections(response.data.data || []);
+        if ((response.data.data || []).length > 0) {
           setSelectedSection(response.data.data[0]);
         }
       } else {
-        toast.error(response.data.message);
         setTeacherSections([]);
+        toast.error(response.data?.message || 'Failed to load teacher sections');
       }
-    } catch (error) {
-      console.error('Error fetching teacher sections:', error);
+    } catch (err) {
+      console.error('Error fetching teacher sections:', err?.response || err);
       toast.error('Failed to load teacher sections');
       setTeacherSections([]);
     }
   };
 
-  // Toggle favorite status for a section
   const toggleFavorite = (scheduleId, sectionId) => {
-    setSchedules(prevSchedules =>
-      prevSchedules.map(schedule =>
+    setSchedules(prev =>
+      prev.map(schedule =>
         schedule.id === scheduleId
           ? {
-              ...schedule,
-              sections: schedule.sections.map(section =>
-                section.id === sectionId
-                  ? { ...section, isFavorite: !section.isFavorite }
-                  : section
-              )
-            }
+            ...schedule,
+            sections: schedule.sections.map(section =>
+              section.id === sectionId ? { ...section, isFavorite: !section.isFavorite } : section
+            )
+          }
           : schedule
       )
     );
-    
-    // Optional: Show a toast notification
-    // You can add a toast library or use a simple alert
-    // toast.success('Favorite updated');
   };
 
-  // Handle section click to create/edit schedule or navigate to emergency dismissal
   const handleSectionClick = (grade, section, action = 'schedule') => {
     if (action === 'emergency') {
-      // Navigate to emergency dismissal page
       navigate('/teacher-dashboard/emergency-dismissal', {
         state: {
           schedule: {
@@ -227,49 +220,47 @@ const TeachingSchedulePage = () => {
           }
         }
       });
-    } else {
-      // Set the selected section for the create schedule modal
-      setSelectedSection(section);
-      setCreateFormData({
-        teacher: user?.teacherProfileId || '',
-        gradeSection: section.id,
-        sectionName: section.name,
-        gradeName: grade.grade,
-        day: 'Monday to Friday',
-        schedule: []
-      });
-      setIsCreateModalOpen(true);
+      return;
     }
+
+    setSelectedSection(section);
+    setCreateFormData({
+      teacher: user?.teacherProfileId || '',
+      gradeSection: section.id,
+      sectionName: section.name,
+      gradeName: grade.grade,
+      day: 'Monday to Friday',
+      schedule: []
+    });
+    setIsCreateModalOpen(true);
   };
 
-  const breadcrumbItems = [
-    { label: 'Teaching Schedule', path: '/teacher-dashboard/teaching-schedule' }
-  ];
+  const breadcrumbItems = [{ label: 'Teaching Schedule', path: '/teacher-dashboard/teaching-schedule' }];
 
-  const filteredSchedules = schedules.filter(schedule => 
-    schedule.grade.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    schedule.adviser.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    schedule.sections.some(section => 
-      section.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      section.room.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredSchedules = schedules.filter(schedule =>
+    (schedule.grade || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (schedule.adviser || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (schedule.sections || []).some(section =>
+      (section.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (section.room || '').toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
 
   const filteredTeacherSchedules = teacherSchedules.filter(schedule =>
-    schedule.teacher.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    schedule.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    schedule.day.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    schedule.room.toLowerCase().includes(searchQuery.toLowerCase())
+    (schedule.teacher || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (schedule.subject || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (schedule.day || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (schedule.room || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleEdit = (schedule) => {
     setEditingSchedule(schedule);
     setEditFormData({
-      teacher: schedule.teacher,
-      subject: schedule.subject,
-      day: schedule.day,
-      time: schedule.time,
-      room: schedule.room
+      teacher: schedule.teacher || '',
+      subject: schedule.subject || '',
+      day: schedule.day || '',
+      time: schedule.time || '',
+      room: schedule.room || ''
     });
     setIsEditModalOpen(true);
   };
@@ -280,41 +271,20 @@ const TeachingSchedulePage = () => {
       return;
     }
 
-    setTeacherSchedules(prev =>
-      prev.map(schedule =>
-        schedule.id === editingSchedule.id
-          ? { ...schedule, ...editFormData }
-          : schedule
-      )
-    );
-
+    setTeacherSchedules(prev => prev.map(s => (s.id === editingSchedule.id ? { ...s, ...editFormData } : s)));
     setIsEditModalOpen(false);
     setEditingSchedule(null);
-    setEditFormData({
-      teacher: '',
-      subject: '',
-      day: '',
-      time: '',
-      room: ''
-    });
+    setEditFormData({ teacher: '', subject: '', day: '', time: '', room: '' });
   };
 
   const handleCancelEdit = () => {
     setIsEditModalOpen(false);
     setEditingSchedule(null);
-    setEditFormData({
-      teacher: '',
-      subject: '',
-      day: '',
-      time: '',
-      room: ''
-    });
+    setEditFormData({ teacher: '', subject: '', day: '', time: '', room: '' });
   };
 
   const handleDelete = async (scheduleId) => {
-    if (!window.confirm('Are you sure you want to delete this schedule?')) {
-      return;
-    }
+    if (!window.confirm('Are you sure you want to delete this schedule?')) return;
 
     try {
       const response = await axios.post(
@@ -323,92 +293,27 @@ const TeachingSchedulePage = () => {
         { withCredentials: true }
       );
 
-      if (response.data.success) {
+      if (response.data?.success) {
         toast.success('Schedule deleted successfully!');
-        // Refresh the schedules list
         fetchData();
       } else {
-        toast.error(response.data.message || 'Failed to delete schedule');
+        toast.error(response.data?.message || 'Failed to delete schedule');
       }
-    } catch (error) {
-      console.error('Error deleting schedule:', error);
-      toast.error(error.response?.data?.message || 'Error deleting schedule. Please try again.');
+    } catch (err) {
+      console.error('Error deleting schedule:', err?.response || err);
+      toast.error(err?.response?.data?.message || 'Error deleting schedule. Please try again.');
     }
   };
 
   const handleAddClass = () => {
-    setAddClassFormData(prev => ({
-      ...prev,
-      teachers: teachers || []
-    }));
+    setAddClassFormData(prev => ({ ...prev, teachers: teachers || [] }));
     setIsAddClassModalOpen(true);
   };
 
   const handleCancelAddClass = () => {
     setIsAddClassModalOpen(false);
-    setAddClassFormData({
-      teacherId: '',
-      gradeLevelId: '',
-      sectionId: '',
-      roomNumber: '',
-      classShift: 'Morning',
-      teachers: teachers || []
-    });
+    setAddClassFormData({ teacherId: '', gradeLevelId: '', sectionId: '', roomNumber: '', classShift: 'Morning', teachers: teachers || [] });
     setSectionsData([]);
-  };
-
-  const fetchSectionsForGrade = async (gradeLevelId) => {
-    if (!gradeLevelId) {
-      setSectionsData([]);
-      return;
-    }
-
-    try {
-      const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-sections-with-students.php?gradeLevelId=${gradeLevelId}`,
-        { withCredentials: true }
-      );
-
-      console.log('Sections response for grade', gradeLevelId, ':', response.data);
-
-      if (response.data.success) {
-        if (response.data.data.length > 0) {
-          const sections = response.data.data[0].sections || [];
-          console.log('Setting sections:', sections);
-          setSectionsData(sections);
-        } else {
-          // No sections found - this is OK, just show the "create sections" message
-          setSectionsData([]);
-          console.log('No sections found for grade level:', gradeLevelId);
-        }
-      } else {
-        setSectionsData([]);
-        toast.error(response.data.message || 'Failed to load sections');
-      }
-    } catch (error) {
-      console.error('Error fetching sections:', error);
-      console.error('Error response:', error.response?.data);
-      setSectionsData([]);
-      
-      const errorMsg = error.response?.data?.message || error.message || 'Failed to load sections';
-      toast.error(errorMsg);
-    }
-  };
-
-  const handleGradeLevelChange = (gradeLevelId) => {
-    // Clear sections first to show loading state
-    setSectionsData([]);
-    
-    setAddClassFormData({
-      ...addClassFormData,
-      gradeLevelId,
-      sectionId: ''
-    });
-    
-    // Fetch sections for the new grade level
-    if (gradeLevelId) {
-      fetchSectionsForGrade(gradeLevelId);
-    }
   };
 
   const handleSubmitAddClass = async (e) => {
@@ -436,20 +341,54 @@ const TeachingSchedulePage = () => {
         { withCredentials: true }
       );
 
-      if (response.data.success) {
-        toast.success(response.data.message);
+      if (response.data?.success) {
+        toast.success(response.data.message || 'Assigned successfully');
         handleCancelAddClass();
-        fetchData(); // Refresh the schedules
+        fetchData();
       } else {
-        toast.error(response.data.message || 'Failed to assign section');
+        toast.error(response.data?.message || 'Failed to assign section');
       }
-    } catch (error) {
-      console.error('Error assigning section:', error);
-      toast.error(error.response?.data?.message || 'Error assigning section. Please try again.');
+    } catch (err) {
+      console.error('Error assigning section:', err?.response || err);
+      toast.error(err?.response?.data?.message || 'Error assigning section. Please try again.');
     }
   };
 
-  // Helper function to get section theme for a grade
+  const handleCreateSectionsForGrade = async (gradeLevelId) => {
+    if (!gradeLevelId) {
+      toast.error('Please select a grade level first');
+      return;
+    }
+
+    if (!activeSchoolYear?.id) {
+      toast.error('No active school year found. Please contact administrator.');
+      return;
+    }
+
+    const theme = getSectionTheme(parseInt(gradeLevelId, 10));
+    const themeText = `${theme.name} (${theme.sections})`;
+
+    if (!window.confirm(`This will create 5 sections with theme: ${themeText}. Continue?`)) return;
+
+    try {
+      const response = await axios.post(
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/create-sections.php',
+        { gradeLevelId, schoolYearId: activeSchoolYear.id },
+        { withCredentials: true }
+      );
+
+      if (response.data?.success) {
+        toast.success(response.data.message || 'Sections created');
+        fetchSectionsForGrade(gradeLevelId);
+      } else {
+        toast.error(response.data?.message || 'Failed to create sections');
+      }
+    } catch (err) {
+      console.error('Error creating sections:', err?.response || err);
+      toast.error(err?.response?.data?.message || 'Error creating sections. Please try again.');
+    }
+  };
+
   const getSectionTheme = (gradeLevelId) => {
     const themes = {
       1: { name: 'Flowers', sections: 'Rose, Lily, Tulip, Daisy, Sunflower' },
@@ -462,124 +401,49 @@ const TeachingSchedulePage = () => {
     return themes[gradeLevelId] || themes[1];
   };
 
-  const handleCreateSectionsForGrade = async (gradeLevelId) => {
-    if (!gradeLevelId) {
-      toast.error('Please select a grade level first');
-      return;
-    }
-
-    if (!activeSchoolYear || !activeSchoolYear.id) {
-      toast.error('No active school year found. Please contact administrator.');
-      console.error('Active school year:', activeSchoolYear);
-      return;
-    }
-
-    const theme = getSectionTheme(parseInt(gradeLevelId));
-    const themeText = `${theme.name} (${theme.sections})`;
-    
-    if (!window.confirm(`This will create 5 sections with theme: ${themeText}. Continue?`)) {
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/create-sections.php',
-        {
-          gradeLevelId,
-          schoolYearId: activeSchoolYear.id
-        },
-        { withCredentials: true }
-      );
-
-      if (response.data.success) {
-        toast.success(response.data.message);
-        fetchSectionsForGrade(gradeLevelId); // Refresh sections
-      } else {
-        toast.error(response.data.message || 'Failed to create sections');
-        console.error('Server response:', response.data);
-      }
-    } catch (error) {
-      console.error('Error creating sections:', error);
-      console.error('Error response:', error.response?.data);
-      toast.error(error.response?.data?.message || 'Error creating sections. Please try again.');
-    }
-  };
-
-  const handleCreateSchedule = () => {
-    setIsCreateModalOpen(true);
-  };
+  const handleCreateSchedule = () => setIsCreateModalOpen(true);
 
   const handleTeacherChange = async (teacherId) => {
-    setCreateFormData({ 
-      teacher: teacherId,
-      gradeSection: '',
-      sectionId: '',
-      day: 'Monday to Friday',
-      schedule: []
-    });
-    
+    setCreateFormData(prev => ({ ...prev, teacher: teacherId, gradeSection: '', sectionId: '', schedule: [] }));
     await fetchTeacherSections(teacherId);
-    // Don't auto-load schedule, wait for section selection
   };
 
   const handleSectionChange = async (sectionId) => {
-    const selectedSectionData = teacherSections.find(s => s.id === parseInt(sectionId));
-    
+    const selectedSectionData = teacherSections.find(s => s.id === parseInt(sectionId, 10));
+
     if (!selectedSectionData) {
-      setCreateFormData(prev => ({
-        ...prev,
-        sectionId: '',
-        gradeSection: '',
-        schedule: []
-      }));
+      setCreateFormData(prev => ({ ...prev, sectionId: '', gradeSection: '', schedule: [] }));
       return;
     }
 
-    setCreateFormData(prev => ({
-      ...prev,
-      sectionId: sectionId,
-      gradeSection: `${selectedSectionData.gradeLevel} - Section ${selectedSectionData.sectionName}`
-    }));
+    setCreateFormData(prev => ({ ...prev, sectionId: sectionId, gradeSection: `${selectedSectionData.gradeLevel} - Section ${selectedSectionData.sectionName}` }));
 
-    // Fetch schedule for this specific section
     try {
       const response = await axios.get(
         `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-section-schedule.php?sectionId=${sectionId}`,
         { withCredentials: true }
       );
 
-      if (response.data.success && response.data.data.schedule.length > 0) {
-        setCreateFormData(prev => ({
-          ...prev,
-          schedule: response.data.data.schedule
-        }));
+      if (response.data?.success && (response.data.data?.schedule || []).length > 0) {
+        setCreateFormData(prev => ({ ...prev, schedule: response.data.data.schedule }));
       } else {
-        // No existing schedule, start fresh
-        setCreateFormData(prev => ({
-          ...prev,
-          schedule: []
-        }));
+        setCreateFormData(prev => ({ ...prev, schedule: [] }));
       }
-    } catch (error) {
-      console.error('Error fetching section schedule:', error);
-      // Start with empty schedule if error
-      setCreateFormData(prev => ({
-        ...prev,
-        schedule: []
-      }));
+    } catch (err) {
+      console.error('Error fetching section schedule:', err?.response || err);
+      setCreateFormData(prev => ({ ...prev, schedule: [] }));
     }
   };
 
   const fetchTeacherScheduleDetail = async (teacherId) => {
     if (!teacherId) return;
-
     try {
       const response = await axios.get(
         `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-teacher-schedule-detail.php?teacherId=${teacherId}`,
         { withCredentials: true }
       );
 
-      if (response.data.success) {
+      if (response.data?.success) {
         const scheduleData = response.data.data;
         setCreateFormData(prev => ({
           ...prev,
@@ -590,35 +454,26 @@ const TeachingSchedulePage = () => {
           sectionId: scheduleData.sectionId
         }));
       }
-    } catch (error) {
-      console.error('Error fetching teacher schedule detail:', error);
-      // Don't show error toast here as it's okay if there's no schedule yet
+    } catch (err) {
+      console.error('Error fetching teacher schedule detail:', err?.response || err);
     }
   };
 
   const handleCancelCreate = () => {
     setIsCreateModalOpen(false);
-    setCreateFormData({
-      teacher: '',
-      gradeSection: '',
-      day: 'Monday to Friday',
-      schedule: []
-    });
+    setCreateFormData({ teacher: '', gradeSection: '', day: 'Monday to Friday', schedule: [] });
     setTeacherSections([]);
     setSelectedSection(null);
   };
 
   const handleSubjectChange = (index, subjectId) => {
     const newSchedule = [...createFormData.schedule];
-    newSchedule[index].subject = subjectId;
+    newSchedule[index] = { ...newSchedule[index], subject: subjectId };
     setCreateFormData({ ...createFormData, schedule: newSchedule });
   };
 
   const handleAddTimeSlot = () => {
-    setCreateFormData({
-      ...createFormData,
-      schedule: [...createFormData.schedule, { startTime: '', endTime: '', subject: '' }]
-    });
+    setCreateFormData(prev => ({ ...prev, schedule: [...prev.schedule, { startTime: '', endTime: '', subject: '' }] }));
   };
 
   const handleRemoveTimeSlot = (index) => {
@@ -628,37 +483,45 @@ const TeachingSchedulePage = () => {
 
   const handleTimeChange = (index, field, time) => {
     const newSchedule = [...createFormData.schedule];
-    newSchedule[index][field] = time;
+    newSchedule[index] = { ...newSchedule[index], [field]: time };
+    setCreateFormData({ ...createFormData, schedule: newSchedule });
+  };
+
+  const handleGradeLevelChange = async (gradeLevelId) => {
+    setCreateFormData(prev => ({ ...prev, gradeLevelId, sectionId: '', gradeSection: '', schedule: [] }));
+    await fetchSectionsForGrade(gradeLevelId);
+  };
+
+  const handleSlotTeacherChange = (index, teacherId) => {
+    const newSchedule = [...createFormData.schedule];
+    newSchedule[index] = { ...newSchedule[index], teacherId };
     setCreateFormData({ ...createFormData, schedule: newSchedule });
   };
 
   const handleSubmitSchedule = async (e) => {
     e.preventDefault();
-    
-    // Validate form
+
     if (!createFormData.teacher) {
       toast.error('Please select a teacher');
       return;
     }
-    
+
     if (!createFormData.teacherProfileId || !createFormData.sectionId) {
       toast.error('Teacher has no assigned section. Please assign a section first.');
       return;
     }
 
-    // Check if at least one time slot is added
     if (createFormData.schedule.length === 0) {
       toast.error('Please add at least one time slot');
       return;
     }
 
-    // Check if all time slots have start time, end time, and subject filled
     const incompleteSlot = createFormData.schedule.find(slot => !slot.startTime || !slot.endTime || !slot.subject);
     if (incompleteSlot) {
       toast.error('Please fill in start time, end time, and subject for all time slots');
       return;
     }
-    
+
     try {
       const response = await axios.post(
         'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/submit-schedule.php',
@@ -671,147 +534,127 @@ const TeachingSchedulePage = () => {
         { withCredentials: true }
       );
 
-      if (response.data.success) {
-        toast.success(response.data.message);
+      if (response.data?.success) {
+        toast.success(response.data.message || 'Schedule saved');
         handleCancelCreate();
-        fetchData(); // Refresh the schedules list
+        fetchData();
       } else {
-        toast.error(response.data.message || 'Failed to save schedule');
+        toast.error(response.data?.message || 'Failed to save schedule');
       }
-    } catch (error) {
-      console.error('Error submitting schedule:', error);
-      toast.error(error.response?.data?.message || 'Error saving schedule. Please try again.');
+    } catch (err) {
+      console.error('Error submitting schedule:', err?.response || err);
+      toast.error(err?.response?.data?.message || 'Error saving schedule. Please try again.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-0 w-full max-w-full overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 w-full">
       <Toaster position="top-right" />
-      
-      {/* Breadcrumb */}
+
       <Breadcrumb items={breadcrumbItems} />
 
-      {/* Header */}
-      <div className="mb-4 md:mb-6">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
           {activeTab === 'my-schedule' ? 'Teaching Schedule' : 'Teacher Schedules'}
         </h1>
-        {activeTab === 'my-schedule' && (
-          <p className="text-lg md:text-xl text-orange-600">
-            Overview
-          </p>
-        )}
+        {activeTab === 'my-schedule' && <p className="text-lg text-orange-600">Overview</p>}
       </div>
 
-      {/* Tabs and Search Bar */}
-      <div className="flex flex-col gap-3 mb-4 md:mb-6">
-        {/* Tabs */}
+      <div className="flex flex-col gap-3 mb-6">
         <div className="flex gap-2 overflow-x-auto pb-2">
           <button
             onClick={() => {
               setActiveTab('my-schedule');
-              setSearchQuery(''); // Clear search when switching tabs
+              setSearchQuery('');
             }}
-            className={`px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium transition-all text-sm md:text-base whitespace-nowrap ${
-              activeTab === 'my-schedule'
-                ? 'bg-amber-300 text-gray-900 border border-gray-900/20'
-                : 'bg-transparent text-gray-900 dark:text-white border border-gray-900/20 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-gray-800'
-            }`}
+            className={`px-4 py-2 rounded-xl font-medium transition-all ${activeTab === 'my-schedule' ? 'bg-amber-300 text-gray-900' : 'bg-transparent text-gray-900 dark:text-white border'
+              }`}
           >
             My Class Schedule
           </button>
-          {/* Only Super Teachers can view/manage all teacher schedules */}
+
           {userCanManageAllSchedules && (
             <button
               onClick={() => {
                 setActiveTab('teacher-schedules');
-                setSearchQuery(''); // Clear search when switching tabs
+                setSearchQuery('');
               }}
-              className={`px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium transition-all text-sm md:text-base whitespace-nowrap ${
-                activeTab === 'teacher-schedules'
-                  ? 'bg-amber-300 text-gray-900 border border-gray-900/20'
-                  : 'bg-transparent text-gray-900 dark:text-white border border-gray-900/20 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
+              className={`px-4 py-2 rounded-xl font-medium transition-all ${activeTab === 'teacher-schedules' ? 'bg-amber-300 text-gray-900' : 'bg-transparent text-gray-900 dark:text-white border'
+                }`}
             >
               Teacher Schedules
             </button>
           )}
         </div>
 
-        {/* Search and Create Button */}
-        <div className="flex flex-col sm:flex-row gap-2">
-          {activeTab === 'my-schedule' && (
-            <button className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 md:py-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <span className="text-xs md:text-sm font-medium">Add filter</span>
-              <Filter className="w-3 h-3" />
-            </button>
-          )}
-          <div className="flex-1 flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600">
-            <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+        <div className="flex flex-col gap-3 sm:flex-row items-center">
+          <div className="flex items-center gap-2">
+            {activeTab === 'my-schedule' && (
+              <button className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg border">
+                <span className="text-xs md:text-sm font-medium">Add filter</span>
+                <Filter className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          <div className="flex-1 flex items-center gap-3 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg border">
+            <Search className="w-4 h-4" />
             <input
               type="text"
-              placeholder={activeTab === 'my-schedule' ? "Search..." : "Search teacher, subject..."}
+              placeholder={activeTab === 'my-schedule' ? 'Search...' : 'Search teacher, subject...'}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 bg-transparent outline-none text-xs md:text-sm text-gray-600 dark:text-gray-300 placeholder:text-gray-400 min-w-0"
+              className="flex-1 bg-transparent outline-none text-sm"
             />
             {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0"
-                title="Clear search"
-              >
+              <button onClick={() => setSearchQuery('')} title="Clear search">
                 <X className="w-4 h-4" />
               </button>
             )}
           </div>
-          {activeTab === 'my-schedule' && userCanManageAllSchedules && (
-            <button
-              onClick={handleAddClass}
-              className="px-4 md:px-6 py-2 md:py-3 bg-amber-300 text-gray-900 rounded-xl font-medium hover:bg-amber-400 transition-colors whitespace-nowrap flex items-center justify-center gap-2 text-sm md:text-base"
-            >
-              <span>+ Add New Class</span>
-            </button>
-          )}
-          {activeTab === 'teacher-schedules' && userCanManageAllSchedules && (
-            <button
-              onClick={handleCreateSchedule}
-              className="px-4 md:px-6 py-2 md:py-3 bg-amber-300 text-gray-900 rounded-xl font-medium hover:bg-amber-400 transition-colors whitespace-nowrap text-sm md:text-base"
-            >
-              Create Schedule
-            </button>
-          )}
+
+          <div className="flex gap-2">
+            {activeTab === 'my-schedule' && userCanManageAllSchedules && (
+              <button onClick={handleAddClass} className="px-4 py-2 bg-amber-300 rounded-xl font-medium">
+                + Add New Class
+              </button>
+            )}
+
+            {activeTab === 'teacher-schedules' && userCanManageAllSchedules && (
+              <button onClick={handleCreateSchedule} className="px-4 py-2 bg-amber-300 rounded-xl font-medium">
+                Create Schedule
+              </button>
+            )}
+          </div>
         </div>
+
+        {searchQuery && (
+          <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            {activeTab === 'my-schedule'
+              ? `Found ${filteredSchedules.length} schedule(s) matching "${searchQuery}"`
+              : `Found ${filteredTeacherSchedules.length} schedule(s) matching "${searchQuery}"`}
+          </div>
+        )}
       </div>
 
-      {/* Search Results Info */}
-      {searchQuery && (
-        <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-          {activeTab === 'my-schedule' 
-            ? `Found ${filteredSchedules.length} schedule(s) matching "${searchQuery}"`
-            : `Found ${filteredTeacherSchedules.length} schedule(s) matching "${searchQuery}"`
-          }
-        </div>
-      )}
+      <div>
+        {activeTab === 'my-schedule' ? (
+          <MySchedule
+            schedules={filteredSchedules}
+            loading={loading}
+            onToggleFavorite={toggleFavorite}
+            onSectionClick={handleSectionClick}
+          />
+        ) : (
+          <TeacherSchedules
+            schedules={filteredTeacherSchedules}
+            loading={loading}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
+      </div>
 
-      {/* Content - Conditional based on active tab */}
-      {activeTab === 'my-schedule' ? (
-        <MySchedule 
-          schedules={filteredSchedules}
-          loading={loading}
-          onToggleFavorite={toggleFavorite}
-          onSectionClick={handleSectionClick}
-        />
-      ) : (
-        <TeacherSchedules 
-          schedules={filteredTeacherSchedules}
-          loading={loading}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      )}
-
-      {/* Edit Modal */}
       <EditScheduleModal
         isOpen={isEditModalOpen}
         schedule={editingSchedule}
@@ -821,7 +664,6 @@ const TeachingSchedulePage = () => {
         onChange={setEditFormData}
       />
 
-      {/* Add New Class Modal */}
       <AddClassModal
         isOpen={isAddClassModalOpen}
         formData={addClassFormData}
@@ -831,12 +673,14 @@ const TeachingSchedulePage = () => {
         onClose={handleCancelAddClass}
         onSubmit={handleSubmitAddClass}
         onChange={setAddClassFormData}
-        onGradeLevelChange={handleGradeLevelChange}
+        onGradeLevelChange={(gradeLevelId) => {
+          setAddClassFormData(prev => ({ ...prev, gradeLevelId }));
+          fetchSectionsForGrade(gradeLevelId);
+        }}
         onCreateSections={handleCreateSectionsForGrade}
         getSectionTheme={getSectionTheme}
       />
 
-      {/* Create Schedule Modal */}
       <CreateScheduleModal
         isOpen={isCreateModalOpen}
         formData={createFormData}
@@ -851,6 +695,8 @@ const TeachingSchedulePage = () => {
         onAddTimeSlot={handleAddTimeSlot}
         onRemoveTimeSlot={handleRemoveTimeSlot}
         onTimeChange={handleTimeChange}
+        onGradeLevelChange={handleGradeLevelChange}
+        onSlotTeacherChange={handleSlotTeacherChange}
       />
     </div>
   );

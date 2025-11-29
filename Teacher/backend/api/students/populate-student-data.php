@@ -35,9 +35,9 @@ $nationalities = ['Filipino', 'Chinese-Filipino', 'American', 'Japanese', 'Korea
 // Student statuses
 $studentStatuses = ['Enrolled', 'Enrolled', 'Enrolled', 'On Leave']; // More enrolled students
 
-echo "===========================================\n";
+echo "-------------------------------------------\n";
 echo "Student Data Population Script\n";
-echo "===========================================\n";
+echo "-------------------------------------------\n";
 echo "Number of students to generate: $numberOfStudents\n";
 echo "Starting population...\n\n";
 
@@ -205,18 +205,18 @@ try {
     
     $pdo->commit();
     
-    echo "\n===========================================\n";
+    echo "\n-------------------------------------------\n";
     echo "SUCCESS!\n";
-    echo "===========================================\n";
+    echo "-------------------------------------------\n";
     echo "Successfully created $successCount students\n";
     echo "Students have been enrolled with guardians, emergency contacts, and medical info.\n";
     echo "\n";
     
 } catch (Exception $e) {
     $pdo->rollBack();
-    echo "\n\n===========================================\n";
+    echo "\n\n-------------------------------------------\n";
     echo "ERROR!\n";
-    echo "===========================================\n";
+    echo "-------------------------------------------\n";
     echo "Error: " . $e->getMessage() . "\n";
     echo "File: " . $e->getFile() . "\n";
     echo "Line: " . $e->getLine() . "\n";

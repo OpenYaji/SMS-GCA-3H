@@ -84,6 +84,7 @@ try {
             cs.StartTime,
             cs.EndTime,
             cs.SubjectID as subject,
+            cs.TeacherProfileID,
             sub.SubjectName,
             cs.DayOfWeek,
             cs.RoomNumber,
@@ -105,8 +106,13 @@ try {
     foreach ($schedules as $schedule) {
         $formattedSchedule[] = [
             'subject' => $schedule['subject'],
+            'subjectName' => $schedule['SubjectName'],
             'startTime' => $schedule['startTime'],
-            'endTime' => $schedule['endTime']
+            'endTime' => $schedule['endTime'],
+            'rawStartTime' => $schedule['StartTime'],
+            'rawEndTime' => $schedule['EndTime'],
+            'day' => $schedule['DayOfWeek'],
+            'teacherId' => $schedule['TeacherProfileID']
         ];
     }
     

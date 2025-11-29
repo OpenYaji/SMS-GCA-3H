@@ -76,7 +76,24 @@ export default function UpdateStudentModal({ studentData, onInputChange, onSave,
               <input
                 type="date"
                 value={studentData.birthdate}
-                onChange={(e) => onInputChange('birthdate', e.target.value)}
+                onChange={(e) => {
+                  const newBirthdate = e.target.value;
+                  onInputChange('birthdate', newBirthdate);
+
+                  // Calculate age
+                  if (newBirthdate) {
+                    const today = new Date();
+                    const birthDate = new Date(newBirthdate);
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                      age--;
+                    }
+                    onInputChange('age', age);
+                  } else {
+                    onInputChange('age', '');
+                  }
+                }}
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
               />
             </div>

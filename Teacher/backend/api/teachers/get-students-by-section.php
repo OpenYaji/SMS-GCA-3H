@@ -56,8 +56,16 @@ if (!$db) {
 }
 
 try {
+    // Get SchoolYearID for the section
+    $sectionQuery = "SELECT SchoolYearID FROM section WHERE SectionID = :sectionId";
+    $sectionStmt = $db->prepare($sectionQuery);
+    $sectionStmt->bindParam(':sectionId', $sectionId, PDO::PARAM_INT);
+    $sectionStmt->execute();
+    $schoolYearId = $sectionStmt->fetchColumn();
+
     // Get students in the section with their attendance status for today
     // Uses LEFT JOIN to include students without attendance records
+    // Filter by SchoolYearID to ensure we only look at current year enrollments
     $studentQuery = "
         SELECT 
             sp.StudentProfileID as id,
@@ -82,10 +90,12 @@ try {
         LEFT JOIN attendance a ON sp.StudentProfileID = a.StudentProfileID 
             AND DATE(a.AttendanceDate) = :today
         WHERE e.SectionID = :sectionId
+        AND e.SchoolYearID = :schoolYearId
         AND e.EnrollmentID IN (
             SELECT MAX(EnrollmentID) 
             FROM enrollment 
             WHERE StudentProfileID = sp.StudentProfileID
+            AND SchoolYearID = :schoolYearId
             GROUP BY StudentProfileID
         )
         ORDER BY p.LastName, p.FirstName
@@ -93,6 +103,7 @@ try {
     
     $stmt = $db->prepare($studentQuery);
     $stmt->bindParam(':sectionId', $sectionId, PDO::PARAM_INT);
+    $stmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
     $stmt->bindParam(':today', $today, PDO::PARAM_STR);
     $stmt->execute();
     

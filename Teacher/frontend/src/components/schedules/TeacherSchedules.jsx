@@ -18,7 +18,8 @@ const TeacherSchedules = ({ schedules, loading, onEdit, onDelete }) => {
     <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg overflow-hidden">
       {/* Table Header */}
       <div className="bg-amber-300 px-6 py-4">
-        <div className="grid grid-cols-6 gap-4 text-center font-semibold text-gray-900">
+        <div className="grid grid-cols-7 gap-4 text-center font-semibold text-gray-900">
+          <div>Section</div>
           <div>Teacher Name</div>
           <div>Subject</div>
           <div>Day</div>
@@ -40,8 +41,13 @@ const TeacherSchedules = ({ schedules, loading, onEdit, onDelete }) => {
           schedules.map((schedule) => (
             <div
               key={schedule.id}
-              className="grid grid-cols-6 gap-4 px-6 py-5 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="grid grid-cols-7 gap-4 px-6 py-5 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
+              <div className="flex items-center justify-center">
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {schedule.section || 'N/A'}
+                </p>
+              </div>
               <div className="flex items-center justify-center">
                 <p className="font-medium text-gray-900 dark:text-white">
                   {schedule.teacher}

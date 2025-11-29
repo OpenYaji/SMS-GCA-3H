@@ -7,7 +7,7 @@ const SectionAssignmentModal = ({ isOpen, onClose, applicant, onSave }) => {
   // Load sections when applicant is set
   useEffect(() => {
     if (applicant?.grade) {
-      fetch(`http://localhost/SMS-GCA-3H/Registrar/backend/api/sections/getByGrade.php?grade=${applicant.grade}`)
+      fetch(`http://192.168.254.176/SMS-GCA-3H/Registrar/backend/api/sections/getByGrade.php?grade=${applicant.grade}`)
         .then((res) => res.json())
         .then((data) => setSectionOptions(data))
         .catch((err) => console.error(err));

@@ -11,7 +11,7 @@ const ScreeningTable = ({ filterOptions = {}, onValidated }) => {
   const [error, setError] = useState(null);
   const prevDataRef = useRef(null);
 
-  const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
+  const API_BASE = "http://192.168.254.176/SMS-GCA-3H/Registrar/backend/api/applicants";
 
   // Fetch applicants
   const fetchApplicants = async () => {

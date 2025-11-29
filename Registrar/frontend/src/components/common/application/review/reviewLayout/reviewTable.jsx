@@ -6,7 +6,7 @@ import BulkSectionModal from "./table/BulkSectionModal";
 import EnrollmentConfirmationModal from "./table/EnrollmentConfirmationModal";
 import EnrollmentSuccessModal from "./table/EnrollmentSuccessModal";
 
-const BASE_API = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
+const BASE_API = "http://192.168.254.176/SMS-GCA-3H/Registrar/backend/api/applicants";
 
 const ReviewTable = ({ selectedFinalRows = [], toggleFinalRow = () => {}, statusUpdates = {}, triggerSectionUpdate = () => {} }) => {
     const [applicants, setApplicants] = useState([]);
@@ -49,7 +49,7 @@ const ReviewTable = ({ selectedFinalRows = [], toggleFinalRow = () => {}, status
     // Fetch sections by grade level
     useEffect(() => {
         if (applicantToEdit?.grade) {
-            fetch(`http://localhost/SMS-GCA-3H/Registrar/backend/api/sections/getByGrade.php?grade=${applicantToEdit.grade}`)
+            fetch(`http://192.168.254.176/SMS-GCA-3H/Registrar/backend/api/sections/getByGrade.php?grade=${applicantToEdit.grade}`)
                 .then((res) => res.json())
                 .then((data) => setSectionOptions(data))
                 .catch((err) => console.error(err));

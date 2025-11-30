@@ -11,7 +11,8 @@ $dotenv->load();
 
 function getMailer() {
     $mail = new PHPMailer(true);
-
+    $mail->CharSet = PHPMailer::CHARSET_UTF8;
+    
     try {
         //Server settings
         $mail->isSMTP();

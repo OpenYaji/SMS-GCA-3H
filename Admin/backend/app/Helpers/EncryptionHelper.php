@@ -15,10 +15,21 @@ class EncryptionHelper
         }
 
         try {
-            return Crypt::decryptString($value);
+            //return Crypt::decryptString($value);
+            return $value;
         } catch (DecryptException $e) {
             return null;
         }
+    }
+
+    public static function encrypt(?string $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        //return Crypt::encryptString($value);
+        return $value;
     }
     
 }

@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import Tabs from "@/components/ui/Tabs";
-import ClassRosters from './ClassRosters/index';
-import AllStudents from './AllStudents/index';
-import AllStudentsPage from './AllStudents/AllStudentsPage';
-
+import CR from './cr/cr';
+import AS from './as/as';
 const StudentTabs = () => {
-  const [activeTab, setActiveTab] = useState('rosters');
+  const [activeTab, setActiveTab] = useState('cr');
 
   const tabs = [
-    { id: 'rosters', label: 'Class Rosters' },
-    { id: 'all', label: 'All Students' }
+    { id: 'cr', label: 'Class Rosters' },
+      { id: 'as', label: 'All Students' }
   ];
 
   return (
@@ -22,8 +20,9 @@ const StudentTabs = () => {
       />
 
       <div className="py-4">
-        {activeTab === 'rosters' && <ClassRosters />}
-        {activeTab === 'all' && <AllStudentsPage />}
+        {activeTab === 'cr' && <CR />}
+        {activeTab === 'as' && <AS />}
+
       </div>
     </div>
   );

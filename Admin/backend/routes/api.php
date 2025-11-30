@@ -2,9 +2,9 @@
 
 use App\Models\SchoolYear;
 use Illuminate\Http\Request;
-use App\Http\Middleware\AdminOnly;
+use App\Http\Middlewares\AdminOnly;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\TokenAuthentication;
+use App\Http\Middlewares\TokenAuthentication;
 use App\Http\Controllers\Api\V1\SectionController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\SchoolYearController;

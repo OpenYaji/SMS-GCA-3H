@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { FileCheck } from "lucide-react";
 import ScreeningModal from "../screeningModal/screeningModal";
+import { HOST_IP } from "../../../../../../config";
 
 const ScreeningTable = ({ filterOptions = {}, onValidated }) => {
   const [selectedApplicant, setSelectedApplicant] = useState(null);
@@ -11,7 +12,7 @@ const ScreeningTable = ({ filterOptions = {}, onValidated }) => {
   const [error, setError] = useState(null);
   const prevDataRef = useRef(null);
 
-  const API_BASE = "http://localhost/SMS-GCA-3H/Registrar/backend/api/applicants";
+  const API_BASE = `http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/applicants`;
 
   // Fetch applicants
   const fetchApplicants = async () => {

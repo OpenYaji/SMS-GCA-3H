@@ -2993,3 +2993,11 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\validateApplicant.php on line 123
+[30-Nov-2025 20:32:38 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined function getMailer() in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\validateApplicant.php:123
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\validateApplicant.php on line 123
+[30-Nov-2025 20:37:15 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined function getMailer() in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\validateApplicant.php:123
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\applicants\validateApplicant.php on line 123

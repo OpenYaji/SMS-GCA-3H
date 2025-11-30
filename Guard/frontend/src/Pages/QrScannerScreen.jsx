@@ -77,7 +77,7 @@ const SerialQrScanner = () => {
       console.log("Processing QR:", scannedData);
       
       const response = await fetch(
-        "http://localhost/SMS-GCA-3H/guard/backend/server/tap_qr.php",
+        "http://192.168.254.190/SMS-GCA-3H/guard/backend/server/tap_qr.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },

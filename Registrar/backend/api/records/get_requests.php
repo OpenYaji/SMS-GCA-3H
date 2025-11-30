@@ -2,15 +2,19 @@
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/cors.php';
 
-header('Content-Type: application/json');
-// get_requests.php
+header('Content-Type: application/json; charset=UTF-8');
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");
 
-include_once 'db_connect.php';
-
 try {
+    // Initialize database connection
+    $database = new Database();
+    $conn = $database->getConnection();
+    
+    if (!$conn) {
+        throw new Exception("Database connection failed");
+    }
+
     // We need to join document_request -> studentprofile -> profile -> user to get the email
     $query = "
         SELECT 
@@ -44,5 +48,6 @@ try {
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(["error" => $e->getMessage()]);
+    error_log("get_requests.php error: " . $e->getMessage());
 }
 ?>

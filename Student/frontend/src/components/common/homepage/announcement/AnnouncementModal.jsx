@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiCalendar, FiTag, FiX } from 'react-icons/fi';
+import { FiCalendar, FiTag, FiX, FiUser } from 'react-icons/fi';
 
 const AnnouncementModal = ({ announcement, onClose }) => {
   useEffect(() => {
@@ -15,6 +15,14 @@ const AnnouncementModal = ({ announcement, onClose }) => {
 
   if (!announcement) return null;
 
+  // Format content - convert line breaks to HTML
+  const formatContent = (content) => {
+    if (!content) return '';
+    return content.split('\n').map((paragraph, index) => 
+      paragraph.trim() ? `<p key="${index}">${paragraph}</p>` : '<br/>'
+    ).join('');
+  };
+
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 backdrop-blur-sm">
       <motion.div 
@@ -26,17 +34,61 @@ const AnnouncementModal = ({ announcement, onClose }) => {
         className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-lg shadow-2xl overflow-hidden flex flex-col"
       >
         <div className="overflow-y-auto">
-          <img src={announcement.imageUrl} alt={announcement.title} className="w-full h-72 object-cover" />
+          <img 
+            src={announcement.imageUrl} 
+            alt={announcement.title} 
+            className="w-full h-72 object-cover"
+            onError={(e) => {
+              e.target.src = "https://placehold.co/800x400/b9b196/5B3E31?text=Announcement+Image";
+            }}
+          />
           <div className="p-8">
-            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3">{announcement.title}</h1>
+            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3">
+              {announcement.title}
+            </h1>
+            
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
-              <div className="flex items-center"><FiCalendar className="mr-2" /><span>{new Date(announcement.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span></div>
-              <div className="flex items-center"><FiTag className="mr-2" /><span className="inline-block bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 text-xs font-semibold px-2.5 py-1 rounded-full">{announcement.category}</span></div>
+              <div className="flex items-center">
+                <FiCalendar className="mr-2" />
+                <span>
+                  {new Date(announcement.publishDate).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </span>
+              </div>
+              
+              <div className="flex items-center">
+                <FiTag className="mr-2" />
+                <span className="inline-block bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 text-xs font-semibold px-2.5 py-1 rounded-full">
+                  {announcement.category}
+                </span>
+              </div>
+              
+              {announcement.authorName && (
+                <div className="flex items-center">
+                  <FiUser className="mr-2" />
+                  <span>By {announcement.authorName}</span>
+                </div>
+              )}
             </div>
-            <div className="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300" dangerouslySetInnerHTML={{ __html: announcement.fullContent }}/>
+            
+            <div 
+              className="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300"
+              dangerouslySetInnerHTML={{ 
+                __html: formatContent(announcement.fullContent) 
+              }}
+            />
           </div>
         </div>
-        <button onClick={onClose} className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/50 dark:bg-black/50 hover:bg-white/80 dark:hover:bg-black/80 text-gray-700 dark:text-gray-200 transition-colors"><FiX size={20} /></button>
+        
+        <button 
+          onClick={onClose} 
+          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/50 dark:bg-black/50 hover:bg-white/80 dark:hover:bg-black/80 text-gray-700 dark:text-gray-200 transition-colors"
+        >
+          <FiX size={20} />
+        </button>
       </motion.div>
     </div>
   );

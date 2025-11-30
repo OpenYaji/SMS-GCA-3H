@@ -57,7 +57,7 @@ class AuthorizedEscortController extends Controller
         $authorizedEscort->update([
             'EscortStatus' => 'Approved',
             'IsActive' => true,
-            'ApprovedByUserID' => User::SYSTEM_USER_ID,
+            'ApprovedByUserID' => User::getCurrentUserId(),
         ]);
 
         return json_encode([

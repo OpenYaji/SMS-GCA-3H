@@ -97,12 +97,12 @@ try {
 
     // Add encrypted fields if provided
     if (!empty($contactNumber)) {
-        $updateProfile .= ", EncryptedPhoneNumber = :phoneNumber";
+        $updateProfile .= ", EncryptedPhoneNumber = AES_ENCRYPT(:phoneNumber, 'encryption_key')";
         $params[':phoneNumber'] = $contactNumber;
     }
 
     if (!empty($address)) {
-        $updateProfile .= ", EncryptedAddress = :address";
+        $updateProfile .= ", EncryptedAddress = AES_ENCRYPT(:address, 'encryption_key')";
         $params[':address'] = $address;
     }
 

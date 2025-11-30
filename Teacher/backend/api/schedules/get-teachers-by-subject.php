@@ -48,32 +48,59 @@ if (!$db) {
 }
 
 try {
-    // Get all teachers who teach this subject
-    // This is based on existing schedules in the system
+    // First, get the subject name
+    $subjectQuery = "SELECT SubjectName FROM subject WHERE SubjectID = :subjectId";
+    $subjectStmt = $db->prepare($subjectQuery);
+    $subjectStmt->bindParam(':subjectId', $subjectId, PDO::PARAM_INT);
+    $subjectStmt->execute();
+    $subjectName = $subjectStmt->fetchColumn();
+
+    if (!$subjectName) {
+        echo json_encode([
+            'success' => true, 
+            'data' => [], 
+            'message' => 'Subject not found'
+        ]);
+        exit();
+    }
+
+    // Get all teachers whose specialization matches the subject name
+    // We check if Specialization contains SubjectName OR SubjectName contains Specialization
+    // to handle cases like "Mathematics" vs "Math" or "Science 1" vs "General Science"
     $query = "
         SELECT DISTINCT
             tp.TeacherProfileID as id,
             CONCAT(p.FirstName, ' ', p.LastName) as name,
-            CONCAT(p.LastName, ', ', p.FirstName) as fullName
-        FROM classschedule cs
-        JOIN teacherprofile tp ON cs.TeacherProfileID = tp.TeacherProfileID
+            CONCAT(p.LastName, ', ', p.FirstName) as fullName,
+            tp.Specialization
+        FROM teacherprofile tp
         JOIN profile p ON tp.ProfileID = p.ProfileID
         JOIN user u ON p.UserID = u.UserID
-        WHERE cs.SubjectID = :subjectId
-            AND u.IsDeleted = 0
-            AND (u.UserType = 'Teacher' OR u.UserType = 'Head Teacher')
+        WHERE u.IsDeleted = 0
+        AND u.AccountStatus = 'Active'
+        AND (u.UserType = 'Teacher' OR u.UserType = 'HeadTeacher' OR u.UserType = 'Head Teacher')
+        AND (
+            tp.Specialization IS NOT NULL 
+            AND tp.Specialization != ''
+            AND (
+                tp.Specialization LIKE CONCAT('%', :subjectName1, '%')
+                OR :subjectName2 LIKE CONCAT('%', tp.Specialization, '%')
+            )
+        )
         ORDER BY p.LastName, p.FirstName
     ";
     
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':subjectId', $subjectId, PDO::PARAM_INT);
+    $stmt->bindParam(':subjectName1', $subjectName, PDO::PARAM_STR);
+    $stmt->bindParam(':subjectName2', $subjectName, PDO::PARAM_STR);
     $stmt->execute();
     $teachers = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     http_response_code(200);
     echo json_encode([
         'success' => true,
-        'data' => $teachers
+        'data' => $teachers,
+        'debug_subject' => $subjectName
     ]);
     
 } catch (Exception $e) {

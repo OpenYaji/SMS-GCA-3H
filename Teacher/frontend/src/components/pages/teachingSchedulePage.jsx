@@ -259,31 +259,51 @@ const TeachingSchedulePage = () => {
   const handleEdit = (schedule) => {
     setEditingSchedule(schedule);
     setEditFormData({
-      teacher: schedule.teacher || '',
-      subject: schedule.subject || '',
+      teacherProfileId: schedule.TeacherProfileID || '',
+      subjectId: schedule.SubjectID || '',
       day: schedule.day || '',
-      time: schedule.time || '',
+      startTime: schedule.rawStartTime || '',
+      endTime: schedule.rawEndTime || '',
       room: schedule.room || ''
     });
     setIsEditModalOpen(true);
   };
 
-  const handleSaveEdit = () => {
-    if (!editFormData.teacher || !editFormData.subject || !editFormData.day || !editFormData.time || !editFormData.room) {
-      alert('Please fill in all fields');
+  const handleSaveEdit = async () => {
+    if (!editFormData.teacherProfileId || !editFormData.subjectId || !editFormData.day || !editFormData.startTime || !editFormData.endTime || !editFormData.room) {
+      toast.error('Please fill in all fields');
       return;
     }
 
-    setTeacherSchedules(prev => prev.map(s => (s.id === editingSchedule.id ? { ...s, ...editFormData } : s)));
-    setIsEditModalOpen(false);
-    setEditingSchedule(null);
-    setEditFormData({ teacher: '', subject: '', day: '', time: '', room: '' });
+    try {
+      const response = await axios.post(
+        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/update-schedule.php',
+        {
+          scheduleId: editingSchedule.id,
+          ...editFormData
+        },
+        { withCredentials: true }
+      );
+
+      if (response.data?.success) {
+        toast.success('Schedule updated successfully');
+        setIsEditModalOpen(false);
+        setEditingSchedule(null);
+        setEditFormData({ teacherProfileId: '', subjectId: '', day: '', startTime: '', endTime: '', room: '' });
+        fetchData(); // Refresh data
+      } else {
+        toast.error(response.data?.message || 'Failed to update schedule');
+      }
+    } catch (err) {
+      console.error('Error updating schedule:', err);
+      toast.error(err?.response?.data?.message || 'Error updating schedule');
+    }
   };
 
   const handleCancelEdit = () => {
     setIsEditModalOpen(false);
     setEditingSchedule(null);
-    setEditFormData({ teacher: '', subject: '', day: '', time: '', room: '' });
+    setEditFormData({ teacherProfileId: '', subjectId: '', day: '', startTime: '', endTime: '', room: '' });
   };
 
   const handleDelete = async (scheduleId) => {

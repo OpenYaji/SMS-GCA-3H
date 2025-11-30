@@ -43,7 +43,13 @@ try {
             sp.StudentProfileID as id,
             p.FirstName as firstName,
             p.LastName as lastName,
+            p.MiddleName as middleName,
             sp.StudentNumber as studentNumber,
+            sp.Gender as gender,
+            sp.DateOfBirth as birthdate,
+            TIMESTAMPDIFF(YEAR, sp.DateOfBirth, CURDATE()) as age,
+            CAST(AES_DECRYPT(p.EncryptedAddress, 'encryption_key') AS CHAR) as address,
+            CAST(AES_DECRYPT(p.EncryptedPhoneNumber, 'encryption_key') AS CHAR) as contactNumber,
             e.EnrollmentID as enrollmentId
         FROM studentprofile sp
         JOIN profile p ON sp.ProfileID = p.ProfileID
@@ -165,7 +171,13 @@ try {
             'id' => $studentId,
             'firstName' => $studentRow['firstName'],
             'lastName' => $studentRow['lastName'],
+            'middleName' => $studentRow['middleName'],
             'studentNumber' => $studentRow['studentNumber'],
+            'gender' => $studentRow['gender'],
+            'birthdate' => $studentRow['birthdate'],
+            'age' => $studentRow['age'],
+            'address' => $studentRow['address'],
+            'contactNumber' => $studentRow['contactNumber'],
             'grades' => [
                 'q1' => $q1Avg,
                 'q2' => $q2Avg,

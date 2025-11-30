@@ -38,6 +38,7 @@ export default function StudentGradesPage({
     firstName: student?.firstName || '',
     lastName: student?.lastName || '',
     middleName: student?.middleName || '',
+    gender: student?.gender || '',
     birthdate: student?.birthdate || '',
     age: student?.age || '',
     studentNumber: student?.studentNumber || '',
@@ -62,6 +63,7 @@ export default function StudentGradesPage({
         firstName: student.firstName || '',
         lastName: student.lastName || '',
         middleName: student.middleName || '',
+        gender: student.gender || '',
         birthdate: student.birthdate || '',
         age: student.age || '',
         studentNumber: student.studentNumber || '',
@@ -264,12 +266,7 @@ export default function StudentGradesPage({
         )}
 
         <div className="flex gap-4">
-          <button className="bg-amber-300 hover:bg-amber-400 px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            Send via Email
-          </button>
+
 
           {/* Print Report Card Dropdown Button */}
           <div className="relative" ref={dropdownRef}>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 import MyClassesPage from './myClassesPage.jsx';
 import ClassDetailsPage from './classDetailsPage.jsx';
 import ClassGradesPage from './classGradesPage.jsx';
@@ -317,13 +318,20 @@ export default function ClassManagementApp() {
           })
         );
 
-        handleCloseGradeModal();
-
         // Trigger refresh for StudentGradesPage
         setGradeRefreshKey(prev => prev + 1);
 
-        // Show success message (you can add a toast notification here)
-        console.log('Grade saved successfully:', response.data.message);
+        // Show success message
+        const subjectName = newGradeData.subjectName || 'Subject';
+        const quarterMap = {
+          'q1': '1st Quarter',
+          'q2': '2nd Quarter',
+          'q3': '3rd Quarter',
+          'q4': '4th Quarter'
+        };
+        const quarterDisplay = quarterMap[quarter] || quarter;
+        
+        toast.success(`Grade saved successfully for ${subjectName} - ${quarterDisplay}!`);
       } else {
         throw new Error(response.data.message || 'Failed to save grade');
       }
@@ -355,6 +363,7 @@ export default function ClassManagementApp() {
    */
   return (
     <>
+      <Toaster position="top-right" />
       {currentView === 'classList' && (
         <MyClassesPage
           classes={classes}
@@ -407,6 +416,7 @@ export default function ClassManagementApp() {
           isOpen={isGradeModalOpen}
           student={studentToGrade}
           gradeLevelId={selectedClass?.gradeLevelId}
+          selectedClass={selectedClass}
           allStudents={students}
           onClose={handleCloseGradeModal}
           onSave={handleSaveGrade}

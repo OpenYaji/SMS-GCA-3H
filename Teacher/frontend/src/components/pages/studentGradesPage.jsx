@@ -48,12 +48,26 @@ export default function StudentGradesPage({
   });
   const [saving, setSaving] = useState(false);
   const dropdownRef = useRef(null);
-  const modalRef = useRef(null);
+
+  const fetchAllStudentData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await Promise.all([
+        fetchStudentGrades(),
+      ]);
+    } catch (err) {
+      console.error('Error fetching all student data:', err);
+      setError('Failed to load all student data.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Fetch subjects and grades when component mounts
   useEffect(() => {
     if (student && classData) {
-      fetchStudentGrades();
+      fetchAllStudentData();
     }
   }, [student, classData]);
 
@@ -179,9 +193,6 @@ export default function StudentGradesPage({
 
   const fetchStudentGrades = async () => {
     try {
-      setLoading(true);
-      setError(null);
-
       // Fetch subjects for this grade level
       const subjectsResponse = await axios.get(
         `http://localhost/SMS-GCA-3H/Teacher/backend/api/subjects/get-subjects-by-grade.php?gradeLevelId=${classData.gradeLevelId}`,
@@ -197,8 +208,6 @@ export default function StudentGradesPage({
     } catch (err) {
       console.error('Error fetching student grades:', err);
       setError('Failed to load grades');
-    } finally {
-      setLoading(false);
     }
   };
 

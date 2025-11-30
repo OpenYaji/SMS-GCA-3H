@@ -14,7 +14,11 @@ import {
   LogOut,
   Menu,
   X,
-  BadgeDollarSign
+  BadgeDollarSign,
+  GraduationCap,
+  ArchiveRestore,
+  ClipboardMinus,
+  ChartArea
 } from "lucide-react";
 
 export default function DashboardSidebar({
@@ -75,22 +79,22 @@ export default function DashboardSidebar({
     },
     {
       name: "Grading and Academics",
-      icon: <Settings size={18} />,
+      icon: <GraduationCap size={18} />,
       path: "/registrar-dashboard/grading-academics",
     },
     {
       name: "Record and Archives",
-      icon: <Settings size={18} />,
-      path: "/registrar-dashboard/record-and-archives",
+      icon: <ArchiveRestore size={18} />,
+      path: "/registrar-dashboard/record-and-archives", 
     },
     {
       name: "Document Requests",
-      icon: <Settings size={18} />,
+      icon: <ClipboardMinus size={18} />,
       path: "/registrar-dashboard/document-requests",
     },
     {
       name: "Report and Analytics",
-      icon: <Settings size={18} />,
+      icon: <ChartArea size={18} />,
       path: "/registrar-dashboard/report-and-analytics",
     },
   ];

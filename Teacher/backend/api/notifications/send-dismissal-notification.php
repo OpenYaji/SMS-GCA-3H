@@ -89,6 +89,27 @@ try {
         ";
         $stmt = $db->prepare($parentQuery);
         $stmt->bindParam(':sectionId', $sectionId, PDO::PARAM_INT);
+    } elseif ($recipientType === 'student') {
+        // Get all parents/guardians of a specific student
+        if (!isset($input['studentId'])) {
+            throw new Exception('Student ID is required for student recipient');
+        }
+        
+        $studentId = (int)$input['studentId'];
+        
+        $parentQuery = "
+            SELECT DISTINCT 
+                CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR) AS Email,
+                g.FullName,
+                g.GuardianID
+            FROM studentprofile sp
+            JOIN studentguardian sg ON sp.StudentProfileID = sg.StudentProfileID
+            JOIN guardian g ON sg.GuardianID = g.GuardianID
+            WHERE sp.StudentProfileID = :studentId
+            AND g.EncryptedEmailAddress IS NOT NULL
+        ";
+        $stmt = $db->prepare($parentQuery);
+        $stmt->bindParam(':studentId', $studentId, PDO::PARAM_INT);
     } else {
         // Get specific parent/guardian
         if (!$parentId) {

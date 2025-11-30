@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, Clock } from 'lucide-react';
+import { ChevronDown, Clock, User, Phone, Mail, Users } from 'lucide-react';
 import Breadcrumb from '../components/common/Breadcrumb';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -17,10 +17,10 @@ const EmergencyDismissalPage = () => {
   });
   const [message, setMessage] = useState('');
   const [selectedRecipient, setSelectedRecipient] = useState('all');
-  const [selectedParent, setSelectedParent] = useState('');
-  const [parents, setParents] = useState([]);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showParentDropdown, setShowParentDropdown] = useState(false);
+  const [showStudentDropdown, setShowStudentDropdown] = useState(false);
   const [allSchedules, setAllSchedules] = useState([]);
   const [selectedDay, setSelectedDay] = useState(location.state?.schedule?.day || 'Monday');
 
@@ -39,8 +39,8 @@ const EmergencyDismissalPage = () => {
       return;
     }
 
-    // Fetch parents for this section
-    fetchParents();
+    // Fetch students for this section
+    fetchStudents();
     // Fetch actual schedule to get dynamic start/end times
     fetchSectionSchedule();
   }, [navigate]);
@@ -108,20 +108,20 @@ const EmergencyDismissalPage = () => {
     }
   }, [selectedDay, allSchedules]);
 
-  const fetchParents = async () => {
+  const fetchStudents = async () => {
     try {
       if (!currentSchedule?.sectionId) return;
 
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/notifications/get-section-parents.php?sectionId=${currentSchedule.sectionId}`,
+        `http://localhost/SMS-GCA-3H/Teacher/backend/api/notifications/get-section-students-with-guardians.php?sectionId=${currentSchedule.sectionId}`,
         { withCredentials: true }
       );
 
       if (response.data.success) {
-        setParents(response.data.data);
+        setStudents(response.data.data);
       }
     } catch (error) {
-      console.error('Error fetching parents:', error);
+      console.error('Error fetching students:', error);
     }
   };
 
@@ -165,7 +165,7 @@ const EmergencyDismissalPage = () => {
       message: message.trim(),
       dismissalTime,
       selectedRecipient,
-      selectedParent,
+      selectedStudent,
       currentSchedule
     });
 
@@ -179,8 +179,8 @@ const EmergencyDismissalPage = () => {
       return;
     }
 
-    if (selectedRecipient === 'specific' && !selectedParent) {
-      toast.error('Please select a parent');
+    if (selectedRecipient === 'student' && !selectedStudent) {
+      toast.error('Please select a student');
       return;
     }
 
@@ -188,20 +188,22 @@ const EmergencyDismissalPage = () => {
     setLoading(true);
 
     try {
+      const payload = {
+        scheduleId: currentSchedule?.scheduleId,
+        sectionId: currentSchedule?.sectionId,
+        gradeLevel: currentSchedule?.gradeLevel,
+        section: currentSchedule?.section,
+        subject: currentSchedule?.subject,
+        originalEndTime: currentSchedule?.endTime,
+        newDismissalTime: formatSelectedTime(),
+        message: message,
+        recipientType: selectedRecipient, // 'all' or 'student'
+        studentId: selectedRecipient === 'student' ? selectedStudent?.id : null
+      };
+
       const response = await axios.post(
         'http://localhost/SMS-GCA-3H/Teacher/backend/api/notifications/send-dismissal-notification.php',
-        {
-          scheduleId: currentSchedule?.scheduleId,
-          sectionId: currentSchedule?.sectionId,
-          gradeLevel: currentSchedule?.gradeLevel,
-          section: currentSchedule?.section,
-          subject: currentSchedule?.subject,
-          originalEndTime: currentSchedule?.endTime,
-          newDismissalTime: formatSelectedTime(),
-          message: message,
-          recipientType: selectedRecipient,
-          parentId: selectedRecipient === 'specific' ? selectedParent : null
-        },
+        payload,
         { withCredentials: true }
       );
 
@@ -225,7 +227,7 @@ const EmergencyDismissalPage = () => {
         setMessage('');
         setDismissalTime({ hour: '00', minute: '00', period: 'PM' });
         setSelectedRecipient('all');
-        setSelectedParent('');
+        setSelectedStudent(null);
       } else {
         toast.error(response.data.message || 'Failed to send notification');
       }
@@ -319,7 +321,7 @@ const EmergencyDismissalPage = () => {
           </div>
 
           {/* Emergency Dismissal Panel */}
-          <div className="w-[380px] bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-gray-800 dark:to-gray-800/50 border border-amber-200 dark:border-gray-700 rounded-3xl shadow-lg p-6">
+          <div className="w-[380px] bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-gray-800 dark:to-gray-800/50 border border-amber-200 dark:border-gray-700 rounded-3xl shadow-lg p-6 flex flex-col">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-5 text-center">
               Change Dismissal Time
             </h2>
@@ -446,7 +448,10 @@ const EmergencyDismissalPage = () => {
               </label>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setSelectedRecipient('all')}
+                  onClick={() => {
+                    setSelectedRecipient('all');
+                    setSelectedStudent(null);
+                  }}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedRecipient === 'all'
                     ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-2 border-amber-500 shadow-sm'
                     : 'bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700'
@@ -458,40 +463,41 @@ const EmergencyDismissalPage = () => {
                 <div className="relative flex-1">
                   <button
                     onClick={() => {
-                      setSelectedRecipient('specific');
-                      setShowParentDropdown(!showParentDropdown);
+                      setSelectedRecipient('student');
+                      setShowStudentDropdown(!showStudentDropdown);
                     }}
-                    className={`w-full px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-between transition-all ${selectedRecipient === 'specific'
+                    className={`w-full px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-between transition-all ${selectedRecipient === 'student'
                       ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-2 border-amber-500 shadow-sm'
                       : 'bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700'
                       }`}
                   >
                     <span className="truncate">
-                      {selectedParent
-                        ? parents.find(p => p.id === selectedParent)?.name
-                        : 'Select parent'}
+                      {selectedStudent
+                        ? selectedStudent.name
+                        : 'Select student'}
                     </span>
                     <ChevronDown size={18} className="ml-2 flex-shrink-0" />
                   </button>
 
-                  {showParentDropdown && (
+                  {showStudentDropdown && (
                     <div className="absolute top-full mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-xl max-h-48 overflow-y-auto z-10">
-                      {parents.length > 0 ? (
-                        parents.map((parent) => (
+                      {students.length > 0 ? (
+                        students.map((student) => (
                           <button
-                            key={parent.id}
+                            key={student.id}
                             onClick={() => {
-                              setSelectedParent(parent.id);
-                              setShowParentDropdown(false);
+                              setSelectedStudent(student);
+                              setSelectedRecipient('student');
+                              setShowStudentDropdown(false);
                             }}
                             className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-amber-50 dark:hover:bg-gray-700 transition-colors"
                           >
-                            {parent.name}
+                            {student.name}
                           </button>
                         ))
                       ) : (
                         <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                          No parents found
+                          No students found
                         </div>
                       )}
                     </div>
@@ -500,11 +506,53 @@ const EmergencyDismissalPage = () => {
               </div>
             </div>
 
+            {/* Parent/Guardian Info Display */}
+            {selectedRecipient === 'student' && selectedStudent && (
+              <div className="mb-6 bg-amber-50 dark:bg-gray-800/50 border border-amber-100 dark:border-gray-700 rounded-xl p-4">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                  <Users size={16} className="text-amber-600 dark:text-amber-400" />
+                  Guardian Information
+                </h3>
+                
+                {selectedStudent.guardians && selectedStudent.guardians.length > 0 ? (
+                  <div className="space-y-3">
+                    {selectedStudent.guardians.map((guardian, idx) => (
+                      <div key={guardian.id || idx} className={`pb-3 ${idx !== selectedStudent.guardians.length - 1 ? 'border-b border-amber-100 dark:border-gray-700' : ''}`}>
+                        <div className="flex items-center gap-2 mb-1">
+                          <User size={14} className="text-gray-500 dark:text-gray-400" />
+                          <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{guardian.name}</span>
+                          <span className="text-xs px-2 py-0.5 bg-white dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
+                            {guardian.relationship}
+                          </span>
+                        </div>
+                        {guardian.phone && (
+                          <div className="flex items-center gap-2 ml-5 text-xs text-gray-600 dark:text-gray-400">
+                            <Phone size={12} />
+                            {guardian.phone}
+                          </div>
+                        )}
+                        {guardian.email && (
+                          <div className="flex items-center gap-2 ml-5 text-xs text-gray-600 dark:text-gray-400 truncate">
+                            <Mail size={12} />
+                            <span className="truncate" title={guardian.email}>{guardian.email}</span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-gray-500 dark:text-gray-400 italic text-center py-2">
+                    No guardian information available
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Send Button */}
             <button
               onClick={handleSendNotification}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white py-3.5 rounded-full text-base font-bold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white py-3.5 rounded-full text-base font-bold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-auto"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

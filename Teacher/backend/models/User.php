@@ -7,7 +7,7 @@ class User {
         $this->conn = $db;
     }
 
-    public function getStudentByStudentNumber($identifier) {
+    public function getStudentByStudentNumber($studentNumber) {
         $query = "
             SELECT 
                 u.UserID,
@@ -25,13 +25,12 @@ class User {
             JOIN 
                 passwordpolicy pp ON u.UserID = pp.UserID
             WHERE 
-                (sp.StudentNumber = :identifier OR u.EmailAddress = :identifier) 
-                AND u.UserType = 'Student'
+                sp.StudentNumber = :studentNumber AND u.UserType = 'Student'
         ";
 
         try {
             $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':identifier', $identifier);
+            $stmt->bindParam(':studentNumber', $studentNumber);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -112,7 +111,6 @@ class User {
             SELECT 
                 u.UserID, u.EmailAddress, u.UserType, u.AccountStatus, u.LastLoginDate,
                 p.ProfileID, p.FirstName, p.LastName, p.MiddleName,
-                p.Gender, p.BirthDate, p.Age, p.Religion, p.MotherTounge,
                 CONCAT_WS(' ', p.FirstName, p.MiddleName, p.LastName) AS FullName,
                 CAST(p.EncryptedPhoneNumber AS CHAR) AS PhoneNumber,
                 CAST(p.EncryptedAddress AS CHAR) AS Address,
@@ -146,7 +144,7 @@ class User {
         }
     }
 
-    public function getTeacherByEmployeeNumber($identifier){
+    public function getTeacherByEmployeeNumber($EmployeeNumber){
         $query = "
             SELECT 
                 u.UserID,
@@ -161,15 +159,12 @@ class User {
                 profile p ON tp.ProfileID = p.ProfileID
             JOIN 
                 user u ON p.UserID = u.UserID
-            LEFT JOIN 
-                passwordpolicy pp ON u.UserID = pp.UserID
             WHERE 
-                (tp.EmployeeNumber = :identifier OR u.EmailAddress = :identifier)
-                AND (u.UserType = 'Teacher' OR u.UserType = 'Head Teacher')";
+                tp.EmployeeNumber = :EmployeeNumber AND (u.UserType = 'Teacher' OR u.UserType = 'Head Teacher')";
 
         try {
             $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':identifier', $identifier);
+            $stmt->bindParam(':EmployeeNumber', $EmployeeNumber);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

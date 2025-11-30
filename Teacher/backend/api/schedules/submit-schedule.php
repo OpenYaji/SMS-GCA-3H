@@ -30,9 +30,14 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Check Authorization (Head Teacher only)
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'Head Teacher') {
+// Check Authorization (Head Teacher or Teacher)
+// Note: UserType might be 'Head Teacher' or 'HeadTeacher' depending on DB version
+if (!isset($_SESSION['user_type']) || 
+    ($_SESSION['user_type'] !== 'Head Teacher' && 
+     $_SESSION['user_type'] !== 'HeadTeacher' && 
+     $_SESSION['user_type'] !== 'Teacher')) {
     http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Access denied. Only Head Teachers can submit schedules.']);
+    echo json_encode(['success' => false, 'message' => 'Access denied. User type: ' . ($_SESSION['user_type'] ?? 'None')]);
     exit();
 }
 
@@ -59,11 +64,10 @@ try {
     $db->beginTransaction();
     
     // Validate required fields
-    if (empty($input['teacherProfileId']) || empty($input['sectionId']) || empty($input['schedule'])) {
-        throw new Exception('Missing required fields: teacherProfileId, sectionId, or schedule.');
+    if (empty($input['sectionId']) || empty($input['schedule'])) {
+        throw new Exception('Missing required fields: sectionId or schedule.');
     }
     
-    $teacherProfileId = $input['teacherProfileId'];
     $sectionId = $input['sectionId'];
     $day = $input['day'] ?? 'Monday';
     $scheduleSlots = $input['schedule'];
@@ -76,14 +80,10 @@ try {
     $sectionData = $stmt->fetch(PDO::FETCH_ASSOC);
     $room = $sectionData['RoomNumber'] ?? 'TBD';
     
-    // First, delete existing schedules for this teacher and section
-    $deleteQuery = "
-        DELETE FROM classschedule 
-        WHERE TeacherProfileID = :teacherProfileId 
-        AND SectionID = :sectionId
-    ";
+    // Delete existing schedules for this section to avoid duplicates/conflicts
+    // Since the frontend sends the COMPLETE schedule for the section, we can safely replace it.
+    $deleteQuery = "DELETE FROM classschedule WHERE SectionID = :sectionId";
     $stmt = $db->prepare($deleteQuery);
-    $stmt->bindParam(':teacherProfileId', $teacherProfileId);
     $stmt->bindParam(':sectionId', $sectionId);
     $stmt->execute();
     
@@ -91,10 +91,14 @@ try {
     
     // Insert each time slot as a schedule entry
     foreach ($scheduleSlots as $slot) {
-        // Skip if subject, startTime, or endTime is missing
-        if (empty($slot['subject']) || empty($slot['startTime']) || empty($slot['endTime'])) {
+        // Skip if subject, startTime, endTime, or teacherId is missing
+        if (empty($slot['subject']) || empty($slot['startTime']) || empty($slot['endTime']) || empty($slot['teacherId'])) {
             continue;
         }
+        
+        // Use slot day if available, else fallback to global day
+        $slotDay = $slot['day'] ?? $day;
+        $teacherProfileId = $slot['teacherId'];
         
         // Convert time to 24-hour format
         $startTime = date('H:i:s', strtotime($slot['startTime']));
@@ -117,7 +121,7 @@ try {
         $stmt->bindParam(':sectionId', $sectionId, PDO::PARAM_INT);
         $stmt->bindParam(':subjectId', $slot['subject'], PDO::PARAM_INT);
         $stmt->bindParam(':teacherProfileId', $teacherProfileId, PDO::PARAM_INT);
-        $stmt->bindParam(':dayOfWeek', $day, PDO::PARAM_STR);
+        $stmt->bindParam(':dayOfWeek', $slotDay, PDO::PARAM_STR);
         $stmt->bindParam(':startTime', $startTime, PDO::PARAM_STR);
         $stmt->bindParam(':endTime', $endTime, PDO::PARAM_STR);
         $stmt->bindParam(':room', $room, PDO::PARAM_STR);

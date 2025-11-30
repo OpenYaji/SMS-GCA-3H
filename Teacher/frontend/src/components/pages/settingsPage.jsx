@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AppearancesTab from '../common/settings/appearancesTab';
 import MyAccountTab from '../common/settings/myAccountTab';
+import Breadcrumb from '../common/Breadcrumb.jsx';
 
 /**
  * SettingsPage Component
@@ -34,8 +35,18 @@ export default function SettingsPage() {
     }
   };
 
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'Settings' }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-8">
+      {/* Breadcrumbs */}
+      <div className="mb-6">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
+
       {/* Page Header */}
       <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6">
         Settings
@@ -47,11 +58,10 @@ export default function SettingsPage() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-6 py-3 rounded-[15px] text-base font-semibold transition-all duration-200 ${
-              activeTab === tab.id
-                ? 'bg-amber-400 text-neutral-700 border-2 border-black/20'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-300/50 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700'
-            }`}
+            className={`px-6 py-3 rounded-[15px] text-base font-semibold transition-all duration-200 ${activeTab === tab.id
+              ? 'bg-amber-400 text-neutral-700 border-2 border-black/20'
+              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-300/50 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
           >
             {tab.label}
           </button>

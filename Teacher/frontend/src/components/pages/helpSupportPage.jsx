@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FaqSection from '../common/dashboard/help/faqSection.jsx';
 import AskQuestionForm from '../common/dashboard/help/askQuestionForm.jsx';
 import ContactUs from '../common/dashboard/help/contactUs.jsx';
+import Breadcrumb from '../common/Breadcrumb.jsx';
 
 /**
  * HelpSupportPage Component
@@ -24,21 +25,31 @@ export default function HelpSupportPage() {
       date: new Date().toISOString(),
       ...questionData
     };
-    
+
     setSubmittedQuestions(prev => [...prev, newQuestion]);
-    
+
     // Optional: Send to backend API
     // fetch('/api/help/questions', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(newQuestion)
     // });
-    
+
     console.log('Question submitted:', newQuestion);
   };
 
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'Help & Support' }
+  ];
+
   return (
     <div className="p-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      {/* Breadcrumbs */}
+      <div className="mb-6">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
+
       {/* Page Header */}
       <h1 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">
         Help & Support

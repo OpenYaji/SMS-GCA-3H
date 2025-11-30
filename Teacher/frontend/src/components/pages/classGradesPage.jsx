@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SearchBarWithFilter from '../common/dashboard/my-classes/searchBarWithFilter.jsx';
+import Breadcrumb from '../common/Breadcrumb.jsx';
 
 /**
  * ClassGradesPage Component
@@ -12,13 +13,15 @@ import SearchBarWithFilter from '../common/dashboard/my-classes/searchBarWithFil
  * @param {boolean} loading - Loading state indicator
  * @param {string} error - Error message if any
  * @param {function} onBack - Callback to navigate back to class details
+ * @param {function} onBackToClassList - Callback to navigate back to class list
  */
-export default function ClassGradesPage({ 
-  classData, 
-  students, 
-  loading, 
-  error, 
-  onBack
+export default function ClassGradesPage({
+  classData,
+  students,
+  loading,
+  error,
+  onBack,
+  onBackToClassList
 }) {
   // State for student search and filter
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,10 +38,17 @@ export default function ClassGradesPage({
     return matchesSearch;
   });
 
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'My Classes', onClick: onBackToClassList },
+    { label: 'Class Details', onClick: onBack },
+    { label: 'Class Grades' }
+  ];
+
   return (
     <div className="bg-gray-50 min-h-screen p-4 md:p-8">
       {/* Back Button */}
-      <button 
+      <button
         onClick={onBack}
         className="text-sm text-gray-600 hover:text-gray-900 mb-4 flex items-center gap-2 transition-colors"
       >
@@ -47,9 +57,9 @@ export default function ClassGradesPage({
       </button>
 
       {/* Breadcrumbs */}
-      <p className="text-sm text-gray-500 mb-4">
-        Grade Levels & Sections &gt; Class Details &gt; Class Grades
-      </p>
+      <div className="mb-4">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
 
       {/* Dynamic Header */}
       <header className="mb-6">
@@ -71,7 +81,7 @@ export default function ClassGradesPage({
       )}
 
       {/* Search and Filter for Students */}
-      <SearchBarWithFilter 
+      <SearchBarWithFilter
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         filterOption={filterOption}
@@ -131,8 +141,8 @@ const StudentGradeList = ({ students }) => (
     <div>
       {students.length > 0 ? (
         students.map((student) => (
-          <StudentGradeRow 
-            key={student.id} 
+          <StudentGradeRow
+            key={student.id}
             studentData={student}
           />
         ))

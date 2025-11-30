@@ -17,9 +17,15 @@ const AttendanceReportPage = () => {
 
   // Breadcrumb items
   const breadcrumbItems = [
-    { label: 'Grade Levels & Sections', href: '/teacher-dashboard/my-classes' },
-    { label: 'Class Details', href: '/teacher-dashboard/my-classes' },
-    { label: 'Attendance', href: '/teacher-dashboard/attendance' },
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'My Classes', href: '/teacher-dashboard/my-classes' },
+    {
+      label: 'Attendance',
+      href: {
+        pathname: '/teacher-dashboard/attendance',
+        state: { classData }
+      }
+    },
     { label: 'Report' },
   ];
 
@@ -41,17 +47,17 @@ const AttendanceReportPage = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       if (!classData?.id) {
         setError('No class selected');
         return;
       }
-      
+
       const response = await axios.get(
         `http://localhost/SMS-GCA-3H/Teacher/backend/api/attendance/get-attendance-report.php?sectionId=${classData.id}&quarter=${selectedQuarter}`,
         { withCredentials: true }
       );
-      
+
       if (response.data.success) {
         setStudents(response.data.data);
         setFilteredStudents(response.data.data);
@@ -143,11 +149,10 @@ const AttendanceReportPage = () => {
                   <button
                     key={quarter}
                     onClick={() => handleQuarterSelect(quarter)}
-                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${
-                      selectedQuarter === quarter 
-                        ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 font-medium' 
+                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${selectedQuarter === quarter
+                        ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 font-medium'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
+                      }`}
                   >
                     {quarter} Quarter
                   </button>
@@ -247,13 +252,12 @@ const AttendanceReportPage = () => {
                   {student.totalSchoolDays}
                 </div>
                 <div className="col-span-1">
-                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${
-                    parseFloat(student.attendanceRate) >= 90 
+                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${parseFloat(student.attendanceRate) >= 90
                       ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                      : parseFloat(student.attendanceRate) >= 75 
+                      : parseFloat(student.attendanceRate) >= 75
                         ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
                         : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
-                  }`}>
+                    }`}>
                     {student.attendanceRate}%
                   </span>
                 </div>

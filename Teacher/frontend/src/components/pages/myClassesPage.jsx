@@ -3,6 +3,7 @@ import { RefreshCw } from 'lucide-react';
 import HeaderPage from '../common/dashboard/my-classes/headerPage.jsx';
 import SearchBarWithFilter from '../common/dashboard/my-classes/searchBarWithFilter.jsx';
 import ViewMyClasses from '../common/dashboard/my-classes/viewMyClasses.jsx';
+import Breadcrumb from '../common/Breadcrumb.jsx';
 
 /**
  * MyClassesPage Component
@@ -18,10 +19,10 @@ import ViewMyClasses from '../common/dashboard/my-classes/viewMyClasses.jsx';
  * @param {function} onToggleFavorite - Callback to toggle favorite status
  * @param {function} onRefresh - Callback to manually refresh class list
  */
-export default function MyClassesPage({ 
-  classes, 
-  loading, 
-  error, 
+export default function MyClassesPage({
+  classes,
+  loading,
+  error,
   onViewClassDetails,
   onToggleFavorite,
   onRefresh
@@ -51,8 +52,17 @@ export default function MyClassesPage({
     return matchesFilter && matchesSearch;
   });
 
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'My Classes' }
+  ];
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 md:p-8">
+      <div className="mb-6">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
+
       {/* Static Header with Refresh Button */}
       <div className="flex justify-between items-start mb-6">
         <HeaderPage />
@@ -67,7 +77,7 @@ export default function MyClassesPage({
           </button>
         )}
       </div>
-      
+
       {/* Error Message */}
       {error && (
         <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg">
@@ -75,16 +85,16 @@ export default function MyClassesPage({
           <p className="text-sm mt-1">{error}</p>
         </div>
       )}
-      
+
       {/* Search and Filter Controls */}
-      <SearchBarWithFilter 
+      <SearchBarWithFilter
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         filterOption={filterOption}
         onFilterChange={setFilterOption}
         filterType="classes"
       />
-      
+
       {/* Loading State */}
       {loading ? (
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-12 text-center">
@@ -93,7 +103,7 @@ export default function MyClassesPage({
         </div>
       ) : (
         /* Class List with Navigation and Favorite Callbacks */
-        <ViewMyClasses 
+        <ViewMyClasses
           classes={filteredClasses}
           onViewClassDetails={onViewClassDetails}
           onToggleFavorite={onToggleFavorite}

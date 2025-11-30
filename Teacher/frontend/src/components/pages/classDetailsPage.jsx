@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Download, Printer } from 'lucide-react';
 import SearchBarWithFilter from '../common/dashboard/my-classes/searchBarWithFilter.jsx';
+import Breadcrumb from '../common/Breadcrumb.jsx';
 
 /**
  * ClassDetailsPage Component
@@ -17,11 +18,11 @@ import SearchBarWithFilter from '../common/dashboard/my-classes/searchBarWithFil
  * @param {function} onViewGrades - Callback to navigate to class grades page (all students quarterly)
  * @param {function} onViewStudentInfo - Callback to navigate to individual student grades page
  */
-export default function ClassDetailsPage({ 
-  classData, 
-  students, 
-  loading, 
-  error, 
+export default function ClassDetailsPage({
+  classData,
+  students,
+  loading,
+  error,
   onBack,
   onViewGrades,
   onViewStudentInfo
@@ -29,7 +30,7 @@ export default function ClassDetailsPage({
   // State for student search and filter
   const [searchTerm, setSearchTerm] = useState('');
   const [filterOption, setFilterOption] = useState('All');
-  
+
   // Navigation hook for routing
   const navigate = useNavigate();
 
@@ -64,11 +65,11 @@ export default function ClassDetailsPage({
     const headers = ['Last Name', 'First Name', 'Attendance', 'Grade'];
     const csvContent = [
       headers.join(','),
-      ...filteredStudents.map(s => 
+      ...filteredStudents.map(s =>
         `${s.lastName},${s.firstName},${s.attendance},${s.grade}`
       )
     ].join('\n');
-    
+
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -93,10 +94,16 @@ export default function ClassDetailsPage({
     });
   };
 
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'My Classes', onClick: onBack },
+    { label: 'Class Details' }
+  ];
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 md:p-8">
       {/* Back Button */}
-      <button 
+      <button
         onClick={onBack}
         className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4 flex items-center gap-2 transition-colors"
       >
@@ -105,9 +112,9 @@ export default function ClassDetailsPage({
       </button>
 
       {/* Breadcrumbs */}
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        Grade Levels & Sections &gt; Class Details
-      </p>
+      <div className="mb-4">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
 
       {/* Dynamic Header - Shows selected class info with action buttons */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
@@ -123,7 +130,7 @@ export default function ClassDetailsPage({
             Total Students: {students.length} | Present: {students.filter(s => s.attendance === 'Present').length} | Absent: {students.filter(s => s.attendance === 'Absent').length}
           </p>
         </header>
-        
+
         {/* Export/Print Actions */}
         <div className="flex gap-2">
           <button
@@ -154,7 +161,7 @@ export default function ClassDetailsPage({
       )}
 
       {/* Search and Filter for Students */}
-      <SearchBarWithFilter 
+      <SearchBarWithFilter
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         filterOption={filterOption}
@@ -174,13 +181,13 @@ export default function ClassDetailsPage({
 
       {/* Footer Action Buttons */}
       <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-        <button 
+        <button
           onClick={onViewGrades}
           className="bg-amber-400 hover:bg-amber-500 text-gray-800 font-medium py-3 px-8 rounded-full transition-colors"
         >
           View Class Grade
         </button>
-        <button 
+        <button
           onClick={handleViewAttendance}
           className="bg-amber-400 hover:bg-amber-500 text-gray-800 font-medium py-3 px-8 rounded-full transition-colors"
         >
@@ -246,7 +253,7 @@ const StudentList = ({ students, onViewStudentInfo }) => (
  * @param {function} onViewStudentInfo - Callback when View Info button is clicked
  */
 const StudentRow = ({ studentData, onViewStudentInfo }) => (
-  <div 
+  <div
     className="px-6 py-5 grid grid-cols-12 gap-4 items-center border-b border-gray-200 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
     {/* Last Name */}
     <div className="col-span-3 text-gray-700 dark:text-gray-200 font-medium">
@@ -290,7 +297,7 @@ const StudentRow = ({ studentData, onViewStudentInfo }) => (
 
     {/* View Info Button */}
     <div className="col-span-1 flex justify-end">
-      <button 
+      <button
         onClick={(e) => {
           e.stopPropagation();
           onViewStudentInfo(studentData);

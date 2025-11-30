@@ -21,7 +21,7 @@ import InputGradeModal from '../modals/inputGradeModal.jsx';
  */
 export default function ClassManagementApp() {
   // ===== NAVIGATION STATE =====
-  
+
   /**
    * currentView: Controls which "page" is visible
    * - 'classList': Shows MyClassesPage
@@ -30,7 +30,7 @@ export default function ClassManagementApp() {
    * - 'studentGrades': Shows StudentGradesPage (all subjects for one student)
    */
   const [currentView, setCurrentView] = useState('classList');
-  
+
   /**
    * selectedClass: Stores the data of the class that the user clicks on
    */
@@ -47,19 +47,19 @@ export default function ClassManagementApp() {
   const [gradeRefreshKey, setGradeRefreshKey] = useState(0);
 
   // ===== MODAL STATE =====
-  
+
   /**
    * isGradeModalOpen: Controls the "Input Grade" modal visibility
    */
   const [isGradeModalOpen, setIsGradeModalOpen] = useState(false);
-  
+
   /**
    * studentToGrade: Stores the student object being graded
    */
   const [studentToGrade, setStudentToGrade] = useState(null);
 
   // ===== DATA STATE =====
-  
+
   /**
    * classes: Stores the list of classes
    */
@@ -96,7 +96,7 @@ export default function ClassManagementApp() {
         'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/get-teacher-classes.php',
         { withCredentials: true }
       );
-      
+
       if (response.data.success) {
         setClasses(response.data.data);
       } else {
@@ -130,15 +130,15 @@ export default function ClassManagementApp() {
     try {
       setLoading(true);
       setError(null);
-      
+
       // First, auto-mark absent for any past days without records
       await autoMarkAbsentForPastDays(sectionId);
-      
+
       const response = await axios.get(
         `http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/get-students-by-section.php?sectionId=${sectionId}`,
         { withCredentials: true }
       );
-      
+
       if (response.data.success) {
         // Add grades structure to each student
         const studentsWithGrades = response.data.data.map(student => ({
@@ -168,7 +168,7 @@ export default function ClassManagementApp() {
         `http://localhost/SMS-GCA-3H/Teacher/backend/api/grades/get-section-quarterly-grades.php?sectionId=${sectionId}`,
         { withCredentials: true }
       );
-      
+
       if (response.data.success) {
         setStudents(response.data.data);
       } else {
@@ -273,11 +273,11 @@ export default function ClassManagementApp() {
       const gradeValue = newGradeData[quarter];
       const remarks = newGradeData.remarks || '';
       const subjectId = newGradeData.subjectId;
-      
+
       if (!quarter || gradeValue === undefined || !subjectId) {
         throw new Error('Invalid grade data - missing quarter, grade value, or subject');
       }
-      
+
       // Send to backend
       const response = await axios.post(
         'http://localhost/SMS-GCA-3H/Teacher/backend/api/grades/save-quarterly-grade.php',
@@ -291,10 +291,10 @@ export default function ClassManagementApp() {
         },
         { withCredentials: true }
       );
-      
+
       if (response.data.success) {
         // Update local state with the new grade
-        setStudents(prevStudents => 
+        setStudents(prevStudents =>
           prevStudents.map(student => {
             if (student.id === studentId) {
               const updatedGrades = {
@@ -302,12 +302,12 @@ export default function ClassManagementApp() {
                 [quarter]: gradeValue,
                 remarks: remarks
               };
-              
+
               // If backend calculated final grade, update it
               if (response.data.data.finalGrade !== null) {
                 updatedGrades.final = response.data.data.finalGrade;
               }
-              
+
               return {
                 ...student,
                 grades: updatedGrades
@@ -316,12 +316,12 @@ export default function ClassManagementApp() {
             return student;
           })
         );
-        
+
         handleCloseGradeModal();
-        
+
         // Trigger refresh for StudentGradesPage
         setGradeRefreshKey(prev => prev + 1);
-        
+
         // Show success message (you can add a toast notification here)
         console.log('Grade saved successfully:', response.data.message);
       } else {
@@ -338,9 +338,9 @@ export default function ClassManagementApp() {
    * Toggle favorite status for a class
    */
   const handleToggleFavorite = async (classId) => {
-    setClasses(prevClasses => 
-      prevClasses.map(cls => 
-        cls.id === classId 
+    setClasses(prevClasses =>
+      prevClasses.map(cls =>
+        cls.id === classId
           ? { ...cls, isFavorited: !cls.isFavorited }
           : cls
       )
@@ -356,7 +356,7 @@ export default function ClassManagementApp() {
   return (
     <>
       {currentView === 'classList' && (
-        <MyClassesPage 
+        <MyClassesPage
           classes={classes}
           loading={loading}
           error={error}
@@ -367,7 +367,7 @@ export default function ClassManagementApp() {
       )}
 
       {currentView === 'classDetails' && (
-        <ClassDetailsPage 
+        <ClassDetailsPage
           classData={selectedClass}
           students={students}
           loading={loading}
@@ -375,32 +375,35 @@ export default function ClassManagementApp() {
           onBack={handleBackToList}
           onViewGrades={handleViewClassGrades}
           onViewStudentInfo={handleViewStudentGrades}
+          onBackToClassList={handleBackToList}
         />
       )}
 
       {currentView === 'classGrades' && (
-        <ClassGradesPage 
+        <ClassGradesPage
           classData={selectedClass}
           students={students}
           loading={loading}
           error={error}
           onBack={handleBackToDetails}
+          onBackToClassList={handleBackToList}
         />
       )}
 
       {currentView === 'studentGrades' && (
-        <StudentGradesPage 
+        <StudentGradesPage
           key={gradeRefreshKey}
           student={selectedStudent}
           classData={selectedClass}
           onBack={handleBackToDetails}
           onInputGrade={handleOpenGradeModal}
+          onBackToClassList={handleBackToList}
         />
       )}
 
       {/* Grade Input Modal - Rendered conditionally */}
       {isGradeModalOpen && studentToGrade && (
-        <InputGradeModal 
+        <InputGradeModal
           isOpen={isGradeModalOpen}
           student={studentToGrade}
           gradeLevelId={selectedClass?.gradeLevelId}

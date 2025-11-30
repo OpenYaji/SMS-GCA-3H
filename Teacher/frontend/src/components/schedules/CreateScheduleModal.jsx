@@ -1,27 +1,116 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, ChevronDown, Plus, Trash2 } from 'lucide-react';
 import TimePicker from '../common/TimePicker';
+import axios from 'axios';
 
-const CreateScheduleModal = ({ 
-  isOpen, 
-  formData, 
-  teachers, 
+const CreateScheduleModal = ({
+  isOpen,
+  formData,
   subjects,
-  teacherSections = [],
-  onClose, 
-  onSubmit, 
-  onTeacherChange,
+  gradeLevels,
+  onClose,
+  onSubmit,
+  onGradeLevelChange,
   onSectionChange,
   onSubjectChange,
   onAddTimeSlot,
   onRemoveTimeSlot,
-  onTimeChange
+  onTimeChange,
+  onSlotTeacherChange
 }) => {
+  const [sections, setSections] = useState([]);
+  const [loadingSections, setLoadingSections] = useState(false);
+  const [teachersBySubject, setTeachersBySubject] = useState({});
+  const [loadingTeachers, setLoadingTeachers] = useState({});
+
+  // Fetch sections when grade level changes
+  useEffect(() => {
+    if (formData.gradeLevelId) {
+      fetchSections(formData.gradeLevelId);
+    } else {
+      setSections([]);
+    }
+  }, [formData.gradeLevelId]);
+
+  // Fetch teachers for existing schedule slots or when subject changes/slots shift
+  useEffect(() => {
+    if (formData.schedule) {
+      formData.schedule.forEach((slot, index) => {
+        if (slot.subject) {
+          const cached = teachersBySubject[index];
+          // Fetch if not cached, or if cached subject doesn't match current slot subject
+          // And not currently loading
+          if ((!cached || cached.subjectId != slot.subject) && !loadingTeachers[index]) {
+            fetchTeachersBySubject(slot.subject, index);
+          }
+        }
+      });
+    }
+  }, [formData.schedule, teachersBySubject, loadingTeachers]);
+
+  const fetchSections = async (gradeLevelId) => {
+    setLoadingSections(true);
+    try {
+      const response = await axios.get(
+        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-sections-by-grade.php?gradeLevelId=${gradeLevelId}`,
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        setSections(response.data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching sections:', error);
+      setSections([]);
+    } finally {
+      setLoadingSections(false);
+    }
+  };
+
+  const fetchTeachersBySubject = async (subjectId, slotIndex) => {
+    if (!subjectId) return;
+
+    setLoadingTeachers(prev => ({ ...prev, [slotIndex]: true }));
+
+    try {
+      const response = await axios.get(
+        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-teachers-by-subject.php?subjectId=${subjectId}`,
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        setTeachersBySubject(prev => ({
+          ...prev,
+          [slotIndex]: {
+            subjectId: subjectId,
+            data: response.data.data
+          }
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching teachers:', error);
+      setTeachersBySubject(prev => ({
+        ...prev,
+        [slotIndex]: { subjectId: subjectId, data: [] }
+      }));
+    } finally {
+      setLoadingTeachers(prev => ({ ...prev, [slotIndex]: false }));
+    }
+  };
+
+  const handleSubjectChangeWithTeachers = (index, subjectId) => {
+    onSubjectChange(index, subjectId);
+    if (subjectId) {
+      fetchTeachersBySubject(subjectId, index);
+    } else {
+      setTeachersBySubject(prev => ({ ...prev, [index]: null }));
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#342825] rounded-[25px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] w-full max-w-2xl max-h-[85vh] overflow-y-auto relative scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div className="bg-[#342825] rounded-[25px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] w-full max-w-3xl max-h-[85vh] overflow-y-auto relative scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {/* Header */}
         <div className="px-6 pt-6 pb-4 sticky top-0 bg-[#342825] z-10 rounded-t-[25px]">
           <h2 className="text-3xl font-bold text-white" style={{ textShadow: '0px 2.033px 2.033px rgba(0,0,0,0.5)', fontFamily: 'League Spartan, sans-serif' }}>
@@ -37,50 +126,58 @@ const CreateScheduleModal = ({
         </div>
 
         <form onSubmit={onSubmit} className="px-6 pb-6">
-          {/* Select Teacher */}
+          {/* Select Grade Level */}
           <div className="mb-3">
-            <label className="block text-xs text-white mb-1.5">Select Teacher:</label>
+            <label className="block text-xs text-white mb-1.5">Select Grade Level:</label>
             <div className="relative">
               <select
-                value={formData.teacher}
-                onChange={(e) => onTeacherChange(e.target.value)}
+                value={formData.gradeLevelId || ''}
+                onChange={(e) => onGradeLevelChange(e.target.value)}
                 className="w-full h-[32px] px-3 text-sm rounded-lg border border-[#f4d77d] bg-transparent text-[#f4d77d] focus:ring-2 focus:ring-[#f4d77d] focus:border-transparent outline-none appearance-none cursor-pointer"
                 required
               >
-                <option value="" className="bg-[#342825]">Select Teacher</option>
-                {teachers.map((teacher) => (
-                  <option 
-                    key={teacher.id} 
-                    value={teacher.id} 
+                <option value="" className="bg-[#342825]">Select Grade Level</option>
+                {gradeLevels && gradeLevels.length > 0 ? gradeLevels.map((grade) => (
+                  <option
+                    key={grade.id}
+                    value={grade.id}
                     className="bg-[#342825]"
                   >
-                    {teacher.fullName}
+                    {grade.name}
                   </option>
-                ))}
+                )) : (
+                  <option value="" className="bg-[#342825]" disabled>Loading grade levels...</option>
+                )}
               </select>
               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#f4d77d] pointer-events-none" />
             </div>
           </div>
 
           {/* Select Section */}
-          {formData.teacher && (
+          {formData.gradeLevelId && (
             <div className="mb-3">
               <label className="block text-xs text-white mb-1.5">Select Section:</label>
               <div className="relative">
                 <select
                   value={formData.sectionId || ''}
-                  onChange={(e) => onSectionChange(e.target.value)}
-                  className="w-full h-[32px] px-3 text-sm rounded-lg border border-[#f4d77d] bg-transparent text-[#f4d77d] focus:ring-2 focus:ring-[#f4d77d] focus:border-transparent outline-none appearance-none cursor-pointer"
+                  onChange={(e) => {
+                    const selectedSection = sections.find(s => s.id == e.target.value);
+                    onSectionChange(e.target.value, selectedSection);
+                  }}
+                  className="w-full h-[32px] px-3 text-sm rounded-lg border border-[#f4d77d] bg-transparent text-[#f4d77d] focus:ring-2 focus:ring-[#f4d77d] focus:border-transparent outline-none appearance-none cursor-pointer disabled:opacity-50"
+                  disabled={loadingSections}
                   required
                 >
-                  <option value="" className="bg-[#342825]">Select Section</option>
-                  {teacherSections.map((section) => (
-                    <option 
-                      key={section.id} 
-                      value={section.id} 
+                  <option value="" className="bg-[#342825]">
+                    {loadingSections ? 'Loading sections...' : 'Select Section'}
+                  </option>
+                  {sections.map((section) => (
+                    <option
+                      key={section.id}
+                      value={section.id}
                       className="bg-[#342825]"
                     >
-                      {section.gradeLevel} - Section {section.sectionName}
+                      Section {section.sectionName} {section.advisorName ? `(Adviser: ${section.advisorName})` : ''}
                     </option>
                   ))}
                 </select>
@@ -99,12 +196,6 @@ const CreateScheduleModal = ({
             </div>
           )}
 
-          {/* Day */}
-          <div className="mb-4">
-            <label className="inline-block text-xs text-white mr-2">Day:</label>
-            <span className="text-sm text-[#f4d77d] font-medium">{formData.day}</span>
-          </div>
-
           {/* Schedule Table */}
           <div className="bg-transparent rounded-2xl mb-4">
             {/* Table Header */}
@@ -113,7 +204,8 @@ const CreateScheduleModal = ({
               <button
                 type="button"
                 onClick={onAddTimeSlot}
-                className="flex items-center gap-1 px-2.5 py-1.5 bg-[#f4d77d] text-[#342825] rounded-lg text-xs font-medium hover:bg-[#f4d77d]/90 transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1.5 bg-[#f4d77d] text-[#342825] rounded-lg text-xs font-medium hover:bg-[#f4d77d]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!formData.sectionId}
               >
                 <Plus className="w-3 h-3" />
                 Add Time Slot
@@ -124,50 +216,101 @@ const CreateScheduleModal = ({
             <div className="space-y-3">
               {formData.schedule.length === 0 ? (
                 <div className="text-center py-6 text-white/50 text-sm">
-                  No time slots added. Click "Add Time Slot" to create a schedule.
+                  {!formData.gradeLevelId
+                    ? 'Please select a grade level first.'
+                    : !formData.sectionId
+                      ? 'Please select a section first.'
+                      : 'No time slots added. Click "Add Time Slot" to create a schedule.'}
                 </div>
               ) : (
                 formData.schedule.map((slot, index) => (
                   <div key={index} className="bg-white/5 rounded-lg p-3 border border-white/10">
-                    <div className="flex gap-2 items-start">
+                    <div className="grid grid-cols-12 gap-2 items-start">
+                      {/* Day */}
+                      <div className="col-span-2">
+                        <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">Day</label>
+                        <div className="relative">
+                          <select
+                            value={slot.day || 'Monday'}
+                            onChange={(e) => onTimeChange(index, 'day', e.target.value)}
+                            className="w-full h-[34px] px-2.5 text-xs rounded border border-white/20 bg-[#342825] text-white focus:ring-2 focus:ring-[#f4d77d] focus:border-transparent outline-none appearance-none cursor-pointer hover:border-[#f4d77d]/50 transition-colors"
+                          >
+                            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
+                              <option key={day} value={day} className="bg-[#342825]">{day}</option>
+                            ))}
+                          </select>
+                          <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#f4d77d] pointer-events-none" />
+                        </div>
+                      </div>
+
                       {/* Start Time */}
-                      <div className="flex-1 min-w-0">
+                      <div className="col-span-2">
                         <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">Start Time</label>
                         <TimePicker
                           value={slot.startTime}
                           onChange={(time) => onTimeChange(index, 'startTime', time)}
-                          placeholder="Start time"
+                          placeholder="Start"
                         />
                       </div>
 
                       {/* End Time */}
-                      <div className="flex-1 min-w-0">
+                      <div className="col-span-2">
                         <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">End Time</label>
                         <TimePicker
                           value={slot.endTime}
                           onChange={(time) => onTimeChange(index, 'endTime', time)}
-                          placeholder="End time"
+                          placeholder="End"
                         />
                       </div>
 
                       {/* Subject */}
-                      <div className="flex-[1.5] min-w-0">
+                      <div className="col-span-3">
                         <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">Subject</label>
                         <div className="relative">
                           <select
                             value={slot.subject}
-                            onChange={(e) => onSubjectChange(index, e.target.value)}
+                            onChange={(e) => handleSubjectChangeWithTeachers(index, e.target.value)}
                             className="w-full h-[34px] px-2.5 text-xs rounded border border-white/20 bg-[#342825] text-white focus:ring-2 focus:ring-[#f4d77d] focus:border-transparent outline-none appearance-none cursor-pointer hover:border-[#f4d77d]/50 transition-colors"
                             required
                           >
                             <option value="" className="bg-[#342825]">Select Subject</option>
-                            {subjects.map((subject) => (
-                              <option 
-                                key={subject.id} 
-                                value={subject.id} 
+                            {subjects && subjects.length > 0 ? subjects.map((subject) => (
+                              <option
+                                key={subject.id}
+                                value={subject.id}
                                 className="bg-[#342825]"
                               >
                                 {subject.name}
+                              </option>
+                            )) : (
+                              <option value="" className="bg-[#342825]" disabled>Loading subjects...</option>
+                            )}
+                          </select>
+                          <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#f4d77d] pointer-events-none" />
+                        </div>
+                      </div>
+
+                      {/* Teacher */}
+                      <div className="col-span-2">
+                        <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">Teacher</label>
+                        <div className="relative">
+                          <select
+                            value={slot.teacherId || ''}
+                            onChange={(e) => onSlotTeacherChange(index, e.target.value)}
+                            className="w-full h-[34px] px-2.5 text-xs rounded border border-white/20 bg-[#342825] text-white focus:ring-2 focus:ring-[#f4d77d] focus:border-transparent outline-none appearance-none cursor-pointer hover:border-[#f4d77d]/50 transition-colors disabled:opacity-50"
+                            disabled={!slot.subject || loadingTeachers[index]}
+                            required={!!slot.subject}
+                          >
+                            <option value="" className="bg-[#342825]">
+                              {loadingTeachers[index] ? 'Loading...' : 'Select Teacher'}
+                            </option>
+                            {teachersBySubject[index]?.subjectId == slot.subject && teachersBySubject[index]?.data?.map((teacher) => (
+                              <option
+                                key={teacher.id}
+                                value={teacher.id}
+                                className="bg-[#342825]"
+                              >
+                                {teacher.name}
                               </option>
                             ))}
                           </select>
@@ -176,7 +319,7 @@ const CreateScheduleModal = ({
                       </div>
 
                       {/* Delete Button */}
-                      <div className="flex items-end">
+                      <div className="col-span-1 flex items-end justify-center">
                         <button
                           type="button"
                           onClick={() => onRemoveTimeSlot(index)}
@@ -205,7 +348,7 @@ const CreateScheduleModal = ({
             <button
               type="submit"
               className="px-8 py-2 bg-[#f4d77d] text-[#1a1004] rounded-[15px] font-medium hover:bg-[#f4d77d]/90 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!formData.teacher || !formData.sectionId || formData.schedule.length === 0}
+              disabled={!formData.sectionId || formData.schedule.length === 0}
             >
               Save Schedule
             </button>

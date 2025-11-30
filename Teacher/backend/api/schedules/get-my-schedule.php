@@ -72,12 +72,15 @@ try {
             CASE 
                 WHEN COUNT(cs.ScheduleID) > 0 THEN 'Approved'
                 ELSE 'Pending'
-            END as status
+            END as status,
+            CONCAT(p.FirstName, ' ', p.LastName) as adviserName
         FROM section sec
         JOIN gradelevel gl ON sec.GradeLevelID = gl.GradeLevelID
         LEFT JOIN classschedule cs ON cs.SectionID = sec.SectionID
+        LEFT JOIN teacherprofile tp ON sec.AdviserTeacherID = tp.TeacherProfileID
+        LEFT JOIN profile p ON tp.ProfileID = p.ProfileID
         WHERE sec.AdviserTeacherID = :teacherProfileId
-        GROUP BY gl.GradeLevelID, gl.LevelName, sec.SectionID, sec.SectionName
+        GROUP BY gl.GradeLevelID, gl.LevelName, sec.SectionID, sec.SectionName, p.FirstName, p.LastName
         ORDER BY gl.LevelName, sec.SectionName
     ";
     
@@ -101,7 +104,7 @@ try {
             $schedules[] = [
                 'id' => $gradeLevelId,
                 'grade' => 'GRADE ' . $row['grade'],
-                'adviser' => 'N/A', // TODO: Get actual adviser if available
+                'adviser' => $row['adviserName'] ?? 'N/A',
                 'sections' => []
             ];
         }

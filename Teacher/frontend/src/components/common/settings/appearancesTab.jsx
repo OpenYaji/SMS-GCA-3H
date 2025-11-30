@@ -41,6 +41,15 @@ export default function AppearancesTab() {
     }
   }, [isDarkMode]);
 
+  useEffect(() => {
+    // Apply accent color immediately when it changes (for preview)
+    document.documentElement.style.setProperty('--accent-color', selectedAccent);
+    
+    // Optional: You can also map specific accent colors to standard Tailwind colors if you want
+    // to override the 'amber' look dynamically, but that requires significant CSS overrides.
+    // For now, we ensure the CSS variable is set.
+  }, [selectedAccent]);
+
   // Fetch user preferences from API
   const fetchUserPreferences = async () => {
     try {
@@ -53,6 +62,13 @@ export default function AppearancesTab() {
         const { theme, accentColor } = response.data.data;
         setSelectedTheme(theme || 'light');
         setSelectedAccent(accentColor || '#22c55e');
+        
+        // Apply theme immediately on load
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
       }
     } catch (error) {
       console.error('Error fetching preferences:', error);

@@ -84,6 +84,11 @@ export default function DashboardSidebar({
       path: "/registrar-dashboard/record-and-archives",
     },
     {
+      name: "Document Requests",
+      icon: <Settings size={18} />,
+      path: "/registrar-dashboard/document-requests",
+    },
+    {
       name: "Report and Analytics",
       icon: <Settings size={18} />,
       path: "/registrar-dashboard/report-and-analytics",

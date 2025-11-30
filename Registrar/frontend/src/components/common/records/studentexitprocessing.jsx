@@ -503,7 +503,7 @@ const StudentExitProcessing = () => {
                   Grade Level
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
-                  Exit Type
+                  Reason
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
                   Request Date

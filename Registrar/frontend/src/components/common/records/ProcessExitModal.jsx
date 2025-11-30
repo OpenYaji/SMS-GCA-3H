@@ -101,7 +101,7 @@ const ProcessExitModal = ({ isOpen, onClose, student }) => {
                 <span className="ml-2 text-gray-900">09059147650</span>
               </div>
               <div className="mb-3">
-                <span className="font-semibold text-gray-700">Exit Type:</span>
+                <span className="font-semibold text-gray-700">:</span>
                 <span className="ml-2 text-gray-900">Transfer Out</span>
               </div>
             </div>

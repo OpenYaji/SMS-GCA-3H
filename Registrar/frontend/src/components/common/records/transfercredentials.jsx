@@ -242,9 +242,7 @@ const TransferCredentials = () => {
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
                   Grade Level
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
-                  New School
-                </th>
+                
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
                   Request Date
                 </th>

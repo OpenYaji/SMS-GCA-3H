@@ -11,6 +11,7 @@ import RecordPage from './components/pages/recordPage';
 import ReportsPage from './components/pages/reportsPage';
 import HelpSupportPage from './components/pages/helpSupportPage';
 import TransactionPage from './components/pages/transactionPage';
+import DocReqPage from './components/pages/docrequest';
 import { AuthProvider } from './context/AuthContext';
 // import ProtectedRoute from './components/ProtectedRoute';
 
@@ -34,6 +35,7 @@ function App() {
               <Route path="report-and-analytics" element={<ReportsPage />} />
               <Route path="help-and-support" element={<HelpSupportPage />} />
               <Route path="transaction" element={<TransactionPage />} />
+              <Route path="document-requests" element={<DocReqPage />} />
             </Route>
           </Routes>
         </DarkModeProvider>

@@ -140,6 +140,15 @@ try {
         $parentNames[] = $parent['FullName'];
     }
     
+    // Sanitize output for HTML
+    $safeGradeLevel = htmlspecialchars($gradeLevel);
+    $safeSection = htmlspecialchars($section);
+    $safeSubject = htmlspecialchars($subject);
+    $safeTeacherName = htmlspecialchars($teacherName);
+    $safeOriginalEndTime = htmlspecialchars($originalEndTime);
+    $safeNewDismissalTime = htmlspecialchars($newDismissalTime);
+    $safeMessage = htmlspecialchars($message);
+
     // Create email content
     $emailSubject = "⚠️ Emergency: Class Dismissal Time Change - Grade $gradeLevel Section $section";
     
@@ -179,19 +188,19 @@ try {
                     <h3 style='margin-top: 0; color: #404040;'>Class Information</h3>
                     <div class='info-row'>
                         <span class='info-label'>Grade Level:</span>
-                        <span class='info-value'>Grade $gradeLevel</span>
+                        <span class='info-value'>Grade $safeGradeLevel</span>
                     </div>
                     <div class='info-row'>
                         <span class='info-label'>Section:</span>
-                        <span class='info-value'>$section</span>
+                        <span class='info-value'>$safeSection</span>
                     </div>
                     <div class='info-row'>
                         <span class='info-label'>Subject:</span>
-                        <span class='info-value'>$subject</span>
+                        <span class='info-value'>$safeSubject</span>
                     </div>
                     <div class='info-row' style='border-bottom: none;'>
                         <span class='info-label'>Teacher:</span>
-                        <span class='info-value'>$teacherName</span>
+                        <span class='info-value'>$safeTeacherName</span>
                     </div>
                 </div>
                 
@@ -199,17 +208,17 @@ try {
                     <h3 style='margin-top: 0; color: #28a745;'>⏰ Time Change</h3>
                     <div class='info-row'>
                         <span class='info-label'>Original End Time:</span>
-                        <span class='info-value'>$originalEndTime</span>
+                        <span class='info-value'>$safeOriginalEndTime</span>
                     </div>
                     <div class='info-row' style='border-bottom: none;'>
                         <span class='info-label'>New Dismissal Time:</span>
-                        <span class='info-value' style='color: #d9534f; font-weight: bold; font-size: 18px;'>$newDismissalTime</span>
+                        <span class='info-value' style='color: #d9534f; font-weight: bold; font-size: 18px;'>$safeNewDismissalTime</span>
                     </div>
                 </div>
                 
                 <div class='message-box'>
                     <h3 style='margin-top: 0; color: #404040;'>📝 Teacher's Message</h3>
-                    <p style='white-space: pre-wrap; margin: 0;'>$message</p>
+                    <p style='white-space: pre-wrap; margin: 0;'>$safeMessage</p>
                 </div>
                 
                 <p style='margin-top: 30px; padding: 15px; background-color: #fff; border-radius: 5px; border-left: 4px solid #f4d77d;'>

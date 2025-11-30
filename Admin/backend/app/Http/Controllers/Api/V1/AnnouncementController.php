@@ -42,7 +42,7 @@ class AnnouncementController extends Controller
         // Create the announcement
         $announcement = Announcement::create(array_merge(
             $data,
-            ['AuthorUserID' => User::SYSTEM_USER_ID] // hardcoded for now
+            ['AuthorUserID' => User::getCurrentUserId()] 
         ));
              
         //Generate Log
@@ -50,7 +50,7 @@ class AnnouncementController extends Controller
             'TableName' => 'announcement',
             'RecordID' => $announcement->AnnouncementID,
             'Operation' => 'INSERT',
-            'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+            'UserID' => User::getCurrentUserId(), 
             'OldValues' => null,
             'NewValues' => json_encode($announcement->toArray()),
             'IPAddress' => $request->ip(),
@@ -100,7 +100,7 @@ class AnnouncementController extends Controller
             'TableName' => 'announcement',
             'RecordID' => $announcement->AnnouncementID,
             'Operation' => 'UPDATE',
-            'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+            'UserID' => User::getCurrentUserId(), 
             'OldValues' => $oldValues,
             'NewValues' => json_encode($announcement->fresh()->toArray()),
             'IPAddress' => $request->ip(),

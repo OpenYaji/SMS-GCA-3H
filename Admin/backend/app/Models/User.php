@@ -3,9 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Helpers\AuthHelper;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -46,7 +47,6 @@ class User extends Authenticatable
     //     ];
     // }
 
-    const SYSTEM_USER_ID = 12;
 
 
     // all codes above are defaults for user by laravel
@@ -64,6 +64,16 @@ class User extends Authenticatable
         'IsDeleted',
         'DeletedAt',
     ];
+
+    /**
+     * Get current authenticated user ID directly from token
+     */
+    public static function getCurrentUserId(): ?int
+    {
+        return AuthHelper::getUserIdFromToken();
+    }
+
+    
 
     //Relationship: User has one Profile
     public function profile()

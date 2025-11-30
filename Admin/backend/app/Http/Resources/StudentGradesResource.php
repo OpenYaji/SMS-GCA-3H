@@ -24,7 +24,7 @@ class StudentGradesResource extends JsonResource
                         'SubjectCode' => $grade->subject->SubjectCode,
                         'GradeValue' => $grade->GradeValue,
                         'Remarks' => $grade->Remarks,
-                        'Status' => $grade->gradeStatus?->StatusName,
+                        'Status' => $grade->gradeStatus->StatusName,
                         'LastModified' => $grade->LastModified,
                     ];
                 })->sortBy('Subject')->values();

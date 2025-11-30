@@ -33,17 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-// Check authentication (optional for testing, but recommended for production)
-// For now, we'll allow the endpoint to work without authentication for testing
-// In production, uncomment the following lines:
-/*
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Not authenticated.']);
-    exit();
-}
-*/
-
 // Get request data
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -90,19 +79,32 @@ try {
         throw new Exception("Student with StudentProfileID {$studentProfileId} not found in the database.");
     }
     
-    // Step 1: Find the first available section for the grade level that has less than 15 students
+    // Step 1: Find the first available section for the grade level that has space
+    // Use actual enrollment count from enrollment table
     $sectionQuery = "
         SELECT 
             s.SectionID,
             s.SectionName,
             s.MaxCapacity,
-            COALESCE(COUNT(e.EnrollmentID), 0) as CurrentStudentCount
+            s.CurrentEnrollment,
+            COALESCE(
+                (SELECT COUNT(*) 
+                 FROM enrollment e 
+                 WHERE e.SectionID = s.SectionID 
+                 AND e.SchoolYearID = :schoolYearId), 
+                0
+            ) as ActualEnrollmentCount
         FROM section s
-        LEFT JOIN enrollment e ON s.SectionID = e.SectionID
         WHERE s.GradeLevelID = :gradeLevelId
         AND s.SchoolYearID = :schoolYearId
-        GROUP BY s.SectionID, s.SectionName, s.MaxCapacity
-        HAVING CurrentStudentCount < 15
+        AND (s.MaxCapacity IS NULL OR 
+             COALESCE(
+                 (SELECT COUNT(*) 
+                  FROM enrollment e 
+                  WHERE e.SectionID = s.SectionID 
+                  AND e.SchoolYearID = :schoolYearId2), 
+                 0
+             ) < s.MaxCapacity)
         ORDER BY s.SectionName ASC
         LIMIT 1
     ";
@@ -110,16 +112,62 @@ try {
     $stmt = $db->prepare($sectionQuery);
     $stmt->bindParam(':gradeLevelId', $gradeLevelId, PDO::PARAM_INT);
     $stmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
+    $stmt->bindParam(':schoolYearId2', $schoolYearId, PDO::PARAM_INT);
     $stmt->execute();
     
     $availableSection = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$availableSection) {
-        throw new Exception('No available sections found for this grade level. All sections are full or no sections exist.');
+        // Check if sections exist for this grade level
+        $checkSectionExistsQuery = "
+            SELECT COUNT(*) as sectionCount
+            FROM section
+            WHERE GradeLevelID = :gradeLevelId
+            AND SchoolYearID = :schoolYearId
+        ";
+        $checkStmt = $db->prepare($checkSectionExistsQuery);
+        $checkStmt->bindParam(':gradeLevelId', $gradeLevelId, PDO::PARAM_INT);
+        $checkStmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
+        $checkStmt->execute();
+        $sectionCount = $checkStmt->fetch(PDO::FETCH_ASSOC)['sectionCount'];
+        
+        if ($sectionCount == 0) {
+            throw new Exception('No sections exist for this grade level in the selected school year. Please create sections first.');
+        } else {
+            // Get details about why sections are full for better error message
+            $fullSectionsQuery = "
+                SELECT 
+                    s.SectionName,
+                    s.MaxCapacity,
+                    COALESCE(
+                        (SELECT COUNT(*) 
+                         FROM enrollment e 
+                         WHERE e.SectionID = s.SectionID 
+                         AND e.SchoolYearID = :schoolYearId), 
+                        0
+                    ) as ActualCount
+                FROM section s
+                WHERE s.GradeLevelID = :gradeLevelId
+                AND s.SchoolYearID = :schoolYearId
+            ";
+            $fullStmt = $db->prepare($fullSectionsQuery);
+            $fullStmt->bindParam(':gradeLevelId', $gradeLevelId, PDO::PARAM_INT);
+            $fullStmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
+            $fullStmt->execute();
+            $fullSections = $fullStmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $sectionDetails = array_map(function($sec) {
+                return "{$sec['SectionName']} ({$sec['ActualCount']}/{$sec['MaxCapacity']})";
+            }, $fullSections);
+            
+            throw new Exception('No available sections found for this grade level. All sections are full. Sections: ' . implode(', ', $sectionDetails));
+        }
     }
     
     $sectionId = $availableSection['SectionID'];
     $sectionName = $availableSection['SectionName'];
+    $maxCapacity = $availableSection['MaxCapacity'];
+    $actualEnrollmentCount = $availableSection['ActualEnrollmentCount'];
     
     // Step 2: Check if student is already enrolled in this school year
     $checkEnrollmentQuery = "
@@ -162,6 +210,7 @@ try {
     }
     
     // Step 4: Insert enrollment record
+    // EnrollmentDate is a DATE field, so use CURDATE() instead of NOW()
     $enrollmentQuery = "
         INSERT INTO enrollment (
             StudentProfileID,
@@ -172,7 +221,7 @@ try {
             :studentProfileId,
             :sectionId,
             :schoolYearId,
-            NOW()
+            CURDATE()
         )
     ";
     
@@ -188,14 +237,21 @@ try {
     $enrollmentId = $db->lastInsertId();
     
     // Step 5: Update section's current enrollment count
+    // Update CurrentEnrollment field to keep it in sync
     $updateSectionQuery = "
         UPDATE section 
-        SET CurrentEnrollment = COALESCE(CurrentEnrollment, 0) + 1
+        SET CurrentEnrollment = (
+            SELECT COUNT(*) 
+            FROM enrollment 
+            WHERE SectionID = :sectionId 
+            AND SchoolYearID = :schoolYearId
+        )
         WHERE SectionID = :sectionId
     ";
     
     $updateStmt = $db->prepare($updateSectionQuery);
     $updateStmt->bindParam(':sectionId', $sectionId, PDO::PARAM_INT);
+    $updateStmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
     $updateStmt->execute();
     
     // Step 6: Get grade level name for response
@@ -206,6 +262,9 @@ try {
     $gradeLevel = $gradeLevelStmt->fetch(PDO::FETCH_ASSOC);
     
     $db->commit();
+    
+    // Get updated enrollment count for response
+    $finalEnrollmentCount = $actualEnrollmentCount + 1;
     
     http_response_code(200);
     echo json_encode([
@@ -218,7 +277,9 @@ try {
             'gradeLevel' => $gradeLevel['LevelName'],
             'sectionName' => $sectionName,
             'sectionId' => $sectionId,
-            'currentStudentCount' => $availableSection['CurrentStudentCount'] + 1
+            'currentStudentCount' => $finalEnrollmentCount,
+            'maxCapacity' => $maxCapacity,
+            'enrollmentDate' => date('Y-m-d')
         ]
     ]);
     

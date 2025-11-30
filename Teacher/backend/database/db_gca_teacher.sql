@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2025 at 06:04 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Nov 29, 2025 at 01:26 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_latest_gca`
+-- Database: `latest_database_nov28`
 --
 
 -- --------------------------------------------------------
@@ -50,15 +50,6 @@ CREATE TABLE `academicstandinglevel` (
   `SortOrder` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `academicstandinglevel`
---
-
-INSERT INTO `academicstandinglevel` (`StandingLevelID`, `LevelName`, `MinAverage`, `SortOrder`) VALUES
-(1, 'Outstanding', 95.00, 1),
-(2, 'Very Satisfactory', 90.00, 2),
-(3, 'Satisfactory', 85.00, 3);
-
 -- --------------------------------------------------------
 
 --
@@ -71,6 +62,14 @@ CREATE TABLE `adminprofile` (
   `EmployeeNumber` varchar(50) DEFAULT NULL,
   `HireDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `adminprofile`
+--
+
+INSERT INTO `adminprofile` (`AdminProfileID`, `ProfileID`, `EmployeeNumber`, `HireDate`) VALUES
+(1, 3, 'A-00001', '2025-11-27'),
+(2, 12, 'A-00002', '2025-11-29');
 
 -- --------------------------------------------------------
 
@@ -98,11 +97,7 @@ CREATE TABLE `announcement` (
 --
 
 INSERT INTO `announcement` (`AnnouncementID`, `AuthorUserID`, `Title`, `Content`, `Summary`, `Category`, `BannerURL`, `PublishDate`, `ExpiryDate`, `TargetAudience`, `IsPinned`, `IsActive`) VALUES
-(1, 1001, 'Welcome to School Year 2025-2026!', 'We warmly welcome all students, parents, and staff to the new school year 2025-2026. May this year be filled with learning, growth, and achievements! Our theme for this year is \"Excellence in Education, Character in Action.\"\n\nWe have exciting programs lined up including:\n- Enhanced MATATAG Curriculum implementation\n- New computer laboratory facilities\n- Extracurricular activities and clubs\n- Parent-teacher collaboration programs\n\nLet us work together to make this the best school year yet!', 'Welcome message for SY 2025-2026', 'General', NULL, '2025-06-01 08:00:00', '2026-05-31 23:59:59', 'All Users', 1, 1),
-(2, 1001, 'First Quarter Grades Released', 'The grades for the First Quarter have been released. Parents and students can now view academic performance through the student portal.\n\nTo access your grades:\n1. Log in to the student portal\n2. Navigate to the Grades section\n3. Select \"Current School Year\"\n\nIf you have any questions about the grades, please contact your class adviser or visit the Registrar\'s Office during office hours (8:00 AM - 5:00 PM, Monday to Friday).', 'Q1 grades now available in the portal', 'Academic', NULL, '2025-09-15 14:00:00', '2025-10-15 23:59:59', 'All Users', 1, 1),
-(3, 1001, 'Payment Deadline Reminder', 'This is a reminder that the payment deadline for the second installment is November 30, 2025.\n\nPayment Options:\n- Cash payment at the Finance Office\n- Bank Transfer (BDO, BPI, Metrobank)\n- GCash (09XX-XXX-XXXX)\n- PayMaya\n\nPlease settle your accounts on time to avoid late fees of 5% per month. For payment concerns or arrangements, please contact the Finance Office at finance@gca.edu.ph or call (02) 8XXX-XXXX.', 'Payment deadline: Nov 30, 2025', 'General', NULL, '2025-11-15 09:00:00', '2025-11-30 23:59:59', 'Parents', 1, 1),
-(4, 1001, 'Christmas Break Schedule', 'Please be informed of our Christmas Break schedule:\n\nLast day of classes: December 20, 2025\nChristmas Vacation: December 21, 2025 - January 5, 2026\nClasses Resume: January 6, 2026\n\nThe school will be closed during the Christmas break. Emergency concerns may be directed to the school hotline.\n\nWishing everyone a Merry Christmas and a Happy New Year!', 'Christmas break: Dec 21 - Jan 5', 'General', NULL, '2025-12-01 08:00:00', '2026-01-05 23:59:59', 'All Users', 0, 1),
-(5, 1001, 'Parent-Teacher Conference - Second Quarter', 'The Second Quarter Parent-Teacher Conference is scheduled for November 23, 2025 (Saturday) from 8:00 AM to 5:00 PM.\n\nPlease coordinate with your child\'s adviser to schedule a meeting slot. This is a great opportunity to:\n- Discuss your child\'s academic progress\n- Address any concerns\n- Partner for your child\'s success\n\nAttendance is highly encouraged. See you there!', 'PTC on Nov 23, 2025', 'Events', NULL, '2025-11-10 08:00:00', '2025-11-23 23:59:59', 'Parents', 0, 1);
+(1, 12, 'gumana kajojlkjkljkljkl', 'sdfsdfsfsdf', NULL, 'Events', 'http://127.0.0.1:8000/storage/announcements/4OuJOy5pdscyc4CIOV8dBgSo2nvKgnWZ2YcNB5VC.png', '2025-10-25 00:00:00', '2025-11-25 00:00:00', 'All Users', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -117,6 +112,9 @@ CREATE TABLE `application` (
   `ApplyingForGradeLevelID` int(11) NOT NULL,
   `EnrolleeType` enum('New','Old','Transferee') NOT NULL,
   `ApplicationStatus` enum('Pending','For Review','Approved','Rejected','Waitlisted','Enrolled') NOT NULL DEFAULT 'Pending',
+  `PaymentMode` enum('full','quarterly','monthly') DEFAULT NULL,
+  `TransactionID` int(11) DEFAULT NULL,
+  `RegistrarNotes` text DEFAULT NULL,
   `SubmissionDate` datetime NOT NULL DEFAULT current_timestamp(),
   `ReviewedDate` datetime DEFAULT NULL,
   `PreviousSchool` varchar(255) DEFAULT NULL,
@@ -142,24 +140,13 @@ CREATE TABLE `application` (
 -- Dumping data for table `application`
 --
 
-INSERT INTO `application` (`ApplicationID`, `ApplicantProfileID`, `SchoolYearID`, `ApplyingForGradeLevelID`, `EnrolleeType`, `ApplicationStatus`, `SubmissionDate`, `ReviewedDate`, `PreviousSchool`, `StudentFirstName`, `StudentLastName`, `StudentMiddleName`, `DateOfBirth`, `Gender`, `Address`, `ContactNumber`, `EmailAddress`, `GuardianFirstName`, `GuardianLastName`, `GuardianRelationship`, `GuardianContact`, `GuardianEmail`, `TrackingNumber`, `PrivacyAgreement`, `ReviewedByUserID`) VALUES
-(1, 2001, 7, 3, 'New', 'Pending', '2025-04-15 10:00:00', '2025-04-20 14:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(2, 2002, 7, 3, 'New', '', '2025-04-18 11:30:00', '2025-04-22 15:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(3, 2003, 7, 4, 'Old', '', '2025-04-10 09:00:00', '2025-04-15 10:00:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(4, 2004, 7, 4, 'Old', '', '2025-04-12 14:00:00', '2025-04-17 11:00:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(5, 2005, 7, 5, 'Old', 'For Review', '2025-04-08 10:30:00', '2025-04-13 14:30:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(6, 2006, 7, 5, 'Old', 'For Review', '2025-04-09 13:00:00', '2025-04-14 09:30:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(7, 2007, 7, 6, 'Old', 'Enrolled', '2025-04-05 11:00:00', '2025-04-10 16:00:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(8, 2008, 7, 6, 'Old', 'Enrolled', '2025-04-06 15:30:00', '2025-04-11 10:30:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(9, 2009, 7, 7, 'Old', 'Approved', '2025-04-03 09:30:00', '2025-04-08 13:00:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(10, 2010, 7, 7, 'Old', 'Approved', '2025-04-04 14:00:00', '2025-04-09 11:00:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(11, 2011, 7, 8, 'Old', 'Approved', '2025-04-01 08:00:00', '2025-04-05 10:00:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(12, 2012, 7, 8, 'Old', 'Approved', '2025-04-02 12:00:00', '2025-04-07 15:00:00', 'Gymnazo Christian Academy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1001),
-(16, NULL, 7, 6, 'New', 'Approved', '2025-11-22 18:45:13', NULL, '', 'Haaa', 'Haa', 'Ahaha', '2018-11-11', 'Male', '21, AHAHA, HAHA, HAHAHA ,HA', '09123456789', 'johnreybisnarcalipes@gmail.com', 'Aaaaaa', 'Aa', 'father', '09123456789', 'johnreybisnarcalipes@gmail.com', 'GCA-2025-51186', 1, NULL),
-(17, NULL, 7, 3, 'New', 'For Review', '2025-11-22 19:52:58', NULL, '', 'Jan', 'Cali', 'Rei', '2018-10-08', 'Male', 'Haha street , hahahah', '09123456789', 'johnreypj143@gmail.com', 'Haha', 'hahaha', 'Mother', '09551355073', 'johnreypj143@gmail.com', 'GCA-2025-23171', 1, NULL),
-(18, NULL, 7, 3, 'New', 'For Review', '2025-11-24 00:33:35', NULL, '', 'John', 'Fuentes', 'heaven', '2018-08-11', 'Male', '21 qc, bgc, nova sm haha', '09123456789', 'johnreybisnarcalipes@gmail.com', 'Mark', 'Fuentes', 'Mother', '09123456789', 'oliveros.sergeedward.pelitro@gmail.com', 'GCA-2025-58394', 1, NULL),
-(20, NULL, 7, 3, 'New', 'Enrolled', '2025-11-24 00:33:35', NULL, '', 'ewqsa', 'Fuentes', 'heaven', '2018-08-11', 'Male', '21 qc, bgc, nova sm haha', '09123456789', 'johnreybisnarcalipes@gmail.com', 'Mark', 'Fuentes', 'Mother', '09123456789', 'oliveros.sergeedward.pelitro@gmail.com', 'GCA-2025-58395', 1, NULL),
-(21, NULL, 7, 3, 'Old', 'For Review', '2025-11-27 01:24:38', NULL, '', 'erqw', 'ewqewq', 'ewqsd', '2017-11-19', 'Male', 'dasjdiwqjiwqdpwq', '09564230159', 'tranilla.heavengibson.ybanez@gmail.com', 'ewqjeiwq', 'jiewqji', 'mother', '09876543212', 'tranilla.heavengibson.ybanez@gmail.com', 'GCA-2025-52803', 1, NULL);
+INSERT INTO `application` (`ApplicationID`, `ApplicantProfileID`, `SchoolYearID`, `ApplyingForGradeLevelID`, `EnrolleeType`, `ApplicationStatus`, `PaymentMode`, `TransactionID`, `RegistrarNotes`, `SubmissionDate`, `ReviewedDate`, `PreviousSchool`, `StudentFirstName`, `StudentLastName`, `StudentMiddleName`, `DateOfBirth`, `Gender`, `Address`, `ContactNumber`, `EmailAddress`, `GuardianFirstName`, `GuardianLastName`, `GuardianRelationship`, `GuardianContact`, `GuardianEmail`, `TrackingNumber`, `PrivacyAgreement`, `ReviewedByUserID`) VALUES
+(1, NULL, 7, 7, 'New', 'Enrolled', NULL, NULL, NULL, '2025-11-28 04:11:56', NULL, '', 'Aaaa', 'AA', 'AA', '2020-11-11', 'Male', '21 ahahahaha', '09123456789', 'haha@gmail.com', 'Hahaha', 'hahaha', 'father', '09123456789', 'hahahaha@gmail.com', 'GCA-2025-15774', 1, NULL),
+(2, NULL, 7, 3, 'New', 'Enrolled', 'full', 2, '', '2025-11-28 06:32:49', '2025-11-28 06:48:26', '', 'JOAA', 'GAA', 'REY', '2020-12-20', 'Male', 'AAAAADASDADASDA', '09123456789', 'SADASDASD@GMAIL.COM', 'DDA', 'AA', 'ADSADSA', '09123456789', 'johnreybisnarcalipes@gmail.com', 'GCA-2025-88188', 1, NULL),
+(3, NULL, 7, 6, 'New', 'Enrolled', 'monthly', 3, '', '2025-11-28 06:58:04', '2025-11-28 06:58:43', '', 'aaaaga', 'hahaha', 'haha', '2020-11-11', 'Male', '2121212 hahahaha', '09123456789', 'hahaha@gmail.com', 'hahaha', 'hahahaha', 'father', '09123456789', 'j@gmail.com', 'GCA-2025-56645', 1, NULL),
+(4, NULL, 7, 3, 'New', 'Enrolled', 'monthly', 4, '', '2025-11-28 07:05:49', '2025-11-28 07:06:30', '', 'Sana', 'Ka', 'Gumana', '2020-11-11', 'Male', 'AAaaaaaadsadsadada', '09123456789', 'sas@gmail.com', 'ASDasdas', 'dasd', 'father', '09123456678', 'johnre@gmail.com', 'GCA-2025-75766', 1, NULL),
+(5, NULL, 7, 4, 'Old', 'Enrolled', 'quarterly', 6, '', '2025-11-28 07:11:41', '2025-11-28 08:49:23', '', 'HAHAHA', 'HAHAHA', 'HAHAHAHA', '2020-12-12', 'Male', 'hahahahahahaha', '09123456789', 'hahahaha@gmail.com', 'GHAHAHAHA', 'HAHAHAHA', 'father', '09123456789', 'ghahaha@gmail.com', 'GCA-2025-43302', 1, NULL),
+(6, NULL, 7, 8, 'Old', 'Enrolled', 'quarterly', 5, '', '2025-11-28 07:26:58', '2025-11-28 07:27:24', '', 'Haha', 'ahahaha', 'haha', '2020-11-11', 'Male', 'HAhahaADASDADA', '0912345789', 'haha@gmail.com', 'hahahahaha', 'hahahaha', 'FATHER', '09123567890', 'FGSDF@GMAIL.COM', 'GCA-2025-08791', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -253,19 +240,12 @@ CREATE TABLE `attendancesummary` (
 --
 
 INSERT INTO `attendancesummary` (`AttendanceSummaryID`, `StudentProfileID`, `SchoolYearID`, `TotalDaysPresent`, `TotalSchoolDays`, `LastUpdated`) VALUES
-(1, 1, 7, 45, 50, '2025-11-22 18:25:25'),
-(2, 2, 7, 48, 50, '2025-11-22 18:25:25'),
-(3, 3, 7, 47, 50, '2025-11-22 18:25:25'),
-(4, 4, 7, 50, 50, '2025-11-22 18:25:25'),
-(5, 5, 7, 46, 50, '2025-11-22 18:25:25'),
-(6, 6, 7, 49, 50, '2025-11-22 18:25:25'),
-(7, 7, 7, 48, 50, '2025-11-22 18:25:25'),
-(8, 8, 7, 50, 50, '2025-11-22 18:25:25'),
-(9, 9, 7, 47, 50, '2025-11-22 18:25:25'),
-(10, 10, 7, 50, 50, '2025-11-22 18:25:25'),
-(11, 11, 7, 49, 50, '2025-11-22 18:25:25'),
-(12, 12, 7, 48, 50, '2025-11-22 18:25:25'),
-(13, 13, 7, 0, 0, '2025-11-27 03:36:30');
+(1, 1, 7, 0, 0, '2025-11-28 04:22:41'),
+(2, 2, 7, 0, 0, '2025-11-28 06:48:51'),
+(3, 3, 7, 0, 0, '2025-11-28 06:59:24'),
+(4, 4, 7, 0, 0, '2025-11-28 07:06:41'),
+(5, 5, 7, 0, 0, '2025-11-28 07:27:36'),
+(6, 6, 7, 0, 0, '2025-11-28 08:49:31');
 
 -- --------------------------------------------------------
 
@@ -285,6 +265,18 @@ CREATE TABLE `auditlog` (
   `UserAgent` varchar(255) DEFAULT NULL,
   `Timestamp` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `auditlog`
+--
+
+INSERT INTO `auditlog` (`AuditID`, `TableName`, `RecordID`, `Operation`, `UserID`, `OldValues`, `NewValues`, `IPAddress`, `UserAgent`, `Timestamp`) VALUES
+(1, 'guardprofile', 1, 'INSERT', 3, NULL, '{\"GuardProfileID\":1,\"EmployeeNumber\":\"G-00001\",\"HireDate\":\"2025-11-28\",\"Profile\":{\"ProfileID\":8,\"FirstName\":\"Denmarc\",\"LastName\":\"Maglipon\",\"MiddleName\":\"Amar\",\"PhoneNumber\":\"09507047933\",\"Address\":\"15 Masaya St., Banguian, Abulug, Cagayan, Region II (Cagayan Valley)\",\"ProfilePictureURL\":\"http:\\/\\/127.0.0.1:8000\\/storage\\/profiles\\/YAJA8zcvEQl7vxDPXDigR15xcZGfqawM0I7wwiQs.png\"},\"User\":{\"UserID\":8,\"EmailAddress\":\"maglipon.denmarc.amar@gmail.com\",\"UserType\":\"Guard\",\"AccountStatus\":\"Active\",\"LastLoginDate\":null,\"IsArchived\":false}}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 08:49:13'),
+(2, 'registrarprofile', 2, 'INSERT', 3, NULL, '{\"RegistrarProfileID\":2,\"EmployeeNumber\":\"R-00002\",\"HireDate\":\"2025-11-28\",\"Profile\":{\"ProfileID\":9,\"FirstName\":\"Den\",\"LastName\":\"Maglipon\",\"MiddleName\":\"Amar\",\"PhoneNumber\":\"09507047933\",\"Address\":\"3 Maligaya St., San Antonio, Basco , Batanes, Region II (Cagayan Valley)\",\"ProfilePictureURL\":\"http:\\/\\/127.0.0.1:8000\\/storage\\/profiles\\/2lYfVbc7fTQ6t1HCramLzRiXnSobfcvsXQgwXnu5.png\"},\"User\":{\"UserID\":9,\"EmailAddress\":\"amar.denmarc@gmail.com\",\"UserType\":\"Registrar\",\"AccountStatus\":\"Active\",\"LastLoginDate\":null,\"IsArchived\":false}}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 08:54:28'),
+(3, 'guardprofile', 2, 'INSERT', 1, NULL, '{\"GuardProfileID\":2,\"EmployeeNumber\":\"G-00002\",\"HireDate\":\"2025-11-29\",\"Profile\":{\"ProfileID\":10,\"FirstName\":\"denmarc\",\"LastName\":\"maglipon\",\"MiddleName\":\"amar\",\"PhoneNumber\":\"09507047933\",\"Address\":\"ghghgh, Adams, Adams, Ilocos Norte, Region I (Ilocos Region)\",\"ProfilePictureURL\":\"http:\\/\\/127.0.0.1:8000\\/storage\\/profiles\\/ys0Dg8yOnn9fJCSDvg1QOZFvyIkUoKAh1nvii17t.jpg\"},\"User\":{\"UserID\":10,\"EmailAddress\":\"gagalang.joshua.s@gmail.com\",\"UserType\":\"Guard\",\"AccountStatus\":\"Active\",\"LastLoginDate\":null,\"IsArchived\":false}}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-29 05:04:39'),
+(4, 'teacherprofile', 1, 'INSERT', 1, NULL, '{\"TeacherProfileID\":1,\"EmployeeNumber\":\"T-00001\",\"Specialization\":\"Mathematics\",\"HireDate\":\"2025-05-10\",\"Profile\":{\"ProfileID\":11,\"FirstName\":\"Juan\",\"LastName\":\"Kiki\",\"MiddleName\":\"Santos\",\"PhoneNumber\":\"099765679757\",\"Address\":\"456 Barangay San Isidro, Quezon City, Metro Manila\",\"ProfilePictureURL\":\"http:\\/\\/127.0.0.1:8000\\/storage\\/profiles\\/PZx7prIdbeCMX4OD3MIXQaR5MSYS4K45Rx97X32G.jpg\"},\"User\":{\"UserID\":11,\"EmailAddress\":\"uniqujje@gmail.com\",\"UserType\":\"HeadTeacher\",\"AccountStatus\":\"Active\",\"LastLoginDate\":null,\"IsArchived\":false}}', '127.0.0.1', 'PostmanRuntime/7.49.1', '2025-11-29 06:05:06'),
+(5, 'adminprofile', 2, 'INSERT', 12, NULL, '{\"AdminProfileID\":2,\"EmployeeNumber\":\"A-00002\",\"HireDate\":\"2025-11-29\",\"Profile\":{\"ProfileID\":12,\"FirstName\":\"denmarc\",\"LastName\":\"maglipon\",\"MiddleName\":\"amar\",\"PhoneNumber\":\"09507047933\",\"Address\":\"mnbjbjhghj, Adams, Adams, Ilocos Norte, Region I (Ilocos Region)\",\"ProfilePictureURL\":\"http:\\/\\/127.0.0.1:8000\\/storage\\/profiles\\/R2uXS8mxKflvilm4OKuCLFnwRIv8O1Kxx0SRtK1c.jpg\"},\"User\":{\"UserID\":12,\"EmailAddress\":\"amar.denmarc@gmail.com\",\"UserType\":\"Admin\",\"AccountStatus\":\"Active\",\"LastLoginDate\":null,\"IsArchived\":false}}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-29 07:40:43'),
+(6, 'announcement', 1, 'INSERT', 12, NULL, '{\"Title\":\"gumana kajojlkjkljkljkl\",\"Content\":\"sdfsdfsfsdf\",\"Summary\":null,\"Category\":\"Events\",\"PublishDate\":\"2025-10-25\",\"ExpiryDate\":\"2025-11-25\",\"TargetAudience\":\"All Users\",\"IsPinned\":\"1\",\"IsActive\":\"1\",\"BannerURL\":\"http:\\/\\/127.0.0.1:8000\\/storage\\/announcements\\/4OuJOy5pdscyc4CIOV8dBgSo2nvKgnWZ2YcNB5VC.png\",\"AuthorUserID\":12,\"AnnouncementID\":1}', '127.0.0.1', 'PostmanRuntime/7.49.1', '2025-11-29 08:51:12');
 
 -- --------------------------------------------------------
 
@@ -324,34 +316,6 @@ CREATE TABLE `classschedule` (
   `RoomNumber` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `classschedule`
---
-
-INSERT INTO `classschedule` (`ScheduleID`, `SectionID`, `SubjectID`, `TeacherProfileID`, `DayOfWeek`, `StartTime`, `EndTime`, `ScheduleStatusID`, `RoomNumber`) VALUES
-(43, 6, 47, 1, 'Monday', '08:00:00', '09:00:00', NULL, 'Room 101'),
-(44, 6, 47, 1, 'Wednesday', '08:00:00', '09:00:00', NULL, 'Room 101'),
-(45, 6, 47, 1, 'Friday', '08:00:00', '09:00:00', NULL, 'Room 101'),
-(46, 6, 46, 3, 'Tuesday', '08:00:00', '09:00:00', NULL, 'Room 102'),
-(47, 6, 46, 3, 'Thursday', '08:00:00', '09:00:00', NULL, 'Room 102'),
-(48, 6, 46, 3, 'Friday', '09:00:00', '10:00:00', NULL, 'Room 102'),
-(49, 6, 48, 2, 'Monday', '09:00:00', '10:00:00', NULL, 'Room 103'),
-(50, 6, 48, 2, 'Tuesday', '09:00:00', '10:00:00', NULL, 'Room 103'),
-(51, 6, 48, 4, 'Wednesday', '09:00:00', '10:00:00', NULL, 'Room 103'),
-(52, 6, 48, 4, 'Thursday', '09:00:00', '10:00:00', NULL, 'Room 103'),
-(53, 6, 49, 6, 'Tuesday', '10:00:00', '11:00:00', NULL, 'Room 201'),
-(54, 6, 49, 6, 'Thursday', '10:00:00', '11:00:00', NULL, 'Room 201'),
-(55, 6, 50, 6, 'Wednesday', '10:00:00', '11:00:00', NULL, 'Room 201'),
-(56, 6, 50, 6, 'Friday', '10:00:00', '11:00:00', NULL, 'Room 201'),
-(57, 6, 51, 6, 'Monday', '13:00:00', '14:00:00', NULL, 'Music Room'),
-(58, 6, 51, 6, 'Wednesday', '13:00:00', '14:00:00', NULL, 'Music Room'),
-(59, 6, 52, 6, 'Tuesday', '13:00:00', '14:00:00', NULL, 'Art Room'),
-(60, 6, 52, 6, 'Thursday', '13:00:00', '14:00:00', NULL, 'Art Room'),
-(61, 6, 53, 6, 'Monday', '14:00:00', '15:30:00', NULL, 'Gym'),
-(62, 6, 53, 6, 'Friday', '14:00:00', '15:30:00', NULL, 'Gym'),
-(63, 6, 54, 5, 'Wednesday', '14:00:00', '15:00:00', NULL, 'Room 202'),
-(64, 6, 54, 5, 'Thursday', '14:00:00', '15:00:00', NULL, 'Room 202');
-
 -- --------------------------------------------------------
 
 --
@@ -380,15 +344,6 @@ CREATE TABLE `discounttype` (
   `TypeName` varchar(100) NOT NULL,
   `IsActive` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `discounttype`
---
-
-INSERT INTO `discounttype` (`DiscountTypeID`, `TypeName`, `IsActive`) VALUES
-(1, 'Sibling Discount', 1),
-(2, 'Early Payment', 1),
-(3, 'Scholarship', 1);
 
 -- --------------------------------------------------------
 
@@ -428,19 +383,12 @@ CREATE TABLE `emergencycontact` (
 --
 
 INSERT INTO `emergencycontact` (`EmergencyContactID`, `StudentProfileID`, `ContactPerson`, `EncryptedContactNumber`) VALUES
-(1, 1, 'Roberto Martinez Santos', 0x3039313731323334353637),
-(2, 2, 'Antonio Reyes Garcia', 0x3039313831323334353638),
-(3, 3, 'Jose Cruz Lopez', 0x3039313931323334353639),
-(4, 4, 'Rafael Gonzales Ramos', 0x3039323031323334353730),
-(5, 5, 'Luis Torres Mendoza', 0x3039323131323334353731),
-(6, 6, 'Miguel Santos Dela Cruz', 0x3039323231323334353732),
-(7, 7, 'Jose Villanueva Navarro', 0x3039323331323334353733),
-(8, 8, 'Daniel Bautista Castro', 0x3039323431323334353734),
-(9, 9, 'Emmanuel Fernandez Rosales', 0x3039323531323334353735),
-(10, 10, 'Carlos Aguirre Pascual', 0x3039323631323334353736),
-(11, 11, 'James Santiago Morales', 0x3039323731323334353737),
-(12, 12, 'Ricardo Castillo Rivera', 0x3039323831323334353738),
-(13, 13, 'Mark Fuentes', 0x3039313233343536373839);
+(1, 1, 'Hahaha hahaha', 0x3039313233343536373839),
+(2, 2, 'DDA AA', 0x3039313233343536373839),
+(3, 3, 'hahaha hahahaha', 0x3039313233343536373839),
+(4, 4, 'ASDasdas dasd', 0x3039313233343536363738),
+(5, 5, 'hahahahaha hahahaha', 0x3039313233353637383930),
+(6, 6, 'GHAHAHAHA HAHAHAHA', 0x3039313233343536373839);
 
 -- --------------------------------------------------------
 
@@ -453,32 +401,21 @@ CREATE TABLE `enrollment` (
   `StudentProfileID` int(11) NOT NULL,
   `SectionID` int(11) NOT NULL,
   `SchoolYearID` int(11) NOT NULL,
-  `EnrollmentDate` date NOT NULL
+  `EnrollmentDate` date NOT NULL,
+  `OutstandingBalance` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enrollment`
 --
 
-INSERT INTO `enrollment` (`EnrollmentID`, `StudentProfileID`, `SectionID`, `SchoolYearID`, `EnrollmentDate`) VALUES
-(1, 1, 1, 7, '2025-06-01'),
-(2, 2, 1, 7, '2025-06-01'),
-(3, 3, 2, 7, '2025-06-01'),
-(4, 4, 2, 7, '2025-06-01'),
-(5, 5, 3, 7, '2025-06-01'),
-(6, 6, 3, 7, '2025-06-01'),
-(7, 7, 4, 7, '2025-06-01'),
-(8, 8, 4, 7, '2025-06-01'),
-(9, 9, 5, 7, '2025-06-01'),
-(10, 10, 5, 7, '2025-06-01'),
-(11, 11, 6, 7, '2025-06-01'),
-(12, 12, 6, 7, '2025-06-01'),
-(101, 11, 101, 2, '2020-06-01'),
-(102, 11, 102, 3, '2021-06-01'),
-(103, 11, 103, 4, '2022-06-01'),
-(104, 11, 104, 5, '2023-06-01'),
-(105, 11, 105, 6, '2024-06-01'),
-(112, 13, 5, 7, '2025-11-27');
+INSERT INTO `enrollment` (`EnrollmentID`, `StudentProfileID`, `SectionID`, `SchoolYearID`, `EnrollmentDate`, `OutstandingBalance`) VALUES
+(1, 1, 14, 7, '2025-11-28', 0.00),
+(2, 2, 6, 7, '2025-11-28', 0.00),
+(3, 3, 12, 7, '2025-11-28', 0.00),
+(4, 4, 6, 7, '2025-11-28', 0.00),
+(5, 5, 16, 7, '2025-11-28', 0.00),
+(6, 6, 8, 7, '2025-11-28', 0.00);
 
 -- --------------------------------------------------------
 
@@ -521,87 +458,246 @@ CREATE TABLE `grade` (
 --
 
 INSERT INTO `grade` (`GradeID`, `EnrollmentID`, `SubjectID`, `Quarter`, `GradeValue`, `Remarks`, `GradeStatusID`, `LastModified`, `ModifiedByUserID`) VALUES
-(1001, 101, 1, 'First Quarter', 88.00, 'Good performance', NULL, '2020-08-30 14:00:00', 1001),
-(1002, 101, 2, 'First Quarter', 85.00, 'Good performance', NULL, '2020-08-30 14:00:00', 1001),
-(1003, 101, 3, 'First Quarter', 90.00, 'Excellent', NULL, '2020-08-30 14:00:00', 1001),
-(1004, 101, 4, 'First Quarter', 87.00, 'Good performance', NULL, '2020-08-30 14:00:00', 1001),
-(1005, 101, 5, 'First Quarter', 92.00, 'Excellent', NULL, '2020-08-30 14:00:00', 1001),
-(1006, 101, 6, 'First Quarter', 89.00, 'Good performance', NULL, '2020-08-30 14:00:00', 1001),
-(1007, 101, 7, 'First Quarter', 91.00, 'Excellent', NULL, '2020-08-30 14:00:00', 1001),
-(1008, 101, 8, 'First Quarter', 86.00, 'Good performance', NULL, '2020-08-30 14:00:00', 1001),
-(1009, 101, 9, 'First Quarter', 88.00, 'Good performance', NULL, '2020-08-30 14:00:00', 1001),
-(1010, 101, 1, 'Second Quarter', 89.00, 'Improved', NULL, '2020-11-15 14:00:00', 1001),
-(1011, 101, 2, 'Second Quarter', 87.00, 'Good progress', NULL, '2020-11-15 14:00:00', 1001),
-(1012, 101, 3, 'Second Quarter', 91.00, 'Excellent', NULL, '2020-11-15 14:00:00', 1001),
-(1013, 101, 4, 'Second Quarter', 88.00, 'Good performance', NULL, '2020-11-15 14:00:00', 1001),
-(1014, 101, 5, 'Second Quarter', 93.00, 'Outstanding', NULL, '2020-11-15 14:00:00', 1001),
-(1015, 101, 6, 'Second Quarter', 90.00, 'Excellent', NULL, '2020-11-15 14:00:00', 1001),
-(1016, 101, 7, 'Second Quarter', 92.00, 'Excellent', NULL, '2020-11-15 14:00:00', 1001),
-(1017, 101, 8, 'Second Quarter', 87.00, 'Good performance', NULL, '2020-11-15 14:00:00', 1001),
-(1018, 101, 9, 'Second Quarter', 89.00, 'Good performance', NULL, '2020-11-15 14:00:00', 1001),
-(1019, 101, 1, 'Third Quarter', 90.00, 'Consistent improvement', NULL, '2021-01-30 14:00:00', 1001),
-(1020, 101, 2, 'Third Quarter', 88.00, 'Good progress', NULL, '2021-01-30 14:00:00', 1001),
-(1021, 101, 3, 'Third Quarter', 92.00, 'Outstanding', NULL, '2021-01-30 14:00:00', 1001),
-(1022, 101, 4, 'Third Quarter', 89.00, 'Good performance', NULL, '2021-01-30 14:00:00', 1001),
-(1023, 101, 5, 'Third Quarter', 94.00, 'Outstanding', NULL, '2021-01-30 14:00:00', 1001),
-(1024, 101, 6, 'Third Quarter', 91.00, 'Excellent', NULL, '2021-01-30 14:00:00', 1001),
-(1025, 101, 7, 'Third Quarter', 93.00, 'Outstanding', NULL, '2021-01-30 14:00:00', 1001),
-(1026, 101, 8, 'Third Quarter', 88.00, 'Good performance', NULL, '2021-01-30 14:00:00', 1001),
-(1027, 101, 9, 'Third Quarter', 90.00, 'Excellent', NULL, '2021-01-30 14:00:00', 1001),
-(1028, 101, 1, 'Fourth Quarter', 91.00, 'Excellent year-end', NULL, '2021-03-25 14:00:00', 1001),
-(1029, 101, 2, 'Fourth Quarter', 89.00, 'Strong finish', NULL, '2021-03-25 14:00:00', 1001),
-(1030, 101, 3, 'Fourth Quarter', 93.00, 'Outstanding', NULL, '2021-03-25 14:00:00', 1001),
-(1031, 101, 4, 'Fourth Quarter', 90.00, 'Excellent', NULL, '2021-03-25 14:00:00', 1001),
-(1032, 101, 5, 'Fourth Quarter', 95.00, 'Outstanding', NULL, '2021-03-25 14:00:00', 1001),
-(1033, 101, 6, 'Fourth Quarter', 92.00, 'Excellent', NULL, '2021-03-25 14:00:00', 1001),
-(1034, 101, 7, 'Fourth Quarter', 94.00, 'Outstanding', NULL, '2021-03-25 14:00:00', 1001),
-(1035, 101, 8, 'Fourth Quarter', 89.00, 'Good performance', NULL, '2021-03-25 14:00:00', 1001),
-(1036, 101, 9, 'Fourth Quarter', 91.00, 'Excellent', NULL, '2021-03-25 14:00:00', 1001),
-(6001, 1, 1, 'First Quarter', 85.00, 'Good start', NULL, '2025-08-30 14:00:00', 1001),
-(6002, 1, 2, 'First Quarter', 83.00, 'Needs improvement', NULL, '2025-08-30 14:00:00', 1001),
-(6003, 1, 3, 'First Quarter', 88.00, 'Good in Math', NULL, '2025-08-30 14:00:00', 1001),
-(6004, 1, 4, 'First Quarter', 86.00, 'Good', NULL, '2025-08-30 14:00:00', 1001),
-(6005, 1, 5, 'First Quarter', 90.00, 'Excellent values', NULL, '2025-08-30 14:00:00', 1001),
-(6006, 1, 6, 'First Quarter', 87.00, 'Musical talent', NULL, '2025-08-30 14:00:00', 1001),
-(6007, 1, 7, 'First Quarter', 89.00, 'Creative', NULL, '2025-08-30 14:00:00', 1001),
-(6008, 1, 8, 'First Quarter', 84.00, 'Active', NULL, '2025-08-30 14:00:00', 1001),
-(6009, 1, 9, 'First Quarter', 86.00, 'Good', NULL, '2025-08-30 14:00:00', 1001),
-(6019, 3, 10, 'First Quarter', 87.00, 'Good', NULL, '2025-08-30 14:00:00', 1002),
-(6020, 3, 11, 'First Quarter', 85.00, 'Satisfactory', NULL, '2025-08-30 14:00:00', 1002),
-(6021, 3, 12, 'First Quarter', 89.00, 'Good in Math', NULL, '2025-08-30 14:00:00', 1002),
-(6022, 3, 13, 'First Quarter', 88.00, 'Good', NULL, '2025-08-30 14:00:00', 1002),
-(6023, 3, 14, 'First Quarter', 91.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1002),
-(6024, 3, 15, 'First Quarter', 90.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1002),
-(6025, 3, 16, 'First Quarter', 88.00, 'Good', NULL, '2025-08-30 14:00:00', 1002),
-(6026, 3, 17, 'First Quarter', 86.00, 'Active', NULL, '2025-08-30 14:00:00', 1002),
-(6027, 3, 18, 'First Quarter', 87.00, 'Good', NULL, '2025-08-30 14:00:00', 1002),
-(6028, 4, 10, 'First Quarter', 93.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1002),
-(6029, 4, 11, 'First Quarter', 92.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1002),
-(6030, 4, 12, 'First Quarter', 91.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1002),
-(6031, 4, 13, 'First Quarter', 94.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1002),
-(6032, 4, 14, 'First Quarter', 96.00, 'Exemplary', NULL, '2025-08-30 14:00:00', 1002),
-(6033, 4, 15, 'First Quarter', 93.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1002),
-(6034, 4, 16, 'First Quarter', 95.00, 'Very creative', NULL, '2025-08-30 14:00:00', 1002),
-(6035, 4, 17, 'First Quarter', 92.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1002),
-(6036, 4, 18, 'First Quarter', 93.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1002),
-(6091, 11, 46, 'First Quarter', 93.00, 'Consistent excellence', NULL, '2025-08-30 14:00:00', 1006),
-(6092, 11, 47, 'First Quarter', 91.00, 'Strong performance', NULL, '2025-08-30 14:00:00', 1006),
-(6093, 11, 48, 'First Quarter', 95.00, 'Outstanding in Math', NULL, '2025-08-30 14:00:00', 1006),
-(6094, 11, 49, 'First Quarter', 92.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1006),
-(6095, 11, 50, 'First Quarter', 97.00, 'Exemplary values', NULL, '2025-08-30 14:00:00', 1006),
-(6096, 11, 51, 'First Quarter', 94.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1006),
-(6097, 11, 52, 'First Quarter', 96.00, 'Very creative', NULL, '2025-08-30 14:00:00', 1006),
-(6098, 11, 53, 'First Quarter', 91.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1006),
-(6099, 11, 54, 'First Quarter', 93.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1006),
-(6100, 12, 46, 'First Quarter', 94.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1006),
-(6101, 12, 47, 'First Quarter', 92.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1006),
-(6102, 12, 48, 'First Quarter', 91.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1006),
-(6103, 12, 49, 'First Quarter', 95.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1006),
-(6104, 12, 50, 'First Quarter', 96.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1006),
-(6105, 12, 51, 'First Quarter', 93.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1006),
-(6106, 12, 52, 'First Quarter', 95.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1006),
-(6107, 12, 53, 'First Quarter', 92.00, 'Excellent', NULL, '2025-08-30 14:00:00', 1006),
-(6108, 12, 54, 'First Quarter', 94.00, 'Outstanding', NULL, '2025-08-30 14:00:00', 1006);
+(1, 1, 37, 'First Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(2, 1, 37, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(3, 1, 37, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(4, 1, 37, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(5, 1, 38, 'First Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(6, 1, 38, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(7, 1, 38, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(8, 1, 38, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(9, 1, 39, 'First Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(10, 1, 39, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(11, 1, 39, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(12, 1, 39, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(13, 1, 40, 'First Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(14, 1, 40, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(15, 1, 40, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(16, 1, 40, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(17, 1, 41, 'First Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(18, 1, 41, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(19, 1, 41, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(20, 1, 41, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(21, 1, 42, 'First Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(22, 1, 42, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(23, 1, 42, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(24, 1, 42, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(25, 1, 43, 'First Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(26, 1, 43, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(27, 1, 43, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(28, 1, 43, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(29, 1, 44, 'First Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(30, 1, 44, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(31, 1, 44, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(32, 1, 44, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(33, 1, 45, 'First Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(34, 1, 45, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(35, 1, 45, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(36, 1, 45, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 04:22:41', NULL),
+(37, 2, 1, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(38, 2, 1, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(39, 2, 1, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(40, 2, 1, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(41, 2, 2, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(42, 2, 2, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(43, 2, 2, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(44, 2, 2, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(45, 2, 3, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(46, 2, 3, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(47, 2, 3, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(48, 2, 3, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(49, 2, 4, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(50, 2, 4, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(51, 2, 4, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(52, 2, 4, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(53, 2, 5, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(54, 2, 5, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(55, 2, 5, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(56, 2, 5, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(57, 2, 6, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(58, 2, 6, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(59, 2, 6, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(60, 2, 6, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(61, 2, 7, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(62, 2, 7, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(63, 2, 7, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(64, 2, 7, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(65, 2, 8, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(66, 2, 8, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(67, 2, 8, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(68, 2, 8, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(69, 2, 9, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(70, 2, 9, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(71, 2, 9, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(72, 2, 9, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:48:51', NULL),
+(73, 3, 28, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(74, 3, 28, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(75, 3, 28, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(76, 3, 28, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(77, 3, 29, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(78, 3, 29, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(79, 3, 29, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(80, 3, 29, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(81, 3, 30, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(82, 3, 30, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(83, 3, 30, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(84, 3, 30, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(85, 3, 31, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(86, 3, 31, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(87, 3, 31, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(88, 3, 31, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(89, 3, 32, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(90, 3, 32, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(91, 3, 32, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(92, 3, 32, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(93, 3, 33, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(94, 3, 33, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(95, 3, 33, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(96, 3, 33, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(97, 3, 34, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(98, 3, 34, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(99, 3, 34, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(100, 3, 34, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(101, 3, 35, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(102, 3, 35, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(103, 3, 35, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(104, 3, 35, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(105, 3, 36, 'First Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(106, 3, 36, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(107, 3, 36, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(108, 3, 36, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 06:59:24', NULL),
+(109, 4, 1, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(110, 4, 1, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(111, 4, 1, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(112, 4, 1, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(113, 4, 2, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(114, 4, 2, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(115, 4, 2, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(116, 4, 2, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(117, 4, 3, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(118, 4, 3, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(119, 4, 3, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(120, 4, 3, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(121, 4, 4, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(122, 4, 4, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(123, 4, 4, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(124, 4, 4, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(125, 4, 5, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(126, 4, 5, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(127, 4, 5, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(128, 4, 5, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(129, 4, 6, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(130, 4, 6, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(131, 4, 6, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(132, 4, 6, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(133, 4, 7, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(134, 4, 7, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(135, 4, 7, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(136, 4, 7, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:06:41', NULL),
+(137, 4, 8, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:06:42', NULL),
+(138, 4, 8, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:06:42', NULL),
+(139, 4, 8, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:06:42', NULL),
+(140, 4, 8, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:06:42', NULL),
+(141, 4, 9, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:06:42', NULL),
+(142, 4, 9, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:06:42', NULL),
+(143, 4, 9, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:06:42', NULL),
+(144, 4, 9, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:06:42', NULL),
+(145, 5, 46, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(146, 5, 46, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(147, 5, 46, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(148, 5, 46, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(149, 5, 47, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(150, 5, 47, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(151, 5, 47, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(152, 5, 47, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(153, 5, 48, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(154, 5, 48, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(155, 5, 48, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(156, 5, 48, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(157, 5, 49, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(158, 5, 49, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(159, 5, 49, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(160, 5, 49, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(161, 5, 50, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(162, 5, 50, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(163, 5, 50, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(164, 5, 50, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(165, 5, 51, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(166, 5, 51, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(167, 5, 51, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(168, 5, 51, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(169, 5, 52, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(170, 5, 52, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(171, 5, 52, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(172, 5, 52, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(173, 5, 53, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(174, 5, 53, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(175, 5, 53, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(176, 5, 53, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(177, 5, 54, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(178, 5, 54, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(179, 5, 54, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(180, 5, 54, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(181, 5, 55, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(182, 5, 55, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(183, 5, 55, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(184, 5, 55, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(185, 5, 56, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(186, 5, 56, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(187, 5, 56, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(188, 5, 56, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(189, 5, 57, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(190, 5, 57, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(191, 5, 57, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(192, 5, 57, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(193, 5, 58, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(194, 5, 58, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(195, 5, 58, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(196, 5, 58, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(197, 5, 59, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(198, 5, 59, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(199, 5, 59, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(200, 5, 59, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(201, 5, 60, 'First Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(202, 5, 60, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(203, 5, 60, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(204, 5, 60, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 07:27:36', NULL),
+(205, 6, 10, 'First Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(206, 6, 10, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(207, 6, 10, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(208, 6, 10, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(209, 6, 11, 'First Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(210, 6, 11, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(211, 6, 11, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(212, 6, 11, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(213, 6, 12, 'First Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(214, 6, 12, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(215, 6, 12, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(216, 6, 12, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(217, 6, 13, 'First Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(218, 6, 13, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(219, 6, 13, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(220, 6, 13, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(221, 6, 14, 'First Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(222, 6, 14, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(223, 6, 14, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(224, 6, 14, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(225, 6, 15, 'First Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(226, 6, 15, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(227, 6, 15, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(228, 6, 15, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(229, 6, 16, 'First Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(230, 6, 16, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(231, 6, 16, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(232, 6, 16, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(233, 6, 17, 'First Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(234, 6, 17, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(235, 6, 17, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(236, 6, 17, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(237, 6, 18, 'First Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(238, 6, 18, 'Second Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(239, 6, 18, 'Third Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL),
+(240, 6, 18, 'Fourth Quarter', NULL, NULL, NULL, '2025-11-28 08:49:31', NULL);
 
 -- --------------------------------------------------------
 
@@ -640,15 +736,20 @@ CREATE TABLE `gradestatus` (
   `StatusName` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `gradestatus`
+-- Table structure for table `gradesubmissiondeadline`
 --
 
-INSERT INTO `gradestatus` (`StatusID`, `StatusName`) VALUES
-(1, 'Draft'),
-(3, 'Final'),
-(4, 'Revised'),
-(2, 'Submitted');
+CREATE TABLE `gradesubmissiondeadline` (
+  `DeadlineID` int(11) NOT NULL,
+  `SchoolYearID` int(11) NOT NULL,
+  `Quarter` enum('First Quarter','Second Quarter','Third Quarter','Fourth Quarter') NOT NULL,
+  `StartDate` datetime NOT NULL,
+  `DeadlineDate` datetime NOT NULL,
+  `CreatedByUserID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -670,31 +771,12 @@ CREATE TABLE `guardian` (
 --
 
 INSERT INTO `guardian` (`GuardianID`, `FullName`, `EncryptedPhoneNumber`, `EncryptedEmailAddress`, `Occupation`, `WorkAddress`) VALUES
-(1, 'Roberto Martinez Santos', NULL, NULL, 'Engineer', 'Makati City'),
-(2, 'Maria Clara Santos Martinez', NULL, NULL, 'Teacher', 'Quezon City'),
-(3, 'Antonio Reyes Garcia', NULL, NULL, 'Business Owner', 'Caloocan City'),
-(4, 'Elena Garcia Reyes', NULL, NULL, 'Accountant', 'Quezon City'),
-(5, 'Jose Cruz Lopez', NULL, NULL, 'Nurse', 'Manila'),
-(6, 'Carmen Lopez Cruz', NULL, NULL, 'Sales Manager', 'Makati City'),
-(7, 'Rafael Gonzales Ramos', NULL, NULL, 'IT Manager', 'Ortigas, Pasig City'),
-(8, 'Ana Ramos Gonzales', NULL, NULL, 'Pharmacist', 'Quezon City'),
-(9, 'Luis Torres Mendoza', NULL, NULL, 'Architect', 'BGC, Taguig City'),
-(10, 'Maria Mendoza Torres', NULL, NULL, 'Interior Designer', 'Makati City'),
-(11, 'Miguel Santos Dela Cruz', NULL, NULL, 'Doctor', 'Veterans Memorial Medical Center, QC'),
-(12, 'Jennifer Dela Cruz Santos', NULL, NULL, 'Lawyer', 'Makati City'),
-(13, 'Jose Villanueva Navarro', NULL, NULL, 'Bank Manager', 'Makati City'),
-(14, 'Rosa Navarro Villanueva', NULL, NULL, 'HR Director', 'Ortigas, Pasig City'),
-(15, 'Daniel Bautista Castro', NULL, NULL, 'Software Developer', 'BGC, Taguig City'),
-(16, 'Grace Castro Bautista', NULL, NULL, 'Marketing Manager', 'Makati City'),
-(17, 'Emmanuel Fernandez Rosales', NULL, NULL, 'Civil Engineer', 'Quezon City'),
-(18, 'Patricia Rosales Fernandez', NULL, NULL, 'Dentist', 'Novaliches, QC'),
-(19, 'Carlos Aguirre Pascual', NULL, NULL, 'Businessman', 'Quezon City'),
-(20, 'Marie Pascual Aguirre', NULL, NULL, 'Professor', 'University of the Philippines'),
-(21, 'James Santiago Morales', NULL, NULL, 'Government Employee', 'Quezon City Hall'),
-(22, 'Luisa Morales Santiago', NULL, NULL, 'Nurse', 'East Avenue Medical Center'),
-(23, 'Ricardo Castillo Rivera', NULL, NULL, 'Pilot', 'NAIA, Pasay City'),
-(24, 'Nicole Rivera Castillo', NULL, NULL, 'Flight Attendant', 'NAIA, Pasay City'),
-(25, 'Mark Fuentes', 0x3039313233343536373839, 0x6f6c697665726f732e73657267656564776172642e70656c6974726f40676d61696c2e636f6d, NULL, NULL);
+(1, 'Hahaha hahaha', 0x3039313233343536373839, 0x686168616861686140676d61696c2e636f6d, NULL, NULL),
+(2, 'DDA AA', 0x3039313233343536373839, 0x6a6f686e7265796269736e617263616c6970657340676d61696c2e636f6d, NULL, NULL),
+(3, 'hahaha hahahaha', 0x3039313233343536373839, 0x6a40676d61696c2e636f6d, NULL, NULL),
+(4, 'ASDasdas dasd', 0x3039313233343536363738, 0x6a6f686e726540676d61696c2e636f6d, NULL, NULL),
+(5, 'hahahahaha hahahaha', 0x3039313233353637383930, 0x464753444640474d41494c2e434f4d, NULL, NULL),
+(6, 'GHAHAHAHA HAHAHAHA', 0x3039313233343536373839, 0x6768616861686140676d61696c2e636f6d, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -708,6 +790,14 @@ CREATE TABLE `guardprofile` (
   `EmployeeNumber` varchar(50) DEFAULT NULL,
   `HireDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `guardprofile`
+--
+
+INSERT INTO `guardprofile` (`GuardProfileID`, `ProfileID`, `EmployeeNumber`, `HireDate`) VALUES
+(1, 8, 'G-00001', '2025-11-28'),
+(2, 10, 'G-00002', '2025-11-29');
 
 -- --------------------------------------------------------
 
@@ -754,19 +844,12 @@ CREATE TABLE `medicalinfo` (
 --
 
 INSERT INTO `medicalinfo` (`MedicalInfoID`, `StudentProfileID`, `Weight`, `Height`, `EncryptedAllergies`, `EncryptedMedicalConditions`, `EncryptedMedications`) VALUES
-(1, 1, 25.50, 120.00, 0x4e6f6e65, 0x4e6f6e65, 0x4e6f6e65),
-(2, 2, 24.80, 118.50, 0x5065616e757473, 0x4e6f6e65, 0x4e6f6e65),
-(3, 3, 28.30, 125.00, 0x4e6f6e65, 0x417374686d61, 0x56656e746f6c696e20696e68616c6572206173206e6565646564),
-(4, 4, 27.60, 124.00, 0x4e6f6e65, 0x4e6f6e65, 0x4e6f6e65),
-(5, 5, 30.20, 130.00, 0x44757374, 0x416c6c6572676963207268696e69746973, 0x416e746968697374616d696e65),
-(6, 6, 29.50, 128.50, 0x4e6f6e65, 0x4e6f6e65, 0x4e6f6e65),
-(7, 7, 32.80, 135.00, 0x4e6f6e65, 0x4e6f6e65, 0x4e6f6e65),
-(8, 8, 31.40, 133.00, 0x5368656c6c66697368, 0x4e6f6e65, 0x4e6f6e65),
-(9, 9, 35.60, 140.00, 0x4e6f6e65, 0x4e6f6e65, 0x4e6f6e65),
-(10, 10, 34.20, 138.50, 0x4e6f6e65, 0x4e6f6e65, 0x4e6f6e65),
-(11, 11, 38.50, 145.00, 0x4e6f6e65, 0x4e6f6e65, 0x4e6f6e65),
-(12, 12, 37.80, 143.50, 0x50656e6963696c6c696e, 0x4e6f6e65, 0x4e6f6e65),
-(13, 13, NULL, NULL, NULL, NULL, NULL);
+(1, 1, NULL, NULL, NULL, NULL, NULL),
+(2, 2, NULL, NULL, NULL, NULL, NULL),
+(3, 3, NULL, NULL, NULL, NULL, NULL),
+(4, 4, NULL, NULL, NULL, NULL, NULL),
+(5, 5, NULL, NULL, NULL, NULL, NULL),
+(6, 6, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -786,14 +869,6 @@ CREATE TABLE `notificationlog` (
   `ErrorMessage` text DEFAULT NULL,
   `RetryCount` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `notificationlog`
---
-
-INSERT INTO `notificationlog` (`LogID`, `RecipientUserID`, `NotificationTypeID`, `Title`, `Message`, `SentAt`, `IsRead`, `NotificationStatus`, `ErrorMessage`, `RetryCount`) VALUES
-(1, 2012, 1, 'Released na ung new grades, ang ganda mo po', 'HAHAHAHHAHAHAHAHAHAHAHAHAHA', '2025-11-24 15:02:39', 0, '', 'haha', 0),
-(100, 2012, 1, 'hahahaahahaha', 'hahahahahaha', '2025-11-24 15:03:31', 0, 'Sent', 'hahahaha', 0);
 
 -- --------------------------------------------------------
 
@@ -828,15 +903,6 @@ CREATE TABLE `participationlevel` (
   `SortOrder` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `participationlevel`
---
-
-INSERT INTO `participationlevel` (`ParticipationLevelID`, `LevelName`, `SortOrder`) VALUES
-(1, 'Very Active', 1),
-(2, 'Active', 2),
-(3, 'Moderately Active', 3);
-
 -- --------------------------------------------------------
 
 --
@@ -853,24 +919,6 @@ CREATE TABLE `participationrating` (
   `EvaluationDate` datetime NOT NULL DEFAULT current_timestamp(),
   `LastUpdated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `participationrating`
---
-
-INSERT INTO `participationrating` (`ParticipationRatingID`, `StudentProfileID`, `SchoolYearID`, `Rating`, `Remark`, `EvaluatedByUserID`, `EvaluationDate`, `LastUpdated`) VALUES
-(1, 1, 7, 4, 'Good participation', 1001, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(2, 2, 7, 5, 'Very active', 1001, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(3, 3, 7, 4, 'Active participant', 1002, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(4, 4, 7, 5, 'Excellent participation', 1002, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(5, 5, 7, 4, 'Good', 1003, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(6, 6, 7, 5, 'Outstanding', 1003, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(7, 7, 7, 4, 'Very good', 1004, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(8, 8, 7, 5, 'Excellent', 1004, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(9, 9, 7, 4, 'Active', 1005, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(10, 10, 7, 5, 'Very active', 1005, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(11, 11, 7, 5, 'Consistently excellent', 1006, '2025-08-30 14:00:00', '2025-11-22 18:25:25'),
-(12, 12, 7, 5, 'Outstanding', 1006, '2025-08-30 14:00:00', '2025-11-22 18:25:25');
 
 -- --------------------------------------------------------
 
@@ -907,27 +955,18 @@ CREATE TABLE `passwordpolicy` (
 --
 
 INSERT INTO `passwordpolicy` (`PolicyID`, `UserID`, `PasswordHash`, `PasswordSetDate`, `ExpiryDate`, `MustChange`, `FailedLoginAttempts`, `LockedUntil`) VALUES
-(1001, 1001, '$2y$10$teacherpasswordhash', '2025-05-15 09:00:00', NULL, 0, 0, NULL),
-(1002, 1002, '$2y$10$teacherpasswordhash', '2025-05-15 09:00:00', NULL, 0, 0, NULL),
-(1003, 1003, '$2y$10$teacherpasswordhash', '2025-05-15 09:00:00', NULL, 0, 0, NULL),
-(1004, 1004, '$2y$10$teacherpasswordhash', '2025-05-15 09:00:00', NULL, 0, 0, NULL),
-(1005, 1005, '$2y$10$teacherpasswordhash', '2025-05-15 09:00:00', NULL, 0, 0, NULL),
-(1006, 1006, '$2y$10$teacherpasswordhash', '2025-05-15 09:00:00', NULL, 0, 0, NULL),
-(1234, 1234, '$2y$10$pjeCa7zaZxapgqe7ZSMJ0OosrKF3yYtaXdh0exXoORlgbaA.6k29u', '2025-11-27 01:39:20', NULL, 0, 0, NULL),
-(2001, 2001, '$2y$10$studentpasswordhash', '2025-05-20 10:00:00', NULL, 1, 0, NULL),
-(2002, 2002, '$2y$10$studentpasswordhash', '2025-05-20 10:00:00', NULL, 1, 0, NULL),
-(2003, 2003, '$2y$10$studentpasswordhash', '2024-05-20 10:00:00', NULL, 1, 0, NULL),
-(2004, 2004, '$2y$10$studentpasswordhash', '2024-05-20 10:00:00', NULL, 1, 0, NULL),
-(2005, 2005, '$2y$10$studentpasswordhash', '2023-05-20 10:00:00', NULL, 1, 0, NULL),
-(2006, 2006, '$2y$10$studentpasswordhash', '2023-05-20 10:00:00', NULL, 1, 0, NULL),
-(2007, 2007, '$2y$10$studentpasswordhash', '2022-05-20 10:00:00', NULL, 1, 0, NULL),
-(2008, 2008, '$2y$10$studentpasswordhash', '2022-05-20 10:00:00', NULL, 1, 0, NULL),
-(2009, 2009, '$2y$10$studentpasswordhash', '2021-05-20 10:00:00', NULL, 1, 0, NULL),
-(2010, 2010, '$2y$10$studentpasswordhash', '2021-05-20 10:00:00', NULL, 1, 0, NULL),
-(2011, 2011, '$2y$10$studentpasswordhash', '2020-05-20 10:00:00', NULL, 1, 0, NULL),
-(2012, 2012, '$2y$10$pjeCa7zaZxapgqe7ZSMJ0OosrKF3yYtaXdh0exXoORlgbaA.6k29u', '2020-05-20 10:00:00', NULL, 1, 0, NULL),
-(2013, 2016, '$2y$10$pjeCa7zaZxapgqe7ZSMJ0OosrKF3yYtaXdh0exXoORlgbaA.6k29u', '2025-11-27 03:36:30', NULL, 1, 0, NULL),
-(2014, 2017, '$2y$10$sWI57cDXGUYscbTamYDzoO8r94ADBY1bt/y0c8F3eD.1QPyFbzG8m', '2025-11-27 19:01:53', NULL, 0, 0, NULL);
+(1, 1, '$2y$10$VrnrUrqRa.sY9/JpB/Wlu.k1ZhL3QjYPJo2Teblche6/uq70KXIIC', '2025-11-28 04:20:13', NULL, 0, 0, NULL),
+(2, 2, '$2y$10$QU0kRSZdfDL1k/1K/CrMdelhcRJAFH21knzI4Ahb2vVZi7vpvOIoy', '2025-11-28 04:22:41', NULL, 1, 0, NULL),
+(3, 3, '$2y$10$QU0kRSZdfDL1k/1K/CrMdelhcRJAFH21knzI4Ahb2vVZi7vpvOIoy', '2025-11-28 06:48:51', NULL, 1, 0, NULL),
+(4, 4, '$2y$10$SYHLmjvpCMITs2ofs46PeOddmqhXGXgm.Q.Wxlzc.wZUvqPW8I3k.', '2025-11-28 06:59:24', NULL, 1, 0, NULL),
+(5, 5, '$2y$10$WHpwhKLwEYZ9bIrYS6meAumTbZOL3GDA4AoPqhn6Xl3sz/m7r12SW', '2025-11-28 07:06:41', NULL, 1, 0, NULL),
+(6, 6, '$2y$10$QU0kRSZdfDL1k/1K/CrMdelhcRJAFH21knzI4Ahb2vVZi7vpvOIoy', '2025-11-28 07:27:35', NULL, 1, 0, NULL),
+(7, 7, '$2y$10$QU0kRSZdfDL1k/1K/CrMdelhcRJAFH21knzI4Ahb2vVZi7vpvOIoy', '2025-11-28 08:49:31', NULL, 1, 0, NULL),
+(8, 8, '$2y$12$jWqyqpuWU1mqZmHhb5MyneD7scGHS6cHt5toerPlCwuZi.f/sCt9C', '2025-11-28 08:49:13', NULL, 0, 0, NULL),
+(9, 9, '$2y$12$9WhhnAsUUP.1Zg1XLflL3OoaLUdUyCXJ6y6tOBn.aJXY.hBjsq26m', '2025-11-28 08:54:28', NULL, 0, 0, NULL),
+(10, 10, '$2y$12$AlwtKImpTje3uO7CT/c26ux7P.5kfxB76wL7mP2EjYk/dwKFdV4Lq', '2025-11-29 05:04:39', NULL, 0, 0, NULL),
+(11, 11, '$2y$12$MKc4csXLyQkoo57F2WU9vObLaiGhondPtz.JW0vnT/TAJNDSB5ayO', '2025-11-29 06:05:06', NULL, 0, 0, NULL),
+(12, 12, '$2y$12$Ys0h7fomU/U9kfUXy3ywwuFA5Esp5zYmE4aaHVIcIXV7E4/S9vPqq', '2025-11-29 07:40:43', NULL, 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -961,27 +1000,25 @@ CREATE TABLE `payment` (
   `VerificationStatus` enum('Pending','Verified','Rejected') NOT NULL DEFAULT 'Pending',
   `VerifiedByUserID` int(11) DEFAULT NULL,
   `VerifiedAt` datetime DEFAULT NULL,
-  `RejectionReason` text DEFAULT NULL
+  `RejectionReason` text DEFAULT NULL,
+  `VerifiedBy` int(11) DEFAULT NULL,
+  `VerificationRemarks` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `payment`
 --
 
-INSERT INTO `payment` (`PaymentID`, `TransactionID`, `PaymentMethodID`, `AmountPaid`, `PaymentDateTime`, `ReferenceNumber`, `ProofFileID`, `VerificationStatus`, `VerifiedByUserID`, `VerifiedAt`, `RejectionReason`) VALUES
-(1, 1, 1, 20000.00, '2025-06-05 10:30:00', 'CASH-20250605-001', NULL, 'Verified', NULL, NULL, NULL),
-(2, 2, 2, 35000.00, '2025-06-03 14:15:00', 'BT-20250603-001', NULL, 'Verified', NULL, NULL, NULL),
-(3, 3, 3, 15000.00, '2025-06-07 11:20:00', 'GCASH-20250607-001', NULL, 'Verified', NULL, NULL, NULL),
-(4, 4, 2, 37000.00, '2025-06-02 09:45:00', 'BT-20250602-001', NULL, 'Verified', NULL, NULL, NULL),
-(5, 5, 1, 39000.00, '2025-06-04 13:00:00', 'CASH-20250604-001', NULL, 'Verified', NULL, NULL, NULL),
-(6, 6, 3, 25000.00, '2025-06-06 10:00:00', 'GCASH-20250606-001', NULL, 'Verified', NULL, NULL, NULL),
-(7, 7, 4, 30000.00, '2025-06-08 15:30:00', 'PAYMAYA-20250608-001', NULL, 'Verified', NULL, NULL, NULL),
-(8, 8, 2, 41000.00, '2025-06-01 08:00:00', 'BT-20250601-001', NULL, 'Verified', NULL, NULL, NULL),
-(9, 9, 1, 43000.00, '2025-06-05 16:00:00', 'CASH-20250605-002', NULL, 'Verified', NULL, NULL, NULL),
-(10, 10, 3, 20000.00, '2025-06-09 12:00:00', 'GCASH-20250609-001', NULL, 'Verified', NULL, NULL, NULL),
-(11, 11, 2, 45000.00, '2025-06-01 09:00:00', 'BT-20250601-002', NULL, 'Verified', NULL, NULL, NULL),
-(12, 12, 1, 20000.00, '2025-06-10 11:00:00', 'CASH-20250610-001', NULL, 'Verified', NULL, NULL, NULL),
-(13, 12, 2, 15000.00, '2025-07-15 10:30:00', 'BT-20250715-001', NULL, 'Verified', NULL, NULL, NULL);
+INSERT INTO `payment` (`PaymentID`, `TransactionID`, `PaymentMethodID`, `AmountPaid`, `PaymentDateTime`, `ReferenceNumber`, `ProofFileID`, `VerificationStatus`, `VerifiedByUserID`, `VerifiedAt`, `RejectionReason`, `VerifiedBy`, `VerificationRemarks`) VALUES
+(1, 1, 3, 6000.00, '2025-11-28 05:20:14', 'TXN1764278411304153', NULL, 'Verified', 1, '2025-11-28 09:57:40', '', NULL, NULL),
+(2, 2, 1, 18500.00, '2025-11-28 06:48:26', 'DOWNPAY-2-1764283706', NULL, 'Verified', NULL, '2025-11-28 09:48:06', NULL, NULL, NULL),
+(3, 3, 1, 8300.00, '2025-11-28 06:58:43', 'DOWNPAY-3-1764284323', NULL, 'Verified', 1, '2025-11-28 06:58:43', NULL, NULL, NULL),
+(4, 3, 3, 11700.00, '2025-11-28 07:03:51', 'TXN1764284625372268', NULL, 'Verified', 1, '2025-11-28 09:55:32', '', NULL, NULL),
+(5, 4, 1, 7700.00, '2025-11-28 07:06:30', 'DOWNPAY-4-1764284790', NULL, 'Verified', 1, '2025-11-28 07:06:30', NULL, NULL, NULL),
+(6, 5, 1, 9600.00, '2025-11-28 07:27:24', 'DOWNPAY-6-1764286044', NULL, 'Verified', 1, '2025-11-28 07:27:24', NULL, NULL, NULL),
+(7, 5, 3, 10400.00, '2025-11-28 07:29:15', 'TXN1764286144632499', NULL, 'Verified', 1, '2025-11-28 09:36:14', '', NULL, NULL),
+(8, 6, 1, 8900.00, '2025-11-28 08:49:23', 'DOWNPAY-5-1764290963', NULL, 'Verified', 1, '2025-11-28 08:49:23', NULL, NULL, NULL),
+(9, 6, 3, 9600.00, '2025-11-28 08:51:08', 'TXN1764291065951286', NULL, 'Verified', 1, '2025-11-28 09:30:25', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1048,27 +1085,18 @@ CREATE TABLE `profile` (
 --
 
 INSERT INTO `profile` (`ProfileID`, `UserID`, `FirstName`, `LastName`, `MiddleName`, `Gender`, `BirthDate`, `Age`, `Religion`, `MotherTounge`, `EncryptedPhoneNumber`, `EncryptedAddress`, `ProfilePictureURL`) VALUES
-(1001, 1001, 'Maria', 'Santos', 'Reyes', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(1002, 1002, 'Jose', 'Dela Cruz', 'Manuel', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(1003, 1003, 'Anna', 'Reyes', 'Garcia', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(1004, 1004, 'Robert', 'Gonzales', 'Cruz', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(1005, 1005, 'Carmen', 'Lopez', 'Ramos', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(1006, 1006, 'Daniel', 'Torres', 'Mendoza', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(1234, 1234, 'Registrar', 'User', 'w', NULL, NULL, NULL, NULL, NULL, 0x009562101456, 0x0123, NULL),
-(2001, 2001, 'John Carlo', 'Martinez', 'Santos', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2002, 2002, 'Sofia Mae', 'Reyes', 'Garcia', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2003, 2003, 'Miguel Angelo', 'Cruz', 'Lopez', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2004, 2004, 'Isabella Rose', 'Gonzales', 'Ramos', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2005, 2005, 'Gabriel Luis', 'Torres', 'Mendoza', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2006, 2006, 'Mia Angelica', 'Santos', 'Dela Cruz', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2007, 2007, 'Rafael Jose', 'Villanueva', 'Navarro', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2008, 2008, 'Sophia Grace', 'Bautista', 'Castro', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2009, 2009, 'Lucas Emmanuel', 'Fernandez', 'Rosales', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2010, 2010, 'Chloe Marie', 'Aguirre', 'Pascual', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2011, 2011, 'Oliver James', 'Santiago', 'Morales', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2012, 2012, 'Emma Nicole', 'Castillo', 'Rivera', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(2013, 2016, 'ewqsa', 'Fuentes', 'heaven', NULL, NULL, NULL, NULL, NULL, 0x3039313233343536373839, 0x32312071632c206267632c206e6f766120736d2068616861, NULL),
-(2014, 2017, 'Mark Kengie', 'Aldabon', NULL, NULL, '2004-11-22', 21, 'Catholic', NULL, 0x2b28363329203931322d3334352d36373839, NULL, NULL);
+(1, 1, 'Registrar', 'Ako', 'Si', 'Male', '2025-11-02', 19, '11', '11', 0x11, 0x11, '11'),
+(2, 2, 'Aaaa', 'AA', 'AA', NULL, NULL, NULL, NULL, NULL, 0x3039313233343536373839, 0x323120616861686168616861, NULL),
+(3, 3, 'JOAA', 'GAA', 'REY', NULL, NULL, NULL, NULL, NULL, 0x3039313233343536373839, 0x414141414144415344414441534441, NULL),
+(4, 4, 'aaaaga', 'hahaha', 'haha', NULL, NULL, NULL, NULL, NULL, 0x3039313233343536373839, 0x32313231323132206861686168616861, NULL),
+(5, 5, 'Sana', 'Ka', 'Gumana', NULL, NULL, NULL, NULL, NULL, 0x3039313233343536373839, 0x414161616161616164736164736164616461, NULL),
+(6, 6, 'Haha', 'ahahaha', 'haha', NULL, NULL, NULL, NULL, NULL, 0x30393132333435373839, 0x4841686168614144415344414441, NULL),
+(7, 7, 'HAHAHA', 'HAHAHA', 'HAHAHAHA', NULL, NULL, NULL, NULL, NULL, 0x3039313233343536373839, 0x6861686168616861686168616861, NULL),
+(8, 8, 'Denmarc', 'Maglipon', 'Amar', NULL, NULL, NULL, NULL, NULL, 0x65794a7064694936496e5a7356476849535768505769394764553479656d6b34635670786331453950534973496e5a686248566c496a6f694d445a53646a5a334f574a35637a42774d315251576b78785a31497a5a7a3039496977696257466a496a6f695a4455335a4749785a4467794d6a63344e544d304e4459304d4759324e5455784f44466b4d446b354d6a686d5a6a5135593251774d4449784e7a4535596a426a5a575a6c4f546b314d7a597a4d5463794d5463784d434973496e52685a79493649694a39, 0x65794a7064694936496a42326454563256315670656d7779536e465363455976576b5a525358633950534973496e5a686248566c496a6f69516e6842646b46494e44524a5a446868554455724e456c684d55705153304a57536c6844634651794d7939505957464a5a33425462544a7062304e42556b64775654463262323147546b683459337071624574686469733355334243565642594d314e6a626c68584e6b347a4f5642784d446430626e6430656c5258536c5a444e6a5a746348424b4d58493359306b39496977696257466a496a6f694d6a4e6c597a68694d4445304d7a63794d5459335a6a67314e54597a4d5749354d544d794d7a45784e546c6a4d6a526c5a545a694d5745304d544e695a44597a4e546c6c4e6a4d785a445935596a64694d474a6c4e434973496e52685a79493649694a39, 'http://127.0.0.1:8000/storage/profiles/YAJA8zcvEQl7vxDPXDigR15xcZGfqawM0I7wwiQs.png'),
+(9, 9, 'Den', 'Maglipon', 'Amar', NULL, NULL, NULL, NULL, NULL, 0x65794a7064694936496b4a366254526d52553531656a524c556d39694d6d3830543074495346453950534973496e5a686248566c496a6f6965584633536b46714e31564455564e55563351764e55744d53464e445a7a3039496977696257466a496a6f694d6d566a4e57597a4d5451784e7a637a4e7a4d344d7a4935593251785a575a6a4d54597a4d6a4a684e6d4d334f574e6b4e7a41315a6d45325a5468694d544e6a4e3256694f4751304f5755334e5449774f446c6d5a694973496e52685a79493649694a39, 0x65794a7064694936496c5a6b596e567857444a335958564e51334e5051586c7a546c424d4b33633950534973496e5a686248566c496a6f69644551775532646a5755466d5558673251575a3263457057544651725a4746725154644a634770764f465272536d5132636d4a47556b67784c30744b616e646865444a534f556b3356585236655456444d545a50517a5a5156474e5756555a58656d39516133646b4f476b7a544735685a6e4e4b626a6c72526d4a4e4f564a4562574e61515568795a445a7252446739496977696257466a496a6f695a474d77597a6b784f57517759574a6d4d446c6c4d7a457a4d7a426c593249784d6d4d334e4451794d5463324d7a45314d445535597a45345a6d4931596a526c4d7a67305a44497a4f54557a595451325a6a55314e434973496e52685a79493649694a39, 'http://127.0.0.1:8000/storage/profiles/2lYfVbc7fTQ6t1HCramLzRiXnSobfcvsXQgwXnu5.png'),
+(10, 10, 'denmarc', 'maglipon', 'amar', NULL, NULL, NULL, NULL, NULL, 0x65794a7064694936496a46475a486868596b6c4b634574774d6a424e64573555613239714b33633950534973496e5a686248566c496a6f69616c647853586c534e58703656544247546d6c595a566c55516d77725a7a3039496977696257466a496a6f69596d51315a6d4d785a445178596a51304e325a6d4d325933596a5a6c4d6a55794f5455784e6a6b794d6d4d774d474e695a4463315a4463305a47557a5a57526d5a444e6a4e6a59334f5749304e544d33595751324e434973496e52685a79493649694a39, 0x65794a7064694936496b6475526c525665485659623031536231683061444a5565565a735656453950534973496e5a686248566c496a6f694d574675517a526c4b797442566d4a4d656a5a3153545533565646755633637a62537434536a497661304674646a464f516e524855334a7062335675633149324c326c6b6156465562573433576a5a5957446458626b4a4e63444e554e565a6c4d457848516e4e324e585a56646b74476347633950534973496d316859794936496d566b4f54557a4e4449345a4445794e4441314e4759314e5463335a5452685a5445354f575a6a4d6a646c4e6a646a4d6d466b4e444a684f4749304d6d557a5a6a42684e446b335a6a4e6b595451344e4745314d324d694c434a30595763694f69496966513d3d, 'http://127.0.0.1:8000/storage/profiles/ys0Dg8yOnn9fJCSDvg1QOZFvyIkUoKAh1nvii17t.jpg'),
+(11, 11, 'Juan', 'Kiki', 'Santos', NULL, NULL, NULL, NULL, NULL, 0x65794a7064694936496e6879626d4a594d4851334f45313352454a4664326471655852366455453950534973496e5a686248566c496a6f69656c4a6959316c546146426f5746566c52465a78536b68356153394a55543039496977696257466a496a6f694d6a4a684d7a41794e57526d4e6d4d33596a6b33596d566b5a54417a4d7a426c4d7a46694e5442694f44526a4e474a6c4f4442684f5755774d546b7a4d446c694e6d457a59574a694d6a68694d574e6d5a474d314d534973496e52685a79493649694a39, 0x65794a7064694936496d7868656e647753585a6d4d6d52745530394b656e55304f5642715a45453950534973496e5a686248566c496a6f69546e557a6257397953454a35556e5242545856595a7a51344d564a6b65485a424e6b524265574a6164317052533268715547703461444e735a564230596c6f795a45744d4e5664776354424453466c595a306c5a616c46714e3038345a6c646b5957526b53464e4e5a576c6b5a5641306546453950534973496d316859794936496a68684e6a4d355a6a5577596a64694e6d49794d7a4135595441785a6d52684d324533596d59334d44566b4e6d5a6b4e7a63794e4459354e6d45354d57466c596a59784f475a6a4f5441314d325a6959545179596a4d694c434a30595763694f69496966513d3d, 'http://127.0.0.1:8000/storage/profiles/PZx7prIdbeCMX4OD3MIXQaR5MSYS4K45Rx97X32G.jpg'),
+(12, 12, 'denmarc', 'maglipon', 'amar', NULL, NULL, NULL, NULL, NULL, 0x65794a7064694936496a6c6e5a456435544842536132646c4e5778785a43394f4c305236516d633950534973496e5a686248566c496a6f695769383457464d764f4556355253746e625855354f48517a55464a6d647a3039496977696257466a496a6f694d7a51304f444a684d446b314d4459354f44466c4e7a5269595455315a4455784d6a41344d6a4e695a6a5535595449774e5751314f4749324e5456684e6d597a4d6d49334e574d324e4451354e7a51334e7a63324d434973496e52685a79493649694a39, 0x65794a7064694936496a4634636e4978635551725a6d355056553968556e4a78536d566d5957633950534973496e5a686248566c496a6f69536b5a335432565365445a32536d64764e574578554745334d6e4a344b326b35546c4e57556d6c6e566c68774e5646305a32463159336870536c6c59616b70484e484e7054474a365745786d654670596555637751315a6c61454a45613352335a30565a576d317761306b7261454a7859306b334d48706f576b5133596e5a59535778704e4568565647524c616a5139496977696257466a496a6f695954557a4f5452685a6a5534597a59334f5752685a6d59784d7a637a5a44646a4d4441314e324e6a4d444668596d45774d7a63784f445a6d5a6d526d4e54426d4f5751304d3249354f5467774d7a4d784d5455324d434973496e52685a79493649694a39, 'http://127.0.0.1:8000/storage/profiles/R2uXS8mxKflvilm4OKuCLFnwRIv8O1Kxx0SRtK1c.jpg');
 
 -- --------------------------------------------------------
 
@@ -1088,7 +1116,8 @@ CREATE TABLE `registrarprofile` (
 --
 
 INSERT INTO `registrarprofile` (`RegistrarProfileID`, `ProfileID`, `EmployeeNumber`, `HireDate`) VALUES
-(1234, 1234, 'R-123', NULL);
+(1, 1, '1', NULL),
+(2, 9, 'R-00002', '2025-11-28');
 
 -- --------------------------------------------------------
 
@@ -1125,18 +1154,6 @@ CREATE TABLE `role` (
   `Description` text DEFAULT NULL,
   `IsActive` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `role`
---
-
-INSERT INTO `role` (`RoleID`, `RoleName`, `Description`, `IsActive`) VALUES
-(1, 'Super Admin', 'Full access', 1),
-(2, 'Registrar', 'Student records', 1),
-(3, 'Finance Officer', 'Payments', 1),
-(4, 'Teacher', 'Grades', 1),
-(5, 'Student', 'Portal access', 1),
-(6, 'Head Teacher', 'Access to all features', 1);
 
 -- --------------------------------------------------------
 
@@ -1223,18 +1240,18 @@ INSERT INTO `section` (`SectionID`, `GradeLevelID`, `SchoolYearID`, `AdviserTeac
 (2, 1, 7, NULL, 'Pre-elem Afternoon', 15, 0, 1),
 (3, 2, 7, NULL, 'Kinder Morning', 15, 0, 1),
 (4, 2, 7, NULL, 'Kinder Afternoon', 15, 0, 1),
-(5, 3, 7, NULL, 'Grade 1 Morning', 15, 3, 1),
-(6, 3, 7, NULL, 'Grade 1 Afternoon', 15, 0, 1),
+(5, 3, 7, NULL, 'Grade 1 Morning', 15, 0, 1),
+(6, 3, 7, NULL, 'Grade 1 Afternoon', 15, 2, 1),
 (7, 4, 7, NULL, 'Grade 2 Morning', 15, 0, 1),
-(8, 4, 7, NULL, 'Grade 2 Afternoon', 15, 2, 1),
+(8, 4, 7, NULL, 'Grade 2 Afternoon', 15, 1, 1),
 (9, 5, 7, NULL, 'Grade 3 Morning', 15, 0, 1),
 (10, 5, 7, NULL, 'Grade 3 Afternoon', 15, 0, 1),
 (11, 6, 7, NULL, 'Grade 4 Morning', 15, 0, 1),
-(12, 6, 7, NULL, 'Grade 4 Afternoon', 15, 2, 1),
+(12, 6, 7, NULL, 'Grade 4 Afternoon', 15, 1, 1),
 (13, 7, 7, NULL, 'Grade 5 Morning', 15, 0, 1),
-(14, 7, 7, NULL, 'Grade 5 Afternoon', 15, 0, 1),
+(14, 7, 7, NULL, 'Grade 5 Afternoon', 15, 1, 1),
 (15, 8, 7, NULL, 'Grade 6 Morning', 15, 0, 1),
-(16, 8, 7, NULL, 'Grade 6 Afternoon', 15, 0, 1);
+(16, 8, 7, NULL, 'Grade 6 Afternoon', 15, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1279,31 +1296,12 @@ CREATE TABLE `studentguardian` (
 --
 
 INSERT INTO `studentguardian` (`StudentGuardianID`, `StudentProfileID`, `GuardianID`, `RelationshipType`, `IsPrimaryContact`, `IsEmergencyContact`, `IsAuthorizedPickup`, `SortOrder`) VALUES
-(1, 1, 1, 'Father', 1, 1, 1, 1),
-(2, 1, 2, 'Mother', 0, 1, 1, 2),
-(3, 2, 3, 'Father', 1, 1, 1, 1),
-(4, 2, 4, 'Mother', 0, 1, 1, 2),
-(5, 3, 5, 'Father', 1, 1, 1, 1),
-(6, 3, 6, 'Mother', 0, 1, 1, 2),
-(7, 4, 7, 'Father', 1, 1, 1, 1),
-(8, 4, 8, 'Mother', 0, 1, 1, 2),
-(9, 5, 9, 'Father', 1, 1, 1, 1),
-(10, 5, 10, 'Mother', 0, 1, 1, 2),
-(11, 6, 11, 'Father', 1, 1, 1, 1),
-(12, 6, 12, 'Mother', 0, 1, 1, 2),
-(13, 7, 13, 'Father', 1, 1, 1, 1),
-(14, 7, 14, 'Mother', 0, 1, 1, 2),
-(15, 8, 15, 'Father', 1, 1, 1, 1),
-(16, 8, 16, 'Mother', 0, 1, 1, 2),
-(17, 9, 17, 'Father', 1, 1, 1, 1),
-(18, 9, 18, 'Mother', 0, 1, 1, 2),
-(19, 10, 19, 'Father', 1, 1, 1, 1),
-(20, 10, 20, 'Mother', 0, 1, 1, 2),
-(21, 11, 21, 'Father', 1, 1, 1, 1),
-(22, 11, 22, 'Mother', 0, 1, 1, 2),
-(23, 12, 23, 'Father', 1, 1, 1, 1),
-(24, 12, 24, 'Mother', 0, 1, 1, 2),
-(25, 13, 25, 'Mother', 1, 1, 1, 0);
+(1, 1, 1, 'Father', 1, 1, 1, 0),
+(2, 2, 2, 'Guardian', 1, 1, 1, 0),
+(3, 3, 3, 'Father', 1, 1, 1, 0),
+(4, 4, 4, 'Father', 1, 1, 1, 0),
+(5, 5, 5, 'Father', 1, 1, 1, 0),
+(6, 6, 6, 'Father', 1, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1316,7 +1314,7 @@ CREATE TABLE `studentlogindetails` (
 ,`StudentNumber` varchar(50)
 ,`PasswordHash` varchar(255)
 ,`FullName` varchar(201)
-,`UserType` enum('Admin','Teacher','Student','Parent','Registrar','Guard','Staff','Head Teacher')
+,`UserType` enum('Admin','Teacher','Student','Parent','Registrar','Guard','Staff','HeadTeacher')
 ,`AccountStatus` enum('Active','Inactive','Suspended','PendingVerification')
 ,`ProfileID` int(11)
 );
@@ -1344,19 +1342,56 @@ CREATE TABLE `studentprofile` (
 --
 
 INSERT INTO `studentprofile` (`StudentProfileID`, `ProfileID`, `StudentNumber`, `QRCodeID`, `DateOfBirth`, `Gender`, `Nationality`, `StudentStatus`, `ArchiveDate`) VALUES
-(1, 2001, 'GCA-2025-001', NULL, '2018-03-15', 'Male', NULL, 'Enrolled', NULL),
-(2, 2002, 'GCA-2025-002', NULL, '2018-07-22', 'Female', NULL, 'Enrolled', NULL),
-(3, 2003, 'GCA-2024-003', NULL, '2017-05-10', 'Male', NULL, 'Enrolled', NULL),
-(4, 2004, 'GCA-2024-004', NULL, '2017-09-18', 'Female', NULL, 'Enrolled', NULL),
-(5, 2005, 'GCA-2023-005', NULL, '2016-02-14', 'Male', NULL, 'Enrolled', NULL),
-(6, 2006, 'GCA-2023-006', NULL, '2016-11-30', 'Female', NULL, 'Enrolled', NULL),
-(7, 2007, 'GCA-2022-007', NULL, '2015-06-08', 'Male', NULL, 'Enrolled', NULL),
-(8, 2008, 'GCA-2022-008', NULL, '2015-12-25', 'Female', NULL, 'Enrolled', NULL),
-(9, 2009, 'GCA-2021-009', NULL, '2014-04-20', 'Male', NULL, 'Enrolled', NULL),
-(10, 2010, 'GCA-2021-010', NULL, '2014-08-12', 'Female', NULL, 'Enrolled', NULL),
-(11, 2011, 'GCA-2020-011', NULL, '2013-01-15', 'Male', NULL, 'Enrolled', NULL),
-(12, 2012, 'GCA-2020-012', NULL, '2013-10-05', 'Female', NULL, 'Enrolled', NULL),
-(13, 2013, 'GCA-2025-00003', 'QR-GCA-2025-00003', '2018-08-11', 'Male', 'Filipino', 'Enrolled', NULL);
+(1, 2, 'GCA-2025-00001', 'QR-GCA-2025-00001', '2020-11-11', 'Male', 'Filipino', 'Enrolled', NULL),
+(2, 3, 'GCA-2025-00002', 'QR-GCA-2025-00002', '2020-12-20', 'Male', 'Filipino', 'Enrolled', NULL),
+(3, 4, 'GCA-2025-00003', 'QR-GCA-2025-00003', '2020-11-11', 'Male', 'Filipino', 'Enrolled', NULL),
+(4, 5, 'GCA-2025-00004', 'QR-GCA-2025-00004', '2020-11-11', 'Male', 'Filipino', 'Enrolled', NULL),
+(5, 6, 'GCA-2025-00005', 'QR-GCA-2025-00005', '2020-11-11', 'Male', 'Filipino', 'Enrolled', NULL),
+(6, 7, 'GCA-2025-00006', 'QR-GCA-2025-00006', '2020-12-12', 'Male', 'Filipino', 'Enrolled', NULL);
+
+--
+-- Triggers `studentprofile`
+--
+DELIMITER $$
+CREATE TRIGGER `after_student_profile_insert` AFTER INSERT ON `studentprofile` FOR EACH ROW BEGIN
+    DECLARE app_transaction_id INT;
+    DECLARE app_school_year_id INT;
+    DECLARE transaction_balance DECIMAL(10,2);
+    
+    -- Find the application that matches this student's name
+    SELECT a.TransactionID, a.SchoolYearID
+    INTO app_transaction_id, app_school_year_id
+    FROM application a
+    JOIN profile p ON p.FirstName = a.StudentFirstName AND p.LastName = a.StudentLastName
+    WHERE p.ProfileID = NEW.ProfileID
+    AND a.ApplicationStatus IN ('Approved', 'Enrolled')
+    AND a.TransactionID IS NOT NULL
+    ORDER BY a.ApplicationID DESC
+    LIMIT 1;
+    
+    -- If we found a matching transaction, link it automatically
+    IF app_transaction_id IS NOT NULL THEN
+        -- Update transaction with student profile ID
+        UPDATE transaction 
+        SET StudentProfileID = NEW.StudentProfileID
+        WHERE TransactionID = app_transaction_id
+        AND StudentProfileID IS NULL;
+        
+        -- Get the outstanding balance
+        SELECT (TotalAmount - PaidAmount)
+        INTO transaction_balance
+        FROM transaction
+        WHERE TransactionID = app_transaction_id;
+        
+        -- Update enrollment outstanding balance automatically
+        UPDATE enrollment 
+        SET OutstandingBalance = transaction_balance
+        WHERE StudentProfileID = NEW.StudentProfileID
+        AND SchoolYearID = app_school_year_id;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -1493,13 +1528,6 @@ CREATE TABLE `supportticket` (
   `ResolvedByUserID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `supportticket`
---
-
-INSERT INTO `supportticket` (`TicketID`, `UserID`, `Subject`, `TicketStatus`, `TicketPriority`, `CreatedAt`, `ResolvedAt`, `AssignedToUserID`, `ResolvedByUserID`) VALUES
-(1, 2012, 'Billing Question', 'Open', 'Medium', '2025-11-24 00:58:36', NULL, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -1519,13 +1547,7 @@ CREATE TABLE `teacherprofile` (
 --
 
 INSERT INTO `teacherprofile` (`TeacherProfileID`, `ProfileID`, `EmployeeNumber`, `Specialization`, `HireDate`) VALUES
-(1, 1001, 'EMP-2025-001', 'Primary Education', '2025-05-15'),
-(2, 1002, 'EMP-2025-002', 'Primary Education', '2025-05-15'),
-(3, 1003, 'EMP-2025-003', 'Elementary Education', '2025-05-15'),
-(4, 1004, 'EMP-2025-004', 'Mathematics', '2025-05-15'),
-(5, 1005, 'EMP-2025-005', 'Science and Math', '2025-05-15'),
-(6, 1006, 'EMP-2025-006', 'Upper Elementary', '2025-05-15'),
-(7, 2014, 'TEACH-2025-001', 'Science', '2004-11-22');
+(1, 11, 'T-00001', 'Mathematics', '2025-05-10');
 
 -- --------------------------------------------------------
 
@@ -1543,13 +1565,6 @@ CREATE TABLE `ticketmessage` (
   `IsInternal` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `ticketmessage`
---
-
-INSERT INTO `ticketmessage` (`MessageID`, `TicketID`, `SenderUserID`, `Message`, `AttachmentFileID`, `SentAt`, `IsInternal`) VALUES
-(1, 1, 2012, 'nagbayad na aq pero di pa updated ung status', NULL, '2025-11-24 00:58:36', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -1558,7 +1573,7 @@ INSERT INTO `ticketmessage` (`MessageID`, `TicketID`, `SenderUserID`, `Message`,
 
 CREATE TABLE `transaction` (
   `TransactionID` int(11) NOT NULL,
-  `StudentProfileID` int(11) NOT NULL,
+  `StudentProfileID` int(11) DEFAULT NULL,
   `SchoolYearID` int(11) NOT NULL,
   `IssueDate` date NOT NULL,
   `DueDate` date DEFAULT NULL,
@@ -1573,18 +1588,12 @@ CREATE TABLE `transaction` (
 --
 
 INSERT INTO `transaction` (`TransactionID`, `StudentProfileID`, `SchoolYearID`, `IssueDate`, `DueDate`, `TotalAmount`, `PaidAmount`, `TransactionStatusID`) VALUES
-(1, 1, 7, '2025-06-01', '2025-06-30', 35000.00, 20000.00, 2),
-(2, 2, 7, '2025-06-01', '2025-06-30', 35000.00, 35000.00, 3),
-(3, 3, 7, '2025-06-01', '2025-06-30', 37000.00, 15000.00, 2),
-(4, 4, 7, '2025-06-01', '2025-06-30', 37000.00, 37000.00, 3),
-(5, 5, 7, '2025-06-01', '2025-06-30', 39000.00, 39000.00, 3),
-(6, 6, 7, '2025-06-01', '2025-06-30', 39000.00, 25000.00, 2),
-(7, 7, 7, '2025-06-01', '2025-06-30', 41000.00, 30000.00, 2),
-(8, 8, 7, '2025-06-01', '2025-06-30', 41000.00, 41000.00, 3),
-(9, 9, 7, '2025-06-01', '2025-06-30', 43000.00, 43000.00, 3),
-(10, 10, 7, '2025-06-01', '2025-06-30', 43000.00, 20000.00, 2),
-(11, 11, 7, '2025-06-01', '2025-06-30', 45000.00, 45000.00, 3),
-(12, 12, 7, '2025-06-01', '2025-06-30', 45000.00, 35000.00, 2);
+(1, 1, 7, '2025-11-28', '2025-11-30', 11000.00, 6000.00, 1),
+(2, 2, 7, '2025-11-28', '2025-12-28', 18500.00, 0.00, 1),
+(3, 3, 7, '2025-11-28', '2025-12-28', 20000.00, 20000.00, 2),
+(4, NULL, 7, '2025-11-28', '2025-12-28', 18500.00, 7700.00, 2),
+(5, 5, 7, '2025-11-28', '2025-12-28', 20000.00, 20000.00, 3),
+(6, 6, 7, '2025-11-28', '2025-12-28', 18500.00, 18500.00, 3);
 
 -- --------------------------------------------------------
 
@@ -1606,66 +1615,22 @@ CREATE TABLE `transactionitem` (
 --
 
 INSERT INTO `transactionitem` (`ItemID`, `TransactionID`, `ItemTypeID`, `Description`, `Amount`, `Quantity`) VALUES
-(1, 1, 1, 'Grade 1 Tuition Fee', 25000.00, 1),
-(2, 1, 2, 'Miscellaneous Fee', 5000.00, 1),
-(3, 1, 3, 'Books and Materials', 3000.00, 1),
-(4, 1, 4, 'Computer Lab Fee', 1000.00, 1),
-(5, 1, 5, 'Development Fee', 1000.00, 1),
-(6, 2, 1, 'Grade 1 Tuition Fee', 25000.00, 1),
-(7, 2, 2, 'Miscellaneous Fee', 5000.00, 1),
-(8, 2, 3, 'Books and Materials', 3000.00, 1),
-(9, 2, 4, 'Computer Lab Fee', 1000.00, 1),
-(10, 2, 5, 'Development Fee', 1000.00, 1),
-(11, 3, 1, 'Grade 2 Tuition Fee', 26000.00, 1),
-(12, 3, 2, 'Miscellaneous Fee', 5500.00, 1),
-(13, 3, 3, 'Books and Materials', 3500.00, 1),
-(14, 3, 4, 'Computer Lab Fee', 1000.00, 1),
-(15, 3, 5, 'Development Fee', 1000.00, 1),
-(16, 4, 1, 'Grade 2 Tuition Fee', 26000.00, 1),
-(17, 4, 2, 'Miscellaneous Fee', 5500.00, 1),
-(18, 4, 3, 'Books and Materials', 3500.00, 1),
-(19, 4, 4, 'Computer Lab Fee', 1000.00, 1),
-(20, 4, 5, 'Development Fee', 1000.00, 1),
-(21, 5, 1, 'Grade 3 Tuition Fee', 27000.00, 1),
-(22, 5, 2, 'Miscellaneous Fee', 6000.00, 1),
-(23, 5, 3, 'Books and Materials', 4000.00, 1),
-(24, 5, 4, 'Computer Lab Fee', 1000.00, 1),
-(25, 5, 5, 'Development Fee', 1000.00, 1),
-(26, 6, 1, 'Grade 3 Tuition Fee', 27000.00, 1),
-(27, 6, 2, 'Miscellaneous Fee', 6000.00, 1),
-(28, 6, 3, 'Books and Materials', 4000.00, 1),
-(29, 6, 4, 'Computer Lab Fee', 1000.00, 1),
-(30, 6, 5, 'Development Fee', 1000.00, 1),
-(31, 7, 1, 'Grade 4 Tuition Fee', 28000.00, 1),
-(32, 7, 2, 'Miscellaneous Fee', 6500.00, 1),
-(33, 7, 3, 'Books and Materials', 4500.00, 1),
-(34, 7, 4, 'Computer Lab Fee', 1000.00, 1),
-(35, 7, 5, 'Development Fee', 1000.00, 1),
-(36, 8, 1, 'Grade 4 Tuition Fee', 28000.00, 1),
-(37, 8, 2, 'Miscellaneous Fee', 6500.00, 1),
-(38, 8, 3, 'Books and Materials', 4500.00, 1),
-(39, 8, 4, 'Computer Lab Fee', 1000.00, 1),
-(40, 8, 5, 'Development Fee', 1000.00, 1),
-(41, 9, 1, 'Grade 5 Tuition Fee', 29000.00, 1),
-(42, 9, 2, 'Miscellaneous Fee', 7000.00, 1),
-(43, 9, 3, 'Books and Materials', 5000.00, 1),
-(44, 9, 4, 'Computer Lab Fee', 1000.00, 1),
-(45, 9, 5, 'Development Fee', 1000.00, 1),
-(46, 10, 1, 'Grade 5 Tuition Fee', 29000.00, 1),
-(47, 10, 2, 'Miscellaneous Fee', 7000.00, 1),
-(48, 10, 3, 'Books and Materials', 5000.00, 1),
-(49, 10, 4, 'Computer Lab Fee', 1000.00, 1),
-(50, 10, 5, 'Development Fee', 1000.00, 1),
-(51, 11, 1, 'Grade 6 Tuition Fee', 30000.00, 1),
-(52, 11, 2, 'Miscellaneous Fee', 7500.00, 1),
-(53, 11, 3, 'Books and Materials', 5500.00, 1),
-(54, 11, 4, 'Computer Lab Fee', 1000.00, 1),
-(55, 11, 5, 'Development Fee', 1000.00, 1),
-(56, 12, 1, 'Grade 6 Tuition Fee', 30000.00, 1),
-(57, 12, 2, 'Miscellaneous Fee', 7500.00, 1),
-(58, 12, 3, 'Books and Materials', 5500.00, 1),
-(59, 12, 4, 'Computer Lab Fee', 1000.00, 1),
-(60, 12, 5, 'Development Fee', 1000.00, 1);
+(1, 1, 1, 'ha', 100.00, 1),
+(2, 2, 1, 'Registration Fee', 2000.00, 1),
+(3, 2, 2, 'Miscellaneous Fee', 4500.00, 1),
+(4, 2, 1, 'Tuition Fee', 12000.00, 1),
+(5, 3, 1, 'Registration Fee', 2000.00, 1),
+(6, 3, 2, 'Miscellaneous Fee', 5000.00, 1),
+(7, 3, 1, 'Tuition Fee', 13000.00, 1),
+(8, 4, 1, 'Registration Fee', 2000.00, 1),
+(9, 4, 2, 'Miscellaneous Fee', 4500.00, 1),
+(10, 4, 1, 'Tuition Fee', 12000.00, 1),
+(11, 5, 1, 'Registration Fee', 2000.00, 1),
+(12, 5, 2, 'Miscellaneous Fee', 5000.00, 1),
+(13, 5, 1, 'Tuition Fee', 13000.00, 1),
+(14, 6, 1, 'Registration Fee', 2000.00, 1),
+(15, 6, 2, 'Miscellaneous Fee', 4500.00, 1),
+(16, 6, 1, 'Tuition Fee', 12000.00, 1);
 
 -- --------------------------------------------------------
 
@@ -1698,7 +1663,7 @@ INSERT INTO `transactionstatus` (`StatusID`, `StatusName`, `SortOrder`) VALUES
 CREATE TABLE `user` (
   `UserID` int(11) NOT NULL,
   `EmailAddress` varchar(255) NOT NULL,
-  `UserType` enum('Admin','Teacher','Student','Parent','Registrar','Guard','Staff','Head Teacher') NOT NULL,
+  `UserType` enum('Admin','Teacher','Student','Parent','Registrar','Guard','Staff','HeadTeacher') NOT NULL,
   `AccountStatus` enum('Active','Inactive','Suspended','PendingVerification') NOT NULL DEFAULT 'PendingVerification',
   `LastLoginDate` datetime DEFAULT NULL,
   `CreatedAt` datetime NOT NULL DEFAULT current_timestamp(),
@@ -1712,27 +1677,18 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`UserID`, `EmailAddress`, `UserType`, `AccountStatus`, `LastLoginDate`, `CreatedAt`, `UpdatedAt`, `IsDeleted`, `DeletedAt`) VALUES
-(1001, 'maria.santos@gca.edu.ph', 'Teacher', 'Active', NULL, '2025-05-01 08:00:00', '2025-11-22 18:25:25', 0, NULL),
-(1002, 'jose.delacruz@gca.edu.ph', 'Teacher', 'Active', NULL, '2025-05-01 08:00:00', '2025-11-22 18:25:25', 0, NULL),
-(1003, 'anna.reyes@gca.edu.ph', 'Teacher', 'Active', NULL, '2025-05-01 08:00:00', '2025-11-22 18:25:25', 0, NULL),
-(1004, 'robert.gonzales@gca.edu.ph', 'Teacher', 'Active', NULL, '2025-05-01 08:00:00', '2025-11-22 18:25:25', 0, NULL),
-(1005, 'carmen.lopez@gca.edu.ph', 'Teacher', 'Active', NULL, '2025-05-01 08:00:00', '2025-11-22 18:25:25', 0, NULL),
-(1006, 'daniel.torres@gca.edu.ph', 'Teacher', 'Active', NULL, '2025-05-01 08:00:00', '2025-11-22 18:25:25', 0, NULL),
-(1234, 'registrar@gmail.com', 'Registrar', 'Active', NULL, '2025-11-27 01:36:47', '2025-11-27 01:36:47', 0, NULL),
-(2001, 'john.martinez@student.gca.edu.ph', 'Student', 'Active', NULL, '2025-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2002, 'sofia.reyes@student.gca.edu.ph', 'Student', 'Active', NULL, '2025-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2003, 'miguel.cruz@student.gca.edu.ph', 'Student', 'Active', NULL, '2024-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2004, 'isabella.gonzales@student.gca.edu.ph', 'Student', 'Active', NULL, '2024-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2005, 'gabriel.torres@student.gca.edu.ph', 'Student', 'Active', NULL, '2023-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2006, 'mia.santos@student.gca.edu.ph', 'Student', 'Active', NULL, '2023-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2007, 'rafael.villanueva@student.gca.edu.ph', 'Student', 'Active', NULL, '2022-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2008, 'sophia.bautista@student.gca.edu.ph', 'Student', 'Active', NULL, '2022-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2009, 'lucas.fernandez@student.gca.edu.ph', 'Student', 'Active', NULL, '2021-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2010, 'chloe.aguirre@student.gca.edu.ph', 'Student', 'Active', NULL, '2021-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2011, 'oliver.santiago@student.gca.edu.ph', 'Student', 'Active', NULL, '2020-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2012, 'emma.castillo@student.gca.edu.ph', 'Student', 'Active', NULL, '2020-05-20 10:00:00', '2025-11-22 18:25:25', 0, NULL),
-(2016, 'ewqsa.fuentes@student.gca.edu.ph', 'Student', 'Active', NULL, '2025-11-27 03:36:30', '2025-11-27 03:36:30', 0, NULL),
-(2017, 'markkengiealdabon@gmail.com', 'Head Teacher', 'Active', NULL, '2025-11-27 19:01:53', '2025-11-28 00:08:16', 0, NULL);
+(1, '1', 'Registrar', 'Active', NULL, '2025-11-28 04:12:58', '2025-11-28 04:12:58', 0, NULL),
+(2, 'aaaa.aa@student.gca.edu.ph', 'Student', 'Active', NULL, '2025-11-28 04:22:41', '2025-11-28 04:22:41', 0, NULL),
+(3, 'joaa.gaa@student.gca.edu.ph', 'Student', 'Active', NULL, '2025-11-28 06:48:51', '2025-11-28 06:48:51', 0, NULL),
+(4, 'aaaaga.hahaha@student.gca.edu.ph', 'Student', 'Active', NULL, '2025-11-28 06:59:24', '2025-11-28 06:59:24', 0, NULL),
+(5, 'sana.ka@student.gca.edu.ph', 'Student', 'Active', NULL, '2025-11-28 07:06:41', '2025-11-28 07:06:41', 0, NULL),
+(6, 'haha.ahahaha@student.gca.edu.ph', 'Student', 'Active', NULL, '2025-11-28 07:27:35', '2025-11-28 07:27:35', 0, NULL),
+(7, 'hahaha.hahaha@student.gca.edu.ph', 'Student', 'Active', NULL, '2025-11-28 08:49:31', '2025-11-28 08:49:31', 0, NULL),
+(8, 'maglipon.denmarc.amar@gmail.com', 'Guard', 'Active', NULL, '2025-11-28 08:49:12', '2025-11-28 08:49:12', 0, NULL),
+(9, 'amar.dmnmnenmarc@gmail.com', 'Registrar', 'Active', NULL, '2025-11-28 08:54:27', '2025-11-29 15:40:33', 0, NULL),
+(10, 'gagalang.joshua.s@gmail.com', 'Guard', 'Active', NULL, '2025-11-29 05:04:38', '2025-11-29 05:04:38', 0, NULL),
+(11, 'uniqujje@gmail.com', 'HeadTeacher', 'Active', NULL, '2025-11-29 06:05:05', '2025-11-29 06:05:05', 0, NULL),
+(12, 'amar.denmarc@gmail.com', 'Admin', 'Active', NULL, '2025-11-29 07:40:43', '2025-11-29 07:40:43', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -1748,13 +1704,6 @@ CREATE TABLE `userrole` (
   `ExpiryDate` datetime DEFAULT NULL,
   `AssignedByUserID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `userrole`
---
-
-INSERT INTO `userrole` (`UserRoleID`, `UserID`, `RoleID`, `AssignedDate`, `ExpiryDate`, `AssignedByUserID`) VALUES
-(1, 2017, 4, '2025-11-27 19:01:53', NULL, 9);
 
 -- --------------------------------------------------------
 
@@ -1774,13 +1723,40 @@ CREATE TABLE `usersettings` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `user_sessions`
+--
+
+CREATE TABLE `user_sessions` (
+  `SessionID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `Token` varchar(255) NOT NULL,
+  `ExpiresAt` datetime NOT NULL,
+  `CreatedAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `LastActivity` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_sessions`
+--
+
+INSERT INTO `user_sessions` (`SessionID`, `UserID`, `Token`, `ExpiresAt`, `CreatedAt`, `LastActivity`) VALUES
+(1, 1, '0a50422b7641e62ba070fcd65d7e93d63f95f37698e29678d4ab131db8a6b6c3_1_1764294736', '2025-12-28 09:52:16', '2025-11-28 08:12:27', '2025-11-28 09:52:16'),
+(6, 7, '2e05cc78277abbbcdfd19bee405a43a86a41871a726001d624ba053cae5e0a5f_7_1764416764', '2025-12-29 19:46:04', '2025-11-28 08:49:50', '2025-11-29 19:46:04'),
+(12, 6, 'aaa2bc638688b3c99cddfa08f015ff5dae4638cca6d964516c19095214c92474_6_1764293721', '2025-12-28 09:35:21', '2025-11-28 09:35:21', '2025-11-28 09:35:21'),
+(13, 3, '08e4f4fd9d5c492073c64ec2961e597743fc00dabde0b4304be78c0870943753_3_1764294862', '2025-12-28 09:54:22', '2025-11-28 09:47:47', '2025-11-28 09:54:22'),
+(17, 2, '501cafa2c3e11cfc02ebcbddd02db4d46d8e72ee3bd0f215493ebc7463b88ff8_2_1764294909', '2025-12-28 09:55:09', '2025-11-28 09:55:09', '2025-11-28 09:55:09'),
+(21, 12, 'e639e0b286320cc0241b8754a5e9bb25be663abd40c212e664282410ded2e8b7_12_1764416784', '2025-12-29 19:46:24', '2025-11-29 16:32:24', '2025-11-29 19:46:24');
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `vw_student_auth`
 -- (See below for the actual view)
 --
 CREATE TABLE `vw_student_auth` (
 `UserID` int(11)
 ,`EmailAddress` varchar(255)
-,`UserType` enum('Admin','Teacher','Student','Parent','Registrar','Guard','Staff','Head Teacher')
+,`UserType` enum('Admin','Teacher','Student','Parent','Registrar','Guard','Staff','HeadTeacher')
 ,`AccountStatus` enum('Active','Inactive','Suspended','PendingVerification')
 ,`LastLoginDate` datetime
 ,`UserCreatedAt` datetime
@@ -1882,7 +1858,8 @@ ALTER TABLE `application`
   ADD KEY `fk_Application_SchoolYear` (`SchoolYearID`),
   ADD KEY `fk_Application_GradeLevel` (`ApplyingForGradeLevelID`),
   ADD KEY `fk_Application_ReviewedByUser` (`ReviewedByUserID`),
-  ADD KEY `idx_tracking_number` (`TrackingNumber`);
+  ADD KEY `idx_tracking_number` (`TrackingNumber`),
+  ADD KEY `fk_Application_Transaction` (`TransactionID`);
 
 --
 -- Indexes for table `applicationrequirement`
@@ -2021,6 +1998,15 @@ ALTER TABLE `gradestatus`
   ADD UNIQUE KEY `StatusName` (`StatusName`);
 
 --
+-- Indexes for table `gradesubmissiondeadline`
+--
+ALTER TABLE `gradesubmissiondeadline`
+  ADD PRIMARY KEY (`DeadlineID`),
+  ADD UNIQUE KEY `unique_schoolyear_quarter` (`SchoolYearID`,`Quarter`),
+  ADD KEY `fk_GradeDeadline_SchoolYear` (`SchoolYearID`),
+  ADD KEY `fk_GradeDeadline_CreatedByUser` (`CreatedByUserID`);
+
+--
 -- Indexes for table `guardian`
 --
 ALTER TABLE `guardian`
@@ -2109,7 +2095,8 @@ ALTER TABLE `payment`
   ADD KEY `fk_Payment_Transaction` (`TransactionID`),
   ADD KEY `fk_Payment_PaymentMethod` (`PaymentMethodID`),
   ADD KEY `fk_Payment_SecureFile` (`ProofFileID`),
-  ADD KEY `fk_Payment_VerifiedByUser` (`VerifiedByUserID`);
+  ADD KEY `fk_Payment_VerifiedByUser` (`VerifiedByUserID`),
+  ADD KEY `VerifiedBy` (`VerifiedBy`);
 
 --
 -- Indexes for table `paymentmethod`
@@ -2289,6 +2276,16 @@ ALTER TABLE `usersettings`
   ADD UNIQUE KEY `UserID` (`UserID`);
 
 --
+-- Indexes for table `user_sessions`
+--
+ALTER TABLE `user_sessions`
+  ADD PRIMARY KEY (`SessionID`),
+  ADD UNIQUE KEY `Token` (`Token`),
+  ADD UNIQUE KEY `UserID` (`UserID`),
+  ADD KEY `fk_UserSessions_User` (`UserID`),
+  ADD KEY `idx_token_expiry` (`Token`,`ExpiresAt`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -2302,25 +2299,25 @@ ALTER TABLE `academicstanding`
 -- AUTO_INCREMENT for table `academicstandinglevel`
 --
 ALTER TABLE `academicstandinglevel`
-  MODIFY `StandingLevelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `StandingLevelID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `adminprofile`
 --
 ALTER TABLE `adminprofile`
-  MODIFY `AdminProfileID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AdminProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `announcement`
 --
 ALTER TABLE `announcement`
-  MODIFY `AnnouncementID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `AnnouncementID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `application`
 --
 ALTER TABLE `application`
-  MODIFY `ApplicationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `ApplicationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `applicationrequirement`
@@ -2350,13 +2347,13 @@ ALTER TABLE `attendancemethod`
 -- AUTO_INCREMENT for table `attendancesummary`
 --
 ALTER TABLE `attendancesummary`
-  MODIFY `AttendanceSummaryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `AttendanceSummaryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `auditlog`
 --
 ALTER TABLE `auditlog`
-  MODIFY `AuditID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `AuditID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `authorized_escort`
@@ -2368,7 +2365,7 @@ ALTER TABLE `authorized_escort`
 -- AUTO_INCREMENT for table `classschedule`
 --
 ALTER TABLE `classschedule`
-  MODIFY `ScheduleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `ScheduleID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `discount`
@@ -2380,7 +2377,7 @@ ALTER TABLE `discount`
 -- AUTO_INCREMENT for table `discounttype`
 --
 ALTER TABLE `discounttype`
-  MODIFY `DiscountTypeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `DiscountTypeID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `document_request`
@@ -2392,13 +2389,13 @@ ALTER TABLE `document_request`
 -- AUTO_INCREMENT for table `emergencycontact`
 --
 ALTER TABLE `emergencycontact`
-  MODIFY `EmergencyContactID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `EmergencyContactID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `enrollment`
 --
 ALTER TABLE `enrollment`
-  MODIFY `EnrollmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `EnrollmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `faq`
@@ -2410,7 +2407,7 @@ ALTER TABLE `faq`
 -- AUTO_INCREMENT for table `grade`
 --
 ALTER TABLE `grade`
-  MODIFY `GradeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6109;
+  MODIFY `GradeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
 
 --
 -- AUTO_INCREMENT for table `gradelevel`
@@ -2422,19 +2419,25 @@ ALTER TABLE `gradelevel`
 -- AUTO_INCREMENT for table `gradestatus`
 --
 ALTER TABLE `gradestatus`
-  MODIFY `StatusID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `StatusID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `gradesubmissiondeadline`
+--
+ALTER TABLE `gradesubmissiondeadline`
+  MODIFY `DeadlineID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `guardian`
 --
 ALTER TABLE `guardian`
-  MODIFY `GuardianID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `GuardianID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `guardprofile`
 --
 ALTER TABLE `guardprofile`
-  MODIFY `GuardProfileID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `GuardProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `itemtype`
@@ -2446,13 +2449,13 @@ ALTER TABLE `itemtype`
 -- AUTO_INCREMENT for table `medicalinfo`
 --
 ALTER TABLE `medicalinfo`
-  MODIFY `MedicalInfoID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `MedicalInfoID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `notificationlog`
 --
 ALTER TABLE `notificationlog`
-  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `notificationtype`
@@ -2464,13 +2467,13 @@ ALTER TABLE `notificationtype`
 -- AUTO_INCREMENT for table `participationlevel`
 --
 ALTER TABLE `participationlevel`
-  MODIFY `ParticipationLevelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ParticipationLevelID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `participationrating`
 --
 ALTER TABLE `participationrating`
-  MODIFY `ParticipationRatingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ParticipationRatingID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `passwordhistory`
@@ -2482,7 +2485,7 @@ ALTER TABLE `passwordhistory`
 -- AUTO_INCREMENT for table `passwordpolicy`
 --
 ALTER TABLE `passwordpolicy`
-  MODIFY `PolicyID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2015;
+  MODIFY `PolicyID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `password_reset_tokens`
@@ -2494,7 +2497,7 @@ ALTER TABLE `password_reset_tokens`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `PaymentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `PaymentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `paymentmethod`
@@ -2512,13 +2515,13 @@ ALTER TABLE `permission`
 -- AUTO_INCREMENT for table `profile`
 --
 ALTER TABLE `profile`
-  MODIFY `ProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2015;
+  MODIFY `ProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `registrarprofile`
 --
 ALTER TABLE `registrarprofile`
-  MODIFY `RegistrarProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1235;
+  MODIFY `RegistrarProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `requirementtype`
@@ -2530,7 +2533,7 @@ ALTER TABLE `requirementtype`
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `rolepermission`
@@ -2566,13 +2569,13 @@ ALTER TABLE `securefile`
 -- AUTO_INCREMENT for table `studentguardian`
 --
 ALTER TABLE `studentguardian`
-  MODIFY `StudentGuardianID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `StudentGuardianID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `studentprofile`
 --
 ALTER TABLE `studentprofile`
-  MODIFY `StudentProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `StudentProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `subject`
@@ -2584,31 +2587,31 @@ ALTER TABLE `subject`
 -- AUTO_INCREMENT for table `supportticket`
 --
 ALTER TABLE `supportticket`
-  MODIFY `TicketID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `TicketID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `teacherprofile`
 --
 ALTER TABLE `teacherprofile`
-  MODIFY `TeacherProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `TeacherProfileID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ticketmessage`
 --
 ALTER TABLE `ticketmessage`
-  MODIFY `MessageID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `MessageID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `TransactionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `TransactionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `transactionitem`
 --
 ALTER TABLE `transactionitem`
-  MODIFY `ItemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `ItemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `transactionstatus`
@@ -2620,19 +2623,25 @@ ALTER TABLE `transactionstatus`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2018;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `userrole`
 --
 ALTER TABLE `userrole`
-  MODIFY `UserRoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `UserRoleID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `usersettings`
 --
 ALTER TABLE `usersettings`
   MODIFY `SettingsID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_sessions`
+--
+ALTER TABLE `user_sessions`
+  MODIFY `SessionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- Constraints for dumped tables
@@ -2665,7 +2674,8 @@ ALTER TABLE `application`
   ADD CONSTRAINT `fk_Application_GradeLevel` FOREIGN KEY (`ApplyingForGradeLevelID`) REFERENCES `gradelevel` (`GradeLevelID`),
   ADD CONSTRAINT `fk_Application_Profile` FOREIGN KEY (`ApplicantProfileID`) REFERENCES `profile` (`ProfileID`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_Application_ReviewedByUser` FOREIGN KEY (`ReviewedByUserID`) REFERENCES `user` (`UserID`) ON DELETE SET NULL,
-  ADD CONSTRAINT `fk_Application_SchoolYear` FOREIGN KEY (`SchoolYearID`) REFERENCES `schoolyear` (`SchoolYearID`);
+  ADD CONSTRAINT `fk_Application_SchoolYear` FOREIGN KEY (`SchoolYearID`) REFERENCES `schoolyear` (`SchoolYearID`),
+  ADD CONSTRAINT `fk_Application_Transaction` FOREIGN KEY (`TransactionID`) REFERENCES `transaction` (`TransactionID`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `applicationrequirement`
@@ -2748,6 +2758,33 @@ ALTER TABLE `grade`
   ADD CONSTRAINT `fk_Grade_ModifiedByUser` FOREIGN KEY (`ModifiedByUserID`) REFERENCES `user` (`UserID`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_Grade_Status` FOREIGN KEY (`GradeStatusID`) REFERENCES `gradestatus` (`StatusID`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_Grade_Subject` FOREIGN KEY (`SubjectID`) REFERENCES `subject` (`SubjectID`);
+
+--
+-- Constraints for table `gradesubmissiondeadline`
+--
+ALTER TABLE `gradesubmissiondeadline`
+  ADD CONSTRAINT `fk_GradeDeadline_CreatedByUser` FOREIGN KEY (`CreatedByUserID`) REFERENCES `user` (`UserID`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_GradeDeadline_SchoolYear` FOREIGN KEY (`SchoolYearID`) REFERENCES `schoolyear` (`SchoolYearID`);
+
+--
+-- Constraints for table `payment`
+--
+ALTER TABLE `payment`
+  ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`VerifiedBy`) REFERENCES `user` (`UserID`);
+
+--
+-- Constraints for table `user_sessions`
+--
+ALTER TABLE `user_sessions`
+  ADD CONSTRAINT `fk_UserSessions_User` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE;
+
+DELIMITER $$
+--
+-- Events
+--
+CREATE DEFINER=`root`@`localhost` EVENT `cleanup_expired_sessions` ON SCHEDULE EVERY 1 DAY STARTS '2025-11-28 08:16:31' ON COMPLETION NOT PRESERVE ENABLE DO DELETE FROM user_sessions WHERE ExpiresAt < NOW()$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

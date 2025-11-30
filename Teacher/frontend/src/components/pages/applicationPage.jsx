@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Inbox from '../common/application/inbox/inbox.jsx';
 import Screening from '../common/application/screening/screening';
+import Breadcrumb from '../common/Breadcrumb.jsx';
 
 
-const SettingsPage = () => {
+const ApplicationPage = () => {
   const [activeTab, setActiveTab] = useState('Appearances');
 
   const tabs = [
@@ -15,20 +16,29 @@ const SettingsPage = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'Notifications':
-        return <Inbox/>;
+        return <Inbox />;
       case 'Appearances':
-        return <Screening/>;
+        return <Screening />;
       case 'Security':
-        return <Inbox/>;
+        return <Inbox />;
       default:
-        return <Screening/>;
+        return <Screening />;
     }
   };
 
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'Application' }
+  ];
+
   return (
     <>
+      <div className="mb-6">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
+
       <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">
-        Settings
+        Application
       </h1>
 
       <div className="flex items-center gap-2 mb-6">
@@ -36,11 +46,10 @@ const SettingsPage = () => {
           <div key={tab.id} className="relative group">
             <button
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-300 ${
-                activeTab === tab.id
-                  ? 'bg-amber-400 text-stone-900'
-                  : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
-              }`}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-300 ${activeTab === tab.id
+                ? 'bg-amber-400 text-stone-900'
+                : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+                }`}
             >
               {tab.label}
             </button>
@@ -58,4 +67,4 @@ const SettingsPage = () => {
   );
 };
 
-export default SettingsPage;
+export default ApplicationPage;

@@ -143,6 +143,7 @@ export default function TeacherProfile({
   }
 
   const formattedName = formatName(teacher);
+  const isHeadTeacher = teacher.userType === "Head Teacher";
 
   return (
     <>
@@ -201,15 +202,30 @@ export default function TeacherProfile({
             {teacher.subject}
           </p>
 
-          {teacher.archived && (
-            <span
-              className={`text-xs px-3 py-1 rounded-full font-medium mt-2 ${
-                darkMode ? "bg-red-900 text-red-200" : "bg-red-100 text-red-800"
-              }`}
-            >
-              Archived
-            </span>
-          )}
+          <div className="flex flex-wrap gap-2 mt-2 justify-center">
+            {teacher.archived && (
+              <span
+                className={`text-xs px-3 py-1 rounded-full font-medium ${
+                  darkMode
+                    ? "bg-red-900 text-red-200"
+                    : "bg-red-100 text-red-800"
+                }`}
+              >
+                Archived
+              </span>
+            )}
+            {isHeadTeacher && (
+              <span
+                className={`text-xs px-3 py-1 rounded-full font-medium ${
+                  darkMode
+                    ? "bg-purple-900 text-purple-200"
+                    : "bg-purple-100 text-purple-800"
+                }`}
+              >
+                Head Teacher
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Contact Info - Changed from centered to left-aligned */}
@@ -237,6 +253,16 @@ export default function TeacherProfile({
               Subject:
             </span>{" "}
             {teacher.subject}
+          </p>
+          <p>
+            <span
+              className={`font-semibold ${
+                darkMode ? "text-gray-200" : "text-gray-800"
+              }`}
+            >
+              User Type:
+            </span>{" "}
+            {teacher.userType || "Teacher"}
           </p>
         </div>
 

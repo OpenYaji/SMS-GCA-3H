@@ -1,6 +1,5 @@
 import React from 'react';
 import OverallPerformanceCard from '../common/academic/OverallPerformanceCard';
-import TeacherFeedbackCard from '../common/academic/TeacherFeedbackCard';
 import QuickActionsCard from '../common/academic/QuickActionsCard';
 
 const AcademicPage = () => {
@@ -14,7 +13,6 @@ const AcademicPage = () => {
 
         <OverallPerformanceCard />
         <QuickActionsCard />
-        <TeacherFeedbackCard />
         
       </div>
     </>

@@ -205,7 +205,7 @@ class StudentProfileController extends Controller
                     'TableName' => 'studentprofile',
                     'RecordID' => $studentProfile->StudentProfileID,
                     'Operation' => 'UPDATE',
-                    'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+                    'UserID' => User::getCurrentUserId(), 
                     'OldValues' => $oldValues,
                     'NewValues' => json_encode(new StudentProfileResource($studentProfile)),
                     'IPAddress' => $request->ip(),
@@ -277,7 +277,7 @@ class StudentProfileController extends Controller
             'TableName' => 'passwordpolicy',
             'RecordID' => $passwordPolicy->PolicyID,
             'Operation' => 'INSERT',
-            'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+            'UserID' => User::getCurrentUserId(), 
             'OldValues' => null,
             'NewValues' => json_encode($passwordPolicy->toArray()),
             'IPAddress' => $request->ip(),
@@ -350,7 +350,7 @@ class StudentProfileController extends Controller
                     'TableName' => 'passwordpolicy',
                     'RecordID' => $passwordPolicy->PolicyID,
                     'Operation' => 'INSERT',
-                    'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+                    'UserID' => User::getCurrentUserId(), 
                     'OldValues' => null,
                     'NewValues' => json_encode($passwordPolicy->toArray()),
                     'IPAddress' => $request->ip(),

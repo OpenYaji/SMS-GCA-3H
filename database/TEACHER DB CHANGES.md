@@ -23,14 +23,10 @@ ALTER TABLE `profile` ADD `Gender` ENUM('Male','Female') NULL AFTER `MiddleName`
 ALTER TABLE `profile` ADD `Age` INT NULL AFTER `BirthDate`;
 
 -- Add ClassShift column to section table
-ALTER TABLE `section` ADD `ClassShift` ENUM('Morning','Afternoon') NULL AFTER `SectionName`;
+ALTER TABLE `section ` ADD `ClassShift` ENUM('Morning','Afternoon') NULL AFTER `SectionName`;
 
 --Add RoomNumber column to section table
 ALTER TABLE `section` ADD `RoomNumber` VARCHAR(255) NULL AFTER `SectionName`;
 ```
 
 ## Getting Started
-
-```bash
-git add README.md 
-```

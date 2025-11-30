@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTeacherProfileRequest extends FormRequest
@@ -26,20 +24,6 @@ class StoreTeacherProfileRequest extends FormRequest
         return [
             // User table fields
             'EmailAddress' => 'required|email|max:255|unique:user,EmailAddress',
-            'UserType' => [
-                'required',
-                'in:Teacher,HeadTeacher',
-                Rule::when($this->UserType === 'HeadTeacher', [
-                    function ($attribute, $value, $fail) {
-                        // Check if a headteacher already exists
-                        $existingHeadTeacher = User::where('UserType', 'HeadTeacher')->exists();
-                        
-                        if ($existingHeadTeacher) {
-                            $fail('A headteacher already exists. Only one headteacher is allowed.');
-                        }
-                    }
-                ])
-            ],
 
             // Profile table fields
             'FirstName' => 'required|string|max:50',

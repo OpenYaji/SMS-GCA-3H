@@ -51,7 +51,7 @@ class TeacherProfileController extends Controller
                 // Create user
                 $user = User::create([
                     'EmailAddress' => $validated['EmailAddress'],
-                    'UserType' => $validated['UserType'],
+                    'UserType' => 'Teacher',
                     'AccountStatus' => 'Active'
                 ]);
 
@@ -89,7 +89,7 @@ class TeacherProfileController extends Controller
                     'TableName' => 'teacherprofile',
                     'RecordID' => $teacherProfile->TeacherProfileID,
                     'Operation' => 'INSERT',
-                    'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+                    'UserID' => User::getCurrentUserId(), 
                     'OldValues' => null,
                     'NewValues' => json_encode(new TeacherProfileResource($teacherProfile)),
                     'IPAddress' => $request->ip(),
@@ -183,7 +183,7 @@ class TeacherProfileController extends Controller
                     'TableName' => 'teacherprofile',
                     'RecordID' => $teacherProfile->TeacherProfileID,
                     'Operation' => 'UPDATE',
-                    'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+                    'UserID' => User::getCurrentUserId(), 
                     'OldValues' => $oldValues,
                     'NewValues' => json_encode(new TeacherProfileResource($teacherProfile)),
                     'IPAddress' => $request->ip(),
@@ -239,7 +239,7 @@ class TeacherProfileController extends Controller
             'TableName' => 'teacherprofile',
             'RecordID' => $teacherProfile->TeacherProfileID,
             'Operation' => 'DELETE',
-            'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+            'UserID' => User::getCurrentUserId(), 
             'OldValues' => null,
             'NewValues' => null,
             'IPAddress' => $request->ip(),

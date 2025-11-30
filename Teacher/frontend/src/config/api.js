@@ -18,19 +18,22 @@ export const API_ENDPOINTS = {
   LOGOUT: getApiUrl('api/auth/logout.php'),
   GET_CURRENT_USER: getApiUrl('api/auth/get-current-user.php'),
   REGISTER_TEACHER: getApiUrl('api/auth/register-teacher.php'),
-  
+
   // Teachers
   GET_TEACHER_CLASSES: getApiUrl('api/teachers/get-teacher-classes.php'),
   GET_STUDENTS_BY_SECTION: getApiUrl('api/teachers/get-students-by-section.php'),
-  
+
   // Support
   SUPPORT_BASE: getApiUrl('api/support'),
-  
+
   // Notifications
   GET_NOTIFICATIONS: getApiUrl('api/notifications/get-notifications.php'),
-  
+
   // Attendance
   GET_ATTENDANCE_REPORT: getApiUrl('api/attendance/get-report.php'),
+
+  // Announcements
+  GET_ANNOUNCEMENTS: getApiUrl('api/announcements/get-announcements.php'),
 };
 
 export default {

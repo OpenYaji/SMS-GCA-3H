@@ -78,7 +78,6 @@ function App() {
               <Route path="notifications" element={<NotificationPage />} />
               <Route path="announcements" element={<AnnouncementContainer />} />
               <Route path="settings" element={<SettingsPage />} />
-              <Route path="help-and-support" element={<HelpSupportPage />} />
             </Route>
 
             {/* Catch-all route - redirect to login for any unknown paths */}

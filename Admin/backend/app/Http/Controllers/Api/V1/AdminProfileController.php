@@ -88,7 +88,7 @@ class AdminProfileController extends Controller
                     'TableName' => 'adminprofile',
                     'RecordID' => $adminProfile->AdminProfileID,
                     'Operation' => 'INSERT',
-                    'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+                    'UserID' => User::getCurrentUserId(), 
                     'OldValues' => null,
                     'NewValues' => json_encode(new AdminProfileResource($adminProfile)),
                     'IPAddress' => $request->ip(),
@@ -181,7 +181,7 @@ class AdminProfileController extends Controller
                     'TableName' => 'adminprofile',
                     'RecordID' => $adminProfile->AdminProfileID,
                     'Operation' => 'UPDATE',
-                    'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+                    'UserID' => User::getCurrentUserId(), 
                     'OldValues' => $oldValues,
                     'NewValues' => json_encode(new AdminProfileResource($adminProfile)),
                     'IPAddress' => $request->ip(),
@@ -237,7 +237,7 @@ class AdminProfileController extends Controller
             'TableName' => 'adminprofile',
             'RecordID' => $adminProfile->AdminProfileID,
             'Operation' => 'DELETE',
-            'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+            'UserID' => User::getCurrentUserId(), 
             'OldValues' => null,
             'NewValues' => null,
             'IPAddress' => $request->ip(),

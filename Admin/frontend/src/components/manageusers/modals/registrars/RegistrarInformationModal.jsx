@@ -330,7 +330,7 @@ export default function RegistrarInformationModal({
     const requiredFields = [
       "firstName",
       "lastName",
-      "accountEmail",
+      "email",
       "phone",
       "streetAddress",
     ];
@@ -348,7 +348,7 @@ export default function RegistrarInformationModal({
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (editData.accountEmail && !emailRegex.test(editData.accountEmail)) {
+    if (editData.email && !emailRegex.test(editData.email)) {
       setSaveError("Please enter a valid account email address");
       return false;
     }
@@ -383,8 +383,8 @@ export default function RegistrarInformationModal({
         PhoneNumber: safe(editData.phone, registrarDetails?.phone),
         Address: fullAddress,
         EmailAddress: safe(
-          editData.accountEmail || editData.email,
-          registrarDetails?.accountEmail || registrarDetails?.email
+          editData.email || editData.email,
+          registrarDetails?.email || registrarDetails?.email
         ),
         Specialization: safe(editData.subject, registrarDetails?.subject),
       };

@@ -1,4 +1,10 @@
 <?php
+/**
+ * API Endpoint: Get Sections by Grade Level
+ * Method: GET
+ * Returns sections for a specific grade level
+ */
+
 session_start();
 
 ini_set('display_errors', 1);
@@ -23,6 +29,14 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+$gradeLevelId = $_GET['gradeLevelId'] ?? null;
+
+if (!$gradeLevelId) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Grade Level ID is required.']);
+    exit();
+}
+
 // Get database connection
 $database = new Database();
 $db = $database->getConnection();
@@ -34,45 +48,38 @@ if (!$db) {
 }
 
 try {
-    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
-
+    // Get sections for the specified grade level
     $query = "
         SELECT 
-            a.AnnouncementID as id,
-            a.Title as title,
-            a.Content as message,
-            a.Summary as summary,
-            a.Category as category,
-            a.BannerURL as imageUrl,
-            a.PublishDate as createdAt,
-            CONCAT(p.FirstName, ' ', p.LastName) as createdBy
-        FROM announcement a
-        JOIN user u ON a.AuthorUserID = u.UserID
-        JOIN profile p ON u.UserID = p.UserID
-        WHERE a.TargetAudience IN ('All Users', 'Teachers')
-            AND a.IsActive = 1
-            AND (a.ExpiryDate IS NULL OR a.ExpiryDate >= CURDATE())
-        ORDER BY a.PublishDate DESC
-        LIMIT :limit
+            s.SectionID as id,
+            s.SectionName as sectionName,
+            CONCAT(p.FirstName, ' ', p.LastName) as advisorName,
+            tp.TeacherProfileID as advisorId
+        FROM section s
+        LEFT JOIN teacherprofile tp ON s.AdviserTeacherID = tp.TeacherProfileID
+        LEFT JOIN profile p ON tp.ProfileID = p.ProfileID
+        JOIN schoolyear sy ON s.SchoolYearID = sy.SchoolYearID
+        WHERE s.GradeLevelID = :gradeLevelId
+            AND sy.IsActive = 1
+        ORDER BY s.SectionName
     ";
     
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':gradeLevelId', $gradeLevelId, PDO::PARAM_INT);
     $stmt->execute();
-    
-    $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     http_response_code(200);
     echo json_encode([
         'success' => true,
-        'data' => $announcements
+        'data' => $sections
     ]);
     
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Error fetching announcements: ' . $e->getMessage()
+        'message' => 'Error fetching sections: ' . $e->getMessage()
     ]);
 }
 ?>

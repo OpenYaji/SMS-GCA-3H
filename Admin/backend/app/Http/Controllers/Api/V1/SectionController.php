@@ -36,7 +36,7 @@ class SectionController extends Controller
             'TableName' => 'section',
             'RecordID' => $section->SectionID,
             'Operation' => 'INSERT',
-            'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+            'UserID' => User::getCurrentUserId(), 
             'OldValues' => null,
             'NewValues' => json_encode($section->toArray()),
             'IPAddress' => $request->ip(),
@@ -72,7 +72,7 @@ class SectionController extends Controller
             'TableName' => 'section',
             'RecordID' => $section->SectionID,
             'Operation' => 'UPDATE',
-            'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+            'UserID' => User::getCurrentUserId(), 
             'OldValues' => $oldValues,
             'NewValues' => json_encode($section->fresh()->toArray()),
             'IPAddress' => $request->ip(),

@@ -1,4 +1,10 @@
 <?php
+/**
+ * API Endpoint: Get All Sections
+ * Method: GET
+ * Returns all sections with grade level, section name, and advisor
+ */
+
 session_start();
 
 ini_set('display_errors', 1);
@@ -34,45 +40,38 @@ if (!$db) {
 }
 
 try {
-    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
-
+    // Get all sections with grade level and advisor information
     $query = "
         SELECT 
-            a.AnnouncementID as id,
-            a.Title as title,
-            a.Content as message,
-            a.Summary as summary,
-            a.Category as category,
-            a.BannerURL as imageUrl,
-            a.PublishDate as createdAt,
-            CONCAT(p.FirstName, ' ', p.LastName) as createdBy
-        FROM announcement a
-        JOIN user u ON a.AuthorUserID = u.UserID
-        JOIN profile p ON u.UserID = p.UserID
-        WHERE a.TargetAudience IN ('All Users', 'Teachers')
-            AND a.IsActive = 1
-            AND (a.ExpiryDate IS NULL OR a.ExpiryDate >= CURDATE())
-        ORDER BY a.PublishDate DESC
-        LIMIT :limit
+            s.SectionID as id,
+            gl.LevelName as gradeLevel,
+            s.SectionName as sectionName,
+            CONCAT(p.FirstName, ' ', p.LastName) as advisorName,
+            tp.TeacherProfileID as advisorId
+        FROM section s
+        JOIN gradelevel gl ON s.GradeLevelID = gl.GradeLevelID
+        LEFT JOIN teacherprofile tp ON s.AdviserTeacherID = tp.TeacherProfileID
+        LEFT JOIN profile p ON tp.ProfileID = p.ProfileID
+        JOIN schoolyear sy ON s.SchoolYearID = sy.SchoolYearID
+        WHERE sy.IsActive = 1
+        ORDER BY gl.SortOrder, s.SectionName
     ";
     
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
-    
-    $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $sections = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     http_response_code(200);
     echo json_encode([
         'success' => true,
-        'data' => $announcements
+        'data' => $sections
     ]);
     
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Error fetching announcements: ' . $e->getMessage()
+        'message' => 'Error fetching sections: ' . $e->getMessage()
     ]);
 }
 ?>

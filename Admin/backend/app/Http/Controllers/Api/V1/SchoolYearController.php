@@ -61,7 +61,7 @@ class SchoolYearController extends Controller
                 'TableName' => 'schoolyear',
                 'RecordID' => $schoolYear->SchoolYearID,
                 'Operation' => 'INSERT',
-                'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+                'UserID' => User::getCurrentUserId(), 
                 'OldValues' => null,
                 'NewValues' => json_encode($schoolYear->toArray()),
                 'IPAddress' => $request->ip(),
@@ -105,7 +105,7 @@ class SchoolYearController extends Controller
             'TableName' => 'schoolyear',
             'RecordID' => $schoolYear->SchoolYearID,
             'Operation' => 'UPDATE',
-            'UserID' => User::SYSTEM_USER_ID, //hardcoded user for now
+            'UserID' => User::getCurrentUserId(), 
             'OldValues' => $oldValues,
             'NewValues' => json_encode($schoolYear->fresh()->toArray()),
             'IPAddress' => $request->ip(),

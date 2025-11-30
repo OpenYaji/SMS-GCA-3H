@@ -44,6 +44,8 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   // Function to calculate age from birthday
   const calculateAge = (birthday) => {
@@ -128,6 +130,38 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
     }
   };
 
+  // Handle profile image selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check if file is an image
+      if (!file.type.startsWith("image/")) {
+        setError("Please select a valid image file");
+        return;
+      }
+
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Image size should be less than 5MB");
+        return;
+      }
+
+      setProfileImage(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Trigger file input click
+  const triggerFileInput = () => {
+    document.getElementById("profile-image-input").click();
+  };
+
   // Update age when birthday changes
   useEffect(() => {
     if (profileData.birthday) {
@@ -209,6 +243,15 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
       console.log("Endpoint: PUT /api/v1/profile (authenticated user)");
       console.log("API Data:", apiData);
 
+      // If there's a new profile image, you would upload it here
+      if (profileImage) {
+        console.log("New profile image selected:", profileImage.name);
+        // Add your image upload logic here
+        // const formData = new FormData();
+        // formData.append('profile_image', profileImage);
+        // await profileService.uploadProfileImage(formData);
+      }
+
       // FIXED: Use updateProfile WITHOUT ID - it uses the authenticated user's token
       const response = await profileService.updateProfile(apiData);
 
@@ -230,6 +273,8 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
   const handleCancelEdit = () => {
     setIsEditing(false);
     setError(null);
+    setProfileImage(null);
+    setImagePreview(null);
   };
 
   return (
@@ -296,16 +341,56 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
           </button>
         )}
 
-        <div className="w-20 h-20 rounded-full border-4 border-white bg-gray-200 dark:bg-gray-600 flex items-center justify-center shadow-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="40"
-            height="40"
-            viewBox="0 0 24 24"
-            fill="#888"
+        {/* Profile Image with Edit Functionality */}
+        <div className="relative">
+          <div
+            className={`w-20 h-20 rounded-full border-4 border-white bg-gray-200 dark:bg-gray-600 flex items-center justify-center shadow-lg overflow-hidden ${
+              isEditing
+                ? "cursor-pointer hover:opacity-80 transition-opacity"
+                : ""
+            }`}
+            onClick={isEditing ? triggerFileInput : undefined}
           >
-            <path d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 8v-2.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2V20z" />
-          </svg>
+            {imagePreview ? (
+              <img
+                src={imagePreview}
+                alt="Profile preview"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="#888"
+              >
+                <path d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 8v-2.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2V20z" />
+              </svg>
+            )}
+          </div>
+          {isEditing && (
+            <>
+              <input
+                id="profile-image-input"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+              />
+              <div className="absolute bottom-0 right-0 bg-yellow-400 rounded-full p-1 border-2 border-white">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L17.625 2.175L21.8 6.45L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z" />
+                </svg>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex-1">
@@ -372,14 +457,15 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
             isEditing={isEditing}
             onProfileChange={handleProfileChange}
           />
-          <ProfileInfoItem
+          {/* Commented out fields */}
+          {/* <ProfileInfoItem
             label="Sex"
             value={profileData.sex}
             field="sex"
             isEditing={isEditing}
             type="select"
             onProfileChange={handleProfileChange}
-          />
+          /> */}
           <ProfileInfoItem
             label="Nationality"
             value={profileData.nationality}
@@ -387,7 +473,7 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
             isEditing={isEditing}
             onProfileChange={handleProfileChange}
           />
-          <ProfileInfoItem
+          {/* <ProfileInfoItem
             label="Religion"
             value={profileData.religion}
             field="religion"
@@ -400,7 +486,7 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
             field="motherTongue"
             isEditing={isEditing}
             onProfileChange={handleProfileChange}
-          />
+          /> */}
         </div>
       </div>
     </div>

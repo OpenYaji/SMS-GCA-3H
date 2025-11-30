@@ -2,7 +2,9 @@
 
 use App\Models\SchoolYear;
 use Illuminate\Http\Request;
+use App\Http\Middleware\AdminOnly;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\TokenAuthentication;
 use App\Http\Controllers\Api\V1\SectionController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\SchoolYearController;
@@ -22,7 +24,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware([TokenAuthentication::class, AdminOnly::class])->group(function () {
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'index']);
 

@@ -167,6 +167,84 @@ const InputField = ({
   );
 };
 
+// SelectField component for User Type dropdown
+const SelectField = ({
+  label,
+  name,
+  icon: Icon,
+  placeholder,
+  value,
+  onChange,
+  options = [],
+  required = true,
+  error,
+  darkMode = false,
+}) => {
+  const handleSelectChange = (e) => {
+    const { name, value } = e.target;
+    onChange(e);
+  };
+
+  return (
+    <div className="mb-1">
+      <label
+        className={`block mb-1 capitalize ${
+          darkMode ? "text-gray-300" : "text-gray-700"
+        }`}
+      >
+        {label}
+        {!required && (
+          <span
+            className={`text-sm ml-1 ${
+              darkMode ? "text-gray-400" : "text-gray-400"
+            }`}
+          >
+            (optional)
+          </span>
+        )}
+      </label>
+      <div className="relative">
+        <Icon
+          className={`absolute left-3 top-2.5 w-5 h-5 ${
+            darkMode ? "text-gray-400" : "text-gray-400"
+          }`}
+        />
+        <select
+          name={name}
+          value={value || ""}
+          onChange={handleSelectChange}
+          required={required}
+          className={`w-full border rounded-lg pl-10 pr-3 py-2 focus:ring-2 outline-none appearance-none ${
+            darkMode
+              ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500"
+              : "bg-white border-gray-300 text-gray-700 placeholder-gray-400 focus:ring-yellow-400 focus:border-yellow-400"
+          } ${error ? "border-red-500 focus:ring-red-400" : ""}`}
+        >
+          <option value="">{placeholder}</option>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <div
+          className={`absolute right-3 top-2.5 pointer-events-none ${
+            darkMode ? "text-gray-400" : "text-gray-400"
+          }`}
+        >
+          ▼
+        </div>
+        {error && (
+          <div className="flex items-center gap-1 mt-1 text-red-500 text-sm">
+            <AlertCircle className="w-4 h-4" />
+            <span>{error}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // ImageUploadField
 const ImageUploadField = ({
   label,
@@ -406,9 +484,15 @@ export default function AddTeacherRecordModal({
     },
     step2: {
       nationality: "",
+      userType: "Teacher",
       subjectSpecializations: [],
     },
   });
+
+  const userTypeOptions = [
+    { value: "Teacher", label: "Teacher" },
+    { value: "Head Teacher", label: "Head Teacher" },
+  ];
 
   const subjectSpecializations = [
     { code: "english", name: "English" },
@@ -507,6 +591,8 @@ export default function AddTeacherRecordModal({
     if (!data.nationality?.trim())
       newErrors.nationality = "Nationality is required";
 
+    if (!data.userType?.trim()) newErrors.userType = "User type is required";
+
     // Validate at least one subject is selected
     if (!data.subjectSpecializations?.length)
       newErrors.subjectSpecializations =
@@ -574,6 +660,10 @@ export default function AddTeacherRecordModal({
         )
         .map((subject) => subject.name);
 
+      // Transform User Type for backend (remove space from "Head Teacher" to "HeadTeacher")
+      const userTypeForBackend =
+        formData.step2.userType === "Head Teacher" ? "HeadTeacher" : "Teacher";
+
       const teacherData = {
         EmailAddress: formData.step1.email.trim(),
         LastName: formData.step1.lastName.trim(),
@@ -583,6 +673,7 @@ export default function AddTeacherRecordModal({
         Address: fullAddress,
         Specialization: selectedSubjectNames.join(", "),
         HireDate: new Date().toISOString().split("T")[0],
+        UserType: userTypeForBackend,
       };
 
       if (formData.step1.sex?.trim()) {
@@ -651,6 +742,7 @@ export default function AddTeacherRecordModal({
       },
       step2: {
         nationality: "",
+        userType: "Teacher",
         subjectSpecializations: [],
       },
     });
@@ -884,6 +976,18 @@ export default function AddTeacherRecordModal({
                 onChange={(e) => handleChange(e, "step2")}
                 error={errors.step2?.nationality}
                 validationType="name"
+                darkMode={darkMode}
+              />
+
+              <SelectField
+                label="User Type"
+                name="userType"
+                placeholder="Select user type"
+                icon={User}
+                value={formData.step2?.userType ?? "Teacher"}
+                onChange={(e) => handleChange(e, "step2")}
+                options={userTypeOptions}
+                error={errors.step2?.userType}
                 darkMode={darkMode}
               />
 

@@ -977,9 +977,9 @@ export default function StudentInformationModal({
           emergencyContactPerson: studentData.emergencyContactPerson || "",
           emergencyContactNumber: studentData.emergencyContactNumber || "",
 
-          religion: studentData.rawData?.Religion || "",
-          birthplace: studentData.rawData?.Birthplace || "",
-          motherTongue: studentData.rawData?.MotherTongue || "",
+          // religion: studentData.rawData?.Religion || "",
+          // birthplace: studentData.rawData?.Birthplace || "",
+          // motherTongue: studentData.rawData?.MotherTongue || "",
         };
 
         setStudentDetails(enhancedData);
@@ -1002,11 +1002,11 @@ export default function StudentInformationModal({
         birthday: student.rawData?.DateOfBirth || student.birthday || "",
         age: student.age || "",
         sex: student.sex || student.rawData?.Gender || "",
-        religion: student.rawData?.Religion || "",
+        // religion: student.rawData?.Religion || "",
         height: student.height || student.rawData?.MedicalInfo?.Height || "",
         weight: student.weight || student.rawData?.MedicalInfo?.Weight || "",
-        birthplace: student.rawData?.Birthplace || "",
-        motherTongue: student.rawData?.MotherTongue || "",
+        // birthplace: student.rawData?.Birthplace || "",
+        // motherTongue: student.rawData?.MotherTongue || "",
         nationality: student.nationality || "",
 
         fullAddress: student.address || student.rawData?.Profile?.Address || "",
@@ -1385,10 +1385,10 @@ export default function StudentInformationModal({
         Guardians: formattedGuardians.length > 0 ? formattedGuardians : [],
 
         // Optional fields
-        Religion: editData.religion || studentDetails.religion || "",
-        Birthplace: editData.birthplace || studentDetails.birthplace || "",
-        MotherTongue:
-          editData.motherTongue || studentDetails.motherTongue || "",
+        // Religion: editData.religion || studentDetails.religion || "",
+        // Birthplace: editData.birthplace || studentDetails.birthplace || "",
+        // MotherTongue:
+        //   editData.motherTongue || studentDetails.motherTongue || "",
       };
 
       console.log("=== Update Data Being Sent ===");
@@ -1816,7 +1816,7 @@ export default function StudentInformationModal({
                         darkMode={darkMode}
                         validationType="name"
                       />
-                      <EditableInfoRow
+                      {/* <EditableInfoRow
                         label="Religion"
                         value={
                           isEditing
@@ -1830,8 +1830,8 @@ export default function StudentInformationModal({
                         icon={Heart}
                         darkMode={darkMode}
                         validationType="name"
-                      />
-                      <EditableInfoRow
+                      /> */}
+                      {/* <EditableInfoRow
                         label="Birthplace"
                         value={
                           isEditing
@@ -1844,8 +1844,8 @@ export default function StudentInformationModal({
                         placeholder="Enter birthplace"
                         icon={MapPin}
                         darkMode={darkMode}
-                      />
-                      <EditableInfoRow
+                      /> */}
+                      {/* <EditableInfoRow
                         label="Mother Tongue"
                         value={
                           isEditing
@@ -1859,7 +1859,7 @@ export default function StudentInformationModal({
                         icon={User}
                         darkMode={darkMode}
                         validationType="name"
-                      />
+                      /> */}
                     </div>
                   </div>
 

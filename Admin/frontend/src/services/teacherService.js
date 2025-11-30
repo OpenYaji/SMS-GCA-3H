@@ -52,6 +52,11 @@ export const teacherService = {
             }
           );
 
+          const userTypeForDisplay =
+            teacher.User?.UserType === "HeadTeacher"
+              ? "Head Teacher"
+              : "Teacher";
+
           return {
             id: teacher.TeacherProfileID?.toString(),
             teacherId: teacher.EmployeeNumber,
@@ -64,6 +69,7 @@ export const teacherService = {
             archived: isArchived,
             accountStatus: teacher.User?.AccountStatus || "Active",
             profilePicture: teacher.Profile?.ProfilePictureURL || "",
+            userType: userTypeForDisplay,
             rawData: teacher,
           };
         });
@@ -96,6 +102,9 @@ export const teacherService = {
       const teacher = response.data.data || response.data;
 
       if (teacher) {
+        const userTypeForDisplay =
+          teacher.User?.UserType === "HeadTeacher" ? "Head Teacher" : "Teacher";
+
         return {
           id: teacher.TeacherProfileID?.toString() || id,
           teacherId: teacher.EmployeeNumber,
@@ -112,6 +121,7 @@ export const teacherService = {
           address: teacher.Profile?.Address || "",
           archived: teacher.User?.IsArchived === true,
           accountStatus: teacher.User?.AccountStatus || "Active",
+          userType: userTypeForDisplay,
           profilePicture: teacher.Profile?.ProfilePictureURL || null,
           ...teacher,
         };

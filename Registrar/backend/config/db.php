@@ -1,17 +1,13 @@
 <?php
 // db.php
-
-
-class Database
-{
-    private $host = 'localhost';
-    private $db_name = 'aa';
+class Database{
+    private $host = '127.0.0.1';
+    private $db_name = 'aa'; 
     private $username = 'root';
     private $password = '';
     public $conn;
 
-    public function getConnection()
-    {
+    public function getConnection() {
         $this->conn = null;
         try {
             $dsn = "mysql:host={$this->host};dbname={$this->db_name}";

@@ -44,7 +44,7 @@ class GradeSubmissionDeadlineController extends Controller
 
         GradeSubmissionDeadline::create(array_merge(
             $validated,
-            ['CreatedByUserID' => User::SYSTEM_USER_ID]
+            ['CreatedByUserID' => User::getCurrentUserId()]
         ));
 
         return response()->json([

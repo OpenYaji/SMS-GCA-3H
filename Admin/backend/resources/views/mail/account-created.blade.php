@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduSync Account Created</title>
+    <title>Gymnazo Account Created</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
@@ -211,7 +211,7 @@
                     <!-- Header -->
                     <tr>
                         <td class="header">
-                            <h1 class="logo">EduSync</h1>
+                            <h1 class="logo">Gymnazo</h1>
                             <p class="logo-subtitle">Education Management Platform</p>
                         </td>
                     </tr>
@@ -219,12 +219,12 @@
                     <!-- Content -->
                     <tr>
                         <td class="content">
-                            <p class="greeting">Welcome to EduSync!</p>
+                            <p class="greeting">Welcome to Gymnazo!</p>
                             
                             <p>Dear: <strong style="color: #854d0e;">{{ $user->profile->FirstName . ' ' . $user->profile->LastName}} </strong>,</p>
                             
                             <div class="message">
-                                <p>We are excited to inform you that your EduSync account has been set up and is ready for use!</p>
+                                <p>We are excited to inform you that your Gymnazo account has been set up and is ready for use!</p>
                             </div>
                             
                             <div class="credentials">
@@ -244,7 +244,7 @@
                             </div>
                             
                             <p style="text-align: center;">
-                                <a href="#" class="login-button">Access EduSync Portal</a>
+                                <a href="#" class="login-button">Access Gymnazo Portal</a>
                             </p>
                             
                             <div class="contact-info">

@@ -75,8 +75,8 @@ export default function DashboardSidebar({ collapsed, setCollapsed, mobileOpen, 
 
     const menuItems = [
         { name: 'Dashboard', icon: <LayoutDashboard size={18} />, path: '/teacher-dashboard' },
-        { name: 'My Classes', icon: <Book size={18} />, path: '/teacher-dashboard/my-classes' },
-        { name: 'Teaching Schedule', icon: <Clock size={18} />, path: '/teacher-dashboard/teaching-schedule' },
+        { name: 'Advisory Class', icon: <Book size={18} />, path: '/teacher-dashboard/my-classes' },
+        { name: 'Scheduling', icon: <Clock size={18} />, path: '/teacher-dashboard/teaching-schedule' },
         { name: 'Notifications', icon: <Bell size={18} />, path: '/teacher-dashboard/notifications' },
         { name: 'Announcements', icon: <Megaphone size={18} />, path: '/teacher-dashboard/announcements' },
         { name: 'Settings', icon: <Settings size={18} />, path: '/teacher-dashboard/settings' },

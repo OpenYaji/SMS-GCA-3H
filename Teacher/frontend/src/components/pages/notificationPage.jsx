@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Bell, Search, ChevronDown } from 'lucide-react';
+import Breadcrumb from '../common/Breadcrumb.jsx';
 
 /**
  * NotificationPage Component
@@ -52,20 +53,20 @@ const NotificationPage = () => {
           id: announcement.id,
           category: announcement.createdBy || 'ADMIN',
           description: announcement.title,
-          date: new Date(announcement.createdAt).toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric' 
+          date: new Date(announcement.createdAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
           }),
-          time: new Date(announcement.createdAt).toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
+          time: new Date(announcement.createdAt).toLocaleTimeString('en-US', {
+            hour: 'numeric',
             minute: '2-digit',
-            hour12: true 
+            hour12: true
           }),
           status: 'Completed', // Since these are published announcements
           fullMessage: announcement.message
         }));
-        
+
         setNotifications(transformedNotifications);
       } else {
         setError(response.data.message);
@@ -79,14 +80,14 @@ const NotificationPage = () => {
   };
 
   const filteredNotifications = notifications.filter(notification => {
-    const matchesSearch = searchTerm === '' || 
+    const matchesSearch = searchTerm === '' ||
       notification.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       notification.category.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilter = filterOption === 'All' || 
+
+    const matchesFilter = filterOption === 'All' ||
       notification.category === filterOption ||
       notification.status === filterOption;
-    
+
     return matchesSearch && matchesFilter;
   });
 
@@ -94,8 +95,18 @@ const NotificationPage = () => {
   const categories = ['All', ...new Set(notifications.map(n => n.category))];
   const statuses = ['All', 'Completed', 'Pending'];
 
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'Notifications' }
+  ];
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
+      {/* Breadcrumbs */}
+      <div className="mb-6">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
+
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-6xl font-bold text-gray-800 dark:text-white mb-6">
@@ -106,7 +117,7 @@ const NotificationPage = () => {
         <div className="flex items-center gap-0 bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md max-w-2xl overflow-hidden relative">
           {/* Filter Dropdown */}
           <div className="relative" ref={filterRef}>
-            <button 
+            <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className="flex items-center gap-2 px-4 py-3 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
@@ -126,9 +137,8 @@ const NotificationPage = () => {
                       setFilterOption('All');
                       setIsFilterOpen(false);
                     }}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                      filterOption === 'All' ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 font-medium' : 'text-gray-700 dark:text-gray-300'
-                    }`}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${filterOption === 'All' ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 font-medium' : 'text-gray-700 dark:text-gray-300'
+                      }`}
                   >
                     All
                   </button>
@@ -145,9 +155,8 @@ const NotificationPage = () => {
                         setFilterOption(category);
                         setIsFilterOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                        filterOption === category ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 font-medium' : 'text-gray-700 dark:text-gray-300'
-                      }`}
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${filterOption === category ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 font-medium' : 'text-gray-700 dark:text-gray-300'
+                        }`}
                     >
                       {category}
                     </button>
@@ -165,9 +174,8 @@ const NotificationPage = () => {
                         setFilterOption(status);
                         setIsFilterOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                        filterOption === status ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 font-medium' : 'text-gray-700 dark:text-gray-300'
-                      }`}
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${filterOption === status ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 font-medium' : 'text-gray-700 dark:text-gray-300'
+                        }`}
                     >
                       {status}
                     </button>
@@ -279,11 +287,10 @@ const NotificationPage = () => {
 
                   {/* Status */}
                   <div
-                    className={`font-medium ${
-                      notification.status === 'Completed'
-                        ? 'text-green-500'
-                        : 'text-red-400'
-                    }`}
+                    className={`font-medium ${notification.status === 'Completed'
+                      ? 'text-green-500'
+                      : 'text-red-400'
+                      }`}
                   >
                     {notification.status}
                   </div>

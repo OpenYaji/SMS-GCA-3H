@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SearchBar from '../common/SearchBar.jsx';
 import AnnouncementCard from '../cards/announcementCard.jsx';
+import Breadcrumb from '../common/Breadcrumb.jsx';
 import { API_ENDPOINTS } from '../../config/api';
 
 /**
@@ -60,6 +61,11 @@ export default function AnnouncementPage() {
     return matchesTitle || matchesDescription;
   });
 
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'Announcements' }
+  ];
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -69,9 +75,14 @@ export default function AnnouncementPage() {
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-8">
+      {/* Breadcrumbs */}
+      <div className="mb-6">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
+
       {/* Page Header */}
-      <div className="pt-8 pb-6">
+      <div className="pb-6">
         <h1 className="text-center text-5xl font-bold text-gray-900 dark:text-white">
           Updated <span className="text-amber-400">Announcement</span>
         </h1>

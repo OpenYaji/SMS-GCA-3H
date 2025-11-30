@@ -34,9 +34,10 @@ const AttendancePage = () => {
   const [updatingAttendance, setUpdatingAttendance] = useState(false);
 
   // Breadcrumb items
+  // Breadcrumb items
   const breadcrumbItems = [
-    { label: 'Grade Levels & Sections', href: '/dashboard/classes' },
-    { label: 'Class Details', href: '/dashboard/class-details' },
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'My Classes', href: '/teacher-dashboard/my-classes' },
     { label: 'Attendance' },
   ];
 

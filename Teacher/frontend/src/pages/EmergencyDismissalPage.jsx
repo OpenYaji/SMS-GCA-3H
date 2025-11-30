@@ -25,6 +25,7 @@ const EmergencyDismissalPage = () => {
   const [selectedDay, setSelectedDay] = useState(location.state?.schedule?.day || 'Monday');
 
   const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
     { label: 'Teaching Schedule', href: '/teacher-dashboard/teaching-schedule' },
     { label: 'Emergency Dismissal' }
   ];

@@ -5,6 +5,7 @@ import GradesTable from '../cards/GradesTable';
 import ReportCardModal from '../modals/ReportCardModal';
 import WholeYearReportCard from '../modals/WholeYearReportCard';
 import UpdateStudentModal from '../modals/UpdateStudentModal';
+import Breadcrumb from '../common/Breadcrumb.jsx';
 
 /**
  * StudentGradesPage Component
@@ -16,12 +17,14 @@ import UpdateStudentModal from '../modals/UpdateStudentModal';
  * @param {object} classData - The class/section data
  * @param {function} onBack - Callback to navigate back
  * @param {function} onInputGrade - Callback to open grade input modal
+ * @param {function} onBackToClassList - Callback to navigate back to class list
  */
 export default function StudentGradesPage({
   student,
   classData,
   onBack,
-  onInputGrade
+  onInputGrade,
+  onBackToClassList
 }) {
   const [subjects, setSubjects] = useState([]);
   const [grades, setGrades] = useState({});
@@ -206,6 +209,13 @@ export default function StudentGradesPage({
     return <div className="p-8 text-center">No student selected</div>;
   }
 
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'My Classes', onClick: onBackToClassList },
+    { label: 'Class Details', onClick: onBack },
+    { label: 'View Info' }
+  ];
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 md:p-8">
       {/* Back Button */}
@@ -218,9 +228,9 @@ export default function StudentGradesPage({
       </button>
 
       {/* Breadcrumbs */}
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-        Grade Levels & Sections &gt; Class Details &gt; View Info
-      </p>
+      <div className="mb-6">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
 
       {/* Student Information Card */}
       <StudentInfoCard

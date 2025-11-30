@@ -235,7 +235,10 @@ const TeachingSchedulePage = () => {
     setIsCreateModalOpen(true);
   };
 
-  const breadcrumbItems = [{ label: 'Teaching Schedule', path: '/teacher-dashboard/teaching-schedule' }];
+  const breadcrumbItems = [
+    { label: 'Dashboard', href: '/teacher-dashboard' },
+    { label: 'Teaching Schedule' }
+  ];
 
   const filteredSchedules = schedules.filter(schedule =>
     (schedule.grade || '').toLowerCase().includes(searchQuery.toLowerCase()) ||

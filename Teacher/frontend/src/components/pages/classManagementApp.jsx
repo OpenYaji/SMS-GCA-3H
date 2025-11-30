@@ -330,7 +330,7 @@ export default function ClassManagementApp() {
           'q4': '4th Quarter'
         };
         const quarterDisplay = quarterMap[quarter] || quarter;
-        
+
         toast.success(`Grade saved successfully for ${subjectName} - ${quarterDisplay}!`);
       } else {
         throw new Error(response.data.message || 'Failed to save grade');

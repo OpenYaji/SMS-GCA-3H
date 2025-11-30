@@ -13,7 +13,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // NOTE: The URL below targets your provided PHP script endpoint
-  const API_URL = 'http://localhost:5174/server/server.php/student-log/';
+  const API_URL = 'http://localhost:5174/server/server.php/student-log';
 
   useEffect(() => {
     const fetchStudents = async () => {

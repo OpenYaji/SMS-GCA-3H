@@ -81,7 +81,7 @@ const StudentLogScreen = () => {
   return (
     <div className="p-4 sm:p-0">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-stone-900">Student Log</h1>
+        <h1 className="text-3xl font-bold text-stone-900">Student Attendance Log</h1>
       </div>
 
       <div className="flex mb-8 w-full max-w-lg">
@@ -109,8 +109,8 @@ const StudentLogScreen = () => {
           <div className='col-span-1'>ID</div>
           <div className="col-span-1">Student Name</div>
           <div className="col-span-1">Section/Grade</div>
-          <div className="col-span-1 text-center">Time In (Mock)</div>
-          <div className="col-span-1 text-center">Time Out (Mock)</div>
+         {/*  <div className="col-span-1 text-center">Time In (Mock)</div>
+          <div className="col-span-1 text-center">Time Out (Mock)</div> */}
         </div>
 
         {filteredStudentLog.map((student, index) => (
@@ -118,11 +118,10 @@ const StudentLogScreen = () => {
             key={student.id} 
             className={`grid grid-cols-5 items-center p-4 border-b border-stone-200 last:border-b-0 min-w-[500px] ${index % 2 === 1 ? 'bg-white' : 'bg-stone-50'} hover:bg-amber-50 transition-colors`} 
           >
-            <div className="col-span-1 text-stone-800 font-medium">{student.id}</div>
-            <div className="col-span-1 text-stone-800 font-medium">{student.user || 'N/A'}</div>
+            <div className="col-span-1 text-stone-600">{student.UserID || 'N/A'}</div>
+            <div className="col-span-1 text-stone-800 font-medium">{student.FirstName}</div>
+            <div className="col-span-1 text-stone-800 font-medium">{student.LastName || 'N/A'}</div>
             <div className="col-span-1 text-stone-600">{student.section || 'N/A'}</div>
-            <div className="col-span-1 text-center text-stone-600">{student.timeIn || '7:00 AM (Mock)'}</div>
-            <div className="col-span-1 text-center text-stone-600">{student.timeIn || '4:00 PM (Mock)'}</div>
           </div>
         ))}
       </div>

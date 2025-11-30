@@ -1,5 +1,4 @@
 <?php
-
 // 1. CORS Headers and Configuration
 header("Access-Control-Allow-Origin: http://localhost:5176");
 header("Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS");
@@ -35,7 +34,6 @@ try {
 }
 
 // 4. Utility Functions
-
 function send_json($data, $status = 200) {
     http_response_code($status);
     echo json_encode($data);
@@ -55,21 +53,20 @@ $apiBase = "/server/server.php";
 // --- GET /server/server.php/student-log ---
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && strpos($request, "$apiBase/student-log") !== false) {
     try {
-        $stmt = $pdo->query("SELECT UserID, FirstName, Gender FROM profile ORDER BY UserID DESC");
+        $stmt = $pdo->query("SELECT UserID, FirstName, LastName, MiddleName FROM profile ORDER BY UserID DESC");
         send_json($stmt->fetchAll());
     } catch (PDOException $e) {
         handle_error($e->getMessage());
     }
 }
 
-// --- GET /server/server.php/profile/{employeeId} from guard_profile ---
+// --- GET /server/server.php/profile/{EmployeeNumber} from guardprofile ---
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && preg_match("#$apiBase/profile/([^/]+)#", $request, $match)) {
-    $employeeId = $match[1];
+    $EmployeeNumber = $match[1];
 
     try {
-        // Directly fetch from guard_profile
-        $stmt = $pdo->prepare("SELECT * FROM guard_profile WHERE employee_id = ?");
-        $stmt->execute([$employeeId]);
+        $stmt = $pdo->prepare("SELECT * FROM guardprofile WHERE EmployeeNumber = ?");
+        $stmt->execute([$EmployeeNumber]);
         $profile = $stmt->fetch();
 
         if (!$profile) {
@@ -77,21 +74,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && preg_match("#$apiBase/profile/([^/]+
         } else {
             send_json($profile);
         }
-
     } catch (PDOException $e) {
         handle_error($e->getMessage());
     }
 }
 
-// --- PUT /server/server.php/profile/{employeeId} for guard_profile ---
+// --- PUT /server/server.php/profile/{EmployeeNumber} for guardprofile ---
 if ($_SERVER['REQUEST_METHOD'] === 'PUT' && preg_match("#$apiBase/profile/([^/]+)#", $request, $match)) {
-    $employeeId = $match[1];
+    $EmployeeNumber = $match[1];
     $body = json_decode(file_get_contents("php://input"), true);
 
     if (!$body) send_json(["message" => "Invalid request body"], 400);
 
-    $fields = ['fname','email','sex','birthday','phone_number','address','religion',
-               'mother_tounge','nationality','weight','height','avatar'];
+    $fields = [
+        'fname','email','sex','birthday','phone_number','address','religion',
+        'mother_tounge','nationality','weight','height','avatar'
+    ];
 
     $setParts = [];
     $values = [];
@@ -105,10 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT' && preg_match("#$apiBase/profile/([^/]+
 
     if (empty($setParts)) send_json(["message" => "No valid fields to update"], 400);
 
-    $values[] = $employeeId;
+    $values[] = $EmployeeNumber;
 
     try {
-        $sql = "UPDATE guard_profile SET " . implode(", ", $setParts) . " WHERE employee_id = ?";
+        $sql = "UPDATE guardprofile SET " . implode(", ", $setParts) . " WHERE EmployeeNumber = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute($values);
         send_json(["message" => "Profile updated"]);
@@ -136,5 +134,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && strpos($request, "$apiBase/attendan
 
 // 6. Fallback (404 Not Found)
 send_json(["message" => "Endpoint not found: $request"], 404);
-
 ?>

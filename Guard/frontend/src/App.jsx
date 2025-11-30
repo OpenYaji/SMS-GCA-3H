@@ -24,8 +24,8 @@ import StudentListScreen from './Pages/StudentListScreen.jsx';
  * Maps database data structure to a front-end readable profile object.
  */
 const mapToDisplayData = (data) => {
-  // NOTE: data_employee_id seems like a typo, using data.employee_id if available.
-  const employeeIdToUse = data.employee_id || ''; 
+  // NOTE: data_EmployeeNumber seems like a typo, using data.EmployeeNumber if available.
+  const employeeIdToUse = data.EmployeeNumber || ''; 
   const nameParts = [data.fname, data.middle_name, data.last_name, employeeIdToUse].filter(Boolean);
 
   return {
@@ -37,8 +37,8 @@ const mapToDisplayData = (data) => {
 };
 
 // SET CORRECT ID FROM YOUR DATABASE
-// This is the variable you defined to hold the ID: GUARD_EMPLOYEE_ID
-const GUARD_EMPLOYEE_ID = 'GRD-00101'; 
+// This is the variable you defined to hold the ID: GUARD_EmployeeNumber
+const GUARD_EmployeeNumber = 'EMP-0001'; 
 
 
 // --- Main Application Component ---
@@ -54,8 +54,8 @@ const App = () => {
    * Fetches the employee/guard profile data from the backend API.
    */
   const fetchEmployeeProfile = async () => {
-    // 🎯 FIX APPLIED HERE: Use GUARD_EMPLOYEE_ID instead of the undefined variable employee_id
-    const apiUrl = `http://localhost:5174/server/server.php/profile/${GUARD_EMPLOYEE_ID}`; 
+    // 🎯 FIX APPLIED HERE: Use GUARD_EmployeeNumber instead of the undefined variable EmployeeNumber
+    const apiUrl = `http://localhost:5174/server/server.php/profile/${GUARD_EmployeeNumber}`; 
 
     try {
       const response = await fetch(apiUrl);

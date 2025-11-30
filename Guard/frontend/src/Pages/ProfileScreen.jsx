@@ -4,22 +4,26 @@ import Edit2 from '../Components/Edit2.jsx';
 import Mail from '../Components/Mail.jsx';
 import ProfileField from '../Components/ProfileField.jsx';
 
-const GUARD_EMPLOYEE_ID = 'GRD-00101';
+const GUARD_EMPLOYEE_ID = 'EMP-0001';
 
 // Map front-end keys to backend
-const mapToBackendKeys = (data) => ({
-    fname: data.fullName.split(' ')[0] || '',
-    email: data.email || '',
-    employee_id: data.employeeId || '',
-    sex: data.sex || '',
-    birthday: data.dateOfBirth || '',
-    phone_number: data.phoneNumber || '',
-    address: data.address || '',
-    religion: data.religion || '',
-    mother_tounge: data.motherTongue || '',
-    nationality: data.nationality || '',
-    weight: data.weight ? parseFloat(data.weight.replace(' kg', '')) : null,
-    height: data.height ? parseFloat(data.height.replace(' cm', '')) : null,
+const mapToDisplayData = (data) => ({
+  guardProfileId: data.GuardProfileID,
+  profileId: data.ProfileID,
+  employeeId: data.EmployeeNumber,
+  hireDate: data.HireDate,
+  fullName: data.fname, // if you later add lname/mname, combine here
+  email: data.email,
+  sex: data.sex,
+  dateOfBirth: data.birthday,
+  phoneNumber: data.phone_number,
+  address: data.address,
+  religion: data.religion,
+  motherTongue: data.mother_tounge,
+  nationality: data.nationality,
+  weight: data.weight ? `${data.weight} kg` : '',
+  height: data.height ? `${data.height} cm` : '',
+  avatar_url: data.avatar,
 });
 
 const ProfileScreen = () => {
@@ -33,24 +37,24 @@ const ProfileScreen = () => {
     const [error, setError] = useState(null);
     const [showErrorModal, setShowErrorModal] = useState(false);
 
-    const mapToDisplayData = (data) => {
-        const nameParts = [data.fname, data.middle_name, data.last_name].filter(Boolean);
-        return {
-            fullName: nameParts.length > 0 ? nameParts.join(' ') : '',
-            email: data.email || '',
-            employeeId: data.employee_id || '',
-            sex: data.sex || '',
-            dateOfBirth: data.birthday || '',
-            phoneNumber: data.phone_number || '',
-            address: data.address || '',
-            religion: data.religion || '',
-            motherTongue: data.mother_tounge || '',
-            nationality: data.nationality || '',
-            weight: data.weight ? `${data.weight} kg` : '',
-            height: data.height ? `${data.height} cm` : '',
-            avatar_url: data.avatar_url,
-        };
-    };
+    const mapToBackendKeys = (data) => ({
+  GuardProfileID: data.guardProfileId || null,
+  ProfileID: data.profileId || null,
+  EmployeeNumber: data.employeeId || '',
+  HireDate: data.hireDate || null,
+  fname: data.fullName ? data.fullName.split(' ')[0] : '',
+  email: data.email || '',
+  sex: data.sex || '',
+  birthday: data.dateOfBirth || '',
+  phone_number: data.phoneNumber || '',
+  address: data.address || '',
+  religion: data.religion || '',
+  mother_tounge: data.motherTongue || '',
+  nationality: data.nationality || '',
+  weight: data.weight ? parseFloat(data.weight.replace(' kg', '')) : null,
+  height: data.height ? parseFloat(data.height.replace(' cm', '')) : null,
+  avatar: data.avatar_url || null,
+});
 
     const fetchProfile = async () => {
         if (!employeeId) {

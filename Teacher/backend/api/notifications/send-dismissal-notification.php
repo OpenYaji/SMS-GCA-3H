@@ -77,7 +77,7 @@ try {
         // Get all parents/guardians of students in this section
         $parentQuery = "
             SELECT DISTINCT 
-                CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR) AS Email,
+                COALESCE(CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR), CAST(g.EncryptedEmailAddress AS CHAR)) AS Email,
                 g.FullName,
                 g.GuardianID
             FROM enrollment e
@@ -99,7 +99,7 @@ try {
         
         $parentQuery = "
             SELECT DISTINCT 
-                CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR) AS Email,
+                COALESCE(CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR), CAST(g.EncryptedEmailAddress AS CHAR)) AS Email,
                 g.FullName,
                 g.GuardianID
             FROM studentprofile sp
@@ -118,7 +118,7 @@ try {
         
         $parentQuery = "
             SELECT 
-                CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR) AS Email,
+                COALESCE(CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR), CAST(g.EncryptedEmailAddress AS CHAR)) AS Email,
                 g.FullName
             FROM guardian g
             WHERE g.GuardianID = :parentId
@@ -286,6 +286,7 @@ try {
             'totalSent' => $successCount,
             'totalFailed' => count($failedEmails),
             'failedEmails' => $failedEmails,
+            'sentEmails' => $parentEmails,
             'recipients' => $parentNames,
             'timestamp' => date('Y-m-d H:i:s')
         ]

@@ -23,7 +23,14 @@ function getMailer() {
         $mail->Port       = $_ENV['SMTP_PORT'] ?? 465;
 
         //Default Sender
-        $mail->setFrom($_ENV['SMTP_FROM_EMAIL'] ?? 'no-reply@gymnazo.edu.ph', $_ENV['SMTP_FROM_NAME'] ?? 'Gymnazo Christian Academy');
+        $fromEmail = $_ENV['SMTP_FROM_EMAIL'] ?? 'no-reply@gymnazo.edu.ph';
+        $fromName = $_ENV['SMTP_FROM_NAME'] ?? 'Gymnazo Christian Academy';
+        
+        // Strip quotes if they exist in the env variable
+        $fromName = trim($fromName, '"\'');
+
+        $mail->setFrom($fromEmail, $fromName);
+        $mail->addReplyTo($fromEmail, $fromName);
 
         return $mail;
     } catch (Exception $e) {

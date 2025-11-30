@@ -45,8 +45,8 @@ try {
             sp_prof.LastName as studentLastName,
             g.GuardianID as guardianId,
             g.FullName as guardianName,
-            CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR) as guardianEmail,
-            CAST(AES_DECRYPT(g.EncryptedPhoneNumber, 'encryption_key') AS CHAR) as guardianPhone,
+            COALESCE(CAST(AES_DECRYPT(g.EncryptedEmailAddress, 'encryption_key') AS CHAR), CAST(g.EncryptedEmailAddress AS CHAR)) as guardianEmail,
+            COALESCE(CAST(AES_DECRYPT(g.EncryptedPhoneNumber, 'encryption_key') AS CHAR), CAST(g.EncryptedPhoneNumber AS CHAR)) as guardianPhone,
             sg.RelationshipType as relationship
         FROM enrollment e
         JOIN studentprofile sp ON e.StudentProfileID = sp.StudentProfileID

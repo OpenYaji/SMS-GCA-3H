@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ViewStudentsModal = ({ isVisible, student, onClose }) => {
+const ViewStudentModal = ({ isVisible, student, onClose }) => {
   const [closing, setClosing] = useState(false);
   if (!isVisible || !student) return null;
 
@@ -184,4 +184,4 @@ const ViewStudentsModal = ({ isVisible, student, onClose }) => {
   );
 };
 
-export default ViewStudentsModal;
+export default ViewStudentModal;

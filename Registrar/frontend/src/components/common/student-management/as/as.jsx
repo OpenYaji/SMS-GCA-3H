@@ -4,7 +4,7 @@ import StudentsFilters from './components/StudentsFilters';
 import StudentsTable from '../as/components/StudentsTable';
 import ExportButtons from '../as/components/ExportButtons';
 import ConfirmationModal from '../as/components/ConfirmationModal';
-import ViewStudentModal from './components/ViewStudentModal';
+import ViewStudentModal from '../as/components/ViewStudentModal';
 
 const AS = () => {  
     const {

@@ -6,6 +6,7 @@
         "dev:student": "cd Student/frontend && npm run dev -- --host --port 5173",
         "dev:registrar": "cd Registrar/frontend && npm run dev -- --host --port 5174",
         "dev:admin": "concurrently -n \"Admin Frontend,Admin Backend\" -c \"red,magenta\" \"cd Admin/frontend && npm run dev -- --host --port 5175\" \"cd Admin/backend && php artisan serve --port=8000\"",
+        "dev:guard": "cd Guard/frontend && npm run dev -- --host --port 5176",
         "dev:teacher": "cd Teacher/frontend && npm run dev -- --host --port 5177",
         "dev:all": "concurrently -n \"Student,Registrar,Admin,Guard,Teacher\" -c \"green,blue,red,magenta,yellow\" \"npm run dev:student\" \"npm run dev:registrar\" \"npm run dev:admin\" \"npm run dev:guard\" \"npm run dev:teacher\""
     },

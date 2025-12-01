@@ -38,6 +38,8 @@ export default function StudentGradesPage({
     firstName: student?.firstName || '',
     lastName: student?.lastName || '',
     middleName: student?.middleName || '',
+    gender: student?.gender || '',
+    profilePicture: student?.profilePicture || '',
     birthdate: student?.birthdate || '',
     age: student?.age || '',
     studentNumber: student?.studentNumber || '',
@@ -62,6 +64,8 @@ export default function StudentGradesPage({
         firstName: student.firstName || '',
         lastName: student.lastName || '',
         middleName: student.middleName || '',
+        gender: student.gender || '',
+        profilePicture: student.profilePicture || '',
         birthdate: student.birthdate || '',
         age: student.age || '',
         studentNumber: student.studentNumber || '',
@@ -108,25 +112,42 @@ export default function StudentGradesPage({
     try {
       setSaving(true);
 
-      console.log('Updating student with data:', {
-        studentId: student.id,
-        ...studentData
-      });
+      const formData = new FormData();
+      formData.append('studentId', student.id);
+      formData.append('firstName', studentData.firstName);
+      formData.append('lastName', studentData.lastName);
+      formData.append('middleName', studentData.middleName);
+      formData.append('gender', studentData.gender);
+      formData.append('birthdate', studentData.birthdate);
+      formData.append('age', studentData.age);
+      formData.append('studentNumber', studentData.studentNumber);
+      formData.append('address', studentData.address);
+      formData.append('contactNumber', studentData.contactNumber);
+
+      if (studentData.profilePictureFile) {
+        formData.append('profilePicture', studentData.profilePictureFile);
+      }
+
+      console.log('Updating student with formData...');
 
       const response = await axios.post(
         'http://localhost/SMS-GCA-3H/Teacher/backend/api/students/update-student-profile.php',
-        {
-          studentId: student.id,
-          ...studentData
-        },
-        { withCredentials: true }
+        formData,
+        { 
+          withCredentials: true,
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }
       );
 
       console.log('Update response:', response.data);
 
       if (response.data.success) {
-        // Update parent student object
-        Object.assign(student, studentData);
+        // Update parent student object with returned data
+        Object.assign(student, response.data.data);
+        
+        // Clear the file input state
+        setStudentData(prev => ({ ...prev, profilePictureFile: null }));
+        
         setShowUpdateModal(false);
         alert('Student profile updated successfully!');
       } else {
@@ -264,12 +285,7 @@ export default function StudentGradesPage({
         )}
 
         <div className="flex gap-4">
-          <button className="bg-amber-300 hover:bg-amber-400 px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            Send via Email
-          </button>
+
 
           {/* Print Report Card Dropdown Button */}
           <div className="relative" ref={dropdownRef}>

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Helpers\EncryptionHelper;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -32,8 +33,8 @@ class StudentProfileResource extends JsonResource
                 'FirstName' => $this->profile?->FirstName,
                 'LastName' => $this->profile?->LastName,
                 'MiddleName' => $this->profile?->MiddleName,
-                'PhoneNumber' =>  $this->safeDecrypt($this->profile?->EncryptedPhoneNumber),
-                'Address' => $this->safeDecrypt($this->profile?->EncryptedAddress),
+                'PhoneNumber' =>  EncryptionHelper::decrypt($this->profile?->EncryptedPhoneNumber),
+                'Address' => EncryptionHelper::decrypt($this->profile?->EncryptedAddress),
                 'ProfilePictureURL' => $this->profile?->ProfilePictureURL,
             ],
 
@@ -52,15 +53,15 @@ class StudentProfileResource extends JsonResource
             'MedicalInfo' => [
                 'Weight' => $this->medicalInfo?->Weight,
                 'Height'=> $this->medicalInfo?->Height,
-                'Allergies'=> $this->safeDecrypt($this->medicalInfo?->EncryptedAllergies),
-                'MedicalConditions'=> $this->safeDecrypt($this->medicalInfo?->EncryptedMedicalConditions),
-                'Medications'=> $this->safeDecrypt($this->medicalInfo?->EncryptedMedications), 
+                'Allergies'=> EncryptionHelper::decrypt($this->medicalInfo?->EncryptedAllergies),
+                'MedicalConditions'=> EncryptionHelper::decrypt($this->medicalInfo?->EncryptedMedicalConditions),
+                'Medications'=> EncryptionHelper::decrypt($this->medicalInfo?->EncryptedMedications), 
             ],
 
             // include related student emergency contact
             'EmergencyContact' => [
                 'ContactPerson'=> $this->emergencyContact?->ContactPerson,
-                'ContactNumber'=> $this->safeDecrypt($this->emergencyContact?->EncryptedContactNumber),
+                'ContactNumber'=> EncryptionHelper::decrypt($this->emergencyContact?->EncryptedContactNumber),
             ],
 
             'Guardians' => GuardianResource::collection($this->guardians),
@@ -75,22 +76,5 @@ class StudentProfileResource extends JsonResource
         ];
     }
 
-    /**
-     * Safely decrypts a given value.
-     *
-     * @param  string|null  $value
-     * @return string|null
-     */
-    private function safeDecrypt(?string $value): ?string
-    {
-        if (empty($value)) {
-            return null;
-        }
-
-        try {
-            return Crypt::decryptString($value);
-        } catch (DecryptException $e) {
-            return null;
-        }
-    }
+ 
 }

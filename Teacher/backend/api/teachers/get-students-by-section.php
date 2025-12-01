@@ -72,6 +72,7 @@ try {
             p.LastName as lastName,
             p.FirstName as firstName,
             p.MiddleName as middleName,
+            sp.Gender as gender,
             sp.DateOfBirth as birthdate,
             TIMESTAMPDIFF(YEAR, sp.DateOfBirth, CURDATE()) as age,
             sp.StudentNumber as studentNumber,

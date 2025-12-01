@@ -19,7 +19,9 @@ class Announcement
                     a.Category as category,
                     a.BannerURL as imageUrl,
                     DATE_FORMAT(a.PublishDate, '%Y-%m-%d') as publishDate,
+                    DATE_FORMAT(a.ExpiryDate, '%Y-%m-%d') as expiryDate,
                     a.IsPinned as isPinned,
+                    a.TargetAudience as targetAudience,
                     CONCAT(p.FirstName, ' ', p.LastName) as authorName
                   FROM " . $this->table . " a
                   LEFT JOIN user u ON a.AuthorUserID = u.UserID
@@ -62,7 +64,9 @@ class Announcement
                     a.Category as category,
                     a.BannerURL as imageUrl,
                     DATE_FORMAT(a.PublishDate, '%Y-%m-%d') as publishDate,
+                    DATE_FORMAT(a.ExpiryDate, '%Y-%m-%d') as expiryDate,
                     a.IsPinned as isPinned,
+                    a.TargetAudience as targetAudience,
                     CONCAT(p.FirstName, ' ', p.LastName) as authorName
                   FROM " . $this->table . " a
                   LEFT JOIN user u ON a.AuthorUserID = u.UserID
@@ -75,30 +79,5 @@ class Announcement
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function create($data)
-    {
-        $query = "INSERT INTO " . $this->table . "
-                  (AuthorUserID, Title, Content, Summary, Category, BannerURL, PublishDate, TargetAudience, IsPinned, IsActive)
-                  VALUES 
-                  (:authorUserId, :title, :content, :summary, :category, :bannerUrl, :publishDate, :targetAudience, :isPinned, 1)";
-
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(':authorUserId', $data['authorUserId']);
-        $stmt->bindParam(':title', $data['title']);
-        $stmt->bindParam(':content', $data['content']);
-        $stmt->bindParam(':summary', $data['summary']);
-        $stmt->bindParam(':category', $data['category']);
-        $stmt->bindParam(':bannerUrl', $data['bannerUrl']);
-        $stmt->bindParam(':publishDate', $data['publishDate']);
-        $stmt->bindParam(':targetAudience', $data['targetAudience']);
-        $stmt->bindParam(':isPinned', $data['isPinned']);
-
-        if ($stmt->execute()) {
-            return $this->conn->lastInsertId();
-        }
-        return false;
     }
 }

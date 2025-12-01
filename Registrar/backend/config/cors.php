@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0); // Hide HTML errors, we only want JSON
 
 // Allow React Frontend
-header("Access-Control-Allow-Origin: http://localhost:5174"); 
+header("Access-Control-Allow-Origin: http://10.153.119.17:5174"); 
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Max-Age: 86400");
 header("Content-Type: application/json; charset=UTF-8");

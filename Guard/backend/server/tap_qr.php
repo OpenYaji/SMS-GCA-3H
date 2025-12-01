@@ -1,26 +1,22 @@
 <?php
-header("Access-Control-Allow-Origin: *"); 
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json; charset=UTF-8");
-error_reporting(0);
+require_once __DIR__ . '/../config/cors.php';
+require_once __DIR__ . '/../config/db.php';
 
-$host = "localhost";
-$user = "root";
-$pass = "aggabaorenz";
-$db   = "guard_db";
+header('Content-Type: application/json');
 
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) {
-    echo json_encode(["success" => false, "message" => "DB connection failed"]);
+// Check DB Connection
+if (!isset($pdo) || $pdo === null) {
+    echo json_encode([
+        "success" => false, 
+        "message" => "Database connection failed"
+    ]);
     exit;
 }
 
-// Semaphore credentials
-$api_key = "ee4ec741b11ba5243f1f67bc1e173a0d"; // replace with your real key
+// Semaphore SMS Settings
+$api_key = "ee4ec741b11ba5243f1f67bc1e173a0d";
 $sender_name = "FuxDevs";
 
-// SMS helper
 function sendSMS($recipient, $message, $api_key, $sender_name) {
     $url = 'https://api.semaphore.co/api/v4/messages';
     $data = [
@@ -48,51 +44,63 @@ function sendSMS($recipient, $message, $api_key, $sender_name) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $qrCodeId = $_POST['qr_data'] ?? '';
 
-    if (!$qrCodeId) {
+    if (empty($qrCodeId)) {
         echo json_encode(["success" => false, "message" => "No QR code provided"]);
         exit;
     }
 
-    $stmt = $conn->prepare("SELECT studentName, StudentNumber, QRCodeID, DateOfBirth, Gender, Nationality, PhoneNumber, TapTimeIn, TapTimeOut 
-                            FROM student_profiles WHERE QRCodeID = ?");
-    $stmt->bind_param("s", $qrCodeId);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    try {
+        // Fetch student info only — NO ATTENDANCE
+        $stmt = $pdo->prepare("
+            SELECT 
+                sp.StudentProfileID,
+                sp.StudentNumber,
+                sp.QRCodeID,
+                sp.DateOfBirth,
+                sp.Gender,
+                sp.Nationality,
+                CONCAT(p.FirstName, ' ', p.LastName) AS studentName,
+                CAST(p.EncryptedPhoneNumber AS CHAR CHARACTER SET utf8mb4) AS PhoneNumber
+            FROM studentprofile sp
+            JOIN profile p ON sp.ProfileID = p.ProfileID
+            WHERE sp.QRCodeID = ?;
+        ");
+        
+        $stmt->execute([$qrCodeId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($row = $result->fetch_assoc()) {
-        $phone = $row['PhoneNumber'];
-        $recipient = "+63" . substr($phone, 1); // format PH number
+        if ($row) {
+            // Format phone
+            $phone = $row['PhoneNumber'] ?? '';
+            $recipient = ($phone && strlen($phone) > 1) ? "63" . substr($phone, 1) : '';
 
-        if (empty($row['TapTimeIn'])) {
-            // First tap → record TapTimeIn
-            $update = $conn->prepare("UPDATE student_profiles SET TapTimeIn = NOW() WHERE QRCodeID = ?");
-            $update->bind_param("s", $qrCodeId);
-            $update->execute();
-            $row['TapTimeIn'] = date("Y-m-d H:i:s");
-            $message = "Tap Time In recorded for {$row['studentName']} at {$row['TapTimeIn']}";
+            // Create message — just text only
+            $message = "{$row['studentName']} tapped at " . date("Y-m-d H:i:s");
 
-            $smsResponse = sendSMS($recipient, $message, $api_key, $sender_name);
+            // Optional SMS sending
+            if ($recipient) {
+                $smsResponse = sendSMS($recipient, $message, $api_key, $sender_name);
+                file_put_contents("sms_log.txt", $smsResponse . PHP_EOL, FILE_APPEND);                
+            }
 
-            echo json_encode(["success" => true, "message" => $message, "student" => $row, "sms" => $smsResponse]);
-        } elseif (empty($row['TapTimeOut'])) {
-            // Second tap → record TapTimeOut
-            $update = $conn->prepare("UPDATE student_profiles SET TapTimeOut = NOW() WHERE QRCodeID = ?");
-            $update->bind_param("s", $qrCodeId);
-            $update->execute();
-            $row['TapTimeOut'] = date("Y-m-d H:i:s");
-            $message = "Tap Time Out recorded for {$row['studentName']} at {$row['TapTimeOut']}";
-
-            $smsResponse = sendSMS($recipient, $message, $api_key, $sender_name);
-
-            echo json_encode(["success" => true, "message" => $message, "student" => $row, "sms" => $smsResponse]);
+            echo json_encode([
+                "success" => true,
+                "message" => $message,
+                "student" => $row,
+                "action" => "tap_only_display"
+            ]);
         } else {
-            echo json_encode(["success" => false, "message" => "Already tapped in and out", "student" => $row]);
+            echo json_encode(["success" => false, "message" => "Student not found"]);
         }
-    } else {
-        echo json_encode(["success" => false, "message" => "Student not found"]);
+        
+    } catch (Exception $e) {
+        echo json_encode([
+            "success" => false, 
+            "message" => "Database error: " . $e->getMessage()
+        ]);
     }
     exit;
 }
 
-echo json_encode(["success" => false, "message" => "Invalid request"]);
+echo json_encode(["success" => false, "message" => "Invalid request method"]);
 ?>

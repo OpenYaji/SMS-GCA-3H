@@ -10,6 +10,7 @@ use App\Mail\AccountCreated;
 use Illuminate\Http\Request;
 use App\Models\PasswordPolicy;
 use App\Models\TeacherProfile;
+use App\Helpers\EncryptionHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -68,8 +69,8 @@ class TeacherProfileController extends Controller
                     'FirstName' => $validated['FirstName'],
                     'LastName' => $validated['LastName'],
                     'MiddleName' => $validated['MiddleName'],
-                    'EncryptedPhoneNumber' => Crypt::encryptString($validated['PhoneNumber']),
-                    'EncryptedAddress' => Crypt::encryptString($validated['Address']),
+                    'EncryptedPhoneNumber' => EncryptionHelper::encrypt($validated['PhoneNumber']),
+                    'EncryptedAddress' => EncryptionHelper::encrypt($validated['Address']),
                     'ProfilePictureURL' => $validated['ProfilePictureURL'] ?? null,
                 ]);
 
@@ -167,8 +168,8 @@ class TeacherProfileController extends Controller
                     'FirstName' => $validated['FirstName'],
                     'LastName' => $validated['LastName'],
                     'MiddleName' => $validated['MiddleName'] ?? null,
-                    'EncryptedPhoneNumber' => Crypt::encryptString($validated['PhoneNumber']),
-                    'EncryptedAddress' => Crypt::encryptString($validated['Address']),
+                    'EncryptedPhoneNumber' => EncryptionHelper::encrypt($validated['PhoneNumber']),
+                    'EncryptedAddress' => EncryptionHelper::encrypt($validated['Address']),
                     'ProfilePictureURL' => $profilePictureURL,
                 ]);
 

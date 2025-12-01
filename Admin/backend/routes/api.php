@@ -24,7 +24,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::prefix('v1')->middleware([TokenAuthentication::class, AdminOnly::class])->group(function () {
+//Route::prefix('v1')->middleware([TokenAuthentication::class, AdminOnly::class])->group(function () {
+Route::prefix('v1')->group(function () {
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'index']);
 

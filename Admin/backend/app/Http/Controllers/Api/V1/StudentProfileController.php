@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Mail\AccountCreated;
 use Illuminate\Http\Request;
 use App\Models\StudentProfile;
+use App\Helpers\EncryptionHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -127,8 +128,8 @@ class StudentProfileController extends Controller
                     'FirstName' => $validated['FirstName'],
                     'LastName' => $validated['LastName'],
                     'MiddleName' => $validated['MiddleName'] ?? null,
-                    'EncryptedPhoneNumber' => Crypt::encryptString($validated['PhoneNumber']),
-                    'EncryptedAddress' => Crypt::encryptString($validated['Address']),
+                    'EncryptedPhoneNumber' => EncryptionHelper::encrypt($validated['PhoneNumber']),
+                    'EncryptedAddress' => EncryptionHelper::encrypt($validated['Address']),
                     'ProfilePictureURL' => $profilePictureURL,
                 ]);
 
@@ -144,7 +145,7 @@ class StudentProfileController extends Controller
                     [],
                     [
                         'ContactPerson' => $validated['ContactPerson'],
-                        'EncryptedContactNumber' => Crypt::encryptString($validated['ContactNumber']),
+                        'EncryptedContactNumber' => EncryptionHelper::encrypt($validated['ContactNumber']),
                     ]
                 );
 
@@ -154,9 +155,9 @@ class StudentProfileController extends Controller
                     [
                         'Height' => $validated['Height'],
                         'Weight' => $validated['Weight'],
-                        'EncryptedAllergies' => Crypt::encryptString($validated['Allergies']),
-                        'EncryptedMedicalConditions' => Crypt::encryptString($validated['MedicalConditions']),
-                        'EncryptedMedications' => Crypt::encryptString($validated['Medications'])
+                        'EncryptedAllergies' => EncryptionHelper::encrypt($validated['Allergies']),
+                        'EncryptedMedicalConditions' => EncryptionHelper::encrypt($validated['MedicalConditions']),
+                        'EncryptedMedications' => EncryptionHelper::encrypt($validated['Medications'])
                     ]
                 );
 
@@ -167,8 +168,8 @@ class StudentProfileController extends Controller
                             // Update existing guardian info (GuardianID exists due to validation)
                             Guardian::where('GuardianID', $g['GuardianID'])->update([
                                 'FullName' => $g['FullName'],
-                                'EncryptedPhoneNumber' => Crypt::encryptString($g['PhoneNumber']),
-                                'EncryptedEmailAddress' => Crypt::encryptString($g['EmailAddress']),
+                                'EncryptedPhoneNumber' => EncryptionHelper::encrypt($g['PhoneNumber']),
+                                'EncryptedEmailAddress' => EncryptionHelper::encrypt($g['EmailAddress']),
                                 'Occupation' => $g['Occupation'],
                                 'WorkAddress' => $g['WorkAddress'],
                             ]);
@@ -178,8 +179,8 @@ class StudentProfileController extends Controller
                             // Create new guardian (GuardianID is null or not provided)
                             $guardian = Guardian::create([
                                 'FullName' => $g['FullName'],
-                                'EncryptedPhoneNumber' => Crypt::encryptString($g['PhoneNumber']),
-                                'EncryptedEmailAddress' => Crypt::encryptString($g['EmailAddress']),
+                                'EncryptedPhoneNumber' => EncryptionHelper::encrypt($g['PhoneNumber']),
+                                'EncryptedEmailAddress' => EncryptionHelper::encrypt($g['EmailAddress']),
                                 'Occupation' => $g['Occupation'],
                                 'WorkAddress' => $g['WorkAddress'],
                             ]);

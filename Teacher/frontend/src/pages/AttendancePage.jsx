@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Search, ChevronDown, Calendar, X } from 'lucide-react';
 import Breadcrumb from '../components/common/Breadcrumb';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 
 const AttendancePage = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const AttendancePage = () => {
       }
 
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/attendance/get-section-attendance.php?sectionId=${classData.id}&date=${selectedDate}`,
+        `${API_ENDPOINTS.GET_SECTION_ATTENDANCE}?sectionId=${classData.id}&date=${selectedDate}`,
         { withCredentials: true }
       );
 
@@ -146,7 +147,7 @@ const AttendancePage = () => {
       setUpdatingAttendance(true);
 
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/attendance/update-attendance.php',
+        API_ENDPOINTS.UPDATE_ATTENDANCE,
         {
           studentId: studentId,
           sectionId: classData.id,

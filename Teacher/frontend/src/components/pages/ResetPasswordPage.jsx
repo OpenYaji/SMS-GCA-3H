@@ -4,6 +4,7 @@ import Header from '../common/homepage/loginHeader';
 import Bg from '../../assets/img/bg.png';
 import Logo from '../../assets/img/gymnazu.png';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
@@ -33,7 +34,7 @@ const ResetPasswordPage = () => {
   const verifyToken = async () => {
     try {
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/auth/reset-password.php',
+        API_ENDPOINTS.RESET_PASSWORD,
         { action: 'verify', token }
       );
 
@@ -95,7 +96,7 @@ const ResetPasswordPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/auth/reset-password.php',
+        API_ENDPOINTS.RESET_PASSWORD,
         {
           token,
           password,

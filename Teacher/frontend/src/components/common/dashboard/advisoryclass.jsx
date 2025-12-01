@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { API_ENDPOINTS } from '../../../config/api';
+
+const { GET_ADVISORY_CLASSES } = API_ENDPOINTS;
 
 const AdvisoryClass = () => {
   const navigate = useNavigate();
@@ -13,7 +16,7 @@ const AdvisoryClass = () => {
     const fetchAdvisoryClasses = async () => {
       try {
         const response = await axios.get(
-          'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/get-advisory-classes.php',
+          GET_ADVISORY_CLASSES,
           { withCredentials: true }
         );
         

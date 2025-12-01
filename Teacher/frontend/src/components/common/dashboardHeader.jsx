@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Menu, Search, Sun, Moon, Bell, User, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
+import { API_ENDPOINTS, API_URL } from '../../config/api';
 
 const Tooltip = ({ text }) => (
     <span className="
@@ -46,7 +47,7 @@ const DashboardHeader = ({ setMobileOpen }) => {
                 const fetchNotifications = async () => {
                         try {
                                 const response = await axios.get(
-                                        'http://localhost/SMS-GCA-3H/Teacher/backend/api/notifications/get-notifications.php?limit=10',
+                                        `${API_ENDPOINTS.GET_NOTIFICATIONS}?limit=10`,
                                         { withCredentials: true }
                                 );
                                 
@@ -223,7 +224,7 @@ const DashboardHeader = ({ setMobileOpen }) => {
                                                                         src={
                                                                                 user.profilePictureURL.startsWith('data:') || user.profilePictureURL.startsWith('http')
                                                                                         ? user.profilePictureURL 
-                                                                                        : `http://localhost/SMS-GCA-3H/Teacher/backend/${user.profilePictureURL}`
+                                                                                        : `${API_URL}/${user.profilePictureURL}`
                                                                         }
                                                                         alt='Profile' 
                                                                         className='w-full h-full object-cover'

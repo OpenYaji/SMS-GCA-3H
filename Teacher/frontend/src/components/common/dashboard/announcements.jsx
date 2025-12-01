@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bell, Megaphone } from 'lucide-react';
+import { API_ENDPOINTS } from '../../../config/api';
 
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -11,7 +12,7 @@ const Announcements = () => {
     const fetchAnnouncements = async () => {
       try {
         const response = await axios.get(
-          'http://localhost/SMS-GCA-3H/Teacher/backend/api/announcements/get-announcements.php?limit=3',
+          `${API_ENDPOINTS.GET_ANNOUNCEMENTS}?limit=3`,
           { withCredentials: true }
         );
         

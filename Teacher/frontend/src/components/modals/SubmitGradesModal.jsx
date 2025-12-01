@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { X, Send, CheckCircle, Clock, AlertCircle, XCircle, RefreshCw } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config/api';
 
 /**
  * SubmitGradesModal Component
@@ -35,7 +36,7 @@ export default function SubmitGradesModal({ isOpen, onClose, classData }) {
       setError(null);
       
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/grades/get-submission-status.php?sectionId=${classData.id}`,
+        `${API_ENDPOINTS.GET_SUBMISSION_STATUS}?sectionId=${classData.id}`,
         { withCredentials: true }
       );
       
@@ -60,7 +61,7 @@ export default function SubmitGradesModal({ isOpen, onClose, classData }) {
       setError(null);
       
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/grades/submit-grades-to-registrar.php',
+        API_ENDPOINTS.SUBMIT_GRADES_TO_REGISTRAR,
         {
           sectionId: classData.id,
           quarter: selectedQuarter,

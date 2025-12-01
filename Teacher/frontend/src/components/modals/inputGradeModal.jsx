@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 /**
  * InputGradeModal Component
@@ -49,7 +50,7 @@ export default function InputGradeModal({
       try {
         setLoadingSubjects(true);
         const response = await axios.get(
-          `http://localhost/SMS-GCA-3H/Teacher/backend/api/subjects/get-subjects-by-grade.php?gradeLevelId=${gradeLevelId}`,
+          `${API_ENDPOINTS.GET_SUBJECTS_BY_GRADE}?gradeLevelId=${gradeLevelId}`,
           { withCredentials: true }
         );
         
@@ -73,7 +74,7 @@ export default function InputGradeModal({
 
       try {
         const response = await axios.get(
-          `http://localhost/SMS-GCA-3H/Teacher/backend/api/grades/get-student-grades-all-subjects.php?studentId=${student.id}&sectionId=${selectedClass.id}`,
+          `${API_ENDPOINTS.GET_STUDENT_GRADES_ALL_SUBJECTS}?studentId=${student.id}&sectionId=${selectedClass.id}`,
           { withCredentials: true }
         );
 

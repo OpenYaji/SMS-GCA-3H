@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, ChevronDown, Plus, Trash2 } from 'lucide-react';
 import TimePicker from '../common/TimePicker';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 const CreateScheduleModal = ({
   isOpen,
@@ -52,7 +53,7 @@ const CreateScheduleModal = ({
     setLoadingSections(true);
     try {
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-sections-by-grade.php?gradeLevelId=${gradeLevelId}`,
+        `${API_ENDPOINTS.GET_SECTIONS_BY_GRADE}?gradeLevelId=${gradeLevelId}`,
         { withCredentials: true }
       );
       if (response.data.success) {
@@ -73,7 +74,7 @@ const CreateScheduleModal = ({
 
     try {
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-teachers-by-subject.php?subjectId=${subjectId}`,
+        `${API_ENDPOINTS.GET_TEACHERS_BY_SUBJECT}?subjectId=${subjectId}`,
         { withCredentials: true }
       );
 

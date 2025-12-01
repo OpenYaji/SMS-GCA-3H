@@ -69,11 +69,10 @@ const GradeApproval = () => {
         };
         
         // Transform API data to match frontend structure
-        // API returns: id, sectionId, teacher, gradeLevel, section, studentCount, gradingPeriod, status, etc.
         const transformedData = response.data.data.map(sub => ({
           id: sub.id,
           teacher: sub.teacher || 'Unknown Teacher',
-          subject: 'All Subjects', // Grade submissions are per section, not per subject
+          subject: 'All Subjects',
           gradeLevel: sub.gradeLevel,
           section: sub.section,
           studentCount: sub.studentCount,
@@ -95,7 +94,7 @@ const GradeApproval = () => {
           approvedGrades: apiStats.approvedGrades || 0,
           pendingReview: apiStats.pendingReview || 0,
           rejectedGrades: apiStats.rejectedGrades || 0,
-          totalStudents: apiStats.totalStudents || transformedData.length
+          totalStudents: apiStats.totalStudents || 0
         });
       } else {
         throw new Error(response.data.message || 'Failed to fetch submissions');
@@ -114,22 +113,17 @@ const GradeApproval = () => {
     fetchSubmissions();
   }, [fetchSubmissions]);
 
-  // Filter submissions (client-side filtering for non-API filters)
-  const filteredSubmissions = useMemo(() => {
-    return submissions; // API already filters by server-side
-  }, [submissions]);
-
   // Filter out approved submissions from selectable ones
   const selectableSubmissions = useMemo(() => {
-    return filteredSubmissions.filter(submission => submission.status !== 'Approved');
-  }, [filteredSubmissions]);
+    return submissions.filter(submission => submission.status !== 'Approved');
+  }, [submissions]);
 
   // Calculate paginated submissions
   const paginatedSubmissions = useMemo(() => {
     const startIndex = (currentPage - 1) * submissionsPerPage;
     const endIndex = startIndex + submissionsPerPage;
-    return filteredSubmissions.slice(startIndex, endIndex);
-  }, [filteredSubmissions, currentPage]);
+    return submissions.slice(startIndex, endIndex);
+  }, [submissions, currentPage]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -138,7 +132,7 @@ const GradeApproval = () => {
     setSelectAll(false);
   }, [filters]);
 
-  // Summary stats directly from API (already in correct format)
+  // Summary stats directly from API
   const summaryStats = useMemo(() => {
     return {
       submittedGrades: stats.submittedGrades,
@@ -149,10 +143,9 @@ const GradeApproval = () => {
   }, [stats]);
 
   const handleSelectSubmission = (submissionId) => {
-    // Only allow selection if submission is not approved
-    const submission = filteredSubmissions.find(s => s.id === submissionId);
+    const submission = submissions.find(s => s.id === submissionId);
     if (submission && submission.status === 'Approved') {
-      return; // Don't allow selection of approved submissions
+      return;
     }
 
     setSelectedSubmissions(prev => 
@@ -166,7 +159,6 @@ const GradeApproval = () => {
     if (selectAll) {
       setSelectedSubmissions([]);
     } else {
-      // Only select non-approved submissions
       setSelectedSubmissions(selectableSubmissions.map(submission => submission.id));
     }
     setSelectAll(!selectAll);
@@ -180,7 +172,7 @@ const GradeApproval = () => {
   };
 
   const handleExportGrades = () => {
-    alert(`Exporting ${filteredSubmissions.length} grade submissions to Excel`);
+    alert(`Exporting ${submissions.length} grade submissions to Excel`);
   };
 
   const handleApproveAll = async () => {
@@ -204,7 +196,7 @@ const GradeApproval = () => {
         alert(`Successfully approved ${response.data.approvedCount} submission(s)`);
         setSelectedSubmissions([]);
         setSelectAll(false);
-        fetchSubmissions(); // Refresh the list
+        fetchSubmissions();
       } else {
         throw new Error(response.data.message || 'Failed to approve submissions');
       }
@@ -218,16 +210,12 @@ const GradeApproval = () => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/grades/review-submission.php`,
-        { 
-          submissionId, 
-          action, 
-          notes 
-        },
+        { submissionId, action, notes },
         { withCredentials: true }
       );
       
       if (response.data.success) {
-        fetchSubmissions(); // Refresh the list
+        fetchSubmissions();
         return true;
       } else {
         throw new Error(response.data.message || 'Failed to review submission');
@@ -239,7 +227,7 @@ const GradeApproval = () => {
     }
   };
 
-  const totalPages = Math.ceil(filteredSubmissions.length / submissionsPerPage);
+  const totalPages = Math.ceil(submissions.length / submissionsPerPage);
 
   // Show loading state
   if (loading && submissions.length === 0) {
@@ -258,7 +246,7 @@ const GradeApproval = () => {
     return (
       <div className="flex items-center justify-center min-h-64">
         <div className="text-center">
-          <div className="text-red-500 text-5xl mb-4">⚠️</div>
+          <div className="text-red-500 text-5xl mb-4"></div>
           <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
           <button
             onClick={fetchSubmissions}
@@ -299,7 +287,7 @@ const GradeApproval = () => {
         onSelectAll={handleSelectAll}
         currentPage={currentPage}
         totalPages={totalPages}
-        totalSubmissions={filteredSubmissions.length}
+        totalSubmissions={submissions.length}
         submissionsPerPage={submissionsPerPage}
         onPageChange={setCurrentPage}
         onReviewSubmission={handleReviewSubmission}

@@ -422,74 +422,48 @@ export const studentService = {
 
         regularFields.forEach((field) => {
           if (studentData[field] !== undefined && studentData[field] !== null) {
-            formData.append(field, studentData[field]);
+            // For medical info fields, handle arrays properly
+            if (field === "Allergies" || field === "MedicalConditions") {
+              if (Array.isArray(studentData[field])) {
+                // Convert array to comma-separated string
+                const value = studentData[field].join(", ");
+                formData.append(field, value);
+                console.log(`Medical field ${field}:`, value);
+              } else {
+                // Handle string values
+                formData.append(field, studentData[field] || "");
+              }
+            } else if (field === "Medications") {
+              // Truncate Medications to 100 characters
+              const medications = studentData[field] || "";
+              formData.append(field, medications.substring(0, 100));
+            } else {
+              formData.append(field, studentData[field]);
+            }
           }
         });
 
-        // Handle Guardians - append each field individually
-        if (hasGuardians && studentData.Guardians.length > 0) {
+        // Handle Guardians - append as JSON string for proper array handling
+        if (hasGuardians) {
           const formattedGuardians = formatGuardiansForAPI(
             studentData.Guardians
           );
 
-          // Append each guardian field individually
-          formattedGuardians.forEach((guardian, index) => {
-            // Append GuardianID (can be null for new guardians)
-            if (guardian.GuardianID !== null) {
-              formData.append(
-                `Guardians[${index}][GuardianID]`,
-                guardian.GuardianID
-              );
-            }
+          console.log("Sending guardians:", formattedGuardians);
 
-            // Append all other fields
-            formData.append(
-              `Guardians[${index}][FullName]`,
-              guardian.FullName || ""
-            );
-            formData.append(
-              `Guardians[${index}][PhoneNumber]`,
-              guardian.PhoneNumber || ""
-            );
-            formData.append(
-              `Guardians[${index}][EmailAddress]`,
-              guardian.EmailAddress || ""
-            );
-            formData.append(
-              `Guardians[${index}][RelationshipType]`,
-              guardian.RelationshipType || "Guardian"
-            );
-            formData.append(
-              `Guardians[${index}][Occupation]`,
-              guardian.Occupation || ""
-            );
-            formData.append(
-              `Guardians[${index}][WorkAddress]`,
-              guardian.WorkAddress || ""
-            );
-            formData.append(
-              `Guardians[${index}][IsPrimaryContact]`,
-              guardian.IsPrimaryContact ? "1" : "0"
-            );
-            formData.append(
-              `Guardians[${index}][IsEmergencyContact]`,
-              guardian.IsEmergencyContact ? "1" : "0"
-            );
-            formData.append(
-              `Guardians[${index}][IsAuthorizedPickup]`,
-              guardian.IsAuthorizedPickup ? "1" : "0"
-            );
-            formData.append(
-              `Guardians[${index}][SortOrder]`,
-              guardian.SortOrder
-            );
-          });
+          // Append guardians as JSON string to preserve array structure
+          formData.append("Guardians", JSON.stringify(formattedGuardians));
+        } else {
+          // If no guardians array, send empty array to remove all guardians
+          console.log("No guardians array - sending empty guardians");
+          formData.append("Guardians", "[]");
         }
 
         // Add file if present
         if (hasFile) {
           formData.append("ProfilePicture", studentData.ProfilePicture);
         }
+
         // Use POST with _method for PUT to handle file uploads
         formData.append("_method", "PUT");
 
@@ -503,6 +477,40 @@ export const studentService = {
         return formatStudentData(updatedStudent);
       } else {
         const updateData = { ...studentData };
+
+        // Handle medical info fields properly for JSON requests
+        if (updateData.Allergies) {
+          if (Array.isArray(updateData.Allergies)) {
+            updateData.Allergies = updateData.Allergies.join(", ");
+          }
+        } else {
+          updateData.Allergies = "";
+        }
+
+        if (updateData.MedicalConditions) {
+          if (Array.isArray(updateData.MedicalConditions)) {
+            updateData.MedicalConditions =
+              updateData.MedicalConditions.join(", ");
+          }
+        } else {
+          updateData.MedicalConditions = "";
+        }
+
+        // Truncate Medications to 100 characters
+        if (updateData.Medications) {
+          updateData.Medications = updateData.Medications.substring(0, 100);
+        } else {
+          updateData.Medications = "";
+        }
+        if (updateData.Guardians !== undefined) {
+          updateData.Guardians = formatGuardiansForAPI(updateData.Guardians);
+        } else {
+          updateData.Guardians = [];
+        }
+
+        console.log("=== JSON Update Data ===");
+        console.log("Guardians being sent:", updateData.Guardians);
+
         const response = await api.put(`/student-profiles/${id}`, updateData);
         const updatedStudent = response.data.data || response.data;
         return formatStudentData(updatedStudent);

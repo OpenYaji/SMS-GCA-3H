@@ -1314,42 +1314,51 @@ export default function StudentInformationModal({
           studentDetails?.emergencyContactNumber
       );
 
-      // Format guardians with proper validation
-      const formattedGuardians = (editData.guardians || [])
-        .filter((guardian) => {
-          // Only include guardians with at least a full name
-          return guardian.fullName && guardian.fullName.trim() !== "";
-        })
-        .map((guardian, index) => {
-          const formattedGuardian = {
-            GuardianID: guardian.guardianID || null,
-            FullName: guardian.fullName?.trim() || "",
-            PhoneNumber: formatAllPhoneNumbers(guardian.phoneNumber),
-            EmailAddress: guardian.emailAddress?.trim() || "",
-            RelationshipType: guardian.relationshipType || "Guardian",
-            Occupation: guardian.occupation?.trim() || "",
-            WorkAddress: guardian.workAddress?.trim() || "",
-            IsPrimaryContact: Boolean(
-              guardian.IsPrimaryContact === true ||
-                guardian.isPrimaryContact === true
-            ),
-            IsEmergencyContact: Boolean(
-              guardian.IsEmergencyContact === true ||
-                guardian.isEmergencyContact === true
-            ),
-            IsAuthorizedPickup: Boolean(
-              guardian.IsAuthorizedPickup !== false &&
-                guardian.isAuthorizedPickup !== false
-            ),
-            SortOrder: Math.max(
-              1,
-              parseInt(guardian.SortOrder || guardian.sortOrder) || index + 1
-            ),
-          };
+      // FIX: Always use the current editData.guardians array
+      // This array already reflects the removed guardian
+      const currentGuardians = editData.guardians || [];
 
-          console.log(`Guardian ${index}:`, formattedGuardian);
-          return formattedGuardian;
-        });
+      const formattedGuardians = currentGuardians.map((guardian, index) => {
+        const formattedGuardian = {
+          GuardianID: guardian.guardianID || null,
+          FullName: guardian.fullName?.trim() || "",
+          PhoneNumber: formatAllPhoneNumbers(guardian.phoneNumber),
+          EmailAddress: guardian.emailAddress?.trim() || "",
+          RelationshipType: guardian.relationshipType || "Guardian",
+          Occupation: guardian.occupation?.trim() || "",
+          WorkAddress: guardian.workAddress?.trim() || "",
+          IsPrimaryContact: Boolean(
+            guardian.IsPrimaryContact === true ||
+              guardian.isPrimaryContact === true
+          ),
+          IsEmergencyContact: Boolean(
+            guardian.IsEmergencyContact === true ||
+              guardian.isEmergencyContact === true
+          ),
+          IsAuthorizedPickup: Boolean(
+            guardian.IsAuthorizedPickup !== false &&
+              guardian.isAuthorizedPickup !== false
+          ),
+          SortOrder: Math.max(
+            1,
+            parseInt(guardian.SortOrder || guardian.sortOrder) || index + 1
+          ),
+        };
+
+        return formattedGuardian;
+      });
+
+      // Handle medical info - ensure arrays are properly handled
+      const allergies = Array.isArray(editData.allergies)
+        ? editData.allergies
+        : [];
+
+      const medicalConditions = Array.isArray(editData.medicalConditions)
+        ? editData.medicalConditions
+        : [];
+
+      // Truncate medications to prevent validation errors
+      const medications = (editData.medications || "").substring(0, 100);
 
       const updateData = {
         FirstName: editData.firstName || studentDetails.firstName,
@@ -1371,28 +1380,19 @@ export default function StudentInformationModal({
         ContactNumber: formattedEmergencyContactNumber,
         Height: editData.height?.toString() || studentDetails.height || "",
         Weight: editData.weight?.toString() || studentDetails.weight || "",
-        Allergies: Array.isArray(editData.allergies)
-          ? editData.allergies.join(", ")
-          : editData.allergies || studentDetails.allergies?.join(", ") || "",
-        MedicalConditions: Array.isArray(editData.medicalConditions)
-          ? editData.medicalConditions.join(", ")
-          : editData.medicalConditions ||
-            studentDetails.medicalConditions?.join(", ") ||
-            "",
-        Medications: editData.medications || studentDetails.medications || "",
+        Allergies: allergies,
+        MedicalConditions: medicalConditions,
+        Medications: medications,
 
-        // Only include guardians if there are valid ones
-        Guardians: formattedGuardians.length > 0 ? formattedGuardians : [],
-
-        // Optional fields
-        // Religion: editData.religion || studentDetails.religion || "",
-        // Birthplace: editData.birthplace || studentDetails.birthplace || "",
-        // MotherTongue:
-        //   editData.motherTongue || studentDetails.motherTongue || "",
+        // FIX: Always include the current guardians array
+        // This array already has the removed guardian filtered out
+        Guardians: formattedGuardians,
       };
 
       console.log("=== Update Data Being Sent ===");
-      console.log(JSON.stringify(updateData, null, 2));
+      console.log("Guardians count:", formattedGuardians.length);
+      console.log("Guardians being sent:", formattedGuardians);
+      console.log("Current guardians in editData:", currentGuardians);
 
       // Add profile picture if selected
       if (selectedImage) {
@@ -1402,27 +1402,17 @@ export default function StudentInformationModal({
       const result = await studentService.updateStudent(studentId, updateData);
 
       if (result) {
-        const freshStudentData = await studentService.getStudentById(studentId);
+        // FIX: Force refresh the student details to get updated data from backend
+        await fetchStudentDetails();
 
-        const updatedStudent = {
-          ...studentDetails,
-          ...editData,
-          ...freshStudentData,
-          profilePicture:
-            freshStudentData.profilePicture || studentDetails.profilePicture,
-          profilePictureURL:
-            freshStudentData.profilePictureURL ||
-            studentDetails.profilePictureURL,
-        };
-
-        setStudentDetails(updatedStudent);
         setSaveSuccess(true);
         setIsEditing(false);
         setSelectedImage(null);
         setImagePreview(null);
 
         if (onStudentInfoUpdated) {
-          onStudentInfoUpdated(updatedStudent);
+          // Also trigger the parent component refresh
+          onStudentInfoUpdated(result);
         }
 
         setTimeout(() => {

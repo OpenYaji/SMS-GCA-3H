@@ -3,7 +3,7 @@ import React from 'react';
 const Filters = ({ filters, onFilterChange, onClearFilters }) => {
   const gradingPeriods = ['Q1', 'Q2', 'Q3', 'Q4', 'Final'];
   const gradeLevels = ['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6'];
-  const statuses = ['Pending', 'Submitted', 'Approved', 'Rejected'];
+  const statuses = ['Submitted', 'Approved', 'Rejected', 'Resubmitted'];
 
   return (
     <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow mb-6 border border-gray-200 dark:border-slate-700">

@@ -1,11 +1,24 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import SummaryCards from './SummaryCards';
 import Filters from './Filters';
 import ActionButtons from './ActionButtons';
 import GradesTable from './GradesTable';
-import { mockGradeSubmissions } from './mockData';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost/SMS-GCA-3H/Registrar/backend/api';
 
 const GradeApproval = () => {
+  const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [stats, setStats] = useState({
+    submittedGrades: 0,
+    approvedGrades: 0,
+    pendingReview: 0,
+    rejectedGrades: 0,
+    totalStudents: 0
+  });
+
   const [filters, setFilters] = useState({
     gradingPeriod: '',
     gradeLevel: '',
@@ -19,20 +32,92 @@ const GradeApproval = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const submissionsPerPage = 50;
 
-  // Filter submissions based on filters
-  const filteredSubmissions = useMemo(() => {
-    const result = mockGradeSubmissions.filter(submission => {
-      const matchesGradingPeriod = filters.gradingPeriod === '' || submission.gradingPeriod === filters.gradingPeriod;
-      const matchesGradeLevel = filters.gradeLevel === '' || submission.gradeLevel === filters.gradeLevel;
-      const matchesStatus = filters.status === '' || submission.status === filters.status;
+  // Fetch submissions from API
+  const fetchSubmissions = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
       
-      return matchesGradingPeriod && matchesGradeLevel && matchesStatus;
-    });
-    
-    console.log('Filtered submissions:', result);
-    console.log('Current filters:', filters);
-    return result;
+      // Map frontend quarter values to database enum values
+      const quarterMap = {
+        'Q1': 'First Quarter',
+        'Q2': 'Second Quarter',
+        'Q3': 'Third Quarter',
+        'Q4': 'Fourth Quarter',
+        'Final': 'Final'
+      };
+      
+      // Build query params
+      const params = new URLSearchParams();
+      if (filters.gradingPeriod) {
+        params.append('quarter', quarterMap[filters.gradingPeriod] || filters.gradingPeriod);
+      }
+      if (filters.gradeLevel) params.append('gradeLevel', filters.gradeLevel);
+      if (filters.status) params.append('status', filters.status);
+      
+      const url = `${API_BASE_URL}/grades/get-submissions.php${params.toString() ? '?' + params.toString() : ''}`;
+      
+      const response = await axios.get(url, { withCredentials: true });
+      
+      if (response.data.success) {
+        // Map database quarter values to frontend display values
+        const quarterDisplayMap = {
+          'First Quarter': 'Q1',
+          'Second Quarter': 'Q2',
+          'Third Quarter': 'Q3',
+          'Fourth Quarter': 'Q4'
+        };
+        
+        // Transform API data to match frontend structure
+        // API returns: id, sectionId, teacher, gradeLevel, section, studentCount, gradingPeriod, status, etc.
+        const transformedData = response.data.data.map(sub => ({
+          id: sub.id,
+          teacher: sub.teacher || 'Unknown Teacher',
+          subject: 'All Subjects', // Grade submissions are per section, not per subject
+          gradeLevel: sub.gradeLevel,
+          section: sub.section,
+          studentCount: sub.studentCount,
+          enrollmentDate: sub.submittedDate || '-',
+          gradingPeriod: sub.gradingPeriod || quarterDisplayMap[sub.quarter] || sub.quarter,
+          status: sub.status,
+          submittedDate: sub.submittedDate,
+          teacherNotes: sub.teacherNotes,
+          registrarNotes: sub.registrarNotes,
+          schoolYearId: sub.schoolYearId
+        }));
+        
+        setSubmissions(transformedData);
+        
+        // API returns: submittedGrades, approvedGrades, pendingReview, rejectedGrades, totalStudents
+        const apiStats = response.data.stats || {};
+        setStats({
+          submittedGrades: apiStats.submittedGrades || 0,
+          approvedGrades: apiStats.approvedGrades || 0,
+          pendingReview: apiStats.pendingReview || 0,
+          rejectedGrades: apiStats.rejectedGrades || 0,
+          totalStudents: apiStats.totalStudents || transformedData.length
+        });
+      } else {
+        throw new Error(response.data.message || 'Failed to fetch submissions');
+      }
+    } catch (err) {
+      console.error('Error fetching submissions:', err);
+      setError(err.message || 'Failed to load grade submissions');
+      setSubmissions([]);
+    } finally {
+      setLoading(false);
+    }
   }, [filters]);
+
+  // Fetch data on mount and when filters change
+  useEffect(() => {
+    fetchSubmissions();
+  }, [fetchSubmissions]);
+
+  // Filter submissions (client-side filtering for non-API filters)
+  const filteredSubmissions = useMemo(() => {
+    return submissions; // API already filters by server-side
+  }, [submissions]);
 
   // Filter out approved submissions from selectable ones
   const selectableSubmissions = useMemo(() => {
@@ -47,26 +132,21 @@ const GradeApproval = () => {
   }, [filteredSubmissions, currentPage]);
 
   // Reset to page 1 when filters change
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
     setSelectedSubmissions([]);
     setSelectAll(false);
   }, [filters]);
 
-  // Calculate summary stats based on total students (148)
-  const totalStudents = 148;
+  // Summary stats directly from API (already in correct format)
   const summaryStats = useMemo(() => {
-    const submittedCount = mockGradeSubmissions.filter(s => s.status === 'Submitted').length;
-    const approvedCount = mockGradeSubmissions.filter(s => s.status === 'Approved').length;
-    const pendingCount = mockGradeSubmissions.filter(s => s.status === 'Pending').length;
-
     return {
-      submittedGrades: submittedCount,
-      approvedGrades: approvedCount,
-      pendingReview: pendingCount,
-      totalStudents: totalStudents
+      submittedGrades: stats.submittedGrades,
+      approvedGrades: stats.approvedGrades,
+      pendingReview: stats.pendingReview,
+      totalStudents: stats.totalStudents
     };
-  }, []);
+  }, [stats]);
 
   const handleSelectSubmission = (submissionId) => {
     // Only allow selection if submission is not approved
@@ -103,14 +183,93 @@ const GradeApproval = () => {
     alert(`Exporting ${filteredSubmissions.length} grade submissions to Excel`);
   };
 
-  const handleApproveAll = () => {
-    alert(`Approving ${selectedSubmissions.length} selected grade submissions`);
-    // In real app, this would update the status of selected submissions to "Approved"
-    setSelectedSubmissions([]);
-    setSelectAll(false);
+  const handleApproveAll = async () => {
+    if (selectedSubmissions.length === 0) {
+      alert('Please select submissions to approve');
+      return;
+    }
+    
+    if (!confirm(`Are you sure you want to approve ${selectedSubmissions.length} selected grade submission(s)?`)) {
+      return;
+    }
+    
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/grades/approve-all.php`,
+        { submissionIds: selectedSubmissions },
+        { withCredentials: true }
+      );
+      
+      if (response.data.success) {
+        alert(`Successfully approved ${response.data.approvedCount} submission(s)`);
+        setSelectedSubmissions([]);
+        setSelectAll(false);
+        fetchSubmissions(); // Refresh the list
+      } else {
+        throw new Error(response.data.message || 'Failed to approve submissions');
+      }
+    } catch (err) {
+      console.error('Error approving submissions:', err);
+      alert('Failed to approve submissions: ' + (err.message || 'Unknown error'));
+    }
+  };
+
+  const handleReviewSubmission = async (submissionId, action, notes = '') => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/grades/review-submission.php`,
+        { 
+          submissionId, 
+          action, 
+          notes 
+        },
+        { withCredentials: true }
+      );
+      
+      if (response.data.success) {
+        fetchSubmissions(); // Refresh the list
+        return true;
+      } else {
+        throw new Error(response.data.message || 'Failed to review submission');
+      }
+    } catch (err) {
+      console.error('Error reviewing submission:', err);
+      alert('Failed to review submission: ' + (err.message || 'Unknown error'));
+      return false;
+    }
   };
 
   const totalPages = Math.ceil(filteredSubmissions.length / submissionsPerPage);
+
+  // Show loading state
+  if (loading && submissions.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-300">Loading grade submissions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error && submissions.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-64">
+        <div className="text-center">
+          <div className="text-red-500 text-5xl mb-4">⚠️</div>
+          <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+          <button
+            onClick={fetchSubmissions}
+            className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -143,6 +302,9 @@ const GradeApproval = () => {
         totalSubmissions={filteredSubmissions.length}
         submissionsPerPage={submissionsPerPage}
         onPageChange={setCurrentPage}
+        onReviewSubmission={handleReviewSubmission}
+        onRefresh={fetchSubmissions}
+        apiBaseUrl={API_BASE_URL}
       />
     </div>
   );

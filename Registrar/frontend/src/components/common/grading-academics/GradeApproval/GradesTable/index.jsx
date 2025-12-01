@@ -12,7 +12,10 @@ const GradesTableWrapper = ({
   totalPages,
   totalSubmissions,
   submissionsPerPage,
-  onPageChange
+  onPageChange,
+  onReviewSubmission,
+  onRefresh,
+  apiBaseUrl
 }) => {
   return (
     <div>
@@ -22,6 +25,9 @@ const GradesTableWrapper = ({
         selectAll={selectAll}
         onSelectSubmission={onSelectSubmission}
         onSelectAll={onSelectAll}
+        onReviewSubmission={onReviewSubmission}
+        onRefresh={onRefresh}
+        apiBaseUrl={apiBaseUrl}
       />
       
       {totalSubmissions > 0 && (

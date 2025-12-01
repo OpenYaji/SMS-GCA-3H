@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Send } from 'lucide-react';
 import SearchBarWithFilter from '../common/dashboard/my-classes/searchBarWithFilter.jsx';
 import Breadcrumb from '../common/Breadcrumb.jsx';
+import SubmitGradesModal from '../modals/SubmitGradesModal.jsx';
 
 /**
  * ClassGradesPage Component
@@ -26,6 +28,7 @@ export default function ClassGradesPage({
   // State for student search and filter
   const [searchTerm, setSearchTerm] = useState('');
   const [filterOption, setFilterOption] = useState('All');
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 
   // Filtering Logic for Students
   const filteredStudents = students.filter((student) => {
@@ -62,14 +65,24 @@ export default function ClassGradesPage({
       </div>
 
       {/* Dynamic Header */}
-      <header className="mb-6">
-        <h1 className="text-5xl font-bold text-gray-900">
-          {classData.grade}
-        </h1>
-        <h2 className="text-xl text-orange-600 mt-2">
-          {classData.section}
-          {classData.subject && <span className="text-gray-500"> • {classData.subject}</span>}
-        </h2>
+      <header className="mb-6 flex justify-between items-start">
+        <div>
+          <h1 className="text-5xl font-bold text-gray-900">
+            {classData.grade}
+          </h1>
+          <h2 className="text-xl text-orange-600 mt-2">
+            {classData.section}
+            {classData.subject && <span className="text-gray-500"> • {classData.subject}</span>}
+          </h2>
+        </div>
+        <button
+          onClick={() => setIsSubmitModalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-amber-400 hover:bg-amber-500 
+                   text-gray-900 rounded-lg font-medium transition-colors shadow-md"
+        >
+          <Send className="w-5 h-5" />
+          Submit to Registrar
+        </button>
       </header>
 
       {/* Error Message */}
@@ -98,6 +111,13 @@ export default function ClassGradesPage({
       ) : (
         <StudentGradeList students={filteredStudents} />
       )}
+
+      {/* Submit Grades Modal */}
+      <SubmitGradesModal
+        isOpen={isSubmitModalOpen}
+        onClose={() => setIsSubmitModalOpen(false)}
+        classData={classData}
+      />
     </div>
   );
 }

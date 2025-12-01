@@ -283,11 +283,11 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
                   <div className="bg-blue-50 dark:bg-blue-900 p-3 rounded">
                     <div className="flex justify-between text-sm mb-1">
                       <span>Down Payment:</span>
-                      <span className="font-semibold">₱ {downPayment.toLocaleString()}</span>
+                      <span className="font-semibold text-5xl">₱ {downPayment.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between text-sm font-bold">
                       <span>Outstanding Balance:</span>
-                      <span className="text-red-600 dark:text-red-400">₱ {outstandingBalance.toLocaleString()}</span>
+                      <span className="text-4xl text-red-600 dark:text-red-400">₱ {outstandingBalance.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
@@ -296,7 +296,7 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
           )}
 
           {/* Screening Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 items-start">
+          <div className="justify-between gap-6 mt-6 items-start">
             {/* Required Documents */}
             <div>
               <h3 className="text-sm font-semibold mb-2">Required Documents</h3>
@@ -323,35 +323,16 @@ const ScreeningModal = ({ applicant, onClose, onValidate }) => {
               </div>
             </div>
 
-            {/* Registrar Notes */}
-            <div>
-              <h3 className="text-sm font-semibold mb-2">Registrar Notes</h3>
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Add notes about this application"
-                className="w-full h-[120px] border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-slate-700 text-sm text-black dark:text-white resize-none"
-              />
-            </div>
-
             {/* Action Buttons */}
             <div className="flex flex-col mt-auto items-end">
               <h3 className="text-sm font-semibold mb-2 invisible">Actions</h3>
               <div className="flex flex-col gap-2">
-                <button
-                  className="w-[190px] px-3.5 py-1.5 rounded bg-yellow-400 text-black font-semibold hover:bg-yellow-500 transition"
-                  onClick={() => setSubModalOpen(true)}
-                >
-                  Request More Info
-                </button>
-                <button className="w-[190px] px-3.5 py-1.5 rounded bg-red-600 text-black font-semibold hover:bg-red-700 transition">
-                  Reject
-                </button>
+
                 <button
                   onClick={handleValidateClick}
                   className="w-[190px] px-3.5 py-1.5 rounded bg-green-600 text-black font-semibold hover:bg-green-700 transition"
                 >
-                  Validate & Notify
+                  Confirm and Proceed
                 </button>
               </div>
             </div>

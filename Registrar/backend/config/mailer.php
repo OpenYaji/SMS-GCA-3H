@@ -21,15 +21,15 @@ class Mailer
             $this->mail->isSMTP();
             $this->mail->Host       = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
             $this->mail->SMTPAuth   = true;
-            $this->mail->Username   = getenv('SMTP_USERNAME') ?: 'johnreybisnarcalipes@gmail.com';
-            $this->mail->Password   = getenv('SMTP_PASSWORD') ?: 'iljb mmag gmsl mvnk';
+            $this->mail->Username   = getenv('SMTP_USERNAME') ?: 'gymazochristian.acad.novaliches@gmail.com';
+            $this->mail->Password   = getenv('SMTP_PASSWORD') ?: 'dags pvho opgf pgec';
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->mail->Port       = getenv('SMTP_PORT') ?: 587;
 
             // Default sender
             $this->mail->setFrom(
-                getenv('SMTP_FROM_EMAIL') ?: 'johnreybisnarcalipes@gmail.com',
-                getenv('SMTP_FROM_NAME') ?: 'Gymnazo Christian Academy'
+                getenv('SMTP_FROM_EMAIL') ?: 'gymazochristian.acad.novaliches@gmail.com',
+                getenv('SMTP_FROM_NAME') ?: 'Gymnazo Christian Academy Novaliches'
             );
         } catch (Exception $e) {
             error_log("Mailer initialization error: " . $e->getMessage());

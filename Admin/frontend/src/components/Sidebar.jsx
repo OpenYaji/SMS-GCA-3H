@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import "../assets/css/dashboard.css";
 import logo from "../assets/images/logo1.png";
+import { logoutService } from "../services/logoutService";
 
 const Sidebar = ({ onToggle, isDarkMode }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -12,6 +13,21 @@ const Sidebar = ({ onToggle, isDarkMode }) => {
 
     if (onToggle) {
       onToggle(newCollapsedState);
+    }
+  };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+
+    // Optional: Add confirmation dialog
+    if (window.confirm("Are you sure you want to logout?")) {
+      try {
+        await logoutService.logout();
+      } catch (error) {
+        console.error("Logout failed:", error);
+        // Fallback redirect in case of error
+        window.location.href = "http://localhost:5173/login";
+      }
     }
   };
 
@@ -220,7 +236,7 @@ const Sidebar = ({ onToggle, isDarkMode }) => {
       <a
         href="#"
         className="logout-btn"
-        onClick={() => console.log("Logout clicked")}
+        onClick={handleLogout}
         data-tooltip={isCollapsed ? "Logout" : ""}
       >
         <span className="logout-icon">

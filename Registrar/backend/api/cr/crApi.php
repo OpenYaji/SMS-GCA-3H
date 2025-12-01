@@ -27,14 +27,24 @@
                 $stmt = $conn->prepare("
                     SELECT 
                         sec.SectionID,
+                        -- Formats the main card title like the first query
+                        CONCAT(gl.LevelName, ' - Section ', sec.SectionName) as FullSectionName, 
                         sec.SectionName,
+                        gl.LevelName,
                         sec.MaxCapacity,
                         sec.CurrentEnrollment,
-                        sec.AdviserTeacherID,
-                        gl.LevelName
-                    FROM section sec
-                    LEFT JOIN gradelevel gl ON gl.GradeLevelID = sec.GradeLevelID
-                    ORDER BY gl.SortOrder, sec.SectionName
+                        -- ALIGNMENT: Fetches the Adviser Name using the same logic as the first query
+                        CONCAT(p.FirstName, ' ', p.LastName) as AdviserName,
+                        sec.AdviserTeacherID
+                        FROM section sec
+                        -- Join Grade Level for sorting/naming
+                        JOIN gradelevel gl ON sec.GradeLevelID = gl.GradeLevelID
+                        -- ALIGNMENT: Join TeacherProfile and Profile to get the name (just like Query 1)
+                        LEFT JOIN teacherprofile tp ON sec.AdviserTeacherID = tp.TeacherProfileID
+                        LEFT JOIN profile p ON tp.ProfileID = p.ProfileID
+                        ORDER BY 
+                        gl.SortOrder, 
+                        sec.SectionName;
                 ");
                 $stmt->execute();
                 echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

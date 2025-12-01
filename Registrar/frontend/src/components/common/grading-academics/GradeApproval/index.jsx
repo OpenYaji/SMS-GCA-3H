@@ -45,7 +45,7 @@ const GradeApproval = () => {
         'Q3': 'Third Quarter',
         'Q4': 'Fourth Quarter',
         'Final': 'Final'
-      };
+      }; 
       
       // Build query params
       const params = new URLSearchParams();

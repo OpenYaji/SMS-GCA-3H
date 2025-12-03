@@ -215,4 +215,45 @@ public function getUserByIdentifier($identifier)
             return false;
         }
     }
+
+    public function updateProfilePicture($userId, $profilePictureURL)
+    {
+        $query = "
+            UPDATE profile p
+            JOIN user u ON p.UserID = u.UserID
+            SET p.ProfilePictureURL = :profilePictureURL
+            WHERE u.UserID = :userId
+        ";
+
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':profilePictureURL', $profilePictureURL);
+            $stmt->bindParam(':userId', $userId);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error updating profile picture: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getProfilePictureURL($userId)
+    {
+        $query = "
+            SELECT p.ProfilePictureURL
+            FROM profile p
+            JOIN user u ON p.UserID = u.UserID
+            WHERE u.UserID = :userId
+        ";
+
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ? $result['ProfilePictureURL'] : null;
+        } catch (PDOException $e) {
+            error_log("Error getting profile picture URL: " . $e->getMessage());
+            return null;
+        }
+    }
 }

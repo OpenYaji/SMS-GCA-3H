@@ -16,13 +16,12 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
- 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
+    // Input validation
     if (!username.trim() || !password.trim()) {
       setError('Please fill in all fields');
       setLoading(false);
@@ -35,35 +34,69 @@ const Login = () => {
       if (result.success) {
         setLoggedInUser(result.user.fullName);
         setShowSuccessModal(true);
-        
+
         console.log(`User Type: ${result.user.userType}`);
         console.log(`Redirecting to: ${result.redirectUrl}`);
 
         setTimeout(() => {
-          // KEY CHANGE: Check if we are already on the correct port
           const currentPort = window.location.port;
           const targetUrl = new URL(result.redirectUrl);
-          
+
           if (targetUrl.port === currentPort) {
-            // If on same port, use React Router
-            navigate(targetUrl.pathname); 
-        } else {
-            // If different port, force browser reload to new app
-            window.location.href = result.redirectUrl; 
+            navigate(targetUrl.pathname);
+          } else {
+            window.location.href = result.redirectUrl;
           }
         }, 2000);
+      } else {
+        // Handle unsuccessful login with custom message
+        setError(result.message || 'Login failed. Please try again.');
       }
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError('An unexpected error occurred. Please try again.');
+      console.error('Login error:', err);
+
+      // Handle network errors
+      if (!err.response) {
+        if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+          setError('Connection timeout. Please check your internet connection and try again.');
+        } else if (err.message.includes('Network Error')) {
+          setError('Network error. Please check your internet connection.');
+        } else {
+          setError('Unable to connect to server. Please try again later.');
+        }
+        return;
+      }
+
+      // Handle HTTP errors
+      const status = err.response?.status;
+      const errorMessage = err.response?.data?.message;
+
+      switch (status) {
+        case 400:
+          setError(errorMessage || 'Invalid input. Please check your credentials.');
+          break;
+        case 401:
+          setError('Invalid student number or password. Please try again.');
+          break;
+        case 403:
+          setError('Access denied. Please contact the school office.');
+          break;
+        case 404:
+          setError('Account not found. Please check your student number.');
+          break;
+        case 500:
+          setError('Server error. Please try again later or contact support.');
+          break;
+        case 503:
+          setError('Service temporarily unavailable. Please try again later.');
+          break;
+        default:
+          setError(errorMessage || 'An unexpected error occurred. Please try again.');
       }
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <>
@@ -90,10 +123,18 @@ const Login = () => {
             />
           </div>
 
-
           {/* Student Login Form */}
           <div className="mb-4 sm:mb-5">
             <form className="space-y-2.5 sm:space-y-3" onSubmit={handleSubmit}>
+              {error && (
+                <div className="p-2.5 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 rounded-lg text-xs sm:text-sm flex items-start gap-2">
+                  <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  <span>{error}</span>
+                </div>
+              )}
+
               <div className="relative">
                 <input
                   type="text"
@@ -148,8 +189,6 @@ const Login = () => {
               </div>
             </form>
           </div>
-
-    
 
           <div className="text-center mt-3 sm:mt-4 text-xs text-gray-300">
             Need help? Contact the <Link to="/#contact-us" className="font-semibold text-amber-400 hover:underline">School Office</Link>

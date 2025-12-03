@@ -13,6 +13,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/backend/, '/SMS-GCA-3H/Student/backend')
       },
+      '/Student/backend': {
+        target: 'http://localhost',
+        changeOrigin: true,
+        secure: false,
+      }
     },
   },
 

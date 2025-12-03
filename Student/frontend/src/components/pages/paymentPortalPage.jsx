@@ -24,7 +24,9 @@ const PaymentPortalPage = () => {
     phoneNumber: '',
     receipt: null,
     transactionId: null,
-    breakdownItems: []
+    breakdownItems: [],
+    paymentMode: 'full', // 'full', 'quarterly', 'monthly'
+    installmentNumber: 1 // Which installment (1-4 for quarterly, 1-8 for monthly)
   });
 
   const txnRef = `TXN${Date.now()}${Math.floor(Math.random() * 1000)}`;
@@ -58,12 +60,13 @@ const PaymentPortalPage = () => {
         const data = paymentResponse.data.data;
         setTransactionData(data);
 
-        // Set payment details with full balance and all items
+        // Don't auto-set amount, let user choose payment mode
         setPaymentDetails(prev => ({
           ...prev,
-          amount: parseFloat(data.balanceAmount),
+          amount: 0,
           transactionId: data.transactionId,
-          breakdownItems: data.availableItems || []
+          breakdownItems: data.availableItems || [],
+          totalAmount: parseFloat(data.balanceAmount)
         }));
       } else {
         setError(paymentResponse.data.message || 'Failed to fetch payment data.');
@@ -116,6 +119,8 @@ const PaymentPortalPage = () => {
       formData.append('method', paymentDetails.method);
       formData.append('phoneNumber', paymentDetails.phoneNumber);
       formData.append('reference', txnRef);
+      formData.append('paymentMode', paymentDetails.paymentMode);
+      formData.append('installmentNumber', paymentDetails.installmentNumber);
 
       if (paymentDetails.receipt) {
         formData.append('receipt', paymentDetails.receipt);
@@ -177,6 +182,7 @@ const PaymentPortalPage = () => {
             onProceed={() => handleStepAction('proceed', 'next')}
             onReturn={() => handleStepAction('close', null)}
             paymentDetails={paymentDetails}
+            setPaymentDetails={setPaymentDetails}
           />
         ) : null;
       case 2:

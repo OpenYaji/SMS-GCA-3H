@@ -103,14 +103,14 @@ const Header = () => {
     : 'text-[#5B3E31] dark:text-amber-400 lg:text-[#F4D77D]';
 
   return (
-    <header className={`w-full shadow-lg sticky top-0 z-50  border-white/10 dark:border-gray-700/10 transition-all duration-500 ${headerClasses}`}>
-      <div className='flex justify-between items-center h-16 sm:h-20 px-4 sm:px-0 transition-colors duration-300'>
+    <header className={`w-full shadow-lg fixed top-0 left-0 right-0 z-50 border-white/10 dark:border-gray-700/10 transition-all duration-500 ${headerClasses}`}>
+      <div className='flex justify-between items-center h-16 sm:h-20 px-4 sm:px-6 lg:px-8 transition-colors duration-300'>
         <div className='flex items-center'>
           <a href="#home">
             <img
               src={Logo}
               alt='Gymnazo'
-              className={`h-10 w-10 sm:h-14 sm:w-14 sm:ml-7 border-2 rounded-full transition-all duration-300 ${logoBorderClasses}`}
+              className={`h-10 w-10 sm:h-14 sm:w-14 border-2 rounded-full transition-all duration-300 ${logoBorderClasses}`}
             />
           </a>
           <div className={`ml-2 sm:ml-4 transition-colors duration-300 ${textColorClasses}`}>
@@ -118,6 +118,23 @@ const Header = () => {
             <div className='text-[10px] sm:text-sm'>NOVALICHES</div>
           </div>
         </div>
+
+        {/* Desktop Navigation - CENTERED IN HEADER */}
+        <nav className={`hidden lg:flex ${textColorClasses} text-sm font-bold transition-all duration-500`}>
+          <div style={{ position: 'relative', height: '12px', display: 'flex', alignItems: 'center' }}>
+            <GooeyNav
+              items={navItems}
+              particleCount={8}
+              particleDistances={[60, 3]}
+              particleR={70}
+              activeIndex={activeNavIndex}
+              animationTime={400}
+              timeVariance={200}
+              colors={[1, 2, 3]}
+            />
+          </div>
+        </nav>
+
         <div className='flex items-center gap-2 sm:gap-4'>
           {/* Desktop Search Bar */}
           <form onSubmit={handleSearch} className="hidden md:flex items-center">
@@ -161,12 +178,12 @@ const Header = () => {
             <svg className={`absolute w-4 h-4 text-amber-400 transition-all duration-300 ${isDarkMode ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M12.009,24A12.067,12.067,0,0,1,.075,10.725,12.121,12.121,0,0,1,10.1.152a13,13,0,0,1,5.03.206,2.5,2.5,0,0,1,1.8,1.8,2.47,2.47,0,0,1-.7,2.425c-4.559,4.168-4.165,10.645.807,14.412h0a2.5,2.5,0,0,1-.7,4.319A13.875,13.875,0,0,1,12.009,24Zm.074-22a10.776,10.776,0,0,0-1.675.127,10.1,10.1,0,0,0-8.344,8.8A9.928,9.928,0,0,0,4.581,18.7a10.473,10.473,0,0,0,11.093,2.734.5.5,0,0,0,.138-.856h0C9.883,16.1,9.417,8.087,14.865,3.124a.459.459,0,0,0,.127-.465.491.491,0,0,0-.356-.362A10.68,10.68,0,0,0,12.083,2Z" /></svg>
           </button>
           <Link to="/login">
-            <button className={`lg:backdrop-blur-sm ${textColorClasses} lg:mr-10 font-bold py-1.5 px-3 sm:py-2 sm:px-4 border-2 rounded-full shadow-lg text-xs sm:text-base transition-all duration-300 ${loginButtonClasses}`}>
+            <button className={`lg:backdrop-blur-sm ${textColorClasses} font-bold py-1.5 px-3 sm:py-2 sm:px-4 border-2 rounded-full shadow-lg text-xs sm:text-base transition-all duration-300 ${loginButtonClasses}`}>
               LOGIN
             </button>
           </Link>
           {/* pag smaller screen to */}
-          <button onClick={toggleMenu} className='lg:hidden flex flex-col justify-center items-center w-8 h-8 sm:mr-4' aria-label="Toggle menu">
+          <button onClick={toggleMenu} className='lg:hidden flex flex-col justify-center items-center w-8 h-8' aria-label="Toggle menu">
             <span className={`bg-[#5B3E31] dark:bg-amber-400 h-0.5 w-6 rounded transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
             <span className={`bg-[#5B3E31] dark:bg-amber-400 h-0.5 w-6 rounded mt-1 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}></span>
             <span className={`bg-[#5B3E31] dark:bg-amber-400 h-0.5 w-6 rounded mt-1 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
@@ -199,22 +216,7 @@ const Header = () => {
         </form>
       </div>
 
-      <nav className={`hidden lg:flex justify-center ${textColorClasses} py-3 text-sm font-bold transition-all duration-500  border-white/10 dark:border-gray-700/10 ${navClasses}`}>
-        <div style={{ position: 'relative', height: '12px', display: 'flex', alignItems: 'center' }}>
-          <GooeyNav
-            items={navItems}
-            particleCount={8}
-            particleDistances={[60, 3]}
-            particleR={70}
-            activeIndex={activeNavIndex}
-            animationTime={400}
-            timeVariance={200}
-            colors={[1, 2, 3]}
-          />
-        </div>
-      </nav>
-
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation - STAYS IN SEPARATE ROW */}
       <nav className={`lg:hidden ${textColorClasses} overflow-hidden transition-all duration-500 border-t border-white/10 dark:border-gray-700/10 ${navClasses} ${isMenuOpen ? 'max-h-64' : 'max-h-0'}`}>
         <div className='flex flex-col items-center py-4 gap-4 font-bold text-sm'>
           {navItems.map((item, index) => (

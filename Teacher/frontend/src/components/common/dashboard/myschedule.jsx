@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ScheduleItem from './scheduleitem';
+import { API_ENDPOINTS } from '../../../config/api';
 
 const MySchedule = () => {
   const [schedules, setSchedules] = useState([]);
@@ -11,7 +12,7 @@ const MySchedule = () => {
     const fetchSchedules = async () => {
       try {
         const response = await axios.get(
-          'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-teacher-schedule.php',
+          API_ENDPOINTS.GET_TEACHER_SCHEDULE,
           { withCredentials: true }
         );
 

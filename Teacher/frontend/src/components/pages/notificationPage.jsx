@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Bell, Search, ChevronDown } from 'lucide-react';
 import Breadcrumb from '../common/Breadcrumb.jsx';
+import { API_ENDPOINTS } from '../../config/api';
 
 /**
  * NotificationPage Component
@@ -43,7 +44,7 @@ const NotificationPage = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/announcements/get-announcements.php',
+        API_ENDPOINTS.GET_ANNOUNCEMENTS,
         { withCredentials: true }
       );
 

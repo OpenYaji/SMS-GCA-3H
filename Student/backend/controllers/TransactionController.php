@@ -168,7 +168,9 @@ class TransactionController
             'amount' => $paymentAmount,
             'method' => $_POST['method'],
             'reference' => $_POST['reference'] ?? '',
-            'phoneNumber' => $_POST['phoneNumber'] ?? ''
+            'phoneNumber' => $_POST['phoneNumber'] ?? '',
+            'paymentMode' => $_POST['paymentMode'] ?? 'custom',
+            'installmentNumber' => intval($_POST['installmentNumber'] ?? 1)
         ];
 
         // Submit payment

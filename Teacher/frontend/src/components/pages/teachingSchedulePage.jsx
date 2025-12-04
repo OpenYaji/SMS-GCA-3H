@@ -11,6 +11,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 import { canManageAllSchedules } from '../../utils/permissions';
+import { API_ENDPOINTS } from '../../config/api';
 
 const TeachingSchedulePage = () => {
   const { user } = useAuth();
@@ -76,7 +77,7 @@ const TeachingSchedulePage = () => {
   const fetchOptions = async () => {
     try {
       const response = await axios.get(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-options.php',
+        API_ENDPOINTS.GET_OPTIONS,
         { withCredentials: true }
       );
 
@@ -101,7 +102,7 @@ const TeachingSchedulePage = () => {
 
       if (activeTab === 'my-schedule') {
         const response = await axios.get(
-          'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-my-schedule.php',
+          API_ENDPOINTS.GET_MY_SCHEDULE,
           { withCredentials: true }
         );
         if (response.data?.success) {
@@ -112,7 +113,7 @@ const TeachingSchedulePage = () => {
         }
       } else {
         const response = await axios.get(
-          'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-all-schedules.php',
+          API_ENDPOINTS.GET_ALL_SCHEDULES,
           { withCredentials: true }
         );
         if (response.data?.success) {
@@ -140,7 +141,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-sections-with-students.php?gradeLevelId=${gradeLevelId}`,
+        `${API_ENDPOINTS.GET_SECTIONS_WITH_STUDENTS}?gradeLevelId=${gradeLevelId}`,
         { withCredentials: true }
       );
 
@@ -167,7 +168,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-teacher-sections.php?teacherId=${teacherId}`,
+        `${API_ENDPOINTS.GET_TEACHER_SECTIONS}?teacherId=${teacherId}`,
         { withCredentials: true }
       );
 
@@ -277,7 +278,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/update-schedule.php',
+        API_ENDPOINTS.UPDATE_SCHEDULE,
         {
           scheduleId: editingSchedule.id,
           ...editFormData
@@ -311,7 +312,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/delete-schedule.php',
+        API_ENDPOINTS.DELETE_SCHEDULE,
         { scheduleId },
         { withCredentials: true }
       );
@@ -354,7 +355,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/assign-teacher-to-section.php',
+        API_ENDPOINTS.ASSIGN_TEACHER_TO_SECTION,
         {
           teacherId: addClassFormData.teacherId,
           sectionId: addClassFormData.sectionId,
@@ -395,7 +396,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/create-sections.php',
+        API_ENDPOINTS.CREATE_SECTIONS,
         { gradeLevelId, schoolYearId: activeSchoolYear.id },
         { withCredentials: true }
       );
@@ -476,7 +477,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-section-schedule.php?sectionId=${sectionId}`,
+        `${API_ENDPOINTS.GET_SECTION_SCHEDULE}?sectionId=${sectionId}`,
         { withCredentials: true }
       );
 
@@ -495,7 +496,7 @@ const TeachingSchedulePage = () => {
     if (!teacherId) return;
     try {
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-teacher-schedule-detail.php?teacherId=${teacherId}`,
+        `${API_ENDPOINTS.GET_TEACHER_SCHEDULE_DETAIL}?teacherId=${teacherId}`,
         { withCredentials: true }
       );
 
@@ -575,7 +576,7 @@ const TeachingSchedulePage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/submit-schedule.php',
+        API_ENDPOINTS.SUBMIT_SCHEDULE,
         {
           teacherProfileId: createFormData.teacherProfileId,
           sectionId: createFormData.sectionId,

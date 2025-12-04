@@ -10,7 +10,7 @@ const WelcomeBanner = () => {
       <div className='relative flex items-center justify-between'>
         <div>
           <h3 className='font-medium text-stone-800 mb-2'>
-            Welcome back, <span className='font-bold'>{user?.firstName || 'Student'}</span>
+            Hello, <span className='font-bold'>{user?.firstName || 'Student'}, welcome to</span>
           </h3>
           <h1 className='text-4xl font-extrabold text-stone-900 '>
             GYMNAZO CHRISTIAN ACADEMY

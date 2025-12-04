@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Search, ChevronDown } from 'lucide-react';
 import Breadcrumb from '../components/common/Breadcrumb';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 
 const AttendanceReportPage = () => {
   const location = useLocation();
@@ -54,7 +55,7 @@ const AttendanceReportPage = () => {
       }
 
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/attendance/get-attendance-report.php?sectionId=${classData.id}&quarter=${selectedQuarter}`,
+        `${API_ENDPOINTS.GET_ATTENDANCE_REPORT}?sectionId=${classData.id}&quarter=${selectedQuarter}`,
         { withCredentials: true }
       );
 

@@ -6,6 +6,7 @@ import ReportCardModal from '../modals/ReportCardModal';
 import WholeYearReportCard from '../modals/WholeYearReportCard';
 import UpdateStudentModal from '../modals/UpdateStudentModal';
 import Breadcrumb from '../common/Breadcrumb.jsx';
+import { API_ENDPOINTS } from '../../config/api';
 
 /**
  * StudentGradesPage Component
@@ -48,12 +49,26 @@ export default function StudentGradesPage({
   });
   const [saving, setSaving] = useState(false);
   const dropdownRef = useRef(null);
-  const modalRef = useRef(null);
+
+  const fetchAllStudentData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await Promise.all([
+        fetchStudentGrades(),
+      ]);
+    } catch (err) {
+      console.error('Error fetching all student data:', err);
+      setError('Failed to load all student data.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Fetch subjects and grades when component mounts
   useEffect(() => {
     if (student && classData) {
-      fetchStudentGrades();
+      fetchAllStudentData();
     }
   }, [student, classData]);
 
@@ -131,7 +146,7 @@ export default function StudentGradesPage({
       console.log('Updating student with formData...');
 
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/students/update-student-profile.php',
+        API_ENDPOINTS.UPDATE_STUDENT_PROFILE,
         formData,
         { 
           withCredentials: true,
@@ -179,12 +194,9 @@ export default function StudentGradesPage({
 
   const fetchStudentGrades = async () => {
     try {
-      setLoading(true);
-      setError(null);
-
       // Fetch subjects for this grade level
       const subjectsResponse = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/subjects/get-subjects-by-grade.php?gradeLevelId=${classData.gradeLevelId}`,
+        `${API_ENDPOINTS.GET_SUBJECTS_BY_GRADE}?gradeLevelId=${classData.gradeLevelId}`,
         { withCredentials: true }
       );
 
@@ -197,8 +209,6 @@ export default function StudentGradesPage({
     } catch (err) {
       console.error('Error fetching student grades:', err);
       setError('Failed to load grades');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -208,7 +218,7 @@ export default function StudentGradesPage({
     for (const subject of subjectsList) {
       try {
         const response = await axios.get(
-          `http://localhost/SMS-GCA-3H/Teacher/backend/api/grades/get-section-grades.php?sectionId=${classData.id}&subjectId=${subject.id}`,
+          `${API_ENDPOINTS.GET_SECTION_GRADES}?sectionId=${classData.id}&subjectId=${subject.id}`,
           { withCredentials: true }
         );
 

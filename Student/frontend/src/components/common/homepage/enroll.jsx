@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
-import Bg from '../../../assets/img/bg.png';
+import Bg from '../../../assets/img/school2.png';
 import { useNavigate } from 'react-router-dom';
 
 const API_URL = 'http://localhost/SMS-GCA-3H/Student/backend/api/admission.php';
 
 const PrivacyModal = ({ isOpen, onClose }) => {
+    const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+
+    const handleScroll = (e) => {
+        const { scrollTop, scrollHeight, clientHeight } = e.target;
+        if (scrollTop + clientHeight >= scrollHeight - 10) {
+            setHasScrolledToBottom(true);
+        }
+    };
+
+    const handleClose = () => {
+        setHasScrolledToBottom(false);
+        onClose();
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -14,7 +28,10 @@ const PrivacyModal = ({ isOpen, onClose }) => {
                     Privacy Policy & Data Sharing Agreement
                 </h2>
 
-                <div className="text-sm space-y-3 max-h-64 overflow-y-auto pr-2">
+                <div
+                    className="text-sm space-y-3 max-h-64 overflow-y-auto pr-2"
+                    onScroll={handleScroll}
+                >
                     <p>
                         **1. Data Collection:** By submitting this form, you consent to the Gymnazo Christian Academy (GCA) collecting and processing the personal and sensitive information provided herein (including student name, birthdate, contact details, academic history, and parent/guardian information).
                     </p>
@@ -32,11 +49,19 @@ const PrivacyModal = ({ isOpen, onClose }) => {
                     </p>
                 </div>
 
+                {!hasScrolledToBottom && (
+                    <div className="mt-4 text-center text-xs text-amber-400 dark:text-amber-300 animate-pulse">
+                        ⬇️ Please scroll to the bottom to continue
+                    </div>
+                )}
+
                 <div className="mt-6 flex justify-end">
                     <button
                         type="button"
-                        onClick={onClose}
-                        className="bg-[#F4D77D] dark:bg-amber-500 hover:bg-amber-300 dark:hover:bg-amber-400 text-black font-bold py-2 px-6 rounded-lg shadow-md transition duration-200"
+                        onClick={handleClose}
+                        disabled={!hasScrolledToBottom}
+                        className={`bg-[#F4D77D] dark:bg-amber-500 hover:bg-amber-300 dark:hover:bg-amber-400 text-black font-bold py-2 px-6 rounded-lg shadow-md transition duration-200 ${!hasScrolledToBottom ? 'opacity-50 cursor-not-allowed' : ''
+                            }`}
                     >
                         Close & Confirm Reading
                     </button>
@@ -294,15 +319,219 @@ const TrackingModal = ({ isOpen, onClose }) => {
     );
 };
 
+const ErrorModal = ({ isOpen, message, onClose }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+            <div className="bg-stone-800/95 dark:bg-gray-900/95 text-white p-6 sm:p-8 rounded-lg w-full max-w-md shadow-2xl backdrop-blur-sm border border-stone-700 dark:border-gray-600">
+                <div className="text-center">
+                    <div className="mb-4">
+                        <svg className="w-16 h-16 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h2 className="text-2xl font-bold text-red-400 mb-4">
+                        Validation Error
+                    </h2>
+                    <p className="text-sm mb-6 text-gray-300">
+                        {message}
+                    </p>
+                    <button
+                        onClick={onClose}
+                        className="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-8 rounded-lg transition duration-200"
+                    >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const ConfirmSubmitModal = ({ isOpen, formData, onConfirm, onCancel }) => {
+    if (!isOpen) return null;
+
+    const formatFieldName = (field) => {
+        const labels = {
+            enrolleeType: 'Enrollee Type',
+            studentFirstName: 'Student First Name',
+            studentMiddleName: 'Student Middle Name',
+            studentLastName: 'Student Last Name',
+            birthdate: 'Birthdate',
+            gender: 'Gender',
+            address: 'Address',
+            contactNumber: 'Student Contact Number',
+            emailAddress: 'Student Email Address',
+            guardianFirstName: 'Guardian First Name',
+            guardianLastName: 'Guardian Last Name',
+            relationship: 'Relationship',
+            guardianContact: 'Guardian Contact Number',
+            guardianEmail: 'Guardian Email Address',
+            gradeLevel: 'Grade Level',
+            previousSchool: 'Previous School'
+        };
+        return labels[field] || field;
+    };
+
+    const formatValue = (field, value) => {
+        if (!value) return 'Not provided';
+
+        if (field === 'enrolleeType') {
+            const types = { returnee: 'Returnee', new: 'New Enrollee', transferee: 'Transferee' };
+            return types[value] || value;
+        }
+        if (field === 'gender') {
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        }
+        if (field === 'birthdate') {
+            return new Date(value).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+        if (field === 'gradeLevel') {
+            const gradeLevels = {
+                nursery: 'Nursery',
+                kinder1: 'Kinder 1',
+                kinder2: 'Kinder 2',
+                grade1: 'Grade 1',
+                grade2: 'Grade 2',
+                grade3: 'Grade 3',
+                grade4: 'Grade 4',
+                grade5: 'Grade 5',
+                grade6: 'Grade 6'
+            };
+            return gradeLevels[value] || value;
+        }
+        return value;
+    };
+
+    const studentFields = ['enrolleeType', 'studentFirstName', 'studentMiddleName', 'studentLastName', 'birthdate', 'gender', 'address', 'contactNumber', 'emailAddress'];
+    const guardianFields = ['guardianFirstName', 'guardianLastName', 'relationship', 'guardianContact', 'guardianEmail'];
+    const academicFields = ['gradeLevel', 'previousSchool'];
+
+    return (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+            <div className="bg-stone-800/95 dark:bg-gray-900/95 text-white p-6 sm:p-8 rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl backdrop-blur-sm border border-stone-700 dark:border-gray-600">
+                <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                            <svg className="w-10 h-10 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h2 className="text-2xl font-bold text-[#F4D77D] dark:text-amber-400">
+                                Confirm Your Application
+                            </h2>
+                        </div>
+                    </div>
+                    <p className="text-sm text-gray-300">
+                        Please review all information carefully before submitting your application.
+                    </p>
+                </div>
+
+                <div className="space-y-6">
+                    {/* Student Information */}
+                    <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                        <h3 className="text-lg font-bold text-amber-400 mb-3 border-b border-white/20 pb-2">
+                            Student Information
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {studentFields.map(field => (
+                                <div key={field} className="space-y-1">
+                                    <p className="text-xs text-gray-400">{formatFieldName(field)}</p>
+                                    <p className="text-sm font-semibold text-white">
+                                        {formatValue(field, formData[field])}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Guardian Information */}
+                    <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                        <h3 className="text-lg font-bold text-amber-400 mb-3 border-b border-white/20 pb-2">
+                            Parent/Guardian Information
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {guardianFields.map(field => (
+                                <div key={field} className="space-y-1">
+                                    <p className="text-xs text-gray-400">{formatFieldName(field)}</p>
+                                    <p className="text-sm font-semibold text-white">
+                                        {formatValue(field, formData[field])}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Academic Information */}
+                    <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                        <h3 className="text-lg font-bold text-amber-400 mb-3 border-b border-white/20 pb-2">
+                            Academic Information
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {academicFields.map(field => (
+                                <div key={field} className="space-y-1">
+                                    <p className="text-xs text-gray-400">{formatFieldName(field)}</p>
+                                    <p className="text-sm font-semibold text-white">
+                                        {formatValue(field, formData[field])}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-6 bg-amber-900/20 border border-amber-600/30 rounded-lg p-4">
+                    <p className="text-sm text-amber-200 flex items-start gap-2">
+                        <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>
+                            By clicking "Confirm & Submit", you acknowledge that all information provided is accurate and complete.
+                        </span>
+                    </p>
+                </div>
+
+                <div className="flex gap-3 mt-6">
+                    <button
+                        onClick={onCancel}
+                        className="flex-1 bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
+                    >
+                        Go Back to Edit
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        className="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Confirm & Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Enroll = () => {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [trackingModalOpen, setTrackingModalOpen] = useState(false);
     const [hasAgreed, setHasAgreed] = useState(false);
+    const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successModalOpen, setSuccessModalOpen] = useState(false);
     const [confirmBackModalOpen, setConfirmBackModalOpen] = useState(false);
     const [trackingNumber, setTrackingNumber] = useState('');
+    const [errors, setErrors] = useState({});
+    const [touched, setTouched] = useState({});
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [confirmSubmitModalOpen, setConfirmSubmitModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         enrolleeType: '',
         studentFirstName: '',
@@ -323,7 +552,7 @@ const Enroll = () => {
     });
 
     const gradeLevels = [
-        "Nursery", "Kinder 1","Kinder 2","Grade 1", "Grade 2", "Grade 3",
+        "Nursery", "Kinder 1", "Kinder 2", "Grade 1", "Grade 2", "Grade 3",
         "Grade 4", "Grade 5", "Grade 6"
     ];
 
@@ -347,20 +576,206 @@ const Enroll = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+
+        // Validate contact numbers
+        if (name === 'contactNumber' || name === 'guardianContact') {
+            // Only allow numbers and limit to 11 digits
+            const numbersOnly = value.replace(/\D/g, '');
+            if (numbersOnly.length <= 11) {
+                setFormData(prev => ({
+                    ...prev,
+                    [name]: numbersOnly
+                }));
+                // Validate in real-time
+                validateField(name, numbersOnly);
+            }
+            return;
+        }
+
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
+        // Validate in real-time
+        validateField(name, value);
+    };
+
+    const handleBlur = (field) => {
+        setTouched(prev => ({ ...prev, [field]: true }));
+        validateField(field, formData[field]);
+    };
+
+    const validateField = (name, value) => {
+        let error = '';
+
+        switch (name) {
+            case 'contactNumber':
+            case 'guardianContact':
+                if (value && value.length > 0 && value.length !== 11) {
+                    error = 'Contact number must be exactly 11 digits';
+                } else if (!value) {
+                    error = 'Contact number is required';
+                }
+                break;
+
+            case 'emailAddress':
+            case 'guardianEmail':
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (value && !emailRegex.test(value)) {
+                    error = 'Please enter a valid email address';
+                } else if (name === 'guardianEmail' && !value) {
+                    // Guardian email is optional, no error
+                    error = '';
+                } else if (name === 'emailAddress' && !value) {
+                    // Student email is optional, no error
+                    error = '';
+                }
+                break;
+
+            case 'birthdate':
+                if (value) {
+                    const birthDate = new Date(value);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+
+                    if (age < 3) {
+                        error = 'Student must be at least 3 years old';
+                    } else if (age > 18) {
+                        error = 'Student must be 18 years old or younger';
+                    }
+                }
+                break;
+
+            case 'studentFirstName':
+            case 'studentLastName':
+            case 'guardianFirstName':
+            case 'guardianLastName':
+                if (value && !/^[a-zA-Z\s\-']+$/.test(value)) {
+                    error = 'Name can only contain letters, spaces, hyphens, and apostrophes';
+                } else if (!value) {
+                    error = 'This field is required';
+                }
+                break;
+
+            case 'address':
+                if (value && value.length < 10) {
+                    error = 'Please enter a complete address (at least 10 characters)';
+                } else if (!value) {
+                    error = 'Address is required';
+                }
+                break;
+
+            case 'relationship':
+                if (!value) {
+                    error = 'Relationship is required';
+                }
+                break;
+
+            case 'enrolleeType':
+            case 'gender':
+            case 'gradeLevel':
+                if (!value) {
+                    error = 'This field is required';
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        setErrors(prev => ({
+            ...prev,
+            [name]: error
+        }));
+
+        return error === '';
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        let isValid = true;
+
+        // Validate all required fields
+        Object.keys(formData).forEach(key => {
+            if (!validateField(key, formData[key])) {
+                isValid = false;
+            }
+        });
+
+        // Mark all fields as touched to show errors
+        const allTouched = {};
+        Object.keys(formData).forEach(key => {
+            allTouched[key] = true;
+        });
+        setTouched(allTouched);
+
+        return isValid;
+    };
+
+    const handlePrivacyModalClose = () => {
+        setHasReadPrivacy(true);
+        setIsModalOpen(false);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!hasAgreed) {
-            alert("Please read and agree to the Privacy Policy to submit the form.");
+            setErrorMessage("Please read and agree to the Privacy Policy to submit the form.");
+            setErrorModalOpen(true);
             return;
         }
 
+        if (!validateForm()) {
+            // Count errors
+            const errorCount = Object.values(errors).filter(error => error !== '').length;
+            const errorFields = Object.entries(errors)
+                .filter(([_, error]) => error !== '')
+                .map(([field, _]) => {
+                    // Convert field names to readable labels
+                    const labels = {
+                        enrolleeType: 'Enrollee Type',
+                        studentFirstName: 'Student First Name',
+                        studentLastName: 'Student Last Name',
+                        birthdate: 'Birthdate',
+                        gender: 'Gender',
+                        address: 'Address',
+                        contactNumber: 'Student Contact Number',
+                        emailAddress: 'Student Email',
+                        guardianFirstName: 'Guardian First Name',
+                        guardianLastName: 'Guardian Last Name',
+                        relationship: 'Relationship',
+                        guardianContact: 'Guardian Contact Number',
+                        guardianEmail: 'Guardian Email',
+                        gradeLevel: 'Grade Level'
+                    };
+                    return labels[field] || field;
+                })
+                .slice(0, 5); // Show only first 5 errors
+
+            let message = `Please correct the following ${errorCount} error${errorCount > 1 ? 's' : ''} before submitting:\n\n`;
+            message += errorFields.map(field => `• ${field}`).join('\n');
+
+            if (errorCount > 5) {
+                message += `\n• ...and ${errorCount - 5} more field${errorCount - 5 > 1 ? 's' : ''}`;
+            }
+
+            setErrorMessage(message);
+            setErrorModalOpen(true);
+            return;
+        }
+
+        // Show confirmation modal instead of submitting immediately
+        setConfirmSubmitModalOpen(true);
+    };
+
+    const handleConfirmSubmit = async () => {
+        setConfirmSubmitModalOpen(false);
         setIsSubmitting(true);
 
         try {
@@ -380,8 +795,7 @@ const Enroll = () => {
             const result = await response.json();
 
             if (!response.ok) {
-                // Show the actual error message from the backend
-                throw new Error(result.message || `HTTP error! status: ${response.status}`);
+                throw new Error(result.message || `Server error: ${response.status}`);
             }
 
             if (result.success) {
@@ -408,12 +822,17 @@ const Enroll = () => {
                     previousSchool: ''
                 });
                 setHasAgreed(false);
+                setHasReadPrivacy(false);
+                setErrors({});
+                setTouched({});
             } else {
-                alert(`Error: ${result.message}`);
+                setErrorMessage(`Submission failed: ${result.message || 'Unknown error occurred'}`);
+                setErrorModalOpen(true);
             }
         } catch (error) {
             console.error('Submission error:', error);
-            alert(`An error occurred while submitting the form: ${error.message}`);
+            setErrorMessage(`Failed to submit application: ${error.message}\n\nPlease check your internet connection and try again.`);
+            setErrorModalOpen(true);
         } finally {
             setIsSubmitting(false);
         }
@@ -421,11 +840,22 @@ const Enroll = () => {
 
     return (
         <div className="relative w-full min-h-screen flex flex-col items-center justify-center py-2 px-4 sm:px-6">
-            <PrivacyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <PrivacyModal isOpen={isModalOpen} onClose={handlePrivacyModalClose} />
             <SuccessModal
                 isOpen={successModalOpen}
                 trackingNumber={trackingNumber}
                 onClose={() => setSuccessModalOpen(false)}
+            />
+            <ErrorModal
+                isOpen={errorModalOpen}
+                message={errorMessage}
+                onClose={() => setErrorModalOpen(false)}
+            />
+            <ConfirmSubmitModal
+                isOpen={confirmSubmitModalOpen}
+                formData={formData}
+                onConfirm={handleConfirmSubmit}
+                onCancel={() => setConfirmSubmitModalOpen(false)}
             />
             <ConfirmBackModal
                 isOpen={confirmBackModalOpen}
@@ -481,6 +911,7 @@ const Enroll = () => {
                                     name="enrolleeType"
                                     value={formData.enrolleeType}
                                     onChange={handleInputChange}
+                                    onBlur={() => handleBlur('enrolleeType')}
                                     required
                                     className="w-full h-12 pt-4 pb-1 px-3 bg-white/90 dark:bg-gray-700 dark:text-gray-100 text-gray-900 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-amber-400 focus:border-amber-400 text-base transition-colors duration-300 peer"
                                 >
@@ -498,47 +929,70 @@ const Enroll = () => {
                                 >
                                     Enrollee Type
                                 </label>
+                                {touched.enrolleeType && errors.enrolleeType && (
+                                    <p className="text-red-400 text-xs mt-1">{errors.enrolleeType}</p>
+                                )}
                             </div>
 
                             <div className="grid grid-cols-3 gap-2">
-                                <Input
-                                    label="First Name"
-                                    name="studentFirstName"
-                                    type="text"
-                                    value={formData.studentFirstName}
-                                    onChange={handleInputChange}
-                                    required
-                                    className="col-span-1"
-                                />
-                                <Input
-                                    label="Middle Name"
-                                    name="studentMiddleName"
-                                    type="text"
-                                    value={formData.studentMiddleName}
-                                    onChange={handleInputChange}
-                                    className="col-span-1"
-                                />
-                                <Input
-                                    label="Last Name"
-                                    name="studentLastName"
-                                    type="text"
-                                    value={formData.studentLastName}
-                                    onChange={handleInputChange}
-                                    required
-                                    className="col-span-1"
-                                />
+                                <div>
+                                    <Input
+                                        label="First Name"
+                                        name="studentFirstName"
+                                        type="text"
+                                        value={formData.studentFirstName}
+                                        onChange={handleInputChange}
+                                        onBlur={() => handleBlur('studentFirstName')}
+                                        required
+                                        className="col-span-1"
+                                    />
+                                    {touched.studentFirstName && errors.studentFirstName && (
+                                        <p className="text-red-400 text-xs mt-1">{errors.studentFirstName}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <Input
+                                        label="Middle Name"
+                                        name="studentMiddleName"
+                                        type="text"
+                                        value={formData.studentMiddleName}
+                                        onChange={handleInputChange}
+                                        className="col-span-1"
+                                    />
+                                </div>
+                                <div>
+                                    <Input
+                                        label="Last Name"
+                                        name="studentLastName"
+                                        type="text"
+                                        value={formData.studentLastName}
+                                        onChange={handleInputChange}
+                                        onBlur={() => handleBlur('studentLastName')}
+                                        required
+                                        className="col-span-1"
+                                    />
+                                    {touched.studentLastName && errors.studentLastName && (
+                                        <p className="text-red-400 text-xs mt-1">{errors.studentLastName}</p>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="flex space-x-2">
-                                <Input
-                                    label="Birthdate"
-                                    name="birthdate"
-                                    type="date"
-                                    value={formData.birthdate}
-                                    onChange={handleInputChange}
-                                    required
-                                    className="flex-1"
-                                />
+                                <div className="flex-1">
+                                    <Input
+                                        label="Birthdate"
+                                        name="birthdate"
+                                        type="date"
+                                        value={formData.birthdate}
+                                        onChange={handleInputChange}
+                                        onBlur={() => handleBlur('birthdate')}
+                                        required
+                                        className="flex-1"
+                                    />
+                                    {touched.birthdate && errors.birthdate && (
+                                        <p className="text-red-400 text-xs mt-1">{errors.birthdate}</p>
+                                    )}
+                                </div>
                                 <div className="flex-1 min-w-[120px]">
                                     <label className="block text-sm font-medium text-white mb-2">Gender</label>
                                     <div className="flex items-center space-x-3 h-10 text-base">
@@ -549,6 +1003,7 @@ const Enroll = () => {
                                                 value="male"
                                                 checked={formData.gender === 'male'}
                                                 onChange={handleInputChange}
+                                                onBlur={() => handleBlur('gender')}
                                                 required
                                                 className="h-4 w-4 text-amber-400"
                                             />
@@ -561,42 +1016,73 @@ const Enroll = () => {
                                                 value="female"
                                                 checked={formData.gender === 'female'}
                                                 onChange={handleInputChange}
+                                                onBlur={() => handleBlur('gender')}
                                                 required
                                                 className="h-4 w-4 text-amber-400"
                                             />
                                             <span>Female</span>
                                         </label>
                                     </div>
+                                    {touched.gender && errors.gender && (
+                                        <p className="text-red-400 text-xs mt-1">{errors.gender}</p>
+                                    )}
                                 </div>
                             </div>
 
-                            <Input
-                                label="Address"
-                                name="address"
-                                type="text"
-                                value={formData.address}
-                                onChange={handleInputChange}
-                                required
-                            />
+                            <div>
+                                <Input
+                                    label="Address"
+                                    name="address"
+                                    type="text"
+                                    value={formData.address}
+                                    onChange={handleInputChange}
+                                    onBlur={() => handleBlur('address')}
+                                    required
+                                />
+                                {touched.address && errors.address && (
+                                    <p className="text-red-400 text-xs mt-1">{errors.address}</p>
+                                )}
+                            </div>
 
                             <div className="flex space-x-2">
-                                <Input
-                                    label="Contact Number"
-                                    name="contactNumber"
-                                    type="tel"
-                                    value={formData.contactNumber}
-                                    onChange={handleInputChange}
-                                    required
-                                    className="flex-1"
-                                />
-                                <Input
-                                    label="Email Address"
-                                    name="emailAddress"
-                                    type="email"
-                                    value={formData.emailAddress}
-                                    onChange={handleInputChange}
-                                    className="flex-1"
-                                />
+                                <div className="flex-1">
+                                    <Input
+                                        label="Contact Number"
+                                        name="contactNumber"
+                                        type="tel"
+                                        value={formData.contactNumber}
+                                        onChange={handleInputChange}
+                                        onBlur={() => handleBlur('contactNumber')}
+                                        required
+                                        className="flex-1"
+                                        maxLength="11"
+                                    />
+                                    {(touched.contactNumber || formData.contactNumber) && errors.contactNumber && (
+                                        <p className="text-red-400 text-xs mt-1">{errors.contactNumber}</p>
+                                    )}
+                                    {formData.contactNumber && !errors.contactNumber && formData.contactNumber.length < 11 && (
+                                        <p className="text-yellow-400 text-xs mt-1">
+                                            {11 - formData.contactNumber.length} digit(s) remaining
+                                        </p>
+                                    )}
+                                    {formData.contactNumber && formData.contactNumber.length === 11 && !errors.contactNumber && (
+                                        <p className="text-green-400 text-xs mt-1">✓ Valid contact number</p>
+                                    )}
+                                </div>
+                                <div className="flex-1">
+                                    <Input
+                                        label="Email Address"
+                                        name="emailAddress"
+                                        type="email"
+                                        value={formData.emailAddress}
+                                        onChange={handleInputChange}
+                                        onBlur={() => handleBlur('emailAddress')}
+                                        className="flex-1"
+                                    />
+                                    {touched.emailAddress && errors.emailAddress && (
+                                        <p className="text-red-400 text-xs mt-1">{errors.emailAddress}</p>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="pt-3 text-xs font-medium text-white leading-tight">
@@ -622,53 +1108,92 @@ const Enroll = () => {
                                 </h2>
 
                                 <div className="flex space-x-2">
-                                    <Input
-                                        label="Guardian First Name"
-                                        name="guardianFirstName"
-                                        type="text"
-                                        value={formData.guardianFirstName}
-                                        onChange={handleInputChange}
-                                        required
-                                        className="flex-1"
-                                    />
-                                    <Input
-                                        label="Guardian Last Name"
-                                        name="guardianLastName"
-                                        type="text"
-                                        value={formData.guardianLastName}
-                                        onChange={handleInputChange}
-                                        required
-                                        className="flex-1"
-                                    />
+                                    <div className="flex-1">
+                                        <Input
+                                            label="Guardian First Name"
+                                            name="guardianFirstName"
+                                            type="text"
+                                            value={formData.guardianFirstName}
+                                            onChange={handleInputChange}
+                                            onBlur={() => handleBlur('guardianFirstName')}
+                                            required
+                                            className="flex-1"
+                                        />
+                                        {touched.guardianFirstName && errors.guardianFirstName && (
+                                            <p className="text-red-400 text-xs mt-1">{errors.guardianFirstName}</p>
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <Input
+                                            label="Guardian Last Name"
+                                            name="guardianLastName"
+                                            type="text"
+                                            value={formData.guardianLastName}
+                                            onChange={handleInputChange}
+                                            onBlur={() => handleBlur('guardianLastName')}
+                                            required
+                                            className="flex-1"
+                                        />
+                                        {touched.guardianLastName && errors.guardianLastName && (
+                                            <p className="text-red-400 text-xs mt-1">{errors.guardianLastName}</p>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="flex space-x-2">
-                                    <Input
-                                        label="Relationship"
-                                        name="relationship"
-                                        type="text"
-                                        value={formData.relationship}
-                                        onChange={handleInputChange}
-                                        required
-                                        className="flex-1"
-                                    />
-                                    <Input
-                                        label="Contact Number"
-                                        name="guardianContact"
-                                        type="tel"
-                                        value={formData.guardianContact}
-                                        onChange={handleInputChange}
-                                        required
-                                        className="flex-1"
-                                    />
+                                    <div className="flex-1">
+                                        <Input
+                                            label="Relationship"
+                                            name="relationship"
+                                            type="text"
+                                            value={formData.relationship}
+                                            onChange={handleInputChange}
+                                            onBlur={() => handleBlur('relationship')}
+                                            required
+                                            className="flex-1"
+                                        />
+                                        {touched.relationship && errors.relationship && (
+                                            <p className="text-red-400 text-xs mt-1">{errors.relationship}</p>
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <Input
+                                            label="Contact Number"
+                                            name="guardianContact"
+                                            type="tel"
+                                            value={formData.guardianContact}
+                                            onChange={handleInputChange}
+                                            onBlur={() => handleBlur('guardianContact')}
+                                            required
+                                            className="flex-1"
+                                            maxLength="11"
+                                        />
+                                        {(touched.guardianContact || formData.guardianContact) && errors.guardianContact && (
+                                            <p className="text-red-400 text-xs mt-1">{errors.guardianContact}</p>
+                                        )}
+                                        {formData.guardianContact && !errors.guardianContact && formData.guardianContact.length < 11 && (
+                                            <p className="text-yellow-400 text-xs mt-1">
+                                                {11 - formData.guardianContact.length} digit(s) remaining
+                                            </p>
+                                        )}
+                                        {formData.guardianContact && formData.guardianContact.length === 11 && !errors.guardianContact && (
+                                            <p className="text-green-400 text-xs mt-1">✓ Valid contact number</p>
+                                        )}
+                                    </div>
                                 </div>
-                                <Input
-                                    label="Email Address"
-                                    name="guardianEmail"
-                                    type="email"
-                                    value={formData.guardianEmail}
-                                    onChange={handleInputChange}
-                                />
+                                <div>
+                                    <Input
+                                        label="Email Address"
+                                        name="guardianEmail"
+                                        type="email"
+                                        value={formData.guardianEmail}
+                                        onChange={handleInputChange}
+                                        onBlur={() => handleBlur('guardianEmail')}
+                                    />
+                                    {touched.guardianEmail && errors.guardianEmail && (
+                                        <p className="text-red-400 text-xs mt-1">{errors.guardianEmail}</p>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="space-y-4 p-6 rounded-lg backdrop-blur-sm bg-stone-800/60 dark:bg-gray-900/70 shadow-xl border border-stone-700 dark:border-gray-600 transition-colors duration-300">
@@ -682,6 +1207,7 @@ const Enroll = () => {
                                             name="gradeLevel"
                                             value={formData.gradeLevel}
                                             onChange={handleInputChange}
+                                            onBlur={() => handleBlur('gradeLevel')}
                                             required
                                             className="w-full h-12 pt-4 pb-1 px-3 bg-white/90 dark:bg-gray-700 dark:text-gray-100 text-gray-900 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-amber-400 focus:border-amber-400 text-base transition-colors duration-300"
                                         >
@@ -699,6 +1225,9 @@ const Enroll = () => {
                                         >
                                             Grade Level Applying for
                                         </label>
+                                        {touched.gradeLevel && errors.gradeLevel && (
+                                            <p className="text-red-400 text-xs mt-1">{errors.gradeLevel}</p>
+                                        )}
                                     </div>
                                     <Input
                                         label="Previous School (if applicable)"
@@ -719,8 +1248,10 @@ const Enroll = () => {
                                         type="checkbox"
                                         checked={hasAgreed}
                                         onChange={(e) => setHasAgreed(e.target.checked)}
+                                        disabled={!hasReadPrivacy}
                                         required
-                                        className="mt-1 h-4 w-4 text-amber-400 border-gray-300 rounded focus:ring-amber-400 bg-white"
+                                        className={`mt-1 h-4 w-4 text-amber-400 border-gray-300 rounded focus:ring-amber-400 bg-white ${!hasReadPrivacy ? 'opacity-50 cursor-not-allowed' : ''
+                                            }`}
                                     />
                                     <label htmlFor="privacyAgreement" className="text-base font-medium">
                                         I have read and agree to the
@@ -731,6 +1262,11 @@ const Enroll = () => {
                                         >
                                             Privacy Policy & Data Sharing Agreement.
                                         </button>
+                                        {!hasReadPrivacy && (
+                                            <span className="block text-xs text-amber-400 dark:text-amber-300 mt-1">
+                                                Please click to read the privacy policy first
+                                            </span>
+                                        )}
                                     </label>
                                 </div>
                             </div>
@@ -748,16 +1284,11 @@ const Enroll = () => {
                     </div>
                 </form>
             </div>
-
-            <div className="absolute bottom-2 right-4 flex items-center space-x-2 z-10">
-                <div className="h-6 w-6 bg-blue-700 dark:bg-blue-600 rounded-sm transition-colors duration-300"></div>
-                <div className="h-6 w-6 bg-green-600 dark:bg-green-500 rounded-sm transition-colors duration-300"></div>
-            </div>
-        </div>
+        </div >
     );
 };
 
-const Input = ({ label, name, type, value, onChange, required = false, className = '' }) => {
+const Input = ({ label, name, type, value, onChange, onBlur, required = false, className = '', maxLength }) => {
     const isDate = type === 'date';
     const hasValue = value || isDate;
 
@@ -769,8 +1300,10 @@ const Input = ({ label, name, type, value, onChange, required = false, className
                 type={type}
                 value={value}
                 onChange={onChange}
+                onBlur={onBlur}
                 required={required}
                 placeholder=" "
+                maxLength={maxLength}
                 className="w-full h-12 pt-4 pb-1 px-3 bg-white/90 dark:bg-gray-700 dark:text-gray-100 text-gray-900 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-amber-400 focus:border-amber-400 text-base transition-colors duration-300 peer"
             />
             <label

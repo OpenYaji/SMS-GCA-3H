@@ -4,29 +4,32 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/qr_generator.php';
 
 class Mailer
 {
     private $mail;
+    private $qrGenerator;
 
     public function __construct()
     {
         $this->mail = new PHPMailer(true);
+        $this->qrGenerator = new QRGenerator();
 
         try {
             // Server settings
             $this->mail->isSMTP();
             $this->mail->Host       = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
             $this->mail->SMTPAuth   = true;
-            $this->mail->Username   = getenv('SMTP_USERNAME') ?: 'johnreybisnarcalipes@gmail.com';
-            $this->mail->Password   = getenv('SMTP_PASSWORD') ?: 'iljb mmag gmsl mvnk';
+            $this->mail->Username   = getenv('SMTP_USERNAME') ?: 'gymazochristian.acad.novaliches@gmail.com';
+            $this->mail->Password   = getenv('SMTP_PASSWORD') ?: 'dags pvho opgf pgec';
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->mail->Port       = getenv('SMTP_PORT') ?: 587;
 
             // Default sender
             $this->mail->setFrom(
-                getenv('SMTP_FROM_EMAIL') ?: 'johnreybisnarcalipes@gmail.com',
-                getenv('SMTP_FROM_NAME') ?: 'Gymnazo Christian Academy'
+                getenv('SMTP_FROM_EMAIL') ?: 'gymazochristian.acad.novaliches@gmail.com',
+                getenv('SMTP_FROM_NAME') ?: 'Gymnazo Christian Academy Novaliches'
             );
         } catch (Exception $e) {
             error_log("Mailer initialization error: " . $e->getMessage());
@@ -121,6 +124,7 @@ class Mailer
     {
         try {
             $this->mail->clearAddresses();
+            $this->mail->clearAttachments();
             
             if (!empty($recipientEmail)) {
                 $this->mail->addAddress($recipientEmail, $enrollmentData['guardianName']);
@@ -130,9 +134,22 @@ class Mailer
                 $this->mail->addAddress($enrollmentData['studentEmail'], $enrollmentData['studentName']);
             }
 
+            // Generate QR code for student
+            $qrResult = $this->qrGenerator->generateStudentQR($enrollmentData['studentNumber']);
+
+            // Attach QR code file if generation was successful
+            if ($qrResult['success'] && file_exists($qrResult['filePath'])) {
+                $this->mail->addAttachment(
+                    $qrResult['filePath'],
+                    'QR-' . $enrollmentData['studentNumber'] . '.png',
+                    'base64',
+                    'image/png'
+                );
+            }
+
             $this->mail->isHTML(true);
             $this->mail->Subject = '🎓 Enrollment Confirmed - Welcome to Gymnazo Christian Academy!';
-            $this->mail->Body = $this->getEnrollmentConfirmationTemplate($enrollmentData);
+            $this->mail->Body = $this->getEnrollmentConfirmationTemplate($enrollmentData, $qrResult);
             $this->mail->AltBody = $this->getEnrollmentConfirmationPlainText($enrollmentData);
 
             $this->mail->send();
@@ -400,7 +417,7 @@ class Mailer
     }
 
     // --- 4. Enrollment Confirmation Template (Refactored) ---
-    private function getEnrollmentConfirmationTemplate($data)
+    private function getEnrollmentConfirmationTemplate($data, $qrData = null)
     {
         $studentName = $data['studentName'];
         $guardianName = $data['guardianName'];
@@ -414,6 +431,30 @@ class Mailer
         $subjectsList = '';
         foreach ($assignedSubjects as $subject) {
             $subjectsList .= "<li>{$subject}</li>";
+        }
+
+        // QR Code section
+        $qrCodeSection = '';
+        if ($qrData && $qrData['success']) {
+            $qrCodeId = $qrData['qrCodeId'];
+            $qrBase64 = $qrData['base64'];
+            $qrMimeType = $qrData['mimeType'];
+            
+            $qrCodeSection = "
+                <h3 style='color: #4f46e5; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; margin-top: 30px;'>📱 Student QR Code</h3>
+                <div style='text-align: center; background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;'>
+                    <p style='color: #6b7280; font-size: 14px; margin-bottom: 15px;'>Scan this QR code for quick student identification</p>
+                    <img src='data:{$qrMimeType};base64,{$qrBase64}' alt='Student QR Code' style='max-width: 300px; width: 100%; height: auto; border: 2px solid #e5e7eb; border-radius: 8px;' />
+                    <p style='margin-top: 15px; font-family: monospace; font-size: 14px; color: #4f46e5; font-weight: bold;'>{$qrCodeId}</p>
+                    <p style='color: #6b7280; font-size: 12px; margin-top: 10px;'>This QR code contains your student number and can be used for campus identification.</p>
+                    <div style='margin-top: 20px; padding: 15px; background: #eef2ff; border-radius: 6px;'>
+                        <p style='margin: 0; font-size: 13px; color: #1e40af;'>
+                            📎 <strong>Attached File:</strong> QR-{$studentNumber}.png<br>
+                            <span style='font-size: 12px; color: #4b5563;'>You can download and print this QR code from the email attachment.</span>
+                        </p>
+                    </div>
+                </div>
+            ";
         }
         
         return "
@@ -456,6 +497,8 @@ class Mailer
                             <td><span style='font-family: monospace; font-size: 16px; color: #4f46e5; font-weight: bold;'>{$studentNumber}</span></td>
                         </tr>
                     </table>
+
+                    {$qrCodeSection}
 
                     <div class='highlight-box warning-box'>
                         <h3 style='margin-top:0; color: #dc2626;'>🔐 Student Portal Login Credentials</h3>

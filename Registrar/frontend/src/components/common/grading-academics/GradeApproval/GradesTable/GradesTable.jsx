@@ -3,13 +3,23 @@ import GradeReviewModal from '../GradeReviewModal';
 import ViewApprovedModal from '../ViewApprovedModal';
 import SuccessToast from '../../../../ui/SuccessToast';
 
-const GradesTable = ({ submissions, selectedSubmissions, selectAll, onSelectSubmission, onSelectAll }) => {
+const GradesTable = ({ 
+  submissions, 
+  selectedSubmissions, 
+  selectAll, 
+  onSelectSubmission, 
+  onSelectAll,
+  onReviewSubmission,
+  onRefresh,
+  apiBaseUrl
+}) => {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -42,20 +52,40 @@ const GradesTable = ({ submissions, selectedSubmissions, selectAll, onSelectSubm
     setSelectedSubmission(null);
   };
 
-  const handleModalAction = (action, data) => {
+  const handleModalAction = async (action, data) => {
     console.log(`${action} action:`, data);
+    setIsProcessing(true);
     
-    if (action === 'approve') {
-      setToastMessage(`Grades for ${data.teacher} - ${data.subject} approved successfully!`);
-      setToastType('success');
-    } else if (action === 'flag') {
-      setToastMessage(`Grade submission flagged for review. Teacher has been notified.`);
-      setToastType('warning');
+    try {
+      if (action === 'approve' && onReviewSubmission) {
+        const success = await onReviewSubmission(data.id, 'approve', data.notes || '');
+        if (success) {
+          setToastMessage(`Grades for ${data.teacher} - ${data.gradeLevel} ${data.section} approved successfully!`);
+          setToastType('success');
+          setShowToast(true);
+          if (onRefresh) onRefresh();
+        }
+      } else if (action === 'flag' || action === 'reject') {
+        if (onReviewSubmission) {
+          const success = await onReviewSubmission(data.id, 'reject', data.notes || data.reason || '');
+          if (success) {
+            setToastMessage(`Grade submission flagged for review. Teacher has been notified.`);
+            setToastType('warning');
+            setShowToast(true);
+            if (onRefresh) onRefresh();
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error processing action:', error);
+      setToastMessage('Failed to process action. Please try again.');
+      setToastType('error');
+      setShowToast(true);
+    } finally {
+      setIsProcessing(false);
+      setShowReviewModal(false);
+      setSelectedSubmission(null);
     }
-    setShowToast(true);
-    
-    setShowReviewModal(false);
-    setSelectedSubmission(null);
   };
 
   const getActionButton = (submission) => {
@@ -184,6 +214,8 @@ const GradesTable = ({ submissions, selectedSubmissions, selectAll, onSelectSubm
         isOpen={showReviewModal}
         onClose={handleCloseModals}
         onAction={handleModalAction}
+        isProcessing={isProcessing}
+        apiBaseUrl={apiBaseUrl}
       />
 
       <ViewApprovedModal

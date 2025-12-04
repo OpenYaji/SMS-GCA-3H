@@ -36,7 +36,7 @@ class Transaction
     /**
      * Get total unpaid balance for a student
      */
-   /**
+    /**
      * Get total unpaid balance for a student
      * FIX: Calculates dynamically to match the Breakdown Card
      */
@@ -62,10 +62,10 @@ class Transaction
             $stmt->bindParam(':student_profile_id', $studentProfileId, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            
+
             // Ensure result is not negative (just in case)
             $balance = $result['totalBalance'] ?? 0.00;
-            return max(0, floatval($balance)); 
+            return max(0, floatval($balance));
         } catch (PDOException $e) {
             error_log("Error in getTotalBalance: " . $e->getMessage());
             return 0.00;
@@ -75,7 +75,7 @@ class Transaction
     /**
      * Get current transaction for active school year
      */
-  /**
+    /**
      * Get current transaction - Calculates Balance Dynamically to prevent negative errors
      */
     public function getCurrentTransaction($studentProfileId)
@@ -223,7 +223,7 @@ class Transaction
     }
 
     /**
-     * Submit a new payment
+     * Submit a new payment - Updated to handle partial payments
      */
     public function submitPayment($studentProfileId, $transactionId, $paymentData)
     {
@@ -234,21 +234,19 @@ class Transaction
                 AmountPaid, 
                 PaymentDateTime, 
                 ReferenceNumber,
-                VerificationStatus
+                VerificationStatus,
+                PaymentMode,
+                InstallmentNumber
             ) VALUES (
                 :transaction_id,
                 :payment_method_id,
                 :amount_paid,
                 NOW(),
                 :reference_number,
-                'Pending'
+                'Pending',
+                :payment_mode,
+                :installment_number
             )
-        ";
-
-        $updateTransactionQuery = "
-            UPDATE transaction 
-            SET PaidAmount = PaidAmount + :amount_paid
-            WHERE TransactionID = :transaction_id
         ";
 
         try {
@@ -260,22 +258,35 @@ class Transaction
                 throw new Exception('Invalid payment method');
             }
 
+            // Validate amount doesn't exceed balance
+            $currentTransaction = $this->getCurrentTransaction($studentProfileId);
+            if (!$currentTransaction) {
+                throw new Exception('No active transaction found');
+            }
+
+            $balance = floatval($currentTransaction['BalanceAmount']);
+            $paymentAmount = floatval($paymentData['amount']);
+
+            if ($paymentAmount > $balance) {
+                throw new Exception('Payment amount exceeds balance');
+            }
+
+            if ($paymentAmount <= 0) {
+                throw new Exception('Payment amount must be greater than zero');
+            }
+
             // Insert payment record
             $stmt = $this->conn->prepare($insertQuery);
             $stmt->bindParam(':transaction_id', $transactionId, PDO::PARAM_INT);
             $stmt->bindParam(':payment_method_id', $methodId, PDO::PARAM_INT);
-            $stmt->bindParam(':amount_paid', $paymentData['amount'], PDO::PARAM_STR);
+            $stmt->bindParam(':amount_paid', $paymentAmount, PDO::PARAM_STR);
             $stmt->bindParam(':reference_number', $paymentData['reference'], PDO::PARAM_STR);
+            $stmt->bindParam(':payment_mode', $paymentData['paymentMode'], PDO::PARAM_STR);
+            $stmt->bindParam(':installment_number', $paymentData['installmentNumber'], PDO::PARAM_INT);
             $stmt->execute();
             $paymentId = $this->conn->lastInsertId();
 
-            // Update transaction paid amount
-            $stmt = $this->conn->prepare($updateTransactionQuery);
-            $stmt->bindParam(':amount_paid', $paymentData['amount'], PDO::PARAM_STR);
-            $stmt->bindParam(':transaction_id', $transactionId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            // Update transaction status
+            // Update transaction status based on remaining balance
             $this->updateTransactionStatus($transactionId);
 
             $this->conn->commit();

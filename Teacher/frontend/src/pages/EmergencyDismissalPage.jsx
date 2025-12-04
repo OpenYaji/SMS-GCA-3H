@@ -4,6 +4,7 @@ import { ChevronDown, Clock, User, Phone, Mail, Users } from 'lucide-react';
 import Breadcrumb from '../components/common/Breadcrumb';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { API_ENDPOINTS } from '../config/api';
 
 const EmergencyDismissalPage = () => {
   const location = useLocation();
@@ -59,7 +60,7 @@ const EmergencyDismissalPage = () => {
       if (!currentSchedule?.sectionId) return;
 
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/schedules/get-section-schedule.php?sectionId=${currentSchedule.sectionId}`,
+        `${API_ENDPOINTS.GET_SECTION_SCHEDULE}?sectionId=${currentSchedule.sectionId}`,
         { withCredentials: true }
       );
 
@@ -113,7 +114,7 @@ const EmergencyDismissalPage = () => {
       if (!currentSchedule?.sectionId) return;
 
       const response = await axios.get(
-        `http://localhost/SMS-GCA-3H/Teacher/backend/api/notifications/get-section-students-with-guardians.php?sectionId=${currentSchedule.sectionId}`,
+        `${API_ENDPOINTS.GET_SECTION_STUDENTS_WITH_GUARDIANS}?sectionId=${currentSchedule.sectionId}`,
         { withCredentials: true }
       );
 
@@ -202,7 +203,7 @@ const EmergencyDismissalPage = () => {
       };
 
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/notifications/send-dismissal-notification.php',
+        API_ENDPOINTS.SEND_DISMISSAL_NOTIFICATION,
         payload,
         { withCredentials: true }
       );

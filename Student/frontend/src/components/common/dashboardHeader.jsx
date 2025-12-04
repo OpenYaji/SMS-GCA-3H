@@ -117,6 +117,14 @@ const DashboardHeader = ({ setMobileOpen }) => {
         );
     }
 
+    const getProfilePictureUrl = (profilePictureURL) => {
+        if (!profilePictureURL) return DefaultProfilePic;
+        // If it's already a full URL, return it
+        if (profilePictureURL.startsWith('http')) return profilePictureURL;
+        // Otherwise, construct the full URL
+        return `http://localhost/SMS-GCA-3H/Student/backend/${profilePictureURL}`;
+    };
+
     return (
         <header className='sticky top-0 z-30 w-full bg-[#F9F9F9] dark:bg-slate-900 dark:border-b dark:border-slate-700 py-4 flex items-center justify-between rounded-xl dark:rounded-none'>
 
@@ -222,7 +230,12 @@ const DashboardHeader = ({ setMobileOpen }) => {
                 <div className="relative group" ref={profileRef}>
                     <button onClick={() => toggleDropdown('profile')} className='flex items-center gap-2 cursor-pointer'>
                         <div className='w-10 h-10 rounded-full bg-gray-300 overflow-hidden'>
-                            <img src={user.profilePictureURL || DefaultProfilePic} alt='User' className='w-full h-full object-cover' />
+                            <img 
+                                src={getProfilePictureUrl(user.profilePictureURL)} 
+                                alt='User' 
+                                className='w-full h-full object-cover'
+                                onError={(e) => { e.target.src = DefaultProfilePic; }}
+                            />
                         </div>
                         <div className='hidden md:block'>
                             <p className='text-sm font-semibold text-gray-800 dark:text-gray-200'>{user.fullName}</p>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import LogoutConfirmationModal from './logoutConfirmation';
 import Logo from '../../assets/img/gymnazu.png';
+import { API_ENDPOINTS } from '../../config/api';
 
 import {
     LayoutDashboard,
@@ -42,7 +43,7 @@ export default function DashboardSidebar({ collapsed, setCollapsed, mobileOpen, 
             setLogoutModalOpen(false);
 
             // Perform logout operations on backend
-            const response = await fetch('http://localhost/SMS-GCA-3H/Teacher/backend/api/auth/logout.php', {
+            const response = await fetch(API_ENDPOINTS.LOGOUT, {
                 method: 'POST',
                 credentials: 'include'
             });

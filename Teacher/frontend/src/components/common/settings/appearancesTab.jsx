@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDarkMode } from '../../../context/DarkModeContext';
+import { API_ENDPOINTS } from '../../../config/api';
 
 /**
  * AppearancesTab Component
@@ -54,7 +55,7 @@ export default function AppearancesTab() {
   const fetchUserPreferences = async () => {
     try {
       const response = await axios.get(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/get-appearance-settings.php',
+        API_ENDPOINTS.GET_APPEARANCE_SETTINGS,
         { withCredentials: true }
       );
 
@@ -98,7 +99,7 @@ export default function AppearancesTab() {
     try {
       setSaving(true);
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/update-appearance-settings.php',
+        API_ENDPOINTS.UPDATE_APPEARANCE_SETTINGS,
         {
           theme: selectedTheme,
           accentColor: selectedAccent,

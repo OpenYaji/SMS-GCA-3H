@@ -4,6 +4,7 @@ import Header from '../common/homepage/loginHeader';
 import Bg from '../../assets/img/bg.png';
 import Logo from '../../assets/img/gymnazu.png';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -26,7 +27,7 @@ const ForgotPasswordPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/auth/forgot-password.php',
+        API_ENDPOINTS.FORGOT_PASSWORD,
         { email }
       );
 

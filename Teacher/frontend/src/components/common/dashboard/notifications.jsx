@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bell } from 'lucide-react';
+import { API_ENDPOINTS } from '../../../config/api';
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -11,7 +12,7 @@ const Notifications = () => {
     const fetchNotifications = async () => {
       try {
         const response = await axios.get(
-          'http://localhost/SMS-GCA-3H/Teacher/backend/api/notifications/get-notifications.php?limit=3',
+          `${API_ENDPOINTS.GET_NOTIFICATIONS}?limit=3`,
           { withCredentials: true }
         );
         

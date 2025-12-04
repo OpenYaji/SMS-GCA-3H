@@ -2,20 +2,33 @@ import React, { useState } from 'react';
 import { Edit, X, Save, AlertCircle } from 'lucide-react';
 import axios from 'axios';
 
-const InfoField = ({ label, value, isEditing, onChange, name, readOnly = false }) => (
+const InfoField = ({ label, value, isEditing, onChange, name, readOnly = false, type = 'text' }) => (
   <div>
     <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">{label}</label>
     {isEditing && !readOnly ? (
-      <input
-        type="text"
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="mt-1 w-full p-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700"
-      />
+      type === 'select' ? (
+        <select
+          name={name}
+          value={value}
+          onChange={onChange}
+          className="mt-1 w-full p-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-200"
+        >
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      ) : (
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          className="mt-1 w-full p-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-200"
+        />
+      )
     ) : (
-      <p className={`mt-1 p-2 rounded-md ${readOnly && isEditing ? 'bg-gray-100 dark:bg-slate-700' : ''}`}>
-        {value}
+      <p className={`mt-1 p-2 rounded-md ${readOnly && isEditing ? 'bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400' : 'text-gray-800 dark:text-gray-200'}`}>
+        {value || 'Not specified'}
       </p>
     )}
   </div>
@@ -46,8 +59,6 @@ const PersonalInfo = ({ personalData, academicData }) => {
       if (formData.address !== personalData.address) updates.address = formData.address;
       if (formData.phone !== personalData.phone) updates.phone = formData.phone;
       if (formData.email !== personalData.email) updates.email = formData.email;
-      if (formData.gender !== personalData.gender) updates.gender = formData.gender;
-      if (formData.nationality !== personalData.nationality) updates.nationality = formData.nationality;
 
       if (Object.keys(updates).length === 0) {
         setError('No changes detected.');
@@ -137,8 +148,8 @@ const PersonalInfo = ({ personalData, academicData }) => {
 
         <InfoField label="Grade & Section" value={academicData.gradeSection} isEditing={isEditing} readOnly />
         <InfoField label="Adviser" value={academicData.adviser} isEditing={isEditing} readOnly />
-        <InfoField label="Gender" name="gender" value={formData.gender} isEditing={isEditing} onChange={handleInputChange} />
-        <InfoField label="Nationality" name="nationality" value={formData.nationality} isEditing={isEditing} onChange={handleInputChange} />
+        <InfoField label="Gender" value={formData.gender} isEditing={isEditing} readOnly />
+        <InfoField label="Nationality" value={formData.nationality} isEditing={isEditing} readOnly />
       </div>
 
       {isEditing && (

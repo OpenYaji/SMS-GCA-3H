@@ -1,0 +1,19 @@
+# Allow access to profile pictures
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
+
+# Set proper headers for images
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Allow only image files
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Allow from all
+</FilesMatch>

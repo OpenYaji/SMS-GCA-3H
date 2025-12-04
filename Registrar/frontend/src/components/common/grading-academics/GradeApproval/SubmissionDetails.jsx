@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../../../ui/Button';
 import InfoField from './InfoField';
 
-const SubmissionDetails = ({ submission, onFlagIssue, onApprove }) => {
+const SubmissionDetails = ({ submission, onFlagIssue, onApprove, isReReview, isProcessing }) => {
   return (
     <div className="lg:col-span-1 space-y-6">
       {/* Submission Information */}
@@ -12,11 +12,17 @@ const SubmissionDetails = ({ submission, onFlagIssue, onApprove }) => {
         </h3>
         <div className="space-y-3">
           <InfoField label="Teacher" value={submission.teacher} />
-          <InfoField label="Subject" value={submission.subject} />
+          <InfoField label="Subject" value={submission.subject || 'All Subjects'} />
           <InfoField label="Grade & Section" value={`${submission.gradeLevel} - ${submission.section}`} />
           <InfoField label="Student Count" value={submission.studentCount} />
-          <InfoField label="Submitted Date" value={submission.submittedDate} />
+          <InfoField label="Submitted Date" value={submission.submittedDate || submission.enrollmentDate} />
           <InfoField label="Grading Period" value={submission.gradingPeriod} />
+          {submission.teacherNotes && (
+            <InfoField label="Teacher Notes" value={submission.teacherNotes} />
+          )}
+          {submission.registrarNotes && (
+            <InfoField label="Previous Notes" value={submission.registrarNotes} />
+          )}
         </div>
       </div>
 
@@ -30,17 +36,28 @@ const SubmissionDetails = ({ submission, onFlagIssue, onApprove }) => {
             variant="danger"
             onClick={onFlagIssue}
             className="w-full flex items-center justify-center gap-2"
+            disabled={isProcessing}
           >
             <div className="i-tabler-flag text-lg" />
-            Flag Issue
+            {isReReview ? 'Flag Again' : 'Flag Issue'}
           </Button>
           <Button 
             variant="primary"
             onClick={onApprove}
             className="w-full flex items-center justify-center gap-2"
+            disabled={isProcessing}
           >
-            <div className="i-tabler-check text-lg" />
-            Verify & Approve
+            {isProcessing ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <div className="i-tabler-check text-lg" />
+                Verify & Approve
+              </>
+            )}
           </Button>
         </div>
       </div>

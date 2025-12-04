@@ -5,9 +5,9 @@ import ApproveConfirmationModal from './ApproveConfirmationModal';
 import FlagIssueModal from './FlagIssueModal';
 import FlagConfirmationModal from './FlagConfirmationModal';
 import SubmissionDetails from './SubmissionDetails';
-import FileAttachments from './FileAttachments';
+import StudentGradesSection from './StudentGradesSection';
 
-const GradeReviewModal = ({ submission, isOpen, onClose, onAction }) => {
+const GradeReviewModal = ({ submission, isOpen, onClose, onAction, isProcessing, apiBaseUrl }) => {
   const [showFlagModal, setShowFlagModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showFlagConfirmModal, setShowFlagConfirmModal] = useState(false);
@@ -113,8 +113,12 @@ const GradeReviewModal = ({ submission, isOpen, onClose, onAction }) => {
               onFlagIssue={() => setShowFlagModal(true)}
               onApprove={() => setShowApproveModal(true)}
               isReReview={isReReview}
+              isProcessing={isProcessing}
             />
-            <FileAttachments />
+            <StudentGradesSection 
+              submission={submission}
+              apiBaseUrl={apiBaseUrl}
+            />
           </div>
         </div>
       </Modal>

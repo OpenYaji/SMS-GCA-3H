@@ -67,7 +67,7 @@ const About = () => {
                             education among their learners by following these philosophical foundations.
                         </p>
                         <a href="#about-us-details" className="text-[#F7C236] dark:text-amber-400 font-medium hover:text-yellow-600 dark:hover:text-amber-300 transition duration-150">
-                            Learn More
+                            Read More
                         </a>
                     </motion.div>
                 </div>

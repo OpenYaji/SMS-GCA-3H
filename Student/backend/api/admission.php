@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../config/cors.php';
 
 // Enable error reporting for debugging
 error_reporting(E_ALL);
@@ -7,7 +8,6 @@ ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../logs/error.log');
 
 // Handle CORS
-require_once __DIR__ . '/../config/cors.php';
 
 // Include dependencies
 require_once __DIR__ . '/../config/db.php';

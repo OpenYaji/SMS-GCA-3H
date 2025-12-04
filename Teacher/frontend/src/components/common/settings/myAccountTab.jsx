@@ -3,6 +3,7 @@ import axios from 'axios';
 import { User, Mail, Phone, Calendar, Upload, Edit2, Save, X } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAuth } from '../../../context/AuthContext';
+import { API_ENDPOINTS, API_URL } from '../../../config/api';
 
 /**
  * MyAccountTab Component
@@ -38,7 +39,7 @@ export default function MyAccountTab() {
       console.log('Fetching teacher profile...');
       
       const response = await axios.get(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/get-teacher-profile.php',
+        API_ENDPOINTS.GET_TEACHER_PROFILE,
         { withCredentials: true }
       );
 
@@ -98,7 +99,7 @@ export default function MyAccountTab() {
       console.log('Sending profile data:', profileData);
       
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3H/Teacher/backend/api/teachers/update-teacher-profile.php',
+        API_ENDPOINTS.UPDATE_TEACHER_PROFILE,
         profileData,
         { withCredentials: true }
       );
@@ -211,7 +212,7 @@ export default function MyAccountTab() {
                       src={
                         profileData.profilePicture.startsWith('data:') 
                           ? profileData.profilePicture 
-                          : `http://localhost/SMS-GCA-3H/Teacher/backend/${profileData.profilePicture}`
+                          : `${API_URL}/${profileData.profilePicture}`
                       }
                       alt="Profile"
                       className="w-full h-full object-cover"

@@ -1,30 +1,26 @@
 import React from "react";
 import { useState } from "react";
-import StudentExitProcessing from "../common/records/studentexitprocessing";
-import TransferCredentials from "../common/records/transfercredentials";
+import DocumentRequests from "../common/records/DocumentRequests";
+import CompletedRequestHistory from "../common/records/CompletedRequest";
 import ArchiveSearch from "../common/records/archivesearch";
-import DeactivatedRecords from "../common/records/deactivatedrecords";
 
 const RecordPage = () => {
   const [activeTab, setActiveTab] = useState("studentexit");
 
   const tabs = [
     {
-      id: "studentexit",
-      label: "Student Exit Processing",
-      component: StudentExitProcessing,
+      id: "DocReq",
+      label: "Document Request",
+      component: DocumentRequests,
     },
     {
-      id: "transfer",
-      label: "Transfer Credentials",
-      component: TransferCredentials,
+      id: "DocLog",
+      label: "Completed Request",
+      component: CompletedRequestHistory,
     },
-    { id: "archive", label: "Archive Search", component: ArchiveSearch },
-    {
-      id: "deactivated",
-      label: "Deactivated Records",
-      component: DeactivatedRecords,
-    },
+    { id: "archive", 
+      label: "Archive Search", 
+      component: ArchiveSearch },
   ];
 
   const ActiveComponent = tabs.find((tab) => tab.id === activeTab)?.component;

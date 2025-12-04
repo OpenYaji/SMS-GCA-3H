@@ -83,14 +83,9 @@ export default function DashboardSidebar({
       path: "/registrar-dashboard/grading-academics",
     },
     {
-      name: "Record and Archives",
-      icon: <ArchiveRestore size={18} />,
-      path: "/registrar-dashboard/record-and-archives", 
-    },
-    {
-      name: "Document Requests",
-      icon: <ClipboardMinus size={18} />,
-      path: "/registrar-dashboard/document-requests",
+      name: "Document Request",
+      icon: <Settings size={18} />,
+      path: "/registrar-dashboard/record-and-archives",
     },
     {
       name: "Report and Analytics",

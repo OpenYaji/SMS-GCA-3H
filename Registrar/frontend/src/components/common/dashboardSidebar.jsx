@@ -79,7 +79,7 @@ export default function DashboardSidebar({
       path: "/registrar-dashboard/grading-academics",
     },
     {
-      name: "Record and Archives",
+      name: "Document Request",
       icon: <Settings size={18} />,
       path: "/registrar-dashboard/record-and-archives",
     },

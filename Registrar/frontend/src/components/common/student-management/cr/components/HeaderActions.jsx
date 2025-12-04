@@ -30,20 +30,6 @@ const HeaderActions = ({ sectionId }) => {
       >
         Print Roster
       </button>
-
-      <button
-        onClick={handleNotifyTeacher}
-        className="px-4 py-2 bg-blue-600 rounded"
-      >
-        Notify Teacher
-      </button>
-
-      <button
-        onClick={handleNotifyParents}
-        className="px-4 py-2 bg-orange-600 rounded"
-      >
-        Notify Parents
-      </button>
     </div>
   );
 };

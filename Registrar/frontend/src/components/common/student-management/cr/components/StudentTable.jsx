@@ -10,7 +10,6 @@ const StudentTable = ({ students }) => {
           <th className="py-2">Student Number</th>
           <th>Student</th>
           <th>Parent/Guardian</th>
-          <th>Gender</th>
           <th>Contact</th>
           <th>Status</th>
         </tr>
@@ -37,8 +36,6 @@ const StudentTable = ({ students }) => {
             {/* Guardian */}
             <td>{s.Guardian ?? "N/A"}</td>
 
-            {/* Gender */}
-            <td>{s.Gender ?? "N/A"}</td>
 
             {/* Contact */}
             <td>{s.Contact ?? "N/A"}</td>

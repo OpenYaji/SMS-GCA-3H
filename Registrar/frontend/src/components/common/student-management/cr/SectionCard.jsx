@@ -29,26 +29,6 @@ const SectionCard = ({ data, onClick }) => {
         </span>
       </div>
 
-      {/* Time */}
-      <div className="flex items-center gap-2 text-gray-400 text-sm mt-3">
-        {/* clock icon */}
-        <svg
-          className="w-4 h-4 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"
-          />
-        </svg>
-
-        <span>{data.time ?? "No schedule"}</span>
-      </div>
-
       {/* Adviser */}
       <div className="flex items-center gap-2 text-gray-300 text-sm mt-3">
         {/* user icon */}

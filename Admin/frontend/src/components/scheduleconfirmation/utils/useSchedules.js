@@ -4,43 +4,63 @@ import { scheduleService } from "../../../services/scheduleService";
 export const useSchedules = () => {
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchSchedules = async () => {
     try {
       setLoading(true);
+      setError(null);
       const data = await scheduleService.getAllProposedSchedules();
 
-      // Only show the headteacher who submitted the proposal, not all teachers
-      if (data.SubmittedBy) {
+      if (data && data.SubmittedBy && data.SubmittedBy.TeacherID) {
+        // Create headteacher card with proposal information
         const headTeacher = {
-          id: data.SubmittedBy.TeacherID || 1,
-          name: `${data.SubmittedBy.FirstName} ${data.SubmittedBy.LastName}`,
+          id: data.SubmittedBy.TeacherID,
+          name: `${data.SubmittedBy.FirstName || ""} ${
+            data.SubmittedBy.LastName || ""
+          }`.trim(),
           position: data.SubmittedBy.Specialization || "Head Teacher",
-          idNumber: `HT${
-            data.SubmittedBy.TeacherID?.toString().padStart(3, "0") || "001"
-          }`,
+          idNumber: `HT${data.SubmittedBy.TeacherID.toString().padStart(
+            3,
+            "0"
+          )}`,
           schedule: "View proposed schedules",
-          proposedBy: `${data.SubmittedBy.FirstName} ${data.SubmittedBy.LastName}`,
+          proposedBy: `${data.SubmittedBy.FirstName || ""} ${
+            data.SubmittedBy.LastName || ""
+          }`.trim(),
           dateProposed: new Date().toISOString().split("T")[0],
           teacherData: data.SubmittedBy,
-          // Store proposal data for API calls
           proposalData: {
             submittedBy: data.SubmittedBy.TeacherID,
             headTeacherId: data.SubmittedBy.TeacherID,
-            proposalId: data.proposalId || data.id, // Include any proposal identifier
+            proposalId: data.SubmittedBy.TeacherID,
           },
-          // Store all teachers for the modal
-          allTeachers: data.SchedulesByTeacher.filter(
-            (teacher) => teacher.TeacherID && teacher.FirstName
-          ),
+          allTeachers: data.SchedulesByTeacher || [],
+          totalPendingSchedules: data.TotalPendingSchedules || 0,
+          totalTeachers: data.TotalTeachers || 0,
+          hasSchedules: (data.TotalPendingSchedules || 0) > 0,
+          message: data.Message || "",
         };
 
-        setSchedules([headTeacher]);
+        // Add avatar placeholder using UI Avatars
+        headTeacher.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          headTeacher.name
+        )}&background=FFBC0D&color=fff&bold=true&size=128`;
+
+        // Only show the headteacher card if there are pending schedules
+        if (headTeacher.hasSchedules) {
+          setSchedules([headTeacher]);
+        } else {
+          // If no pending schedules, show empty state
+          setSchedules([]);
+        }
       } else {
+        console.warn("No valid head teacher data found in response");
         setSchedules([]);
       }
     } catch (error) {
       console.error("Error fetching schedules:", error);
+      setError(error.message || "Failed to fetch proposed schedules");
       setSchedules([]);
     } finally {
       setLoading(false);
@@ -49,24 +69,61 @@ export const useSchedules = () => {
 
   const approveAllSchedules = async (proposalData) => {
     try {
-      await scheduleService.approveAllSchedules(proposalData);
-      // Clear all schedules after approval
-      setSchedules([]);
-      return { success: true };
+      // Use the correct service method
+      const result = await scheduleService.approveAllSchedules(proposalData);
+
+      // Show success message
+      console.log("Approval successful:", result);
+
+      // Refresh the schedules after approval
+      await fetchSchedules();
+      return { success: true, data: result };
     } catch (error) {
       console.error("Error approving schedules:", error);
-      throw error;
+
+      // Check if it's a conflict error
+      if (error.conflicts) {
+        throw {
+          type: "conflict",
+          message: error.originalMessage || "Schedule conflicts found",
+          conflicts: error.conflicts,
+        };
+      }
+
+      throw {
+        type: "error",
+        message: error.message || "Failed to approve schedules",
+      };
     }
   };
 
   const declineAllSchedules = async (proposalData) => {
     try {
-      await scheduleService.declineAllSchedules(proposalData);
-      // Clear all schedules after decline
-      setSchedules([]);
-      return { success: true };
+      // Use the correct service method
+      const result = await scheduleService.declineAllSchedules(proposalData);
+
+      // Show success message
+      console.log("Decline successful:", result);
+
+      // Refresh the schedules after decline
+      await fetchSchedules();
+      return { success: true, data: result };
     } catch (error) {
       console.error("Error declining schedules:", error);
+      throw {
+        type: "error",
+        message: error.message || "Failed to decline schedules",
+      };
+    }
+  };
+
+  // Fetch detailed schedules for a specific teacher
+  const fetchTeacherScheduleDetails = async (teacherId) => {
+    try {
+      const data = await scheduleService.getScheduleByTeacherId(teacherId);
+      return data;
+    } catch (error) {
+      console.error(`Error fetching schedule for teacher ${teacherId}:`, error);
       throw error;
     }
   };
@@ -78,8 +135,10 @@ export const useSchedules = () => {
   return {
     schedules,
     loading,
+    error,
     approveSchedule: approveAllSchedules,
     declineSchedule: declineAllSchedules,
+    fetchTeacherScheduleDetails,
     refetch: fetchSchedules,
   };
 };

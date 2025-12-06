@@ -52,7 +52,7 @@ class TeacherProfileController extends Controller
                 // Create user
                 $user = User::create([
                     'EmailAddress' => $validated['EmailAddress'],
-                    'UserType' => 'Teacher',
+                    'UserType' => $validated['UserType'],                    
                     'AccountStatus' => 'Active'
                 ]);
 

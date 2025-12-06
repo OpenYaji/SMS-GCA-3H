@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\SchoolYear;
 use Illuminate\Http\Request;
 use App\Helpers\EncryptionHelper;
 use Illuminate\Support\Facades\Crypt;
@@ -17,6 +18,19 @@ class StudentProfileResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // Get current school year dynamically
+        $currentSchoolYear = SchoolYear::getCurrentSchoolYear();
+        $currentSchoolYearId = $currentSchoolYear ? $currentSchoolYear->SchoolYearID : 7; //HARDCODED NA FALLBACK DAPAT TO PURE DYNAMIC LANG
+        
+        // Get current enrollment for the current school year
+        $currentEnrollment = $this->enrollments()
+            ->whereHas('section', function($query) use ($currentSchoolYearId) {
+                $query->where('SchoolYearID', $currentSchoolYearId);
+            })
+            ->with(['section.gradeLevel']) // Eager load section and gradeLevel
+            ->orderByDesc('EnrollmentID')
+            ->first();
+
         return [
             'StudentProfileID' => $this->StudentProfileID,
             'StudentNumber' => $this->StudentNumber,
@@ -68,13 +82,16 @@ class StudentProfileResource extends JsonResource
 
             'AuthorizedEscorts' => AuthorizedEscortResource::collection($this->authorizedEscorts()->where('EscortStatus', 'Approved')->get()),
 
-            'GradeLevel' => $this->enrollments()->orderByDesc('EnrollmentID')->first()?->section?->gradeLevel?->LevelName,
-            'Section' => $this->enrollments()->orderByDesc('EnrollmentID')->first()?->section?->SectionName,
+            // Get grade level and section from current enrollment
+            'GradeLevel' => $currentEnrollment?->section?->gradeLevel?->LevelName ?? 'Not Assigned',
+            'Section' => $currentEnrollment?->section?->SectionName ?? 'Not Assigned',
+            
+            // Also include GradeLevelID and SectionID for frontend use
+            'GradeLevelID' => $currentEnrollment?->section?->gradeLevel?->GradeLevelID ?? null,
+            'SectionID' => $currentEnrollment?->section?->SectionID ?? null,
 
             'Grades' => route('student.grades', ['student_profile' => $this->StudentProfileID]),
             'Attendance' => route('student.attendance', ['student_profile' => $this->StudentProfileID]),
         ];
     }
-
- 
 }

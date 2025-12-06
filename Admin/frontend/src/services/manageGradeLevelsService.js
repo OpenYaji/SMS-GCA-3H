@@ -539,7 +539,22 @@ export const manageGradeLevelsService = {
 
   async updateSection(sectionId, sectionData) {
     try {
-      const response = await api.put(`/sections/${sectionId}`, sectionData);
+      // Remove any SectionID from the request body since it's already in the URL
+      const cleanSectionData = { ...sectionData };
+
+      // Make sure we're sending the data in the correct format
+      const requestData = {
+        AdviserTeacherID: parseInt(cleanSectionData.AdviserTeacherID),
+        SectionName: cleanSectionData.SectionName,
+        MaxCapacity: cleanSectionData.MaxCapacity,
+      };
+
+      console.log("Sending section update request:", {
+        url: `/sections/${sectionId}`,
+        data: requestData,
+      });
+
+      const response = await api.put(`/sections/${sectionId}`, requestData);
       return response.data;
     } catch (error) {
       console.error("Error updating section:", error);

@@ -71,7 +71,7 @@ class User extends Authenticatable
     public static function getCurrentUserId(): ?int
     {
         //return AuthHelper::getUserIdFromToken();
-        return 12;
+        return 8;
     }
 
     

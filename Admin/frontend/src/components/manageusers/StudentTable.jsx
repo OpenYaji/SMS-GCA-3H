@@ -9,7 +9,6 @@ import useSearch from "../utils/useSearch";
 import useSort from "../utils/useSort";
 import usePagination from "../utils/usePagination";
 import studentService from "../../services/studentService";
-import manageGradeLevelsService from "../../services/manageGradeLevelsService";
 
 const StudentTable = forwardRef(
   (
@@ -23,9 +22,6 @@ const StudentTable = forwardRef(
     const [sortOption, setSortOption] = useState("All Students");
     const [isSortOpen, setIsSortOpen] = useState(false);
     const [isItemsPerPageOpen, setIsItemsPerPageOpen] = useState(false);
-    const [schoolYears, setSchoolYears] = useState([]);
-    const [currentSchoolYear, setCurrentSchoolYear] = useState(null);
-    const [studentAssignments, setStudentAssignments] = useState({});
     const [selectedStudentId, setSelectedStudentId] = useState(null);
     const [selectedStudents, setSelectedStudents] = useState(new Set());
     const [isMultiSelectMode, setIsMultiSelectMode] = useState(false);
@@ -64,22 +60,6 @@ const StudentTable = forwardRef(
       getSelectedStudents: getSelectedStudentsData,
     }));
 
-    // Fetch school years data
-    const fetchSchoolYears = async () => {
-      try {
-        const result = await manageGradeLevelsService.getSchoolYears();
-        if (result.schoolYears && result.schoolYears.length > 0) {
-          setSchoolYears(result.schoolYears);
-          setCurrentSchoolYear(result.schoolYears[0]);
-          return result.schoolYears[0];
-        }
-        return null;
-      } catch (error) {
-        console.error("Error fetching school years:", error);
-        return null;
-      }
-    };
-
     const formatStudentName = (student) => {
       if (student.firstName && student.lastName) {
         const middleInitial = student.middleName
@@ -90,109 +70,24 @@ const StudentTable = forwardRef(
       return student.name || "Unknown Student";
     };
 
-    const fetchStudentAssignments = async (schoolYear) => {
-      if (!schoolYear) return {};
-
-      const assignments = {};
-
-      try {
-        const sectionPromises = [];
-        const sectionMetadata = [];
-
-        for (const gradeLevel of schoolYear.gradeLevels || []) {
-          for (const section of gradeLevel.sections || []) {
-            if (section.Students || section.StudentsURL) {
-              sectionPromises.push(
-                manageGradeLevelsService
-                  .getStudentsByURL(section.Students || section.StudentsURL)
-                  .catch((error) => {
-                    console.error(
-                      `Error fetching section ${
-                        section.SectionName || section.name
-                      }:`,
-                      error
-                    );
-                    return null;
-                  })
-              );
-
-              sectionMetadata.push({
-                grade:
-                  gradeLevel.levelName ||
-                  gradeLevel.name ||
-                  gradeLevel.gradeLevel,
-                section:
-                  section.SectionName || section.name || section.sectionName,
-                gradeId: gradeLevel.id,
-                sectionId: section.SectionID || section.id,
-                gradeName: gradeLevel.levelName || gradeLevel.name,
-                sectionName: section.SectionName || section.name,
-              });
-            }
-          }
-        }
-
-        // Fetch all sections in parallel
-        const sectionResults = await Promise.all(sectionPromises);
-
-        // Process results
-        sectionResults.forEach((studentsData, index) => {
-          if (!studentsData) return;
-
-          const sectionStudents = studentsData.data || studentsData || [];
-          const metadata = sectionMetadata[index];
-
-          for (const sectionStudent of sectionStudents) {
-            const studentProfileId =
-              sectionStudent.StudentProfileID ||
-              sectionStudent.StudentID ||
-              sectionStudent.StudentNumber ||
-              sectionStudent.id ||
-              sectionStudent.studentId;
-
-            if (studentProfileId) {
-              const assignmentKey = studentProfileId.toString();
-              assignments[assignmentKey] = {
-                grade: metadata.grade,
-                section: metadata.section,
-                gradeId: metadata.gradeId,
-                sectionId: metadata.sectionId,
-                display: `${metadata.gradeName} - ${metadata.sectionName}`,
-              };
-            }
-          }
-        });
-      } catch (error) {
-        console.error("Error fetching student assignments:", error);
-      }
-
-      return assignments;
-    };
-
     const fetchStudents = async (selectedSortOption = sortOption) => {
       try {
         setLoading(true);
         setError(null);
 
-        // Parallel fetch: students and school year data simultaneously
-        const [studentsResult, schoolYear] = await Promise.all([
-          // Fetch students based on sort option
-          (async () => {
-            if (selectedSortOption === "Archived Students Account") {
-              return await studentService.getArchivedAccountStudents();
-            } else if (selectedSortOption === "Archived Student Records") {
-              return await studentService.getArchivedRecordStudents();
-            } else if (selectedSortOption === "Students Fully Archived") {
-              return await studentService.getFullyArchivedStudents();
-            } else if (selectedSortOption === "Students with No Accounts") {
-              return await studentService.getStudentsWithNoAccounts();
-            } else {
-              return await studentService.getStudents();
-            }
-          })(),
-          // Fetch school years simultaneously
-          fetchSchoolYears(),
-        ]);
+        // Fetch students based on sort option
+        let studentsResult;
+        if (selectedSortOption === "Archived Students Account") {
+          studentsResult = await studentService.getArchivedAccountStudents();
+        } else if (selectedSortOption === "Archived Student Records") {
+          studentsResult = await studentService.getArchivedRecordStudents();
+        } else if (selectedSortOption === "Students Fully Archived") {
+          studentsResult = await studentService.getFullyArchivedStudents();
+        } else if (selectedSortOption === "Students with No Accounts") {
+          studentsResult = await studentService.getStudentsWithNoAccounts();
+        } else {
+          studentsResult = await studentService.getStudents();
+        }
 
         console.log(
           `Fetched ${
@@ -200,24 +95,32 @@ const StudentTable = forwardRef(
           } students for view: ${selectedSortOption}`
         );
 
-        // Fetch assignments only after we have both students and school year
-        const assignments = await fetchStudentAssignments(schoolYear);
-        setStudentAssignments(assignments);
-
+        // Map students and use GradeLevel and Section from the API response directly
         const formattedStudents = (studentsResult.students || []).map(
           (student) => {
-            const studentKey =
-              student.studentProfileId?.toString() || student.id?.toString();
-            const assignment = assignments[studentKey];
+            // Use the GradeLevel and Section fields from the API
+            const gradeLevel =
+              student.gradeLevel || student.GradeLevel || "Not Assigned";
+            const section =
+              student.section || student.Section || "Not Assigned";
+            const gradeLevelId =
+              student.gradeLevelId || student.GradeLevelID || null;
+            const sectionId = student.sectionId || student.SectionID || null;
+
+            // Create gradeSection display string
+            const gradeSection =
+              gradeLevel !== "Not Assigned" && section !== "Not Assigned"
+                ? `${gradeLevel} - ${section}`
+                : "Not Assigned";
 
             return {
               ...student,
               formattedName: formatStudentName(student),
-              gradeSection: assignment?.display || "Not Assigned",
-              actualGrade: assignment?.grade || "N/A",
-              actualSection: assignment?.section || "N/A",
-              gradeId: assignment?.gradeId,
-              sectionId: assignment?.sectionId,
+              gradeSection: gradeSection,
+              actualGrade: gradeLevel,
+              actualSection: section,
+              gradeId: gradeLevelId,
+              sectionId: sectionId,
             };
           }
         );
@@ -268,7 +171,6 @@ const StudentTable = forwardRef(
       return () =>
         document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-
     const handleStudentSelection = (student, event) => {
       if (!isMultiSelectMode) {
         // Single selection mode - select student for details view

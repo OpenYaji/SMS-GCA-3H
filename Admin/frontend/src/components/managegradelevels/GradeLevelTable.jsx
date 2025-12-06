@@ -11,6 +11,7 @@ import useSort from "../utils/useSort";
 import usePagination from "../utils/usePagination";
 import AddSectionModal from "./modals/AddSectionModal";
 import ViewSectionModal from "./modals/ViewSectionModal";
+import BaseModal from "./modals/BaseModel";
 import manageGradeLevelsService from "../../services/manageGradeLevelsService";
 import teacherService from "../../services/teacherService";
 
@@ -34,6 +35,29 @@ const GradeLevelTable = forwardRef(
     const sortDropdownRef = React.useRef(null);
     const [showViewModal, setShowViewModal] = useState(false);
     const [selectedViewSection, setSelectedViewSection] = useState(null);
+    const [refreshCounter, setRefreshCounter] = useState(0); // Add refresh counter
+    const [errorModal, setErrorModal] = useState({
+      isOpen: false,
+      title: "",
+      message: "",
+    });
+
+    // Helper function to show error modal
+    const showError = (title, message) => {
+      setErrorModal({
+        isOpen: true,
+        title,
+        message,
+      });
+    };
+
+    const closeErrorModal = () => {
+      setErrorModal({
+        isOpen: false,
+        title: "",
+        message: "",
+      });
+    };
 
     const sortOptions = [
       "All Sections",
@@ -52,13 +76,19 @@ const GradeLevelTable = forwardRef(
       return endDate >= today;
     }, [currentSchoolYear]);
 
-    // GET SECTIONS
-    const fetchSections = async () => {
+    // GET SECTIONS - Improved with timestamp to prevent caching
+    const fetchSections = async (forceRefresh = false) => {
       if (!currentSchoolYear || !gradeLevel) return;
 
       setIsLoadingSections(true);
       try {
-        console.log(`Fetching sections for ${gradeLevel}...`);
+        console.log(
+          `Fetching sections for ${gradeLevel}...`,
+          forceRefresh ? "(force refresh)" : ""
+        );
+
+        // Add timestamp to prevent caching
+        const timestamp = forceRefresh ? `&_t=${Date.now()}` : "";
 
         const gradeLevelData = currentSchoolYear.gradeLevels?.find(
           (gl) => gl.levelName === gradeLevel
@@ -75,28 +105,51 @@ const GradeLevelTable = forwardRef(
               let specialization = "Not Specified";
               let profilePictureURL = null;
 
-              if (section.AdviserName) {
-                adviserName = section.AdviserName;
-              } else if (section.Adviser?.name) {
-                adviserName = section.Adviser.name;
-              } else if (section.AdviserTeacher?.name) {
-                adviserName = section.AdviserTeacher.name;
-              }
-
-              if (section.AdviserID) {
-                adviserId = section.AdviserID.toString();
-              } else if (section.AdviserTeacherID) {
-                adviserId = section.AdviserTeacherID.toString();
-              } else if (section.Adviser?.id) {
-                adviserId = section.Adviser.id.toString();
-              } else if (section.AdviserTeacher?.id) {
-                adviserId = section.AdviserTeacher.id.toString();
-              }
-
-              if (section.rawData?.Adviser) {
+              // Try to get fresh adviser data from the section
+              if (section.Adviser) {
+                adviserName = section.Adviser.FirstName
+                  ? `${section.Adviser.FirstName} ${
+                      section.Adviser.LastName || ""
+                    }`
+                  : section.Adviser.name || "Not Assigned";
+                adviserId =
+                  section.Adviser.EmployeeNumber || section.Adviser.id || "";
+                specialization =
+                  section.Adviser.Specialization || "Not Specified";
+                profilePictureURL = section.Adviser.ProfilePictureURL;
+              } else if (section.AdviserTeacher) {
+                adviserName = section.AdviserTeacher.FirstName
+                  ? `${section.AdviserTeacher.FirstName} ${
+                      section.AdviserTeacher.LastName || ""
+                    }`
+                  : section.AdviserTeacher.name || "Not Assigned";
+                adviserId =
+                  section.AdviserTeacher.EmployeeNumber ||
+                  section.AdviserTeacher.id ||
+                  "";
+                specialization =
+                  section.AdviserTeacher.Specialization || "Not Specified";
+                profilePictureURL = section.AdviserTeacher.ProfilePictureURL;
+              } else if (section.rawData?.Adviser) {
+                adviserName = section.rawData.Adviser.FirstName
+                  ? `${section.rawData.Adviser.FirstName} ${
+                      section.rawData.Adviser.LastName || ""
+                    }`
+                  : section.rawData.Adviser.name || "Not Assigned";
+                adviserId =
+                  section.rawData.Adviser.EmployeeNumber ||
+                  section.rawData.Adviser.id ||
+                  "";
                 specialization =
                   section.rawData.Adviser.Specialization || "Not Specified";
                 profilePictureURL = section.rawData.Adviser.ProfilePictureURL;
+              } else if (section.AdviserName) {
+                adviserName = section.AdviserName;
+              }
+
+              // Fallback to ID fields
+              if (!adviserId) {
+                adviserId = section.AdviserID || section.AdviserTeacherID || "";
               }
 
               let studentCount = 0;
@@ -111,7 +164,7 @@ const GradeLevelTable = forwardRef(
                 name: section.SectionName || `Section ${index + 1}`,
                 students: studentCount,
                 adviser: adviserName,
-                adviserId: adviserId,
+                adviserId: adviserId.toString(),
                 specialization: specialization,
                 profilePictureURL: profilePictureURL,
                 rawData: section,
@@ -132,12 +185,19 @@ const GradeLevelTable = forwardRef(
     };
 
     useImperativeHandle(ref, () => ({
-      refreshSections: fetchSections,
+      refreshSections: () => fetchSections(true), // Force refresh when called externally
     }));
 
     useEffect(() => {
       fetchSections();
     }, [gradeLevel, currentSchoolYear]);
+
+    // Add effect to refresh when refreshCounter changes
+    useEffect(() => {
+      if (refreshCounter > 0) {
+        fetchSections(true);
+      }
+    }, [refreshCounter]);
 
     // GET teachers from teacher service
     const fetchTeachers = async () => {
@@ -215,7 +275,7 @@ const GradeLevelTable = forwardRef(
 
       try {
         if (!editFormData.name.trim() || !editFormData.adviserId) {
-          alert("Please fill in all required fields");
+          showError("Validation Error", "Please fill in all required fields");
           return;
         }
 
@@ -235,16 +295,41 @@ const GradeLevelTable = forwardRef(
           throw new Error("Selected teacher not found");
         }
 
+        // Check if anything actually changed
+        const nameChanged = editFormData.name.trim() !== originalSection.name;
+        const adviserChanged =
+          editFormData.adviserId !== originalSection.adviserId;
+
+        if (!nameChanged && !adviserChanged) {
+          showError(
+            "No Changes",
+            "No changes were detected. Please modify the section name or adviser before saving."
+          );
+          setEditingSection(null);
+          setEditFormData({ name: "", adviserId: "" });
+          setIsSaving(false);
+          return;
+        }
+
+        // Build update data with ONLY changed fields
         const updateData = {
-          SectionName: editFormData.name.trim(),
           AdviserTeacherID: parseInt(selectedTeacher.id),
           MaxCapacity: originalSection.rawData?.MaxCapacity || 15,
-          CurrentEnrollment: originalSection.rawData?.CurrentEnrollment || 0,
         };
+
+        // Only include SectionName if it actually changed
+        if (nameChanged) {
+          updateData.SectionName = editFormData.name.trim();
+        }
 
         console.log("Updating section via API:", {
           sectionId,
           updateData,
+          changes: {
+            nameChanged,
+            adviserChanged,
+            onlySendingChangedFields: true,
+          },
         });
 
         const response = await manageGradeLevelsService.updateSection(
@@ -254,13 +339,43 @@ const GradeLevelTable = forwardRef(
 
         console.log("Section updated successfully:", response.data);
 
-        await fetchSections();
+        // First refresh the school year data from API
+        if (onSectionAdded) {
+          await onSectionAdded();
+        }
+
+        // Then refresh the sections table with the new data
+        await fetchSections(true);
+
+        // Also trigger parent refresh if needed
+        if (onRefreshData) {
+          onRefreshData();
+        }
 
         setEditingSection(null);
         setEditFormData({ name: "", adviserId: "" });
       } catch (error) {
-        console.error(" Error updating section:", error);
-        alert(`Failed to update section: ${error.message}`);
+        console.error("Error updating section:", error);
+
+        // Provide more specific error messages
+        let errorTitle = "Update Failed";
+        let errorMessage = "Failed to update section. Please try again.";
+
+        if (error.message && error.message.includes("already exists")) {
+          errorTitle = "Duplicate Section Name";
+          errorMessage =
+            "A section with this name already exists in this grade level. Please choose a different name.";
+        } else if (
+          error.message &&
+          error.message.includes("Validation failed")
+        ) {
+          errorTitle = "Validation Error";
+          errorMessage = error.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
+        showError(errorTitle, errorMessage);
       } finally {
         setIsSaving(false);
       }
@@ -281,7 +396,16 @@ const GradeLevelTable = forwardRef(
 
         console.log("Section created successfully:", response.data);
 
-        await fetchSections();
+        // Force refresh the sections data
+        await fetchSections(true);
+
+        // Also trigger parent refresh
+        if (onSectionAdded) {
+          await onSectionAdded();
+        }
+
+        // Increment refresh counter
+        setRefreshCounter((prev) => prev + 1);
 
         return { success: true, message: "Section added successfully" };
       } catch (error) {
@@ -761,7 +885,7 @@ const GradeLevelTable = forwardRef(
             if (onSectionAdded) {
               await onSectionAdded();
             }
-            await fetchSections();
+            await fetchSections(true);
           }}
         />
 
@@ -771,6 +895,28 @@ const GradeLevelTable = forwardRef(
           section={selectedViewSection}
           gradeLevel={gradeLevel}
         />
+
+        {/* Error Modal */}
+        <BaseModal
+          isOpen={errorModal.isOpen}
+          onClose={closeErrorModal}
+          title={errorModal.title}
+          width="max-w-md"
+        >
+          <div className="py-4">
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              {errorModal.message}
+            </p>
+            <div className="flex justify-end">
+              <button
+                onClick={closeErrorModal}
+                className="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors duration-200 font-kumbh font-semibold"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </BaseModal>
       </div>
     );
   }

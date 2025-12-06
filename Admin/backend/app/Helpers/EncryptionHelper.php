@@ -15,8 +15,8 @@ class EncryptionHelper
         }
 
         try {
-            //return Crypt::decryptString($value);
-            return $value;
+            return Crypt::decryptString($value);
+            // return $value;
         } catch (DecryptException $e) {
             return null;
         }
@@ -28,8 +28,8 @@ class EncryptionHelper
             return null;
         }
 
-        //return Crypt::encryptString($value);
-        return $value;
+        return Crypt::encryptString($value);
+        // return $value;
     }
     
 }

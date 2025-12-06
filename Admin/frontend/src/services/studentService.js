@@ -79,6 +79,12 @@ const formatStudentData = (student) => {
     accountStatus: user.AccountStatus || "PendingVerification",
     lastLoginDate: user.LastLoginDate,
 
+    // GRADE LEVEL AND SECTION - ALREADY PRESENT AND CORRECT
+    gradeLevel: student.GradeLevel || "Not Assigned",
+    section: student.Section || "Not Assigned",
+    gradeLevelId: student.GradeLevelID || null,
+    sectionId: student.SectionID || null,
+
     // Personal Details
     firstName: profile.FirstName || "",
     middleName: profile.MiddleName || "",
@@ -621,7 +627,7 @@ export const studentService = {
   /**
    * Restore archived student account only
    * @param {string|number} id - Student Profile ID (numeric)
-   * @returns {Promise<Object>} - Restore response
+   * @returns {Promise<Object}> - Restore response
    */
   async restoreStudentAccount(id) {
     try {

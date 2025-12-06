@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\User;
 use App\Models\AuditLog;
 use App\Models\Guardian;
+use App\Models\SchoolYear;
 use Illuminate\Support\Str;
 use App\Mail\AccountCreated;
 use Illuminate\Http\Request;
@@ -26,15 +27,31 @@ use App\Http\Requests\UpdateStudentProfileRequest;
 class StudentProfileController extends Controller
 {
     /**
+     * Get current school year ID
+     */
+    private function getCurrentSchoolYearId()
+    {
+        $currentSchoolYear = SchoolYear::getCurrentSchoolYear();
+        return $currentSchoolYear ? $currentSchoolYear->SchoolYearID : 7; // Fallback
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $currentSchoolYearId = $this->getCurrentSchoolYearId();
+        
         $query = StudentProfile::with([
             'profile.user',
             'medicalInfo',
             'emergencyContact',
-            'guardians'
+            'guardians',
+            'enrollments' => function($query) use ($currentSchoolYearId) {
+                $query->whereHas('section', function($q) use ($currentSchoolYearId) {
+                    $q->where('SchoolYearID', $currentSchoolYearId);
+                })->with(['section.gradeLevel']);
+            }
         ]);
 
         // Archived students
@@ -80,11 +97,18 @@ class StudentProfileController extends Controller
      */
     public function show(StudentProfile $studentProfile)
     {
+        $currentSchoolYearId = $this->getCurrentSchoolYearId();
+        
         return StudentProfileResource::make($studentProfile->load([
             'profile.user',
             'medicalInfo',
             'emergencyContact',
-            'guardians'
+            'guardians',
+            'enrollments' => function($query) use ($currentSchoolYearId) {
+                $query->whereHas('section', function($q) use ($currentSchoolYearId) {
+                    $q->where('SchoolYearID', $currentSchoolYearId);
+                })->with(['section.gradeLevel']);
+            }
         ]));
     }
 
@@ -477,8 +501,24 @@ class StudentProfileController extends Controller
         $validated = $request->validate([
             'NewSectionID' => 'required|exists:section,SectionID'
         ]);
+        
+        $currentSchoolYearId = $this->getCurrentSchoolYearId();
 
-        $studentProfile->enrollments()->latest('EnrollmentID')->first()->update([
+        // Get current enrollment for this school year
+        $currentEnrollment = $studentProfile->enrollments()
+            ->whereHas('section', function($query) use ($currentSchoolYearId) {
+                $query->where('SchoolYearID', $currentSchoolYearId);
+            })
+            ->latest('EnrollmentID')
+            ->first();
+
+        if (!$currentEnrollment) {
+            return response()->json([
+                'message' => 'Student is not enrolled in the current school year'
+            ], 404);
+        }
+
+        $currentEnrollment->update([
             'SectionID' => $validated['NewSectionID']
         ]);
 
@@ -626,12 +666,15 @@ class StudentProfileController extends Controller
      */  
     public function grades(StudentProfile $studentProfile)
     {
+        $currentSchoolYearId = $this->getCurrentSchoolYearId();
+        
         $studentProfile->load([
             'profile',
-            'enrollments.section.gradeLevel',
-            'enrollments.section.schoolYear',
-            'enrollments.grades.subject',
-            'enrollments.grades.gradeStatus'
+            'enrollments' => function($query) use ($currentSchoolYearId) {
+                $query->whereHas('section', function($q) use ($currentSchoolYearId) {
+                    $q->where('SchoolYearID', $currentSchoolYearId);
+                })->with(['section.gradeLevel', 'section.schoolYear', 'grades.subject', 'grades.gradeStatus']);
+            }
         ]);
 
         return new StudentGradesResource($studentProfile);
@@ -660,5 +703,4 @@ class StudentProfileController extends Controller
 
         return new StudentAttendanceResource($studentWithAttendances);
     }
-
 }

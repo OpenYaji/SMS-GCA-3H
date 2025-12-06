@@ -69,6 +69,9 @@ class UpdateStudentProfileRequest extends FormRequest
             'Guardians.*.IsEmergencyContact' => 'required|boolean',
             'Guardians.*.IsAuthorizedPickup' => 'required|boolean',
             'Guardians.*.SortOrder' => 'nullable|integer|min:1',
+            // Guardians to delete
+            'GuardiansToDelete' => 'nullable|array',
+            'GuardiansToDelete.*' => 'integer|exists:Guardian,GuardianID',
         ];
     }
 
@@ -113,6 +116,46 @@ class UpdateStudentProfileRequest extends FormRequest
                 // Set to empty array if invalid data
                 $this->merge(['Guardians' => []]);
             }
+        }
+
+        // Handle GuardiansToDelete
+        if ($this->has('GuardiansToDelete')) {
+            $guardiansToDelete = $this->GuardiansToDelete;
+            
+            // If it's a string, try to parse it
+            if (is_string($guardiansToDelete)) {
+                // Try JSON decode first
+                $decoded = json_decode($guardiansToDelete, true);
+                
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    // Successfully decoded JSON
+                    $guardiansToDelete = $decoded;
+                } else {
+                    // Handle as comma-separated or space-separated
+                    $guardiansToDelete = trim($guardiansToDelete, '[] ');
+                    
+                    if (strpos($guardiansToDelete, ',') !== false) {
+                        $guardiansToDelete = explode(',', $guardiansToDelete);
+                    } else {
+                        $guardiansToDelete = preg_split('/\s+/', $guardiansToDelete);
+                    }
+                    
+                    // Convert to integers and remove empty values
+                    $guardiansToDelete = array_filter(array_map(function($item) {
+                        $item = trim($item);
+                        return is_numeric($item) ? (int)$item : null;
+                    }, $guardiansToDelete));
+                }
+            }
+            
+            // Ensure it's an array
+            if (!is_array($guardiansToDelete)) {
+                $guardiansToDelete = [];
+            }
+            
+            $this->merge(['GuardiansToDelete' => $guardiansToDelete]);
+        } else {
+            $this->merge(['GuardiansToDelete' => []]);
         }
     }
 }

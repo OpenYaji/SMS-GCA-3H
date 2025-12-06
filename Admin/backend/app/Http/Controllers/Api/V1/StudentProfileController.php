@@ -161,6 +161,19 @@ class StudentProfileController extends Controller
                     ]
                 );
 
+                // Guardian deletions
+                if (!empty($validated['GuardiansToDelete'])) {
+                    // Detach guardians from the student (removes pivot records)
+                    $studentProfile->guardians()->detach($validated['GuardiansToDelete']);
+                    
+                    $existingGuardianIds = $studentProfile->guardians()->pluck('Guardian.GuardianID')->toArray();
+                    $guardiansToDeleteEntirely = array_diff($validated['GuardiansToDelete'], $existingGuardianIds);
+                    
+                    if (!empty($guardiansToDeleteEntirely)) {
+                        Guardian::whereIn('GuardianID', $guardiansToDeleteEntirely)->delete();
+                    }
+                }
+
                 // Update guardians and pivot data
                 if (!empty($validated['Guardians'])) {
                     foreach ($validated['Guardians'] as $g) {

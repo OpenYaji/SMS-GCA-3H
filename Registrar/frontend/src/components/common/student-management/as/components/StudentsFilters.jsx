@@ -21,7 +21,7 @@ const StudentsFilters = ({
       {/* Search */}
       <input
         type="text"
-        placeholder="Search StudNumber/Name..."
+        placeholder="Search students..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="

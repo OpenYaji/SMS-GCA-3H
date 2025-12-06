@@ -1,3 +1,5 @@
+reject button and update status
+
 <?php
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
@@ -101,5 +103,26 @@ try {
         "success" => false,
         "message" => $e->getMessage()
     ]);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents("php://input"), true);
+    
+    $applicantId = $data['applicantId'];
+    $status = $data['status'];
+
+    $applicant = new Applicant();
+    
+    if ($status === 'Rejected') {
+        $result = $applicant->rejectApplicant($applicantId);
+        
+        if ($result > 0) {
+            echo json_encode(["success" => true]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Failed to reject applicant"]);
+        }
+    } else {
+        echo json_encode(["success" => false, "message" => "Invalid status"]);
+    }
+}
+
 }
 ?>

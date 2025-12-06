@@ -85,6 +85,34 @@ const InboxTable = ({ filtersState = {}, onProceedToScreening }) => {
       alert(`Error updating stage: ${err.message}`);
     }
   };
+// Rejected
+
+// Handle Rejecting Applicant(s)
+const handleReject = async (applicant) => {
+  try {
+    setRemovingIds((prev) => [...prev, applicant.id]);
+
+    // Send the rejection request to the backend
+    const response = await fetch(`${API_BASE}/updateStatus.php`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ applicantId: applicant.id, status: "Rejected" }),
+    });
+
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message || "Rejection failed");
+
+    // Remove the rejected applicant from the list
+    setApplicants((prev) => prev.filter((a) => a.id !== applicant.id));
+
+    // Optionally show a success message or handle further logic
+    alert("Applicant rejected successfully");
+  } catch (err) {
+    alert(`Error rejecting applicant: ${err.message}`);
+  } finally {
+    setRemovingIds((prev) => prev.filter((id) => id !== applicant.id));
+  }
+};
 
   // --- Filtered applicants ---
   const filteredApplicants = applicants.filter((a) => {

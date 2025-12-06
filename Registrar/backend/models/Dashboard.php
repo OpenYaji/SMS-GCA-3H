@@ -13,7 +13,7 @@ class Dashboard {
     }
 
     public function getPendingTasksCount() {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM application WHERE ApplicationStatus IN ('Pending', 'For Review')");
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM application WHERE ApplicationStatus IN ('Pending', 'Screening', 'Validated', 'Enrolling')");
         $stmt->execute();
         return $stmt->fetchColumn();
     }

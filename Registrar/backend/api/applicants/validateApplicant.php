@@ -1,205 +1,198 @@
 <?php
-// validateApplicant.php - Final Version for Asynchronous Processing
+// Prevent any output before JSON
+ob_start();
 
-// Ensure there is no output before the header. This is critical.
-header('Content-Type: application/json');
-
-// --- 0. Performance Timer Start ---
-$start_time = microtime(true);
-
-// Error logging setup (This should be enabled in production to see the logs)
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-ini_set('log_errors', 1);
-
-// --- 1. Dependencies ---
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/fee_structure.php';
 require_once __DIR__ . '/../../models/Applicant.php';
-require_once __DIR__ . '/../../config/mailer.php'; 
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405); 
-    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
-    exit;
-}
+// Clear any previous output
+ob_clean();
 
-$data = json_decode(file_get_contents('php://input'), true);
+header('Content-Type: application/json');
 
-if (json_last_error() !== JSON_ERROR_NONE) {
-    http_response_code(400); 
-    echo json_encode(['success' => false, 'message' => 'Invalid JSON input']);
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
 
-$applicantId = $data['applicantId'] ?? null;
-$paymentMode = $data['paymentMode'] ?? 'full';
-$downPayment = $data['downPayment'] ?? 0;
-$notes = $data['notes'] ?? '';
+    $applicantId = $data['applicantId'] ?? null;
+    $paymentMode = $data['paymentMode'] ?? 'full';
+    $downPayment = $data['downPayment'] ?? 0;
+    $notes = $data['notes'] ?? '';
 
-if (!$applicantId) {
-    http_response_code(400); 
-    echo json_encode(['success' => false, 'message' => 'Applicant ID is required']);
-    exit;
-}
-
-$conn = null;
-$applicant = null;
-$transactionId = null;
-$lastName = '';
-$totalFee = 0;
-$outstandingBalance = 0;
-
-try {
-    $applicantModel = new Applicant();
-    $conn = $applicantModel->conn;
-
-    // Step 1: Get Applicant Data
-    $applicant = $applicantModel->getApplicantById($applicantId); 
-
-    if (!$applicant) {
-        http_response_code(404);
-        echo json_encode(['success' => false, 'message' => 'Applicant not found']);
+    if (!$applicantId) {
+        echo json_encode(['success' => false, 'message' => 'Applicant ID is required']);
         exit;
     }
-    
-    // --- Timer Log 1: Time spent on initial data fetch ---
-    $time_after_fetch = microtime(true);
-    error_log("Applicant Validation Timing: Initial Data Fetch took " . number_format($time_after_fetch - $start_time, 4) . " seconds.");
-    
-    // CRITICAL CHECK: Get the StudentProfileID
-    $studentProfileId = $applicant['StudentProfileID'] ?? $applicant['ApplicationID']; 
-    
-    // Safety check 
-    if ($studentProfileId === 0 || empty($studentProfileId)) {
-          throw new Exception("Critical Data Missing: Student Profile ID is required for transaction creation.");
+
+    $conn = null;
+
+    try {
+        $applicantModel = new Applicant();
+        $conn = $applicantModel->conn;
+
+        $conn->beginTransaction();
+
+        $applicant = $applicantModel->getApplicantById($applicantId);
+
+        if (!$applicant) {
+            echo json_encode(['success' => false, 'message' => 'Applicant not found']);
+            exit;
+        }
+
+        $fees = FeeStructure::getFeesByGrade($applicant['grade']);
+        $totalFee = $fees['full_payment'];
+        $outstandingBalance = $totalFee - $downPayment;
+
+        // Create transaction record WITHOUT StudentProfileID
+        $stmt = $conn->prepare("
+            INSERT INTO transaction (StudentProfileID, SchoolYearID, IssueDate, DueDate, TotalAmount, PaidAmount, TransactionStatusID)
+            VALUES (NULL, :schoolYearId, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), :totalAmount, :paidAmount, :statusId)
+        ");
+
+        $schoolYearId = $applicant['SchoolYearID'];
+        $statusId = ($outstandingBalance > 0) ? 2 : 3;
+
+        $stmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
+        $stmt->bindParam(':totalAmount', $totalFee);
+        $stmt->bindParam(':paidAmount', $downPayment);
+        $stmt->bindParam(':statusId', $statusId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $transactionId = $conn->lastInsertId();
+
+        // Create transaction items
+        $items = [
+            ['type' => 1, 'desc' => 'Registration Fee', 'amount' => $fees['registration']],
+            ['type' => 2, 'desc' => 'Miscellaneous Fee', 'amount' => $fees['miscellaneous']],
+            ['type' => 1, 'desc' => 'Tuition Fee', 'amount' => $fees['tuition']]
+        ];
+
+        $stmt = $conn->prepare("
+            INSERT INTO transactionitem (TransactionID, ItemTypeID, Description, Amount, Quantity)
+            VALUES (:transactionId, :itemTypeId, :description, :amount, 1)
+        ");
+
+        foreach ($items as $item) {
+            $stmt->bindParam(':transactionId', $transactionId, PDO::PARAM_INT);
+            $stmt->bindParam(':itemTypeId', $item['type'], PDO::PARAM_INT);
+            $stmt->bindParam(':description', $item['desc']);
+            $stmt->bindParam(':amount', $item['amount']);
+            $stmt->execute();
+        }
+
+        // Record down payment with 'Verified' status
+        if ($downPayment > 0) {
+            $refNumber = 'DOWNPAY-' . $applicantId . '-' . time();
+
+            $stmt = $conn->prepare("
+                INSERT INTO payment (TransactionID, PaymentMethodID, AmountPaid, PaymentDateTime, ReferenceNumber, VerificationStatus, VerifiedByUserID, VerifiedAt)
+                VALUES (:transactionId, 1, :amountPaid, NOW(), :refNumber, 'Verified', 1, NOW())
+            ");
+
+            $stmt->bindParam(':transactionId', $transactionId, PDO::PARAM_INT);
+            $stmt->bindParam(':amountPaid', $downPayment);
+            $stmt->bindParam(':refNumber', $refNumber);
+            $stmt->execute();
+        }
+
+        // Update application with payment info and transaction ID
+        $stmt = $conn->prepare("
+            UPDATE application 
+            SET 
+                ApplicationStatus = 'Approved',
+                PaymentMode = :paymentMode,
+                TransactionID = :transactionId,
+                RegistrarNotes = :notes,
+                ReviewedDate = NOW()
+            WHERE ApplicationID = :id
+        ");
+
+        $stmt->bindParam(':paymentMode', $paymentMode);
+        $stmt->bindParam(':transactionId', $transactionId, PDO::PARAM_INT);
+        $stmt->bindParam(':notes', $notes);
+        $stmt->bindParam(':id', $applicantId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $conn->commit();
+
+        // Send email notification
+        $emailSent = false;
+        try {
+            require_once __DIR__ . '/../../config/mailer.php';
+            $mail = getMailer();
+            $mail->addAddress($applicant['GuardianEmail']);
+            $mail->Subject = 'Application Approved - Gymnazo Christian Academy';
+
+            $requiredDocs = FeeStructure::getRequiredDocuments($applicant['EnrolleeType']);
+            $docsList = implode("\n", array_map(fn($doc) => "• $doc", $requiredDocs));
+
+            $paymentModeText = ucfirst($paymentMode);
+
+            $mail->Body = "
+Dear {$applicant['GuardianFirstName']} {$applicant['GuardianLastName']},
+
+Congratulations! We are pleased to inform you that the application for {$applicant['StudentFirstName']} {$applicant['StudentLastName']} has been APPROVED for enrollment in {$applicant['grade']} for School Year 2025-2026.
+
+PAYMENT INFORMATION:
+--------------------
+Payment Mode: {$paymentModeText} Payment
+Total Fee: PHP " . number_format($totalFee, 2) . "
+Down Payment: PHP " . number_format($downPayment, 2) . "
+Outstanding Balance: PHP " . number_format($outstandingBalance, 2) . "
+
+REQUIRED DOCUMENTS:
+-------------------
+{$docsList}
+
+NEXT STEPS:
+-----------
+1. Submit all required documents to the Registrar's Office
+2. Complete the down payment of PHP " . number_format($downPayment, 2) . "
+3. Wait for the section assignment notification
+
+NOTE: Uniforms and books are NOT included in the fees above.
+
+For any concerns, please contact our Registrar's Office.
+
+Best regards,
+Gymnazo Christian Academy
+Registrar's Office
+            ";
+
+            $mail->send();
+            $emailSent = true;
+        } catch (Exception $mailError) {
+            error_log("Email sending failed: " . $mailError->getMessage());
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Applicant validated successfully',
+            'data' => [
+                'applicantId' => $applicantId,
+                'transactionId' => $transactionId,
+                'paymentMode' => $paymentMode,
+                'downPayment' => $downPayment,
+                'outstandingBalance' => $outstandingBalance,
+                'totalFee' => $totalFee,
+                'emailSent' => $emailSent
+            ]
+        ]);
+    } catch (Exception $e) {
+        if ($conn && $conn->inTransaction()) {
+            $conn->rollBack();
+        }
+
+        error_log("Validation Error: " . $e->getMessage());
+
+        echo json_encode([
+            'success' => false,
+            'message' => 'Error: ' . $e->getMessage()
+        ]);
     }
-
-    $conn->beginTransaction();
-
-    // Step 2: Calculate Fees
-    $fees = FeeStructure::getFeesByGrade($applicant['grade']); 
-    $totalFee = $fees['full_payment'];
-    $outstandingBalance = (float)$totalFee - (float)$downPayment;
-    
-    // Step 3: Create Transaction Record (Heavy DB operation)
-    $stmt = $conn->prepare("
-        INSERT INTO transaction (StudentProfileID, SchoolYearID, IssueDate, DueDate, TotalAmount, PaidAmount, TransactionStatusID)
-        VALUES (:studentProfileId, :schoolYearId, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), :totalAmount, :paidAmount, :statusId)
-    ");
-
-    $schoolYearId = $applicant['SchoolYearID'];
-    $statusId = ($outstandingBalance > 0) ? 2 : 3; 
-
-    $stmt->bindParam(':studentProfileId', $studentProfileId, PDO::PARAM_INT);
-    $stmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
-    $stmt->bindParam(':totalAmount', $totalFee);
-    $stmt->bindParam(':paidAmount', $downPayment);
-    $stmt->bindParam(':statusId', $statusId, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $transactionId = $conn->lastInsertId();
-
-    // Step 4: Update application status to 'Approved' (Heavy DB operation)
-    $stmt = $conn->prepare("
-        UPDATE application 
-        SET 
-            ApplicationStatus = 'Approved',
-            PaymentMode = :paymentMode,
-            TransactionID = :transactionId,
-            RegistrarNotes = :notes,
-            ReviewedDate = NOW()
-        WHERE ApplicationID = :id
-    ");
-
-    $stmt->bindParam(':paymentMode', $paymentMode);
-    $stmt->bindParam(':transactionId', $transactionId, PDO::PARAM_INT);
-    $stmt->bindParam(':notes', $notes);
-    $stmt->bindParam(':id', $applicantId, PDO::PARAM_INT);
-    $stmt->execute();
-
-    // COMMIT: The CRITICAL DATABASE work ends here.
-    $conn->commit();
-    
-    // --- Timer Log 2: Time spent on database transaction ---
-    $time_after_commit = microtime(true);
-    error_log("Applicant Validation Timing: DB Transaction (Commit) took " . number_format($time_after_commit - $time_after_fetch, 4) . " seconds.");
-
-    $lastName = $applicant['StudentLastName']; 
-    
-    // --- FINAL SUCCESS JSON RESPONSE ---
-    echo json_encode([
-        'success' => true,
-        'message' => "Applicant {$lastName} Approved Successfully!",
-        'data' => [
-            'applicantId' => $applicantId,
-            'transactionId' => $transactionId, 
-            'paymentMode' => $paymentMode,
-            'downPayment' => $downPayment,
-            'outstandingBalance' => $outstandingBalance,
-            'totalFee' => $totalFee,
-            'emailSent' => false 
-        ]
-    ]);
-
-    // 🛑 ASYNCHRONOUS MAGIC: Release the connection to the browser so the email sending runs in the background 🛑
-    // This code will speed up the response to the user.
-    if (function_exists('fastcgi_finish_request')) {
-        fastcgi_finish_request(); 
-    }
-
-} catch (Exception $e) {
-    if ($conn && $conn->inTransaction()) {
-        $conn->rollBack();
-    }
-
-    error_log("Validation Fatal Error for applicant {$applicantId}: " . $e->getMessage() . "\nStack Trace: " . $e->getTraceAsString()); 
-
-    http_response_code(500); 
-    echo json_encode([
-        'success' => false,
-        'message' => 'An internal server error occurred. Transaction rolled back.'
-    ]);
-    exit;
+} else {
+    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
 
-// ----------------------------------------------------------------
-// --- OPTIONAL: EMAIL NOTIFICATION (Post-Transaction/Background Execution) ---
-// This block will run in the background because of fastcgi_finish_request()
-// ----------------------------------------------------------------
-// if ($applicant && $transactionId) {
-//     try {
-//         $mailer = new Mailer(); 
-
-//         $mailData = [
-//             'trackingNumber' => $applicant['ApplicationID'],
-//             'studentName' => $applicant['StudentFirstName'] . ' ' . $applicant['StudentLastName'],
-//             'guardianName' => $applicant['GuardianFirstName'] . ' ' . $applicant['GuardianLastName'],
-//             'gradeLevel' => $applicant['grade'], 
-//             'enrolleeType' => $applicant['EnrolleeType'], 
-//             'totalFee' => $totalFee,
-//             'downPayment' => $downPayment,
-//             'outstandingBalance' => $outstandingBalance,
-//             'paymentMode' => $paymentMode,
-//         ];
-
-//         $emailSent = $mailer->sendApprovalNotification(
-//             $applicant['GuardianEmail'], 
-//             $mailData
-//         );
-        
-//         if (!$emailSent) {
-//              error_log("Email attempt failed after successful transaction for applicant {$applicantId}.");
-//         }
-
-//     } catch (Exception $mailError) {
-//         error_log("Email sending failed (background) for applicant {$applicantId}: " . $mailError->getMessage());
-//     }
-// }
-
-// // --- Timer Log 3: Total Script Execution Time ---
-// $end_time = microtime(true);
-// error_log("Applicant Validation Timing: TOTAL SCRIPT Execution Time: " . number_format($end_time - $start_time, 4) . " seconds.");
-
-// // END OF FILE
+ob_end_flush();

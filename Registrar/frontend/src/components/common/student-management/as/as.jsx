@@ -5,7 +5,6 @@ import StudentsTable from '../as/components/StudentsTable';
 import ExportButtons from '../as/components/ExportButtons';
 import ConfirmationModal from '../as/components/ConfirmationModal';
 import ViewStudentModal from '../as/components/ViewStudentModal';
-import Pagination from './components/pagination';
 
 const AS = () => {  
     const {
@@ -14,6 +13,8 @@ const AS = () => {
         gradeLevels,
         sections,
         statuses,
+        startIndex,
+        endIndex,
         handleExportCSV,
         handleExportPDF,
         showConfirmModal,
@@ -28,10 +29,6 @@ const AS = () => {
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [search, setSearch] = useState("");
     const [selectedFilters, setSelectedFilters] = useState({ gradeLevel: "", section: "", status: "" });
-
-    // Pagination states
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // Adjust based on how many items per page you want to show
 
     const handleViewStudent = (student) => {
         setSelectedStudent(student);
@@ -51,20 +48,6 @@ const AS = () => {
         return matchesSearch && matchesGrade && matchesSection && matchesStatus;
     });
 
-    // Get current page's students
-    const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
-    const currentStudents = filteredStudents.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
-
-    // Handle page change
-    const handlePageChange = (page) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
-        }
-    };
-
     return (
         <div className="space-y-6">
 
@@ -73,7 +56,7 @@ const AS = () => {
                 <div>
                     <h1 className="text-2xl font-bold">All Students</h1>
                     <p className="text-sm text-gray-500">
-                        Showing {currentStudents.length} of {filteredStudents.length} students
+                        Showing {filteredStudents.length} of {students.length} students
                     </p>
                 </div>
 
@@ -94,21 +77,15 @@ const AS = () => {
                 setSelectedFilters={setSelectedFilters}
             />
 
-            {/* Table */}
-            <div id="students-table">
-                <StudentsTable 
-                    paginatedStudents={currentStudents} // Pass paginated data to the table
-                    handleViewStudent={handleViewStudent}
-                />
-            </div>
+            
+         {/* Table */}
+<div id="students-table">
+    <StudentsTable 
+        paginatedStudents={filteredStudents}
+        handleViewStudent={handleViewStudent}
+    />
+</div>
 
-            {/* Pagination */}
-            <Pagination
-                totalItems={filteredStudents.length}
-                itemsPerPage={itemsPerPage}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-            />
 
             {/* Confirmation Modal */}
             <ConfirmationModal
@@ -131,6 +108,7 @@ const AS = () => {
                     {toast.message}
                     <button onClick={hideToast}>×</button>
                 </div>
+                
             )}
         </div>
     );

@@ -56,6 +56,26 @@ const ScreeningHeader = () => {
         className={`flex gap-2 transition-all duration-500 
           ${animate ? "animate-slideInRight" : "opacity-0"}`}
       >
+        {/* Print Button with tooltip & hover animation */}
+        <div className="relative group">
+          <button
+            className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1.5 
+            rounded-md text-sm font-semibold transition transform duration-200 hover:scale-105 hover:bg-blue-500"
+          >
+            <Printer className="w-4 h-4" />
+            Print Checklist
+          </button>
+
+          {/* Tooltip */}
+          <span
+            className="absolute -top-8 left-1/2 -translate-x-1/2 
+            bg-black text-white text-xs font-semibold rounded-md px-2 py-1 
+            opacity-0 group-hover:opacity-100 transition-all duration-300 
+            whitespace-nowrap z-50"
+          >
+            Print Selected
+          </span>
+        </div>
       </div>
     </div>
   );

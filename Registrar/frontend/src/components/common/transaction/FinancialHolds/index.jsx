@@ -7,7 +7,7 @@ import FinancialHoldModal from './FinancialHoldModal';
 import SuccessToast from '../../../ui/SuccessToast';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://10.153.119.17/SMS-GCA-3H/Registrar/backend/api/financial-holds';
+const API_BASE_URL = 'http://localhost/SMS-GCA-3H/Registrar/backend/api/financial-holds';
 
 const FinancialHolds = () => {
   const [filters, setFilters] = useState({

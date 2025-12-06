@@ -5,7 +5,7 @@ import CompletedRequestHistory from "../common/records/CompletedRequest";
 import ArchiveSearch from "../common/records/archivesearch";
 
 const RecordPage = () => {
-  const [activeTab, setActiveTab] = useState("studentexit");
+  const [activeTab, setActiveTab] = useState("DocReq");
 
   const tabs = [
     {

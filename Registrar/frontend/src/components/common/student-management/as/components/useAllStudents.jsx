@@ -12,7 +12,7 @@ export const useAllStudents = () => {
     gradeLevel: '',
     section: '',
     status: '',
-    search: '', // search bar value
+    search: '',
   });
 
   // Modals
@@ -33,10 +33,14 @@ export const useAllStudents = () => {
     type: 'success',
   });
 
-  const showToast = (message, type = 'success') => setToast({ isVisible: true, message, type });
+  const showToast = (message, type = 'success') => {
+    setToast({ isVisible: true, message, type });
+    setTimeout(() => hideToast(), 4000);
+  };
+  
   const hideToast = () => setToast(prev => ({ ...prev, isVisible: false }));
 
-  // --- Fetch all students once
+  // Fetch all students
   const fetchStudents = async () => {
     try {
       setLoading(true);
@@ -61,7 +65,7 @@ export const useAllStudents = () => {
     fetchStudents();
   }, []);
 
-  // --- Filter & search on frontend (no memo)
+  // Filter & search on frontend
   const filteredStudents = students.filter(s => {
     const matchesSearch = filters.search
       ? s.fullName.toLowerCase().includes(filters.search.toLowerCase()) ||
@@ -75,7 +79,7 @@ export const useAllStudents = () => {
     return matchesSearch && matchesGrade && matchesSection && matchesStatus;
   });
 
-  // --- Pagination
+  // Pagination
   const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -84,6 +88,7 @@ export const useAllStudents = () => {
   const handlePageChange = page => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
+  
   const handleItemsPerPageChange = value => {
     setItemsPerPage(Number(value));
     setCurrentPage(1);
@@ -94,41 +99,95 @@ export const useAllStudents = () => {
     setCurrentPage(1);
   };
 
-  // --- Student Actions
+  // Student Actions
   const handleViewStudent = student => {
     setSelectedStudent(student);
     setShowViewModal(true);
   };
+  
   const handleEditStudent = student => {
     setSelectedStudent(student);
     setShowEditModal(true);
   };
 
-  // --- Export logic (CSV/PDF)
-  const startExportCSV = () => { setConfirmAction('csv'); setShowConfirmModal(true); };
-  const startExportPDF = () => { setConfirmAction('pdf'); setShowConfirmModal(true); };
+  // Handle save from edit modal
+  const handleSaveStudent = async (updatedData) => {
+    try {
+      // Update local state immediately for instant feedback
+      setStudents(prevStudents => 
+        prevStudents.map(s => 
+          s.id === updatedData.id 
+            ? { ...s, ...updatedData } 
+            : s
+        )
+      );
+
+      // Close modal
+      setShowEditModal(false);
+      
+      // Show success toast
+      showToast('Student information updated successfully!', 'success');
+
+      // Refresh data from server to ensure consistency
+      await fetchStudents();
+      
+    } catch (err) {
+      showToast('Failed to update student information', 'error');
+      console.error('Save error:', err);
+    }
+  };
+
+  // Export CSV
+  const startExportCSV = () => { 
+    setConfirmAction('csv'); 
+    setShowConfirmModal(true); 
+  };
+  
+  const executeExportCSV = () => {
+    const headers = ['Student Number', 'Name', 'Grade Level', 'Section', 'Status', 'Guardian', 'Contact'];
+    const rows = filteredStudents.map(s => [
+      s.studentNumber, 
+      s.fullName, 
+      s.gradeLevel, 
+      s.section, 
+      s.status, 
+      s.guardianName, 
+      s.guardianPhone
+    ]);
+    
+    const csvContent = [
+      headers.join(','), 
+      ...rows.map(r => r.map(c => `"${(c||'').toString().replace(/"/g,'""')}"`).join(','))
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `students_export_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    
+    showToast('Students exported to CSV successfully!', 'success');
+  };
+
+  // Export PDF
+  const startExportPDF = () => { 
+    setConfirmAction('pdf'); 
+    setShowConfirmModal(true); 
+  };
+  
+  const executeExportPDF = () => { 
+    window.print(); 
+    showToast('Preparing PDF export...', 'info'); 
+  };
+
   const handleConfirmAction = () => {
     setShowConfirmModal(false);
     if (confirmAction === 'csv') executeExportCSV();
     else if (confirmAction === 'pdf') executeExportPDF();
     setConfirmAction(null);
   };
-  const executeExportCSV = () => {
-    const headers = ['Student Number', 'Name', 'Grade Level', 'Section', 'Status', 'Guardian', 'Contact'];
-    const rows = students.map(s => [
-      s.studentNumber, s.fullName, s.gradeLevel, s.section, s.status, s.guardianName, s.guardianPhone
-    ]);
-    const csvContent = [headers.join(','), ...rows.map(r => r.map(c => `"${(c||'').toString().replace(/"/g,'""')}"`).join(','))].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `students_export_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    showToast('Students exported to CSV successfully!', 'success');
-  };
-  const executeExportPDF = () => { window.print(); showToast('Preparing PDF export...', 'info'); };
 
-  // --- Filter options (no memo)
+  // Filter options
   const gradeLevels = Array.from(new Set(students.map(s => s.gradeLevel).filter(Boolean))).sort();
   const sections = Array.from(new Set(students.map(s => s.section).filter(s => s !== 'Not Assigned'))).sort();
   const statuses = Array.from(new Set(students.map(s => s.status))).sort();
@@ -165,6 +224,7 @@ export const useAllStudents = () => {
     setShowEditModal,
     handleViewStudent,
     handleEditStudent,
+    handleSaveStudent,
 
     // Export
     handleExportCSV: startExportCSV,

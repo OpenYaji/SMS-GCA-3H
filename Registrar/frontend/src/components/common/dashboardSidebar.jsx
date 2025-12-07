@@ -16,8 +16,7 @@ import {
   X,
   BadgeDollarSign,
   GraduationCap,
-  ArchiveRestore,
-  ClipboardMinus,
+  FileSearch,
   ChartArea
 } from "lucide-react";
 
@@ -84,7 +83,7 @@ export default function DashboardSidebar({
     },
     {
       name: "Document Request",
-      icon: <Settings size={18} />,
+      icon: <FileSearch size={18} />,
       path: "/registrar-dashboard/record-and-archives",
     },
     {

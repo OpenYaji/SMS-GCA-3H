@@ -31,14 +31,6 @@ const Financial = () => {
         bg-[#F3D67D] dark:bg-slate-700 text-slate-800 dark:text-slate-100 shadow-inner">
         <CreditCard size={26} />
       </div>
-
-      {/* Tooltip with smoother animation */}
-      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-        bg-gray-900 text-white text-xs font-semibold rounded-md px-2 py-1
-        opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100
-        transition-all duration-500 ease-out whitespace-nowrap z-10">
-        View Financial Holds
-      </div>
     </div>
   );
 };

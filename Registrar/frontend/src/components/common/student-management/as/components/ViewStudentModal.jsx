@@ -49,7 +49,6 @@ const ViewStudentModal = ({ isVisible, student, onClose }) => {
               {[
                 { label: "Student Number", value: student.studentNumber },
                 { label: "Full Name", value: student.fullName },
-                { label: "Birthdate", value: student.dateOfBirth },
                 { label: "Birthplace", value: student.birthPlace },
               ].map((item, idx) => (
                 <div key={idx}>
@@ -63,10 +62,12 @@ const ViewStudentModal = ({ isVisible, student, onClose }) => {
 
             {/* RIGHT COLUMN */}
             <div className="space-y-2">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 {[
+                  
                   { label: "Grade Level", value: student.gradeLevel },
                   { label: "Section", value: student.section },
+                  { label: "Enrollment Date", value: student.enrollmentDate },
                 ].map((item, idx) => (
                   <div key={idx}>
                     <label className="block font-semibold text-sm mb-1">{item.label}</label>
@@ -92,8 +93,9 @@ const ViewStudentModal = ({ isVisible, student, onClose }) => {
                 ))}
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 {[
+                  { label: "Birth Date", value: student.dateOfBirth },
                   { label: "Mother Tongue", value: student.motherTongue },
                   { label: "Religion", value: student.religion },
                 ].map((item, idx) => (
@@ -155,16 +157,6 @@ const ViewStudentModal = ({ isVisible, student, onClose }) => {
             </div>
           </div>
 
-        </div>
-
-        {/* FOOTER */}
-        <div className="mt-4 flex justify-end p-6 border-t border-gray-200 dark:border-slate-700">
-          <button
-            onClick={handleClose}
-            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
-          >
-            Close
-          </button>
         </div>
       </div>
 

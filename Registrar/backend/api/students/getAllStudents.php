@@ -137,7 +137,7 @@ try {
         $params[] = $searchParam;
     }
 
-    $query .= " ORDER BY gl.SortOrder, s.SectionName, p.LastName, p.FirstName";
+     $query .= " ORDER BY sp.StudentNumber ASC";
 
     $studentsQuery = $conn->prepare($query);
     $studentsQuery->execute($params);

@@ -1,5 +1,5 @@
 <?php
-// db.php
+// db.php try
 class Database{
     private $host = 'localhost';
     private $db_name = 'aa'; 

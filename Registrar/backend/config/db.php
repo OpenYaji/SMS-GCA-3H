@@ -1,13 +1,9 @@
 <?php
-// db.php
+// db.php try
 class Database
 {
     private $host = 'localhost';
-<<<<<<< HEAD
-    private $db_name = 'aa'; 
-=======
     private $db_name = 'aa';
->>>>>>> RegistarrLA
     private $username = 'root';
     private $password = '';
     private $conn;

@@ -310,7 +310,7 @@ const ScreeningTable = ({ filterOptions = {}, onValidated }) => {
                                             // REMOVED getRowClass here
                                         `}
                                     >
-                                        <td className="px-4 py-3 text-sm font-medium text-gray-800 dark:text-white">{`${a.StudentLastName}, ${a.StudentFirstName} ${a.StudentMiddleName}.`}</td>
+                                        <td className="px-4 py-3 text-sm font-medium text-gray-800 dark:text-white">{`${a.StudentLastName}, ${a.StudentFirstName} ${a.StudentMiddleName}`}</td>
                                         <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{a.EnrolleeType}</td>
                                         <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 break-words max-w-[200px]">
                                             {requiredDocs.join(", ")}

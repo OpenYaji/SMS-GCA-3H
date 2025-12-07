@@ -103,7 +103,7 @@
             AND e.SectionID = ? 
             AND u.IsDeleted = 0
 
-        ORDER BY sp.StudentNumber ASC
+        ORDER BY  p.LastName, p.FirstName
     ");
 // GET /schoolyear/active
 if (count($parts) === 2 && $parts[0] === "schoolyear" && $parts[1] === "active") {

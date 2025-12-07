@@ -137,7 +137,7 @@ try {
         $params[] = $searchParam;
     }
 
-     $query .= " ORDER BY sp.StudentNumber ASC";
+     $query .= " ORDER BY p.LastName ASC";
 
     $studentsQuery = $conn->prepare($query);
     $studentsQuery->execute($params);

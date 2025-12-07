@@ -1,13 +1,15 @@
 <?php
 // db.php
-class Database{
+class Database
+{
     private $host = 'localhost';
-    private $db_name = 'latest_database_nov28'; 
+    private $db_name = 'aa';
     private $username = 'root';
     private $password = '';
     private $conn;
 
-    public function getConnection() {
+    public function getConnection()
+    {
         $this->conn = null;
 
         try {
@@ -24,4 +26,3 @@ class Database{
         return $this->conn;
     }
 }
-?>

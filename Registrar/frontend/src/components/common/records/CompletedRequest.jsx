@@ -1,74 +1,51 @@
-import React, { useState } from "react";
+// C:\xampp\htdocs\SMS-GCA-3H\Registrar\frontend\src\components\common\records\CompletedRequest.jsx
+
+import React, { useState, useEffect } from "react";
 import CompletedRequestInfoModal from "./CompletedRequestInfo";
+
+const API_BASE_URL = "http://localhost/SMS-GCA-3H/Registrar/backend/api/records";
 
 const CompletedRequestHistory = () => {
   const [selectedRequests, setSelectedRequests] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     documentType: "all",
     gradeLevel: "all",
     dateRange: "all",
   });
 
-  const requests = [
-    {
-      id: 1,
-      name: "Abuel, Kristine M.",
-      studentId: "GCA-2025-004",
-      gradeLevel: "Grade 7",
-      documentType: "Form 137",
-      requestDate: "Oct 15, 2025",
-      completedDate: "Oct 18, 2025",
-      pickupDate: "Oct 20, 2025",
-      pickupTime: "2:00 PM",
-      email: "kristine.abuel@email.com",
-      status: "Released",
-      requestPurpose: "Transfer to another school",
-    },
-    {
-      id: 2,
-      name: "Almilla, John T.",
-      studentId: "GCA-2025-006",
-      gradeLevel: "Grade 9",
-      documentType: "Certificate of Good Moral",
-      requestDate: "Oct 16, 2025",
-      completedDate: "Oct 19, 2025",
-      pickupDate: "Oct 22, 2025",
-      pickupTime: "10:00 AM",
-      email: "john.almilla@email.com",
-      status: "Released",
-      requestPurpose: "Scholarship application",
-    },
-    {
-      id: 3,
-      name: "Bordallo, Angelo J.",
-      studentId: "GCA-2025-011",
-      gradeLevel: "Grade 4",
-      documentType: "Form 137",
-      requestDate: "Oct 10, 2025",
-      completedDate: "Oct 13, 2025",
-      pickupDate: "Oct 15, 2025",
-      pickupTime: "3:30 PM",
-      email: "angelo.bordallo@email.com",
-      status: "Released",
-      requestPurpose: "Transfer to another school",
-    },
-    {
-      id: 4,
-      name: "Cruz, Catherine S.",
-      studentId: "GCA-2025-017",
-      gradeLevel: "Grade 3",
-      documentType: "Certificate of Enrollment",
-      requestDate: "Oct 12, 2025",
-      completedDate: "Oct 14, 2025",
-      pickupDate: "Oct 17, 2025",
-      pickupTime: "11:00 AM",
-      email: "catherine.cruz@email.com",
-      status: "Released",
-      requestPurpose: "Travel visa application",
-    },
-  ];
+  useEffect(() => {
+    fetchCompletedRequests();
+  }, []);
+
+  const fetchCompletedRequests = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/get_completed_requests.php`);
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch completed requests");
+      }
+      
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      setRequests(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      console.error("Error fetching completed requests:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSelectAll = (e) => {
     setSelectedRequests(e.target.checked ? requests.map((r) => r.id) : []);
@@ -100,6 +77,7 @@ const CompletedRequestHistory = () => {
       console.log(`Archiving ${selectedRequests.length} request(s)`);
       alert("Selected requests archived successfully!");
       setSelectedRequests([]);
+      fetchCompletedRequests(); // Refresh list
     }
   };
 
@@ -108,13 +86,49 @@ const CompletedRequestHistory = () => {
     setIsModalOpen(true);
   };
 
-  const getStatusBadge = (status) => {
-    const styles = {
-      Released: "bg-green-100 text-green-800 border border-green-300",
-      Archived: "bg-gray-100 text-gray-800 border border-gray-300",
-    };
-    return styles[status] || "bg-gray-100 text-gray-800 border border-gray-300";
+  const handleArchived = () => {
+    fetchCompletedRequests(); // Refresh list after archiving
   };
+
+  // Calculate stats
+  const stats = {
+    total: requests.length,
+    thisMonth: requests.filter(r => {
+      const requestDate = new Date(r.requestDate);
+      const now = new Date();
+      return requestDate.getMonth() === now.getMonth() && 
+             requestDate.getFullYear() === now.getFullYear();
+    }).length
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-5xl mb-4">⏳</div>
+          <p className="text-gray-600 font-medium">Loading completed requests...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+        <div className="text-center bg-red-50 p-6 rounded-xl border-2 border-red-200">
+          <div className="text-5xl mb-4">⚠️</div>
+          <h3 className="text-lg font-bold text-red-900 mb-2">Error Loading Completed Requests</h3>
+          <p className="text-red-700">{error}</p>
+          <button 
+            onClick={fetchCompletedRequests}
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans">
@@ -148,16 +162,9 @@ const CompletedRequestHistory = () => {
                 className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Grades</option>
-                <option value="1">Grade 1</option>
-                <option value="2">Grade 2</option>
-                <option value="3">Grade 3</option>
-                <option value="4">Grade 4</option>
-                <option value="5">Grade 5</option>
-                <option value="6">Grade 6</option>
-                <option value="7">Grade 7</option>
-                <option value="8">Grade 8</option>
-                <option value="9">Grade 9</option>
-                <option value="10">Grade 10</option>
+                {[1,2,3,4,5,6,7,8,9,10].map(grade => (
+                  <option key={grade} value={grade}>Grade {grade}</option>
+                ))}
               </select>
             </div>
 
@@ -201,7 +208,7 @@ const CompletedRequestHistory = () => {
               Total Completed
             </h3>
             <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              {requests.length}
+              {stats.total}
             </p>
             <p className="text-sm text-gray-600 font-medium">All Time</p>
           </div>
@@ -210,7 +217,7 @@ const CompletedRequestHistory = () => {
               This Month
             </h3>
             <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              12
+              {stats.thisMonth}
             </p>
             <p className="text-sm text-gray-600 font-medium">Requests</p>
           </div>
@@ -290,7 +297,7 @@ const CompletedRequestHistory = () => {
                     />
                   </td>
                   <td className="px-6 py-4 text-sm font-bold text-gray-900">
-                    {request.name}
+                    {request.studentName}
                   </td>
                   <td className="px-6 py-4 text-sm font-semibold text-gray-900">
                     {request.studentId}
@@ -346,6 +353,7 @@ const CompletedRequestHistory = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         request={selectedRequest}
+        onArchived={handleArchived}
       />
 
       <style jsx>{`

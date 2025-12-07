@@ -1,6 +1,12 @@
-import React from "react";
+// C:\xampp\htdocs\SMS-GCA-3H\Registrar\frontend\src\components\common\records\CompletedRequestInfo.jsx
 
-const CompletedRequestInfoModal = ({ isOpen, onClose, request }) => {
+import React, { useState } from "react";
+
+const API_BASE_URL = "http://localhost/SMS-GCA-3H/Registrar/backend/api/records";
+
+const CompletedRequestInfoModal = ({ isOpen, onClose, request, onArchived }) => {
+  const [archiving, setArchiving] = useState(false);
+
   if (!isOpen || !request) return null;
 
   const handlePrint = () => {
@@ -8,11 +14,38 @@ const CompletedRequestInfoModal = ({ isOpen, onClose, request }) => {
     window.print();
   };
 
-  const handleArchive = () => {
-    if (window.confirm("Archive this completed request? This action cannot be undone.")) {
-      console.log("Archiving request:", request.id);
-      alert("Request archived successfully!");
-      onClose();
+  const handleArchive = async () => {
+    if (window.confirm("Archive this completed request? This will move it to the Archive Search tab.")) {
+      try {
+        setArchiving(true);
+        
+        const response = await fetch(`${API_BASE_URL}/archive_request.php`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            requestId: request.id
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          alert("Request archived successfully!");
+          if (onArchived) {
+            onArchived();
+          }
+          onClose();
+        } else {
+          throw new Error(data.error || "Failed to archive request");
+        }
+      } catch (error) {
+        console.error("Error archiving request:", error);
+        alert("Error: " + error.message);
+      } finally {
+        setArchiving(false);
+      }
     }
   };
 
@@ -22,7 +55,7 @@ const CompletedRequestInfoModal = ({ isOpen, onClose, request }) => {
         {/* Header */}
         <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
           <h2 className="text-xl font-bold text-white">
-            Completed Request - {request?.name || "Student Name"}
+            Completed Request - {request?.studentName || "Student Name"}
           </h2>
           <button
             onClick={onClose}
@@ -38,7 +71,7 @@ const CompletedRequestInfoModal = ({ isOpen, onClose, request }) => {
             <div>
               <div className="mb-3">
                 <span className="font-semibold text-gray-700">Student Name:</span>
-                <span className="ml-2 text-gray-900">{request?.name || "N/A"}</span>
+                <span className="ml-2 text-gray-900">{request?.studentName || "N/A"}</span>
               </div>
               <div className="mb-3">
                 <span className="font-semibold text-gray-700">Student ID:</span>
@@ -67,7 +100,7 @@ const CompletedRequestInfoModal = ({ isOpen, onClose, request }) => {
 
           {/* Pickup Details */}
           <div className="mt-4 p-4 bg-white rounded-lg border border-green-200">
-            <h4 className="font-bold text-gray-900 mb-2">📅 Pickup/Delivery Details</h4>
+            <h4 className="font-bold text-gray-900 mb-2">📅 Pickup Details</h4>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="font-semibold text-gray-700">Scheduled Date:</span>
@@ -95,8 +128,6 @@ const CompletedRequestInfoModal = ({ isOpen, onClose, request }) => {
           </div>
         </div>
 
-
-
         {/* Action Buttons */}
         <div className="bg-gray-50 px-6 py-4 flex justify-center gap-3 border-t border-gray-200 flex-wrap">
           <button
@@ -107,9 +138,10 @@ const CompletedRequestInfoModal = ({ isOpen, onClose, request }) => {
           </button>
           <button
             onClick={handleArchive}
-            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 font-medium transition-colors flex items-center gap-2"
+            disabled={archiving}
+            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            📦 Archive
+            {archiving ? "Archiving..." : "📦 Archive"}
           </button>
         </div>
       </div>

@@ -1,69 +1,53 @@
 // C:\xampp\htdocs\SMS-GCA-3H\Registrar\frontend\src\components\common\records\DocumentRequests.jsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProcessRequestModal from "./ProcessRequestModal";
+
+const API_BASE_URL = "http://localhost/SMS-GCA-3H/Registrar/backend/api/records";
 
 const DocumentRequests = () => {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     documentType: "all",
     gradeLevel: "all",
     status: "all",
   });
 
-  // Sample data - replace with API calls
-  const students = [
-    {
-      id: 1,
-      name: "Abuel, Kristine M.",
-      studentId: "GCA-2025-004",
-      gradeLevel: "Grade 7",
-      documentType: "Form 137",
-      requestDate: "Oct 15, 2025",
-      status: "Pending",
-      parentGuardian: "Abuel, Maria T.",
-      contact: "09123456789",
-      requestReason: "Transfer to another school",
-    },
-    {
-      id: 2,
-      name: "Almilla, John T.",
-      studentId: "GCA-2025-006",
-      gradeLevel: "Grade 9",
-      documentType: "Certificate of Good Moral",
-      requestDate: "Oct 16, 2025",
-      status: "Pending",
-      parentGuardian: "Almilla, Rosa S.",
-      contact: "09234567890",
-      requestReason: "Scholarship application",
-    },
-    {
-      id: 3,
-      name: "Bordallo, Angelo J.",
-      studentId: "GCA-2025-011",
-      gradeLevel: "Grade 4",
-      documentType: "Form 137",
-      requestDate: "Oct 20, 2025",
-      status: "Pending",
-      parentGuardian: "Bordallo, Jose M.",
-      contact: "09345678901",
-      requestReason: "Transfer to another school",
-    },
-    {
-      id: 4,
-      name: "Cruz, Catherine S.",
-      studentId: "GCA-2025-017",
-      gradeLevel: "Grade 3",
-      documentType: "Certificate of Enrollment",
-      requestDate: "Oct 21, 2025",
-      status: "Pending",
-      parentGuardian: "Cruz, Anna L.",
-      contact: "09456789012",
-      requestReason: "Travel visa application",
-    },
-  ];
+  useEffect(() => {
+    fetchRequests();
+  }, []);
+
+  const fetchRequests = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/get_requests.php`);
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch requests");
+      }
+      
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      // Filter only pending requests
+      const pendingRequests = data.filter(req => req.status === 'Pending');
+      setStudents(pendingRequests);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      console.error("Error fetching requests:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -106,6 +90,47 @@ const DocumentRequests = () => {
     setSelectedStudent(student);
     setIsModalOpen(true);
   };
+
+  const handleRequestCompleted = () => {
+    fetchRequests(); // Refresh the list
+  };
+
+  // Calculate statistics
+  const stats = {
+    pending: students.length,
+    form137: students.filter(s => s.documentType === 'Form 137').length,
+    certificates: students.filter(s => s.documentType.includes('Certificate')).length,
+    other: students.filter(s => !s.documentType.includes('Form 137') && !s.documentType.includes('Certificate')).length
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-5xl mb-4">⏳</div>
+          <p className="text-gray-600 font-medium">Loading requests...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+        <div className="text-center bg-red-50 p-6 rounded-xl border-2 border-red-200">
+          <div className="text-5xl mb-4">⚠️</div>
+          <h3 className="text-lg font-bold text-red-900 mb-2">Error Loading Requests</h3>
+          <p className="text-red-700">{error}</p>
+          <button 
+            onClick={fetchRequests}
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans">
@@ -188,7 +213,7 @@ const DocumentRequests = () => {
               Pending Requests
             </h3>
             <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              8
+              {stats.pending}
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
@@ -196,7 +221,7 @@ const DocumentRequests = () => {
               Form 137 Requests
             </h3>
             <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              5
+              {stats.form137}
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
@@ -204,7 +229,7 @@ const DocumentRequests = () => {
               Certificates
             </h3>
             <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              2
+              {stats.certificates}
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
@@ -212,7 +237,7 @@ const DocumentRequests = () => {
               Other Documents
             </h3>
             <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              1
+              {stats.other}
             </p>
           </div>
         </div>
@@ -237,13 +262,13 @@ const DocumentRequests = () => {
                   Student Name
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
-                  Student ID
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
-                  Grade Level
+                  Email
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
                   Document Type
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
+                  Purpose
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
                   Request Date
@@ -271,19 +296,19 @@ const DocumentRequests = () => {
                     />
                   </td>
                   <td className="px-6 py-4 text-sm font-bold text-gray-900">
-                    {student.name}
-                  </td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">
-                    {student.studentId}
+                    {student.studentName}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 font-medium">
-                    {student.gradeLevel}
+                    {student.email}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 font-medium">
                     {student.documentType}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 font-medium">
-                    {student.requestDate}
+                    {student.purpose}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                    {student.date}
                   </td>
                   <td className="px-6 py-4">
                     <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full shadow-sm">
@@ -319,8 +344,12 @@ const DocumentRequests = () => {
 
       <ProcessRequestModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedStudent(null);
+        }}
         student={selectedStudent}
+        onRequestCompleted={handleRequestCompleted}
       />
 
       <style jsx>{`

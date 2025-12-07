@@ -107,26 +107,9 @@ const ViewStudentInfoModal = ({ isOpen, onClose, student }) => {
             {/* Middle Column - Family and Contact Info */}
             <div className="col-span-1">
               <div className="space-y-4">
-                <div>
-                  <p className="text-sm font-semibold text-gray-900 mb-1">
-                    Barangay
-                  </p>
-                  <p className="text-sm text-gray-400">Lorem</p>
-                </div>
+            
 
-                <div>
-                  <p className="text-sm font-semibold text-gray-900 mb-1">
-                    Municipality
-                  </p>
-                  <p className="text-sm text-gray-400">Impsum</p>
-                </div>
-
-                <div>
-                  <p className="text-sm font-semibold text-gray-900 mb-1">
-                    Province
-                  </p>
-                  <p className="text-sm text-gray-400">Lorem Ipsum</p>
-                </div>
+              
 
                 <div>
                   <p className="text-sm font-semibold text-gray-900 mb-1">

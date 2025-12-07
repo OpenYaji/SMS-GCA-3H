@@ -1,6 +1,7 @@
 <?php
-// db.php try
-class Database{
+// C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\config\db.php
+class Database
+{
     private $host = 'localhost';
     private $db_name = 'aa';
     private $username = 'root';

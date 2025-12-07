@@ -31,7 +31,7 @@ const RecordPage = () => {
       <div className="bg-white border-b border-gray-200">
         <div className="px-6 pt-6">
           <h1 className="text-2xl font-semibold text-gray-900 mb-4">
-            Records and Archives
+            Document Request
           </h1>
           <div className="flex gap-1">
             {tabs.map((tab) => (

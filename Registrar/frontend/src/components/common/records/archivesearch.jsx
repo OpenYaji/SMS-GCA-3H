@@ -1,17 +1,23 @@
+// C:\xampp\htdocs\SMS-GCA-3H\Registrar\frontend\src\components\common\records\ArchiveSearch.jsx
+
 import React, { useState, useEffect } from "react";
 import ViewStudentInfoModal from "./ViewStudentInfoModal";
+
+const API_BASE_URL = "http://localhost/SMS-GCA-3H/Registrar/backend/api/records";
 
 const ArchiveSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [archivedRecords, setArchivedRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     schoolYear: "all",
     exitType: "all",
   });
   const [selectedRecords, setSelectedRecords] = useState([]);
 
-  // Apply Poppins font for consistency
   useEffect(() => {
     const prev = document.body.style.fontFamily;
     document.body.style.fontFamily = "'Poppins', sans-serif";
@@ -20,45 +26,34 @@ const ArchiveSearch = () => {
     };
   }, []);
 
-  // Sample archived data
-  const archivedRecords = [
-    {
-      id: 1,
-      studentName: "Abuel, Kristine M.",
-      studentId: "GCA-2025-004",
-      lastGradeLevel: "Grade 2",
-      exitType: "Transfer Out",
-      exitDate: "Oct 15, 2025",
-      archiveDate: "Oct 20, 2025",
-    },
-    {
-      id: 2,
-      studentName: "Abella, John T.",
-      studentId: "GCA-2025-006",
-      lastGradeLevel: "Grade 3",
-      exitType: "Transfer Out",
-      archiveDate: "Oct 16, 2025",
-      exitDate: "Oct 22, 2025",
-    },
-    {
-      id: 3,
-      studentName: "Bordallo, Angelo J.",
-      studentId: "GCA-2025-011",
-      lastGradeLevel: "Grade 4",
-      exitType: "Graduation",
-      exitDate: "Oct 20, 2025",
-      archiveDate: "Oct 28, 2025",
-    },
-    {
-      id: 4,
-      studentName: "Cruz, Catherine S.",
-      studentId: "GCA-2025-017",
-      lastGradeLevel: "Grade 5",
-      exitType: "Dropped",
-      exitDate: "Oct 21, 2025",
-      archiveDate: "Oct 29, 2025",
-    },
-  ];
+  useEffect(() => {
+    fetchArchivedRecords();
+  }, []);
+
+  const fetchArchivedRecords = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/get_archive_search.php`);
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch archived records");
+      }
+      
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      setArchivedRecords(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      console.error("Error fetching archived records:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSelectAll = (e) => {
     setSelectedRecords(
@@ -83,6 +78,42 @@ const ArchiveSearch = () => {
     setSelectedStudent(student);
     setIsModalOpen(true);
   };
+
+  // Calculate statistics
+  const stats = {
+    total: archivedRecords.length,
+    graduated: archivedRecords.filter(r => r.exitType === 'Graduation').length,
+    transferred: archivedRecords.filter(r => r.exitType === 'Transfer Out').length,
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-white p-8 font-sans min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-5xl mb-4">⏳</div>
+          <p className="text-gray-600 font-medium">Loading archived records...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white p-8 font-sans min-h-screen flex items-center justify-center">
+        <div className="text-center bg-red-50 p-6 rounded-xl border-2 border-red-200">
+          <div className="text-5xl mb-4">⚠️</div>
+          <h3 className="text-lg font-bold text-red-900 mb-2">Error Loading Archives</h3>
+          <p className="text-red-700">{error}</p>
+          <button 
+            onClick={fetchArchivedRecords}
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white p-8 font-sans">
@@ -156,10 +187,10 @@ const ArchiveSearch = () => {
         {/* Statistics Cards - Yellow Background */}
         <div className="grid grid-cols-4 gap-4 bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-100 p-6 rounded-xl mb-6 shadow-sm">
           {[
-            { label: "Total Archived Records", value: "2,458" },
-            { label: "Graduated Students", value: "156" },
-            { label: "Transferred Out", value: "892" },
-            { label: "Archive Size", value: "45.7 GB" },
+            { label: "Total Archived Records", value: stats.total.toString() },
+            { label: "Graduated Students", value: stats.graduated.toString() },
+            { label: "Transferred Out", value: stats.transferred.toString() },
+      
           ].map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-5xl font-black text-blue-600 mb-1">

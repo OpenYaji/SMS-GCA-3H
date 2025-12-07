@@ -1,27 +1,26 @@
+// C:\xampp\htdocs\SMS-GCA-3H\Registrar\frontend\src\components\common\records\ProcessRequestModal.jsx
+
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const ProcessRequestModal = ({ isOpen, onClose, student }) => {
+const API_BASE_URL = "http://localhost/SMS-GCA-3H/Registrar/backend/api/records";
+
+const ProcessRequestModal = ({ isOpen, onClose, student, onRequestCompleted }) => {
   if (!isOpen || !student) return null;
 
   const [requestData, setRequestData] = useState({
-    studentName: student.name || "N/A",
-    studentId: student.studentId || "N/A",
-    gradeSection: student.gradeLevel || "Grade 7",
-    documentType: student.documentType || "Form 137",
-    
-    parentGuardian: student.parentGuardian || "N/A",
-    contact: student.contact || "N/A",
-    requestReason: student.requestReason || "Document request",
-    requestDate: student.requestDate || new Date().toLocaleDateString(),
-    
+    studentName: student.studentName || "N/A",
+    email: student.email || "N/A",
+    documentType: student.documentType || "N/A",
+    purpose: student.purpose || "N/A",
+    requestDate: student.date || new Date().toLocaleDateString(),
     pickupDate: new Date(),
     pickupTime: "",
-    recipientEmail: student.email || "",
-    
     specialInstructions: "",
   });
+
+  const [submitting, setSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,16 +31,43 @@ const ProcessRequestModal = ({ isOpen, onClose, student }) => {
     setRequestData((prev) => ({ ...prev, pickupDate: date }));
   };
 
-  const handleCompleted = () => {
+  const handleCompleted = async () => {
     if (window.confirm("Mark this request as completed? The document has been released to the student/guardian.")) {
-      console.log("Request Completed:", requestData);
-      alert("Request marked as completed and moved to Completed Request History!");
-      onClose();
+      try {
+        setSubmitting(true);
+        
+        const response = await fetch(`${API_BASE_URL}/complete_request.php`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            requestId: student.id
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          alert("Request marked as completed and moved to Completed Request History!");
+          if (onRequestCompleted) {
+            onRequestCompleted();
+          }
+          onClose();
+        } else {
+          throw new Error(data.error || "Failed to complete request");
+        }
+      } catch (error) {
+        console.error("Error completing request:", error);
+        alert("Error: " + error.message);
+      } finally {
+        setSubmitting(false);
+      }
     }
   };
 
   const handleSendEmail = () => {
-    if (!requestData.recipientEmail) {
+    if (!requestData.email) {
       alert("Please provide an email address for notification.");
       return;
     }
@@ -51,7 +77,7 @@ const ProcessRequestModal = ({ isOpen, onClose, student }) => {
       return;
     }
 
-    if (window.confirm(`Send email notification to ${requestData.recipientEmail}?`)) {
+    if (window.confirm(`Send email notification to ${requestData.email}?`)) {
       sendEmailNotification(requestData);
       alert("Email notification sent successfully!");
     }
@@ -67,9 +93,9 @@ const ProcessRequestModal = ({ isOpen, onClose, student }) => {
     });
     
     const emailBody = `
-Dear ${data.parentGuardian},
+Dear Student/Guardian,
 
-Your requested document (${data.documentType}) for ${data.studentName} (${data.studentId}) is now ready for pickup.
+Your requested document (${data.documentType}) for ${data.studentName} is now ready for pickup.
 
 Pickup Details:
 - Date: ${pickupDateFormatted}
@@ -85,7 +111,7 @@ Gymnazo Christian Academy
 Registrar's Office
     `.trim();
 
-    console.log("Sending Email to:", data.recipientEmail);
+    console.log("Sending Email to:", data.email);
     console.log("Subject:", emailSubject);
     console.log("Body:", emailBody);
   };
@@ -106,8 +132,8 @@ Registrar's Office
         </div>
 
         <div className="p-4 pt-6 text-gray-800">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2 mb-6 text-sm">
-            <h4 className="col-span-1 lg:col-span-3 text-md font-extrabold text-blue-600 mb-2 border-b border-blue-100 pb-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 mb-6 text-sm">
+            <h4 className="col-span-1 sm:col-span-2 text-md font-extrabold text-blue-600 mb-2 border-b border-blue-100 pb-1">
               Student and Request Details
             </h4>
 
@@ -116,39 +142,28 @@ Registrar's Office
               {requestData.studentName}
             </p>
             <p>
-              <span className="font-bold">Parent / Guardian:</span>{" "}
-              {requestData.parentGuardian}
-            </p>
-            <p>
-              <span className="font-bold">Document Type:</span>{" "}
-              {requestData.documentType}
+              <span className="font-bold">Email:</span>{" "}
+              {requestData.email}
             </p>
 
             <p>
-              <span className="font-bold">Student ID:</span>{" "}
-              {requestData.studentId}
-            </p>
-            <p>
-              <span className="font-bold">Contact:</span> {requestData.contact}
+              <span className="font-bold">Document Type:</span>{" "}
+              {requestData.documentType}
             </p>
             <p>
               <span className="font-bold">Request Date:</span>{" "}
               {requestData.requestDate}
             </p>
 
-            <p>
-              <span className="font-bold">Grade & Section:</span>{" "}
-              {requestData.gradeSection}
-            </p>
-            <p className="col-span-2">
-              <span className="font-bold">Request Reason:</span>{" "}
-              {requestData.requestReason}
+            <p className="col-span-1 sm:col-span-2">
+              <span className="font-bold">Purpose:</span>{" "}
+              {requestData.purpose}
             </p>
           </div>
 
           <div className="mb-6 bg-blue-50 p-6 rounded-xl border border-blue-200 shadow-inner">
             <h4 className="text-lg font-extrabold text-gray-900 mb-4 flex items-center gap-2">
-              📅 Schedule Pickup/Delivery
+              📅 Schedule Pickup
             </h4>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -178,24 +193,6 @@ Registrar's Office
                   className="w-full px-3 py-2.5 border-2 border-gray-300 rounded-xl bg-white text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
                 />
               </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-bold text-gray-800 mb-2">
-                📧 Student Email *
-              </label>
-              <input
-                type="email"
-                name="recipientEmail"
-                value={requestData.recipientEmail}
-                onChange={handleInputChange}
-                placeholder="student@example.com"
-                className="w-full px-3 py-2.5 border-2 border-gray-300 rounded-xl bg-white text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
-                required
-              />
-              <p className="text-xs text-gray-600 mt-1 italic">
-                An email notification will be sent to the student with pickup details.
-              </p>
             </div>
 
             <div className="mb-4">
@@ -247,13 +244,15 @@ Registrar's Office
           <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
             <button
               onClick={handleCompleted}
-              className="px-6 py-2.5 text-sm font-semibold bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors shadow-md transform hover:scale-[1.02] active:scale-100"
+              disabled={submitting}
+              className="px-6 py-2.5 text-sm font-semibold bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors shadow-md transform hover:scale-[1.02] active:scale-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              ✓ Completed
+              {submitting ? "Processing..." : "✓ Completed"}
             </button>
             <button
               onClick={handleSendEmail}
-              className="px-6 py-2.5 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-md transform hover:scale-[1.02] active:scale-100"
+              disabled={submitting}
+              className="px-6 py-2.5 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-md transform hover:scale-[1.02] active:scale-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               📧 Send Email
             </button>

@@ -1,7 +1,6 @@
 <?php
 // db.php try
-class Database
-{
+class Database{
     private $host = 'localhost';
     private $db_name = 'aa';
     private $username = 'root';

@@ -113,39 +113,59 @@ const PaymentPortalPage = () => {
 
   const processPayment = async () => {
     try {
-      const formData = new FormData();
-      formData.append('transactionId', paymentDetails.transactionId);
-      formData.append('amount', paymentDetails.amount);
-      formData.append('method', paymentDetails.method);
-      formData.append('phoneNumber', paymentDetails.phoneNumber);
-      formData.append('reference', txnRef);
-      formData.append('paymentMode', paymentDetails.paymentMode);
-      formData.append('installmentNumber', paymentDetails.installmentNumber);
+      setLoading(true);
 
-      if (paymentDetails.receipt) {
-        formData.append('receipt', paymentDetails.receipt);
-      }
-
-      const response = await axios.post('/backend/api/transactions/submitPayment.php', formData, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      // Log the payment details for debugging
+      console.log('Processing payment with details:', {
+        transactionId: paymentDetails.transactionId,
+        amount: paymentDetails.amount,
+        paymentMode: paymentDetails.paymentMode,
+        method: paymentDetails.method,
+        reference: paymentDetails.reference,
+        phoneNumber: paymentDetails.phoneNumber
       });
 
-      // Refresh payment data after successful submission
-      if (response.data.success) {
-        await fetchPaymentData();
+      const formData = new FormData();
+      formData.append('transactionId', paymentDetails.transactionId);
+      formData.append('amount', paymentDetails.amount.toString());
+      formData.append('method', paymentDetails.method);
+      formData.append('reference', paymentDetails.reference || '');
+      formData.append('phoneNumber', paymentDetails.phoneNumber || '');
+      formData.append('paymentMode', paymentDetails.paymentMode || 'custom');
+      formData.append('installmentNumber', '1');
+
+      // Log FormData contents
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
       }
 
-      setTimeout(() => {
+      const response = await axios.post(
+        '/backend/api/transactions/submitPayment.php',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          withCredentials: true
+        }
+      );
+
+      console.log('Payment response:', response.data);
+
+      if (response.data.success) {
+        // Move to success step (step 7)
         setStep(7);
-      }, 2000);
+      } else {
+        setError(response.data.message || 'Payment submission failed');
+        setStep(1);
+      }
     } catch (error) {
       console.error('Payment submission error:', error);
-      setTimeout(() => {
-        setStep(7);
-      }, 2000);
+      console.error('Error response:', error.response?.data);
+      setError(error.response?.data?.message || 'Failed to submit payment. Please try again.');
+      setStep(1);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -183,6 +203,7 @@ const PaymentPortalPage = () => {
             onReturn={() => handleStepAction('close', null)}
             paymentDetails={paymentDetails}
             setPaymentDetails={setPaymentDetails}
+            transactionData={transactionData}
           />
         ) : null;
       case 2:

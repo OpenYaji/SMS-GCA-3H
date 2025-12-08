@@ -131,9 +131,17 @@ class TransactionController
 
         $userId = $_SESSION['user_id'];
 
+        // Log the incoming POST data for debugging
+        error_log("Submit Payment POST data: " . print_r($_POST, true));
+
         // Validate required fields
         if (!isset($_POST['transactionId']) || !isset($_POST['amount']) || !isset($_POST['method'])) {
-            $this->sendResponse(400, false, 'Missing required fields.');
+            $missingFields = [];
+            if (!isset($_POST['transactionId'])) $missingFields[] = 'transactionId';
+            if (!isset($_POST['amount'])) $missingFields[] = 'amount';
+            if (!isset($_POST['method'])) $missingFields[] = 'method';
+
+            $this->sendResponse(400, false, 'Missing required fields: ' . implode(', ', $missingFields));
             return;
         }
 
@@ -163,29 +171,43 @@ class TransactionController
             return;
         }
 
-        // Prepare payment data
+        // Generate unique reference number if not provided or empty
+        $reference = trim($_POST['reference'] ?? '');
+        if (empty($reference)) {
+            $reference = 'PAY-' . $_POST['transactionId'] . '-' . time() . '-' . rand(1000, 9999);
+        }
+
+        // Prepare payment data with defaults
         $paymentData = [
             'amount' => $paymentAmount,
             'method' => $_POST['method'],
-            'reference' => $_POST['reference'] ?? '',
+            'reference' => $reference,
             'phoneNumber' => $_POST['phoneNumber'] ?? '',
             'paymentMode' => $_POST['paymentMode'] ?? 'custom',
-            'installmentNumber' => intval($_POST['installmentNumber'] ?? 1)
+            'installmentNumber' => isset($_POST['installmentNumber']) ? intval($_POST['installmentNumber']) : 1
         ];
 
-        // Submit payment
-        $paymentId = $this->transaction->submitPayment(
-            $studentProfileId,
-            intval($_POST['transactionId']),
-            $paymentData
-        );
+        error_log("Submitting payment with data: " . print_r($paymentData, true));
 
-        if ($paymentId) {
-            $this->sendResponse(200, true, 'Payment submitted successfully.', [
-                'paymentId' => $paymentId
-            ]);
-        } else {
-            $this->sendResponse(500, false, 'Failed to submit payment.');
+        // Submit payment
+        try {
+            $paymentId = $this->transaction->submitPayment(
+                $studentProfileId,
+                intval($_POST['transactionId']),
+                $paymentData
+            );
+
+            if ($paymentId) {
+                $this->sendResponse(200, true, 'Payment submitted successfully.', [
+                    'paymentId' => $paymentId,
+                    'referenceNumber' => $reference
+                ]);
+            } else {
+                $this->sendResponse(500, false, 'Failed to submit payment. Check server logs for details.');
+            }
+        } catch (Exception $e) {
+            error_log("Error submitting payment: " . $e->getMessage());
+            $this->sendResponse(500, false, 'Failed to submit payment: ' . $e->getMessage());
         }
     }
 

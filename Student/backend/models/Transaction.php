@@ -85,7 +85,9 @@ class Transaction
         $query = "
             SELECT 
                 t.TransactionID, 
-                t.TotalAmount, 
+                t.TotalAmount,
+                t.PaymentMode,
+                gl.LevelName as GradeLevel,
                 
                 -- Calculate Real Paid Amount (Sum of Verified Payments)
                 (SELECT COALESCE(SUM(p.AmountPaid), 0) 
@@ -104,6 +106,9 @@ class Transaction
                 t.DueDate
             FROM transaction t
             JOIN schoolyear sy ON t.SchoolYearID = sy.SchoolYearID
+            LEFT JOIN enrollment e ON e.StudentProfileID = t.StudentProfileID AND e.SchoolYearID = t.SchoolYearID
+            LEFT JOIN section s ON s.SectionID = e.SectionID
+            LEFT JOIN gradelevel gl ON gl.GradeLevelID = s.GradeLevelID
             WHERE t.StudentProfileID = :student_profile_id AND sy.IsActive = 1
             LIMIT 1
         ";
@@ -186,10 +191,11 @@ class Transaction
             'totalAmount' => (float)$currentTransaction['TotalAmount'],
             'paidAmount' => (float)$currentTransaction['PaidAmount'],
             'balanceAmount' => (float)$currentTransaction['BalanceAmount'],
+            'paymentMode' => $currentTransaction['PaymentMode'] ?? 'full',
+            'gradeLevel' => $currentTransaction['GradeLevel'] ?? 'Grade 1',
             'availableItems' => $availableItems ?: []
         ];
     }
-
     /**
      * Get payment history for a student - includes all payments regardless of status
      */
@@ -223,39 +229,17 @@ class Transaction
     }
 
     /**
-     * Submit a new payment - Updated to handle partial payments
+     * Submit a new payment - Updated to handle partial payments with payment mode
      */
     public function submitPayment($studentProfileId, $transactionId, $paymentData)
     {
-        $insertQuery = "
-            INSERT INTO payment (
-                TransactionID, 
-                PaymentMethodID, 
-                AmountPaid, 
-                PaymentDateTime, 
-                ReferenceNumber,
-                VerificationStatus,
-                PaymentMode,
-                InstallmentNumber
-            ) VALUES (
-                :transaction_id,
-                :payment_method_id,
-                :amount_paid,
-                NOW(),
-                :reference_number,
-                'Pending',
-                :payment_mode,
-                :installment_number
-            )
-        ";
-
         try {
             $this->conn->beginTransaction();
 
             // Get payment method ID
             $methodId = $this->getPaymentMethodId($paymentData['method']);
             if (!$methodId) {
-                throw new Exception('Invalid payment method');
+                throw new Exception('Invalid payment method: ' . $paymentData['method']);
             }
 
             // Validate amount doesn't exceed balance
@@ -268,33 +252,96 @@ class Transaction
             $paymentAmount = floatval($paymentData['amount']);
 
             if ($paymentAmount > $balance) {
-                throw new Exception('Payment amount exceeds balance');
+                throw new Exception('Payment amount (' . $paymentAmount . ') exceeds balance (' . $balance . ')');
             }
 
             if ($paymentAmount <= 0) {
                 throw new Exception('Payment amount must be greater than zero');
             }
 
-            // Insert payment record
+            // Get payment mode and installment number with defaults
+            $paymentMode = $paymentData['paymentMode'] ?? 'custom';
+            $installmentNumber = isset($paymentData['installmentNumber']) ? intval($paymentData['installmentNumber']) : 1;
+
+            // Ensure reference is unique and not empty
+            $reference = trim($paymentData['reference'] ?? '');
+            if (empty($reference)) {
+                $reference = 'REF-' . $transactionId . '-' . time() . '-' . rand(1000, 9999);
+            }
+
+            // Check if reference already exists
+            $checkQuery = "SELECT COUNT(*) as count FROM payment WHERE ReferenceNumber = :reference";
+            $checkStmt = $this->conn->prepare($checkQuery);
+            $checkStmt->bindValue(':reference', $reference, PDO::PARAM_STR);
+            $checkStmt->execute();
+            $result = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result['count'] > 0) {
+                // Generate a new unique reference
+                $reference = 'REF-' . $transactionId . '-' . time() . '-' . rand(10000, 99999);
+            }
+
+            // Log what we're about to insert
+            error_log("Inserting payment: TransactionID={$transactionId}, MethodID={$methodId}, Amount={$paymentAmount}, Ref={$reference}, Mode={$paymentMode}, InstallNum={$installmentNumber}");
+
+            $insertQuery = "
+                INSERT INTO payment (
+                    TransactionID, 
+                    PaymentMethodID, 
+                    AmountPaid, 
+                    PaymentDateTime,  
+                    ReferenceNumber,
+                    VerificationStatus,
+                    PaymentMode,
+                    InstallmentNumber
+                ) VALUES (
+                    :transaction_id,
+                    :payment_method_id,
+                    :amount_paid,
+                    NOW(),
+                    :reference_number,
+                    'Pending',
+                    :payment_mode,
+                    :installment_number
+                )
+            ";
+
             $stmt = $this->conn->prepare($insertQuery);
-            $stmt->bindParam(':transaction_id', $transactionId, PDO::PARAM_INT);
-            $stmt->bindParam(':payment_method_id', $methodId, PDO::PARAM_INT);
-            $stmt->bindParam(':amount_paid', $paymentAmount, PDO::PARAM_STR);
-            $stmt->bindParam(':reference_number', $paymentData['reference'], PDO::PARAM_STR);
-            $stmt->bindParam(':payment_mode', $paymentData['paymentMode'], PDO::PARAM_STR);
-            $stmt->bindParam(':installment_number', $paymentData['installmentNumber'], PDO::PARAM_INT);
-            $stmt->execute();
+
+            // Bind parameters with explicit types
+            $stmt->bindValue(':transaction_id', $transactionId, PDO::PARAM_INT);
+            $stmt->bindValue(':payment_method_id', $methodId, PDO::PARAM_INT);
+            $stmt->bindValue(':amount_paid', $paymentAmount, PDO::PARAM_STR);
+            $stmt->bindValue(':reference_number', $reference, PDO::PARAM_STR);
+            $stmt->bindValue(':payment_mode', $paymentMode, PDO::PARAM_STR);
+            $stmt->bindValue(':installment_number', $installmentNumber, PDO::PARAM_INT);
+
+            $result = $stmt->execute();
+
+            if (!$result) {
+                $errorInfo = $stmt->errorInfo();
+                throw new Exception('Failed to insert payment: ' . implode(', ', $errorInfo));
+            }
+
             $paymentId = $this->conn->lastInsertId();
+            error_log("Payment inserted successfully with ID: {$paymentId}");
 
             // Update transaction status based on remaining balance
             $this->updateTransactionStatus($transactionId);
 
             $this->conn->commit();
             return $paymentId;
+        } catch (PDOException $e) {
+            $this->conn->rollBack();
+            error_log("PDO Error in submitPayment: " . $e->getMessage());
+            error_log("Error Code: " . $e->getCode());
+            error_log("SQL State: " . ($e->errorInfo[0] ?? 'unknown'));
+            throw $e; // Re-throw to be caught by controller
+
         } catch (Exception $e) {
             $this->conn->rollBack();
             error_log("Error in submitPayment: " . $e->getMessage());
-            return false;
+            throw $e; // Re-throw to be caught by controller
         }
     }
 

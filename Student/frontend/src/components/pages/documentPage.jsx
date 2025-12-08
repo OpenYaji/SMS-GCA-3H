@@ -164,7 +164,7 @@ const DocumentPage = () => {
 
               {submitSuccess && (
                 <div className="mb-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-500 rounded-lg text-green-700 dark:text-green-200 text-sm">
-                  Request submitted successfully! We'll process it within 3-5 business days.
+                  Request submitted successfully! We'll process it within 1-3 business days.
                 </div>
               )}
 
@@ -314,7 +314,7 @@ const DocumentPage = () => {
               <ul className="space-y-3 text-sm text-gray-600 dark:text-gray-400">
                 <li className="flex gap-2">
                   <span className="text-amber-400 mt-0.5">•</span>
-                  <span>Processing time: 3-5 business days</span>
+                  <span>Processing time: 1-3 business days</span>
                 </li>
                 <li className="flex gap-2">
                   <span className="text-amber-400 mt-0.5">•</span>

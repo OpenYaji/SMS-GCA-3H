@@ -80,7 +80,7 @@ class Mailer
             }
 
             $this->mail->isHTML(true);
-            $this->mail->Subject = '📋 Next Step: Document Submission Required - Gymnazo Christian Academy';
+            $this->mail->Subject = 'Next Step: Document Submission Required - Gymnazo Christian Academy';
             $this->mail->Body = $this->getScreeningNotificationTemplate($applicationData);
             $this->mail->AltBody = $this->getScreeningNotificationPlainText($applicationData);
 
@@ -148,7 +148,7 @@ class Mailer
             }
 
             $this->mail->isHTML(true);
-            $this->mail->Subject = '🎓 Enrollment Confirmed - Welcome to Gymnazo Christian Academy!';
+            $this->mail->Subject = ' Enrollment Confirmed - Welcome to Gymnazo Christian Academy!';
             $this->mail->Body = $this->getEnrollmentConfirmationTemplate($enrollmentData, $qrResult);
             $this->mail->AltBody = $this->getEnrollmentConfirmationPlainText($enrollmentData);
 
@@ -466,7 +466,7 @@ class Mailer
         <body>
             <div class='container'>
                 <div class='header'>
-                    <h1>🎓 Welcome to GCA!</h1>
+                    <h1> Welcome to GCA!</h1>
                     <p>Enrollment Confirmed</p>
                 </div>
                 
@@ -474,11 +474,11 @@ class Mailer
                     <p>Dear <strong>{$guardianName}</strong>,</p>
                     
                     <div class='highlight-box success-box'>
-                        <h2 style='margin-top:0; color: #065f46;'>🎉 Enrollment Complete!</h2>
+                        <h2 style='margin-top:0; color: #065f46;'> Enrollment Complete!</h2>
                         <p>Congratulations! **{$studentName}** is now officially enrolled at **Gymnazo Christian Academy** for Grade {$gradeLevel}.</p>
                     </div>
                     
-                    <h3 style='color: #4f46e5; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; margin-top: 30px;'>📋 Student Information</h3>
+                    <h3 style='color: #4f46e5; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; margin-top: 30px;'> Student Information</h3>
                     <table class='data-table'>
                         <tr>
                             <th>Student Name:</th>
@@ -501,7 +501,7 @@ class Mailer
                     {$qrCodeSection}
 
                     <div class='highlight-box warning-box'>
-                        <h3 style='margin-top:0; color: #dc2626;'>🔐 Student Portal Login Credentials</h3>
+                        <h3 style='margin-top:0; color: #dc2626;'>Student Portal Login Credentials</h3>
                         <p style='font-size: 13px; color: #7f1d1d;'>**Important:** You must change your default password immediately upon first login for security.</p>
                         
                         <table style='width: 100%; margin-top: 10px;'>
@@ -516,7 +516,7 @@ class Mailer
                         </table>
                     </div>
                     
-                    <h3 style='color: #4f46e5; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; margin-top: 30px;'>📚 Assigned Subjects</h3>
+                    <h3 style='color: #4f46e5; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; margin-top: 30px;'> Assigned Subjects</h3>
                     <div style='background: #eef2ff; padding: 15px; border-radius: 4px;'>
                         <ul class='step-list' style='padding-left: 20px;'>{$subjectsList}</ul>
                     </div>

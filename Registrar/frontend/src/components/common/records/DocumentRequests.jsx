@@ -144,69 +144,7 @@ const DocumentRequests = () => {
             📋 Document Requests
           </h2>
 
-          {/* Filter Bar */}
-          <div className="bg-gradient-to-r from-amber-900 via-amber-800 to-stone-900 rounded-xl p-4 flex flex-wrap gap-4 items-center shadow-xl">
-            <div className="flex items-center gap-2">
-              <label className="text-white text-sm font-bold">Document Type:</label>
-              <select
-                value={filters.documentType}
-                onChange={(e) => handleFilterChange("documentType", e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
-              >
-                <option value="all">All Types</option>
-                <option value="form137">Form 137</option>
-                <option value="goodmoral">Good Moral Certificate</option>
-                <option value="enrollment">Certificate of Enrollment</option>
-                <option value="diploma">Diploma</option>
-              </select>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <label className="text-white text-sm font-bold">Grade Level:</label>
-              <select
-                value={filters.gradeLevel}
-                onChange={(e) => handleFilterChange("gradeLevel", e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
-              >
-                <option value="all">All Grades</option>
-                <option value="7">Grade 7</option>
-                <option value="8">Grade 8</option>
-                <option value="9">Grade 9</option>
-                <option value="10">Grade 10</option>
-              </select>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <label className="text-white text-sm font-bold">Status:</label>
-              <select
-                value={filters.status}
-                onChange={(e) => handleFilterChange("status", e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
-              >
-                <option value="all">All Statuses</option>
-                <option value="pending">Pending</option>
-                <option value="processing">Processing</option>
-                <option value="ready">Ready</option>
-              </select>
-            </div>
-
-            <div className="ml-auto flex gap-2">
-              <button
-                onClick={handleExportList}
-                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
-              >
-                <span className="text-lg">📄</span>
-                <span className="text-sm font-bold">Export List</span>
-              </button>
-              <button
-                onClick={handleProcessSelected}
-                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
-              >
-                <span className="text-lg">✓</span>
-                <span className="text-sm font-bold">Process Selected</span>
-              </button>
-            </div>
-          </div>
+          
         </div>
 
         {/* Statistics Cards */}

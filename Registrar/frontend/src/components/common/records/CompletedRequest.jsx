@@ -13,6 +13,7 @@ const CompletedRequestHistory = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     documentType: "all",
     gradeLevel: "all",
@@ -50,8 +51,57 @@ const CompletedRequestHistory = () => {
     }
   };
 
+  // Filtering logic
+  const filteredRequests = requests.filter(req => {
+    // Search term filter
+    const matchesSearch = !searchTerm || 
+      (req.studentName && req.studentName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (req.studentId && req.studentId.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (req.documentType && req.documentType.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (req.requestPurpose && req.requestPurpose.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    // Document type filter
+    const matchesDocType = filters.documentType === 'all' || 
+      (req.documentType && req.documentType === filters.documentType);
+    
+    // Grade level filter
+    const matchesGradeLevel = filters.gradeLevel === 'all' || 
+      (req.gradeLevel && req.gradeLevel.toString() === filters.gradeLevel);
+    
+    // Date range filter
+    let matchesDateRange = true;
+    if (filters.dateRange !== 'all' && req.requestDate) {
+      const requestDate = new Date(req.requestDate);
+      const now = new Date();
+      
+      switch(filters.dateRange) {
+        case 'today':
+          matchesDateRange = requestDate.toDateString() === now.toDateString();
+          break;
+        case 'this-week':
+          const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+          matchesDateRange = requestDate >= startOfWeek;
+          break;
+        case 'this-month':
+          matchesDateRange = 
+            requestDate.getMonth() === now.getMonth() && 
+            requestDate.getFullYear() === now.getFullYear();
+          break;
+        case 'last-month':
+          const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+          const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+          matchesDateRange = requestDate >= lastMonth && requestDate <= endOfLastMonth;
+          break;
+        default:
+          matchesDateRange = true;
+      }
+    }
+    
+    return matchesSearch && matchesDocType && matchesGradeLevel && matchesDateRange;
+  });
+
   const handleSelectAll = (e) => {
-    setSelectedRequests(e.target.checked ? requests.map((r) => r.id) : []);
+    setSelectedRequests(e.target.checked ? filteredRequests.map((r) => r.id) : []);
   };
 
   const handleSelectRequest = (requestId) => {
@@ -93,15 +143,22 @@ const CompletedRequestHistory = () => {
     fetchCompletedRequests(); // Refresh list after archiving
   };
 
-  // Calculate stats
+  const handleClearSearch = () => {
+    setSearchTerm("");
+  };
+
+  // Calculate stats based on filtered requests
   const stats = {
-    total: requests.length,
-    thisMonth: requests.filter(r => {
+    total: filteredRequests.length,
+    thisMonth: filteredRequests.filter(r => {
+      if (!r.requestDate) return false;
       const requestDate = new Date(r.requestDate);
       const now = new Date();
       return requestDate.getMonth() === now.getMonth() && 
              requestDate.getFullYear() === now.getFullYear();
-    }).length
+    }).length,
+    form137: filteredRequests.filter(r => r.documentType && r.documentType.includes('Form 137')).length,
+    certificates: filteredRequests.filter(r => r.documentType && r.documentType.includes('Certificate')).length,
   };
 
   if (loading) {
@@ -150,10 +207,11 @@ const CompletedRequestHistory = () => {
                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Types</option>
-                <option value="form137">Form 137</option>
-                <option value="goodmoral">Good Moral Certificate</option>
-                <option value="enrollment">Certificate of Enrollment</option>
-                <option value="diploma">Diploma</option>
+                <option value="Form 137">Form 137</option>
+                <option value="Good Moral Certificate">Good Moral Certificate</option>
+                <option value="Certificate of Enrollment">Certificate of Enrollment</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Transcript of Records">Transcript of Records</option>
               </select>
             </div>
 
@@ -203,8 +261,38 @@ const CompletedRequestHistory = () => {
               </button>
             </div>
           </div>
+
+          {/* Search Bar */}
+          <div className="mt-6">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search by name, ID, document type, or purpose..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-3 pl-12 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+              />
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                🔍
+              </div>
+              {searchTerm && (
+                <button
+                  onClick={handleClearSearch}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+            {searchTerm && (
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                Found {filteredRequests.length} request{filteredRequests.length !== 1 ? 's' : ''} matching "{searchTerm}"
+              </p>
+            )}
+          </div>
         </div>
 
+        {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
             <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
@@ -213,7 +301,7 @@ const CompletedRequestHistory = () => {
             <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
               {stats.total}
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">All Time</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Filtered Results</p>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
             <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
@@ -226,24 +314,25 @@ const CompletedRequestHistory = () => {
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
             <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
-              Avg. Processing Time
+              Form 137
             </h3>
             <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
-              3
+              {stats.form137}
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Days</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Requests</p>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
             <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
-              Most Requested
+              Certificates
             </h3>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
-              Form 137
+            <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
+              {stats.certificates}
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Document Type</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Requests</p>
           </div>
         </div>
 
+        {/* Table */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-x-auto hover:shadow-2xl transition-all duration-300">
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700">
@@ -251,7 +340,8 @@ const CompletedRequestHistory = () => {
                 <th className="px-6 py-4 text-left">
                   <input
                     type="checkbox"
-                    checked={requests.length > 0 && selectedRequests.length === requests.length}
+                    checked={filteredRequests.length > 0 && 
+                      filteredRequests.every(req => selectedRequests.includes(req.id))}
                     onChange={handleSelectAll}
                     className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                   />
@@ -286,7 +376,7 @@ const CompletedRequestHistory = () => {
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {requests.map((request) => (
+              {filteredRequests.map((request) => (
                 <tr
                   key={request.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
@@ -300,29 +390,29 @@ const CompletedRequestHistory = () => {
                     />
                   </td>
                   <td className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">
-                    {request.studentName}
+                    {request.studentName || "N/A"}
                   </td>
                   <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
-                    {request.studentId}
+                    {request.studentId || "N/A"}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.documentType}
+                    {request.documentType || "N/A"}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.requestPurpose}
+                    {request.requestPurpose || "N/A"}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.requestDate}
+                    {request.requestDate || "N/A"}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.completedDate}
+                    {request.completedDate || "N/A"}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.pickupDate}
+                    {request.pickupDate || "N/A"}
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">
-                      {request.status}
+                    <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full shadow-sm">
+                      {request.status || "Completed"}
                     </span>
                   </td>
                   <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
@@ -339,15 +429,36 @@ const CompletedRequestHistory = () => {
           </table>
         </div>
 
-        {requests.length === 0 && (
+        {filteredRequests.length === 0 && (
           <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-6">
-            <div className="text-gray-400 text-5xl mb-4">📋</div>
+            <div className="text-gray-400 text-5xl mb-4">
+              {searchTerm || Object.values(filters).some(f => f !== 'all') ? "🔍" : "📋"}
+            </div>
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              No completed requests found
+              {searchTerm || Object.values(filters).some(f => f !== 'all') 
+                ? "No matching completed requests found" 
+                : "No completed requests found"}
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Completed document requests will appear here.
+              {searchTerm || Object.values(filters).some(f => f !== 'all') 
+                ? "Try adjusting your search or filters" 
+                : "Completed document requests will appear here."}
             </p>
+            {(searchTerm || Object.values(filters).some(f => f !== 'all')) && (
+              <button
+                onClick={() => {
+                  setSearchTerm("");
+                  setFilters({
+                    documentType: "all",
+                    gradeLevel: "all",
+                    dateRange: "all",
+                  });
+                }}
+                className="mt-4 px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+              >
+                Clear All Filters
+              </button>
+            )}
           </div>
         )}
       </div>

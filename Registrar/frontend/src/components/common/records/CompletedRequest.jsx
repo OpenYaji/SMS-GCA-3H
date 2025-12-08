@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import CompletedRequestInfoModal from "./CompletedRequestInfo";
+import { useDarkMode } from "../../DarkModeProvider";
 
 const API_BASE_URL = "http://localhost/SMS-GCA-3H/Registrar/backend/api/records";
 
@@ -17,6 +18,8 @@ const CompletedRequestHistory = () => {
     gradeLevel: "all",
     dateRange: "all",
   });
+
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     fetchCompletedRequests();
@@ -103,10 +106,10 @@ const CompletedRequestHistory = () => {
 
   if (loading) {
     return (
-      <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-4">⏳</div>
-          <p className="text-gray-600 font-medium">Loading completed requests...</p>
+          <p className="text-gray-600 dark:text-gray-300 font-medium">Loading completed requests...</p>
         </div>
       </div>
     );
@@ -114,14 +117,14 @@ const CompletedRequestHistory = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
-        <div className="text-center bg-red-50 p-6 rounded-xl border-2 border-red-200">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+        <div className="text-center bg-red-50 dark:bg-red-900/20 p-6 rounded-xl border-2 border-red-200 dark:border-red-800">
           <div className="text-5xl mb-4">⚠️</div>
-          <h3 className="text-lg font-bold text-red-900 mb-2">Error Loading Completed Requests</h3>
-          <p className="text-red-700">{error}</p>
+          <h3 className="text-lg font-bold text-red-900 dark:text-red-300 mb-2">Error Loading Completed Requests</h3>
+          <p className="text-red-700 dark:text-red-400">{error}</p>
           <button 
             onClick={fetchCompletedRequests}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            className="mt-4 px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600"
           >
             Try Again
           </button>
@@ -131,10 +134,10 @@ const CompletedRequestHistory = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans">
       <div className="max-w-7xl mx-auto animate-fadeIn">
-        <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 mb-6 transition-all duration-300">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 tracking-tight">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6 transition-all duration-300">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
             ✅ Completed Request History
           </h2>
 
@@ -144,7 +147,7 @@ const CompletedRequestHistory = () => {
               <select
                 value={filters.documentType}
                 onChange={(e) => handleFilterChange("documentType", e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Types</option>
                 <option value="form137">Form 137</option>
@@ -159,7 +162,7 @@ const CompletedRequestHistory = () => {
               <select
                 value={filters.gradeLevel}
                 onChange={(e) => handleFilterChange("gradeLevel", e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Grades</option>
                 {[1,2,3,4,5,6,7,8,9,10].map(grade => (
@@ -173,7 +176,7 @@ const CompletedRequestHistory = () => {
               <select
                 value={filters.dateRange}
                 onChange={(e) => handleFilterChange("dateRange", e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
@@ -186,14 +189,14 @@ const CompletedRequestHistory = () => {
             <div className="ml-auto flex gap-2">
               <button
                 onClick={handleExportList}
-                className="flex items-center gap-2 px-5 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
               >
                 <span className="text-lg">📄</span>
                 <span className="text-sm font-bold">Export Report</span>
               </button>
               <button
                 onClick={handleBulkArchive}
-                className="flex items-center gap-2 px-5 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
               >
                 <span className="text-lg">📦</span>
                 <span className="text-sm font-bold">Archive Selected</span>
@@ -203,129 +206,129 @@ const CompletedRequestHistory = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 text-sm font-bold mb-2 tracking-wide uppercase">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
+            <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
               Total Completed
             </h3>
-            <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
+            <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
               {stats.total}
             </p>
-            <p className="text-sm text-gray-600 font-medium">All Time</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">All Time</p>
           </div>
-          <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 text-sm font-bold mb-2 tracking-wide uppercase">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
+            <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
               This Month
             </h3>
-            <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
+            <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
               {stats.thisMonth}
             </p>
-            <p className="text-sm text-gray-600 font-medium">Requests</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Requests</p>
           </div>
-          <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 text-sm font-bold mb-2 tracking-wide uppercase">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
+            <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
               Avg. Processing Time
             </h3>
-            <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
+            <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
               3
             </p>
-            <p className="text-sm text-gray-600 font-medium">Days</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Days</p>
           </div>
-          <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 text-sm font-bold mb-2 tracking-wide uppercase">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
+            <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
               Most Requested
             </h3>
-            <p className="text-2xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
+            <p className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
               Form 137
             </p>
-            <p className="text-sm text-gray-600 font-medium">Document Type</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Document Type</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 overflow-x-auto hover:shadow-2xl transition-all duration-300">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-x-auto hover:shadow-2xl transition-all duration-300">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b-2 border-gray-200">
+            <thead className="bg-gray-50 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700">
               <tr>
                 <th className="px-6 py-4 text-left">
                   <input
                     type="checkbox"
                     checked={requests.length > 0 && selectedRequests.length === requests.length}
                     onChange={handleSelectAll}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer"
+                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                   />
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Student Name
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Student ID
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Document Type
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Request Purpose
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Request Date
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Completed Date
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Pickup Date
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {requests.map((request) => (
                 <tr
                   key={request.id}
-                  className="hover:bg-gray-50 transition-all duration-200"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
                 >
                   <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                     <input
                       type="checkbox"
                       checked={selectedRequests.includes(request.id)}
                       onChange={() => handleSelectRequest(request.id)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer"
+                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                     />
                   </td>
-                  <td className="px-6 py-4 text-sm font-bold text-gray-900">
+                  <td className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">
                     {request.studentName}
                   </td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
                     {request.studentId}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.documentType}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.requestPurpose}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.requestDate}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.completedDate}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.pickupDate}
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-sm text-gray-600 font-medium">
+                    <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">
                       {request.status}
                     </span>
                   </td>
                   <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => handleRowClick(request)}
-                      className="px-3 py-1.5 text-xs font-semibold bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg shadow-sm transition-all duration-300 hover:-translate-y-0.5"
+                      className="px-3 py-1.5 text-xs font-semibold bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-400 rounded-lg shadow-sm transition-all duration-300 hover:-translate-y-0.5"
                     >
                       👁️ View Details
                     </button>
@@ -337,12 +340,12 @@ const CompletedRequestHistory = () => {
         </div>
 
         {requests.length === 0 && (
-          <div className="text-center py-12 bg-white rounded-xl shadow-md mt-6">
+          <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-6">
             <div className="text-gray-400 text-5xl mb-4">📋</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
               No completed requests found
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Completed document requests will appear here.
             </p>
           </div>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import ProcessRequestModal from "./ProcessRequestModal";
+import { useDarkMode } from "../../DarkModeProvider";
 
 const API_BASE_URL = "http://localhost/SMS-GCA-3H/Registrar/backend/api/records";
 
@@ -17,6 +18,8 @@ const DocumentRequests = () => {
     gradeLevel: "all",
     status: "all",
   });
+
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     fetchRequests();
@@ -105,10 +108,10 @@ const DocumentRequests = () => {
 
   if (loading) {
     return (
-      <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-4">⏳</div>
-          <p className="text-gray-600 font-medium">Loading requests...</p>
+          <p className="text-gray-600 dark:text-gray-300 font-medium">Loading requests...</p>
         </div>
       </div>
     );
@@ -116,14 +119,14 @@ const DocumentRequests = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
-        <div className="text-center bg-red-50 p-6 rounded-xl border-2 border-red-200">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+        <div className="text-center bg-red-50 dark:bg-red-900/20 p-6 rounded-xl border-2 border-red-200 dark:border-red-800">
           <div className="text-5xl mb-4">⚠️</div>
-          <h3 className="text-lg font-bold text-red-900 mb-2">Error Loading Requests</h3>
-          <p className="text-red-700">{error}</p>
+          <h3 className="text-lg font-bold text-red-900 dark:text-red-300 mb-2">Error Loading Requests</h3>
+          <p className="text-red-700 dark:text-red-400">{error}</p>
           <button 
             onClick={fetchRequests}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            className="mt-4 px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600"
           >
             Try Again
           </button>
@@ -133,11 +136,11 @@ const DocumentRequests = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans">
       <div className="max-w-7xl mx-auto animate-fadeIn">
         {/* Header Section */}
-        <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 mb-6 transition-all duration-300">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 tracking-tight">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6 transition-all duration-300">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
             📋 Document Requests
           </h2>
 
@@ -148,7 +151,7 @@ const DocumentRequests = () => {
               <select
                 value={filters.documentType}
                 onChange={(e) => handleFilterChange("documentType", e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Types</option>
                 <option value="form137">Form 137</option>
@@ -163,7 +166,7 @@ const DocumentRequests = () => {
               <select
                 value={filters.gradeLevel}
                 onChange={(e) => handleFilterChange("gradeLevel", e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Grades</option>
                 <option value="7">Grade 7</option>
@@ -178,7 +181,7 @@ const DocumentRequests = () => {
               <select
                 value={filters.status}
                 onChange={(e) => handleFilterChange("status", e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Statuses</option>
                 <option value="pending">Pending</option>
@@ -190,14 +193,14 @@ const DocumentRequests = () => {
             <div className="ml-auto flex gap-2">
               <button
                 onClick={handleExportList}
-                className="flex items-center gap-2 px-5 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
               >
                 <span className="text-lg">📄</span>
                 <span className="text-sm font-bold">Export List</span>
               </button>
               <button
                 onClick={handleProcessSelected}
-                className="flex items-center gap-2 px-5 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
               >
                 <span className="text-lg">✓</span>
                 <span className="text-sm font-bold">Process Selected</span>
@@ -208,49 +211,33 @@ const DocumentRequests = () => {
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 text-sm font-bold mb-2 tracking-wide uppercase">
-              Pending Requests
-            </h3>
-            <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              {stats.pending}
-            </p>
-          </div>
-          <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 text-sm font-bold mb-2 tracking-wide uppercase">
-              Form 137 Requests
-            </h3>
-            <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              {stats.form137}
-            </p>
-          </div>
-          <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 text-sm font-bold mb-2 tracking-wide uppercase">
-              Certificates
-            </h3>
-            <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              {stats.certificates}
-            </p>
-          </div>
-          <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 text-sm font-bold mb-2 tracking-wide uppercase">
-              Other Documents
-            </h3>
-            <p className="text-5xl font-bold text-gray-900 mb-3 group-hover:scale-110 transition-transform">
-              {stats.other}
-            </p>
-          </div>
+          {[stats.pending, stats.form137, stats.certificates, stats.other].map((stat, index) => {
+            const titles = ["Pending Requests", "Form 137 Requests", "Certificates", "Other Documents"];
+            return (
+              <div 
+                key={index}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer"
+              >
+                <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
+                  {titles[index]}
+                </h3>
+                <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
+                  {stat}
+                </p>
+              </div>
+            );
+          })}
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-xl shadow-lg border-2 border-gray-200 overflow-x-auto hover:shadow-2xl transition-all duration-300">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-x-auto hover:shadow-2xl transition-all duration-300">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
                 <th className="px-6 py-3 text-left w-12">
                   <input
                     type="checkbox"
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700"
                     checked={
                       students.length > 0 &&
                       selectedStudents.length === students.length
@@ -258,67 +245,67 @@ const DocumentRequests = () => {
                     onChange={handleSelectAll}
                   />
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Student Name
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Document Type
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Purpose
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Request Date
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {students.map((student) => (
                 <tr
                   key={student.id}
-                  className="hover:bg-gray-50 transition-all duration-200 hover:scale-[1.01]"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-[1.01]"
                 >
                   <td className="px-6 py-4 w-12">
                     <input
                       type="checkbox"
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700"
                       checked={selectedStudents.includes(student.id)}
                       onChange={() => handleSelectStudent(student.id)}
                     />
                   </td>
-                  <td className="px-6 py-4 text-sm font-bold text-gray-900">
+                  <td className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">
                     {student.studentName}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {student.email}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {student.documentType}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {student.purpose}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {student.date}
                   </td>
                   <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full shadow-sm">
+                    <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 rounded-full shadow-sm">
                       {student.status}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <button
                       onClick={() => handleProcessRequest(student)}
-                      className="px-4 py-1.5 text-xs font-semibold bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-colors shadow-sm"
+                      className="px-4 py-1.5 text-xs font-semibold bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors shadow-sm"
                     >
                       📝 Process
                     </button>
@@ -330,12 +317,12 @@ const DocumentRequests = () => {
         </div>
 
         {students.length === 0 && (
-          <div className="text-center py-12 bg-white rounded-xl shadow-md mt-6">
+          <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-6">
             <div className="text-gray-400 text-5xl mb-4">📋</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
               No document requests found
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               No pending document requests at the moment.
             </p>
           </div>

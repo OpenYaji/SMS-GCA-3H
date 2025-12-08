@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import ViewStudentInfoModal from "./ViewStudentInfoModal";
+import { useDarkMode } from "../../DarkModeProvider";
 
 const API_BASE_URL = "http://localhost/SMS-GCA-3H/Registrar/backend/api/records";
 
@@ -17,6 +18,8 @@ const ArchiveSearch = () => {
     exitType: "all",
   });
   const [selectedRecords, setSelectedRecords] = useState([]);
+
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     const prev = document.body.style.fontFamily;
@@ -88,10 +91,10 @@ const ArchiveSearch = () => {
 
   if (loading) {
     return (
-      <div className="bg-white p-8 font-sans min-h-screen flex items-center justify-center">
+      <div className="bg-white dark:bg-gray-900 p-8 font-sans min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-4">⏳</div>
-          <p className="text-gray-600 font-medium">Loading archived records...</p>
+          <p className="text-gray-600 dark:text-gray-300 font-medium">Loading archived records...</p>
         </div>
       </div>
     );
@@ -99,14 +102,14 @@ const ArchiveSearch = () => {
 
   if (error) {
     return (
-      <div className="bg-white p-8 font-sans min-h-screen flex items-center justify-center">
-        <div className="text-center bg-red-50 p-6 rounded-xl border-2 border-red-200">
+      <div className="bg-white dark:bg-gray-900 p-8 font-sans min-h-screen flex items-center justify-center">
+        <div className="text-center bg-red-50 dark:bg-red-900/20 p-6 rounded-xl border-2 border-red-200 dark:border-red-800">
           <div className="text-5xl mb-4">⚠️</div>
-          <h3 className="text-lg font-bold text-red-900 mb-2">Error Loading Archives</h3>
-          <p className="text-red-700">{error}</p>
+          <h3 className="text-lg font-bold text-red-900 dark:text-red-300 mb-2">Error Loading Archives</h3>
+          <p className="text-red-700 dark:text-red-400">{error}</p>
           <button 
             onClick={fetchArchivedRecords}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            className="mt-4 px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600"
           >
             Try Again
           </button>
@@ -116,23 +119,23 @@ const ArchiveSearch = () => {
   }
 
   return (
-    <div className="bg-white p-8 font-sans">
+    <div className="bg-white dark:bg-gray-900 p-8 font-sans">
       <div className="max-w-7xl mx-auto animate-fadeIn">
         {/* Header with Title and Buttons */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
             Student Records Archive Search
           </h2>
           <div className="flex gap-3">
             <button
               onClick={handleViewArchiveLog}
-              className="px-5 py-2.5 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 text-sm font-semibold text-gray-700 transition-all duration-300 shadow-md hover:shadow-lg"
+              className="px-5 py-2.5 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-600 text-sm font-semibold text-gray-700 dark:text-gray-300 transition-all duration-300 shadow-md hover:shadow-lg"
             >
               📋 View Archive Log
             </button>
             <button
               onClick={handleExportResults}
-              className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+              className="px-5 py-2.5 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
             >
               📊 Export Search Results
             </button>
@@ -140,8 +143,8 @@ const ArchiveSearch = () => {
         </div>
 
         {/* Yellow Search Box */}
-        <div className="bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-100 p-6 rounded-xl mb-6 shadow-sm">
-          <label className="block text-sm font-bold text-gray-800 mb-3">
+        <div className="bg-gradient-to-br from-yellow-100 dark:from-yellow-900/30 via-yellow-50 dark:via-yellow-900/20 to-yellow-100 dark:to-yellow-900/30 p-6 rounded-xl mb-6 shadow-sm">
+          <label className="block text-sm font-bold text-gray-800 dark:text-gray-300 mb-3">
             Search Student Records
           </label>
           <div className="flex gap-3">
@@ -150,14 +153,14 @@ const ArchiveSearch = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Enter Student name, ID, or other details"
-              className="flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-lg bg-white text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              className="flex-1 px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
             />
             <select
               value={filters.schoolYear}
               onChange={(e) =>
                 setFilters({ ...filters, schoolYear: e.target.value })
               }
-              className="px-4 py-2.5 border-2 border-gray-300 rounded-lg bg-white text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              className="px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
             >
               <option value="all">All Years</option>
               <option value="2024-2025">2024-2025</option>
@@ -168,7 +171,7 @@ const ArchiveSearch = () => {
               onChange={(e) =>
                 setFilters({ ...filters, exitType: e.target.value })
               }
-              className="px-4 py-2.5 border-2 border-gray-300 rounded-lg bg-white text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              className="px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
             >
               <option value="all">All Types</option>
               <option value="transfer">Transfer Out</option>
@@ -177,7 +180,7 @@ const ArchiveSearch = () => {
             </select>
             <button
               onClick={handleSearchArchive}
-              className="px-6 py-2.5 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg"
+              className="px-6 py-2.5 bg-green-500 dark:bg-green-600 text-white rounded-lg hover:bg-green-600 dark:hover:bg-green-500 text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg"
             >
               🔍 Search Archive
             </button>
@@ -185,7 +188,7 @@ const ArchiveSearch = () => {
         </div>
 
         {/* Statistics Cards - Yellow Background */}
-        <div className="grid grid-cols-4 gap-4 bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-100 p-6 rounded-xl mb-6 shadow-sm">
+        <div className="grid grid-cols-4 gap-4 bg-gradient-to-br from-yellow-100 dark:from-yellow-900/30 via-yellow-50 dark:via-yellow-900/20 to-yellow-100 dark:to-yellow-900/30 p-6 rounded-xl mb-6 shadow-sm">
           {[
             { label: "Total Archived Records", value: stats.total.toString() },
             { label: "Graduated Students", value: stats.graduated.toString() },
@@ -193,10 +196,10 @@ const ArchiveSearch = () => {
       
           ].map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-5xl font-black text-blue-600 mb-1">
+              <div className="text-5xl font-black text-blue-600 dark:text-blue-400 mb-1">
                 {stat.value}
               </div>
-              <div className="text-xs text-gray-700 font-bold">
+              <div className="text-xs text-gray-700 dark:text-gray-300 font-bold">
                 {stat.label}
               </div>
             </div>
@@ -204,14 +207,14 @@ const ArchiveSearch = () => {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
               <tr>
                 <th className="px-6 py-4 text-left w-12">
                   <input
                     type="checkbox"
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer"
+                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                     checked={
                       archivedRecords.length > 0 &&
                       selectedRecords.length === archivedRecords.length
@@ -230,45 +233,45 @@ const ArchiveSearch = () => {
                 ].map((heading, i) => (
                   <th
                     key={i}
-                    className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wide"
+                    className="px-6 py-4 text-left text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wide"
                   >
                     {heading}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
+            <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800">
               {archivedRecords.map((record) => (
                 <tr
                   key={record.id}
-                  className="hover:bg-gray-50 transition-all duration-150"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-150"
                 >
                   <td className="px-6 py-4">
                     <input
                       type="checkbox"
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer"
+                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                       checked={selectedRecords.includes(record.id)}
                       onChange={() => handleSelectRecord(record.id)}
                     />
                   </td>
-                  <td className="px-6 py-4 font-semibold text-gray-900">
+                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                     {record.studentName}
                   </td>
-                  <td className="px-6 py-4 text-gray-700 font-medium">
+                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300 font-medium">
                     {record.studentId}
                   </td>
-                  <td className="px-6 py-4 text-gray-700">
+                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">
                     {record.lastGradeLevel}
                   </td>
-                  <td className="px-6 py-4 text-gray-700">{record.exitType}</td>
-                  <td className="px-6 py-4 text-gray-700">{record.exitDate}</td>
-                  <td className="px-6 py-4 text-gray-700">
+                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{record.exitType}</td>
+                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{record.exitDate}</td>
+                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">
                     {record.archiveDate}
                   </td>
                   <td className="px-6 py-4">
                     <button
                       onClick={() => handleViewRecord(record)}
-                      className="px-4 py-2 text-sm font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg shadow-sm transition-all duration-200"
+                      className="px-4 py-2 text-sm font-semibold bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg shadow-sm transition-all duration-200"
                     >
                       👁️ View
                     </button>
@@ -283,10 +286,10 @@ const ArchiveSearch = () => {
         {archivedRecords.length === 0 && (
           <div className="text-center py-12 animate-fadeIn">
             <div className="text-gray-400 text-5xl mb-4">📁</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
               No archived records found
             </h3>
-            <p className="text-gray-600">Try adjusting your search criteria.</p>
+            <p className="text-gray-600 dark:text-gray-400">Try adjusting your search criteria.</p>
           </div>
         )}
       </div>

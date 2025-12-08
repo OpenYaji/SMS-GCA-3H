@@ -53,7 +53,7 @@ const DocumentPage = () => {
 
   const fetchRequestHistory = async () => {
     try {
-      const response = await axios.get('http://localhost/SMS-GCA-3D/Student/backend/api/documents/getDocumentRequest.php', {
+      const response = await axios.get('http://localhost/SMS-GCA-3H/Student/backend/api/documents/getDocumentRequest.php', {
         withCredentials: true
       });
       if (response.data.success) {
@@ -85,7 +85,7 @@ const DocumentPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/SMS-GCA-3D/Student/backend/api/documents/postDocumentRequest.php',
+        'http://localhost/SMS-GCA-3H/Student/backend/api/documents/postDocumentRequest.php',
         formData,
         {
           headers: {

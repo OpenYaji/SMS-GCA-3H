@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import TeamImage from '../../../assets/img/team.png';
+import TeamImage from '../../../assets/img/team3.png';
 import GlareHover from '../../ui/GlareHover';
 import CircularGallery from '../../ui/CircularGallery';
 

@@ -1,12 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { CreditCard } from "lucide-react";
+import { HOST_IP } from "../../../../../config";
+
+const API_BASE = `http://${HOST_IP}/SMS-GCA-3H/Registrar/backend/api/financial-holds/getFinancialHolds.php`;
 
 const Financial = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [count, setCount] = useState("...");
 
-  // Trigger the animation once the component mounts
   useEffect(() => {
     setIsVisible(true);
+
+    const fetchFinancialHolds = async () => {
+      try {
+        const response = await fetch(API_BASE);
+        const data = await response.json();
+        
+        if (data.success) {
+          setCount(data.stats?.activeHolds ?? 0);
+          console.log("Live financial holds:", data.stats?.activeHolds);
+        } else {
+          console.error("API error:", data.message);
+          setCount(0);
+        }
+      } catch (error) {
+        console.error("Error fetching financial holds:", error);
+        setCount(0);
+      }
+    };
+
+    fetchFinancialHolds();
+    const interval = setInterval(fetchFinancialHolds, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -23,7 +49,7 @@ const Financial = () => {
           Financial Holds
         </span>
         <span className="text-black dark:text-white text-2xl font-extrabold">
-          2
+          {count}
         </span>
       </div>
 

@@ -1,5 +1,3 @@
-// C:\xampp\htdocs\SMS-GCA-3H\Registrar\frontend\src\components\common\records\CompletedRequest.jsx
-
 import React, { useState, useEffect } from "react";
 import CompletedRequestInfoModal from "./CompletedRequestInfo";
 import { useDarkMode } from "../../DarkModeProvider";
@@ -14,6 +12,9 @@ const CompletedRequestHistory = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showBulkArchiveModal, setShowBulkArchiveModal] = useState(false);
+  const [archiving, setArchiving] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [filters, setFilters] = useState({
     documentType: "all",
     gradeLevel: "all",
@@ -64,9 +65,9 @@ const CompletedRequestHistory = () => {
     const matchesDocType = filters.documentType === 'all' || 
       (req.documentType && req.documentType === filters.documentType);
     
-    // Grade level filter
+    // Grade level filter - Fixed to handle both string and number comparisons
     const matchesGradeLevel = filters.gradeLevel === 'all' || 
-      (req.gradeLevel && req.gradeLevel.toString() === filters.gradeLevel);
+      (req.gradeLevel && req.gradeLevel.toString() === filters.gradeLevel.toString());
     
     // Date range filter
     let matchesDateRange = true;
@@ -117,20 +118,96 @@ const CompletedRequestHistory = () => {
   };
 
   const handleExportList = () => {
-    console.log("Exporting completed requests list...");
-    alert("Export feature - Generate CSV/Excel report");
+    try {
+      // Prepare data for export
+      const exportData = filteredRequests.map(req => ({
+        'Student Name': req.studentName || 'N/A',
+        'Student ID': req.studentId || 'N/A',
+        'Grade Level': req.gradeLevel || 'N/A',
+        'Document Type': req.documentType || 'N/A',
+        'Request Purpose': req.requestPurpose || 'N/A',
+        'Request Date': req.requestDate || 'N/A',
+        'Completed Date': req.completedDate || 'N/A',
+        'Pickup Date': req.pickupDate || 'N/A',
+        'Status': req.status || 'Completed'
+      }));
+
+      // Convert to CSV
+      const headers = Object.keys(exportData[0]);
+      const csvContent = [
+        headers.join(','),
+        ...exportData.map(row => 
+          headers.map(header => {
+            const cell = row[header];
+            // Escape cells that contain commas or quotes
+            return typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))
+              ? `"${cell.replace(/"/g, '""')}"`
+              : cell;
+          }).join(',')
+        )
+      ].join('\n');
+
+      // Create blob and download
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      
+      link.setAttribute('href', url);
+      link.setAttribute('download', `completed_requests_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      alert(`Successfully exported ${exportData.length} completed request(s) to CSV!`);
+    } catch (error) {
+      console.error("Error exporting data:", error);
+      alert("Error exporting data. Please try again.");
+    }
   };
 
-  const handleBulkArchive = () => {
+  const handleBulkArchiveClick = () => {
     if (selectedRequests.length === 0) {
-      alert("Please select at least one request");
+      alert("Please select at least one request to archive");
       return;
     }
-    if (window.confirm(`Archive ${selectedRequests.length} selected request(s)?`)) {
-      console.log(`Archiving ${selectedRequests.length} request(s)`);
-      alert("Selected requests archived successfully!");
-      setSelectedRequests([]);
-      fetchCompletedRequests(); // Refresh list
+    setShowBulkArchiveModal(true);
+  };
+
+  const handleBulkArchiveConfirm = async () => {
+    try {
+      setArchiving(true);
+      setShowBulkArchiveModal(false);
+      
+      const response = await fetch(`${API_BASE_URL}/archive_multiple_requests.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          requestIds: selectedRequests
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setShowSuccessModal(true);
+        setTimeout(() => {
+          setShowSuccessModal(false);
+          setSelectedRequests([]);
+          fetchCompletedRequests();
+        }, 2000);
+      } else {
+        throw new Error(data.error || "Failed to archive requests");
+      }
+    } catch (error) {
+      console.error("Error archiving requests:", error);
+      alert("Error: " + error.message);
+      setShowBulkArchiveModal(false);
+    } finally {
+      setArchiving(false);
     }
   };
 
@@ -140,7 +217,7 @@ const CompletedRequestHistory = () => {
   };
 
   const handleArchived = () => {
-    fetchCompletedRequests(); // Refresh list after archiving
+    fetchCompletedRequests();
   };
 
   const handleClearSearch = () => {
@@ -211,7 +288,6 @@ const CompletedRequestHistory = () => {
                 <option value="Good Moral Certificate">Good Moral Certificate</option>
                 <option value="Certificate of Enrollment">Certificate of Enrollment</option>
                 <option value="Diploma">Diploma</option>
-                <option value="Transcript of Records">Transcript of Records</option>
               </select>
             </div>
 
@@ -223,8 +299,8 @@ const CompletedRequestHistory = () => {
                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Grades</option>
-                {[1,2,3,4,5,6,7,8,9,10].map(grade => (
-                  <option key={grade} value={grade}>Grade {grade}</option>
+                {[3,4,5,6,7,8].map(grade => (
+                  <option key={grade} value={grade.toString()}>Grade {grade}</option>
                 ))}
               </select>
             </div>
@@ -247,17 +323,19 @@ const CompletedRequestHistory = () => {
             <div className="ml-auto flex gap-2">
               <button
                 onClick={handleExportList}
-                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+                disabled={filteredRequests.length === 0}
+                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 <span className="text-lg">📄</span>
                 <span className="text-sm font-bold">Export Report</span>
               </button>
               <button
-                onClick={handleBulkArchive}
-                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+                onClick={handleBulkArchiveClick}
+                disabled={selectedRequests.length === 0}
+                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 <span className="text-lg">📦</span>
-                <span className="text-sm font-bold">Archive Selected</span>
+                <span className="text-sm font-bold">Archive Selected ({selectedRequests.length})</span>
               </button>
             </div>
           </div>
@@ -470,6 +548,77 @@ const CompletedRequestHistory = () => {
         onArchived={handleArchived}
       />
 
+      {/* Bulk Archive Confirmation Modal */}
+      {showBulkArchiveModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-80 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md transform transition-all">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 px-6 py-4 rounded-t-xl">
+              <div className="flex items-center gap-3">
+                <div className="text-3xl">⚠️</div>
+                <h3 className="text-xl font-bold text-white">Confirm Bulk Archive</h3>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6">
+              <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed mb-4">
+                Archive {selectedRequests.length} selected request{selectedRequests.length !== 1 ? 's' : ''}? This will move them to the Archive Search tab.
+              </p>
+              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                <p className="text-sm text-amber-800 dark:text-amber-300 font-medium">
+                  📦 <strong>{selectedRequests.length}</strong> request{selectedRequests.length !== 1 ? 's' : ''} selected for archiving
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="bg-gray-50 dark:bg-gray-900 px-6 py-4 rounded-b-xl flex justify-end gap-3">
+              <button
+                onClick={() => setShowBulkArchiveModal(false)}
+                disabled={archiving}
+                className="px-5 py-2.5 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 font-semibold transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleBulkArchiveConfirm}
+                disabled={archiving}
+                className="px-5 py-2.5 bg-amber-600 dark:bg-amber-700 text-white rounded-lg hover:bg-amber-700 dark:hover:bg-amber-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {archiving ? (
+                  <>
+                    <span className="inline-block animate-spin">⏳</span>
+                    Archiving...
+                  </>
+                ) : (
+                  <>
+                    📦 Archive {selectedRequests.length} Request{selectedRequests.length !== 1 ? 's' : ''}
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-80 flex items-center justify-center z-[70] p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md transform transition-all animate-bounce-in">
+            <div className="p-8 text-center">
+              <div className="mb-4 text-6xl animate-checkmark">✅</div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                Success!
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 text-base">
+                {selectedRequests.length} request{selectedRequests.length !== 1 ? 's' : ''} archived successfully!
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style jsx>{`
         @keyframes fadeIn {
           from {
@@ -483,6 +632,38 @@ const CompletedRequestHistory = () => {
         }
         .animate-fadeIn {
           animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes bounce-in {
+          0% {
+            opacity: 0;
+            transform: scale(0.5);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        @keyframes checkmark {
+          0% {
+            transform: scale(0);
+            opacity: 0;
+          }
+          50% {
+            transform: scale(1.2);
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+        .animate-bounce-in {
+          animation: bounce-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .animate-checkmark {
+          animation: checkmark 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
       `}</style>
     </div>

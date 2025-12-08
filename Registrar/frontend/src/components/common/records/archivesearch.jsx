@@ -133,12 +133,7 @@ const ArchiveSearch = () => {
             >
               📋 View Archive Log
             </button>
-            <button
-              onClick={handleExportResults}
-              className="px-5 py-2.5 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
-            >
-              📊 Export Search Results
-            </button>
+          
           </div>
         </div>
 
@@ -178,12 +173,7 @@ const ArchiveSearch = () => {
               <option value="graduation">Graduation</option>
               <option value="dropped">Dropped</option>
             </select>
-            <button
-              onClick={handleSearchArchive}
-              className="px-6 py-2.5 bg-green-500 dark:bg-green-600 text-white rounded-lg hover:bg-green-600 dark:hover:bg-green-500 text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg"
-            >
-              🔍 Search Archive
-            </button>
+    
           </div>
         </div>
       

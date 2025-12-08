@@ -186,25 +186,7 @@ const ArchiveSearch = () => {
             </button>
           </div>
         </div>
-
-        {/* Statistics Cards - Yellow Background */}
-        <div className="grid grid-cols-4 gap-4 bg-gradient-to-br from-yellow-100 dark:from-yellow-900/30 via-yellow-50 dark:via-yellow-900/20 to-yellow-100 dark:to-yellow-900/30 p-6 rounded-xl mb-6 shadow-sm">
-          {[
-            { label: "Total Archived Records", value: stats.total.toString() },
-            { label: "Graduated Students", value: stats.graduated.toString() },
-            { label: "Transferred Out", value: stats.transferred.toString() },
       
-          ].map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="text-5xl font-black text-blue-600 dark:text-blue-400 mb-1">
-                {stat.value}
-              </div>
-              <div className="text-xs text-gray-700 dark:text-gray-300 font-bold">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
 
         {/* Table */}
         <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">

@@ -40,27 +40,27 @@ const ProfileInfoItem = ({
   </div>
 );
 
-const ProfileInfo = ({ profileData, setProfileData, userId }) => {
+const ProfileInfo = ({ profileData, setProfileData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
+  const [birthdateISO, setBirthdateISO] = useState("");
+
+  useEffect(() => {
+    if (profileData.profilePictureURL) {
+      setImagePreview(profileData.profilePictureURL);
+    }
+  }, [profileData.profilePictureURL]);
+
   // Function to calculate age from birthday
   const calculateAge = (birthday) => {
     if (!birthday) return "";
 
     try {
-      let birthDate;
-
-      if (birthday.includes(",")) {
-        birthDate = new Date(birthday);
-      } else if (birthday.includes("-")) {
-        birthDate = new Date(birthday);
-      } else {
-        birthDate = new Date(birthday);
-      }
+      const birthDate = new Date(birthday);
 
       if (isNaN(birthDate.getTime())) {
         console.warn("Invalid date format:", birthday);
@@ -85,28 +85,29 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
     }
   };
 
-  // Function to format birthday for date input
+  // Function to format birthday for date input (YYYY-MM-DD)
   const formatBirthdayForInput = (birthday) => {
     if (!birthday) return "";
 
     try {
-      let birthDate;
-
-      if (birthday.includes(",")) {
-        birthDate = new Date(birthday);
-      } else if (birthday.includes("-")) {
+      // If already in YYYY-MM-DD format
+      if (/^\d{4}-\d{2}-\d{2}$/.test(birthday)) {
         return birthday;
-      } else {
-        birthDate = new Date(birthday);
       }
 
+      // Otherwise parse and format
+      const birthDate = new Date(birthday);
       if (isNaN(birthDate.getTime())) {
         return "";
       }
 
-      return birthDate.toISOString().split("T")[0];
+      const year = birthDate.getFullYear();
+      const month = String(birthDate.getMonth() + 1).padStart(2, "0");
+      const day = String(birthDate.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
     } catch (error) {
-      console.error("Error formatting birthday:", error);
+      console.error("Error formatting birthday for input:", error);
       return "";
     }
   };
@@ -134,13 +135,11 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Check if file is an image
       if (!file.type.startsWith("image/")) {
         setError("Please select a valid image file");
         return;
       }
 
-      // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setError("Image size should be less than 5MB");
         return;
@@ -148,7 +147,6 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
 
       setProfileImage(file);
 
-      // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         setImagePreview(e.target.result);
@@ -164,8 +162,8 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
 
   // Update age when birthday changes
   useEffect(() => {
-    if (profileData.birthday) {
-      const calculatedAge = calculateAge(profileData.birthday);
+    if (birthdateISO) {
+      const calculatedAge = calculateAge(birthdateISO);
       if (calculatedAge && calculatedAge !== profileData.age) {
         setProfileData((prev) => ({
           ...prev,
@@ -173,28 +171,33 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
         }));
       }
     }
-  }, [profileData.birthday]);
+  }, [birthdateISO]);
 
   const handleProfileChange = (field, value) => {
-    const updatedData = {
-      ...profileData,
-      [field]: value,
-    };
+    // FIXED: Special handling for birthday field
+    if (field === "birthday") {
+      // Store ISO format for API
+      setBirthdateISO(value);
 
-    // If birthday is being updated, calculate age automatically
-    if (field === "birthday" && value) {
+      // Calculate age automatically
       const calculatedAge = calculateAge(value);
-      if (calculatedAge) {
-        updatedData.age = calculatedAge;
-      }
-    }
 
-    setProfileData(updatedData);
+      // Update display with formatted date
+      setProfileData((prev) => ({
+        ...prev,
+        birthday: formatBirthdayForDisplay(value),
+        age: calculatedAge,
+      }));
+    } else {
+      setProfileData((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    }
   };
 
-  // FIXED: Function to map frontend fields to backend API fields
+  // Function to map frontend fields to backend API fields
   const mapToApiFormat = (data) => {
-    // Split fullName into FirstName, MiddleName, and LastName
     const nameParts = data.fullName?.trim().split(" ") || [];
 
     let firstName = "";
@@ -212,22 +215,33 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
       lastName = nameParts.slice(2).join(" ");
     }
 
-    // Match your API documentation - send what the API expects
-    return {
+    const apiData = {
       EmailAddress: data.email,
       FirstName: firstName,
       LastName: lastName,
-      MiddleName: middleName,
-      PhoneNumber: data.phoneNumber,
-      Address: data.address,
-      // Add these if your API supports them:
-      // Age: data.age,
-      // Birthday: data.birthday,
-      // Sex: data.sex,
-      // Nationality: data.nationality,
-      // Religion: data.religion,
-      // MotherTongue: data.motherTongue,
+      MiddleName: middleName || null,
+      PhoneNumber: data.phoneNumber || null,
+      Address: data.address || null,
     };
+
+    // FIXED: Use the ISO format stored separately
+    if (birthdateISO) {
+      apiData.BirthDate = birthdateISO;
+    }
+
+    if (data.age) {
+      apiData.Age = parseInt(data.age);
+    }
+
+    if (data.sex) {
+      apiData.Gender = data.sex;
+    }
+
+    if (data.motherTongue) {
+      apiData.MotherTounge = data.motherTongue;
+    }
+
+    return apiData;
   };
 
   const handleSaveProfile = async () => {
@@ -235,36 +249,40 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
     setError(null);
 
     try {
-      // Map the data to API format
-      const apiData = mapToApiFormat(profileData);
-
-      // Log for debugging
-      console.log("Sending profile update to API:");
-      console.log("Endpoint: PUT /api/v1/profile (authenticated user)");
-      console.log("API Data:", apiData);
-
-      // If there's a new profile image, you would upload it here
       if (profileImage) {
-        console.log("New profile image selected:", profileImage.name);
-        // Add your image upload logic here
-        // const formData = new FormData();
-        // formData.append('profile_image', profileImage);
-        // await profileService.uploadProfileImage(formData);
+        const formData = new FormData();
+        formData.append("ProfilePicture", profileImage);
+
+        const apiData = mapToApiFormat(profileData);
+        Object.keys(apiData).forEach((key) => {
+          if (apiData[key] !== null && apiData[key] !== undefined) {
+            formData.append(key, apiData[key]);
+          }
+        });
+
+        console.log("Uploading profile with image...");
+        const response = await profileService.updateProfile(formData);
+
+        if (response.data?.ProfilePictureURL) {
+          setProfileData((prev) => ({
+            ...prev,
+            profilePictureURL: response.data.ProfilePictureURL,
+          }));
+        }
+
+        console.log("Profile with image saved successfully:", response);
+      } else {
+        const apiData = mapToApiFormat(profileData);
+        console.log("Sending profile update to API:", apiData);
+        const response = await profileService.updateProfile(apiData);
+        console.log("Profile saved successfully:", response);
       }
 
-      // FIXED: Use updateProfile WITHOUT ID - it uses the authenticated user's token
-      const response = await profileService.updateProfile(apiData);
-
-      console.log("Profile saved successfully:", response);
       setIsEditing(false);
-
-      // Optionally show success message
-      // You can add a success toast/notification here
+      setProfileImage(null);
     } catch (error) {
       console.error("Failed to save profile:", error);
       setError(error.message || "Failed to update profile. Please try again.");
-
-      // Keep editing mode open on error so user can fix issues
     } finally {
       setIsSaving(false);
     }
@@ -274,19 +292,17 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
     setIsEditing(false);
     setError(null);
     setProfileImage(null);
-    setImagePreview(null);
+    setImagePreview(profileData.profilePictureURL || null);
   };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden font-kumbh transition-colors duration-300">
-      {/* Error Message */}
       {error && (
         <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 mx-6 mt-4 rounded-lg">
           <p className="text-sm">{error}</p>
         </div>
       )}
 
-      {/* Profile Header - Yellow in light mode, gradient in dark mode */}
       <div className="px-8 py-4 flex items-center gap-6 relative bg-gradient-to-r from-yellow-400 to-yellow-500 dark:bg-gradient-to-r dark:from-blue-500 dark:to-blue-400">
         {isEditing ? (
           <div className="flex gap-2 absolute top-6 right-6">
@@ -341,7 +357,6 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
           </button>
         )}
 
-        {/* Profile Image with Edit Functionality */}
         <div className="relative">
           <div
             className={`w-20 h-20 rounded-full border-4 border-white bg-gray-200 dark:bg-gray-600 flex items-center justify-center shadow-lg overflow-hidden ${
@@ -403,7 +418,6 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
         </div>
       </div>
 
-      {/* Profile Content */}
       <div className="p-6">
         <div className="grid grid-cols-2 gap-5">
           <ProfileInfoItem
@@ -421,27 +435,16 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
             onProfileChange={handleProfileChange}
           />
           <ProfileInfoItem
-            label="Age"
-            value={profileData.age}
-            field="age"
-            isEditing={isEditing}
-            onProfileChange={handleProfileChange}
-            type="text"
-          />
-          <ProfileInfoItem
             label="Birthday"
             value={
               isEditing
-                ? formatBirthdayForInput(profileData.birthday)
+                ? formatBirthdayForInput(birthdateISO || profileData.birthday)
                 : profileData.birthday
             }
             field="birthday"
             isEditing={isEditing}
             type={isEditing ? "date" : "text"}
-            onProfileChange={(field, value) => {
-              if (!isEditing) return;
-              handleProfileChange(field, value);
-            }}
+            onProfileChange={handleProfileChange}
           />
           <ProfileInfoItem
             label="Address"
@@ -457,36 +460,6 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
             isEditing={isEditing}
             onProfileChange={handleProfileChange}
           />
-          {/* Commented out fields */}
-          {/* <ProfileInfoItem
-            label="Sex"
-            value={profileData.sex}
-            field="sex"
-            isEditing={isEditing}
-            type="select"
-            onProfileChange={handleProfileChange}
-          /> */}
-          <ProfileInfoItem
-            label="Nationality"
-            value={profileData.nationality}
-            field="nationality"
-            isEditing={isEditing}
-            onProfileChange={handleProfileChange}
-          />
-          {/* <ProfileInfoItem
-            label="Religion"
-            value={profileData.religion}
-            field="religion"
-            isEditing={isEditing}
-            onProfileChange={handleProfileChange}
-          />
-          <ProfileInfoItem
-            label="Mother Tongue"
-            value={profileData.motherTongue}
-            field="motherTongue"
-            isEditing={isEditing}
-            onProfileChange={handleProfileChange}
-          /> */}
         </div>
       </div>
     </div>

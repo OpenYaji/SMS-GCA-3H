@@ -46,11 +46,29 @@ export const profileService = {
     }
   },
 
-  // Update profile (without ID - uses current user)
   updateProfile: async (profileData) => {
     try {
-      const response = await api.put("/profile", profileData);
-      return response.data;
+      // Check if profileData is FormData (contains file upload)
+      const isFormData = profileData instanceof FormData;
+
+      // Configure request headers
+      const config = isFormData
+        ? {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        : {};
+
+      if (isFormData) {
+        profileData.append("_method", "PUT");
+        const response = await api.post("/profile", profileData, config);
+        return response.data;
+      } else {
+        // Regular JSON PUT request
+        const response = await api.put("/profile", profileData, config);
+        return response.data;
+      }
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Failed to update profile"

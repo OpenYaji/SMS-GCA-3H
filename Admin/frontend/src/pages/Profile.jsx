@@ -25,13 +25,13 @@ const Profile = () => {
     fullName: "",
     email: "",
     age: "",
-    birthday: "",
+    birthday: "", // Display format
+    birthdayISO: "", // ISO format for API
     address: "",
     phoneNumber: "",
     sex: "",
-    nationality: "",
-    religion: "",
     motherTongue: "",
+    profilePictureURL: "",
   });
 
   // Fetch profile data from API using profileService
@@ -41,22 +41,58 @@ const Profile = () => {
         setLoading(true);
         const response = await profileService.getProfile();
 
+        console.log("API Response:", response); // Debug log
+
         if (response.data) {
           const profile = response.data;
-          // Map API data to our component's state structure
+
+          // Calculate age from BirthDate if available
+          const calculateAge = (birthDate) => {
+            if (!birthDate) return "";
+            const today = new Date();
+            const birth = new Date(birthDate);
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            if (
+              monthDiff < 0 ||
+              (monthDiff === 0 && today.getDate() < birth.getDate())
+            ) {
+              age--;
+            }
+            return age.toString();
+          };
+
+          // Format birthday for display
+          const formatBirthday = (dateString) => {
+            if (!dateString) return "";
+            try {
+              const date = new Date(dateString);
+              return date.toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              });
+            } catch (error) {
+              return dateString;
+            }
+          };
+
+          // FIXED: Store both display and ISO formats
           setProfileData({
-            fullName: `${profile.FirstName} ${
+            fullName: `${profile.FirstName || ""} ${
               profile.MiddleName ? profile.MiddleName + " " : ""
-            }${profile.LastName}`.trim(),
+            }${profile.LastName || ""}`.trim(),
             email: profile.User?.EmailAddress || "",
-            age: "", // You might need to calculate this from birthdate if available
-            birthday: "", // Add if available from API
+            age: profile.Age || calculateAge(profile.BirthDate),
+            birthday: profile.BirthDate
+              ? formatBirthday(profile.BirthDate)
+              : "",
+            birthdayISO: profile.BirthDate || "", // Store ISO format
             address: profile.Address || "",
             phoneNumber: profile.PhoneNumber || "",
-            sex: "", // Add if available from API
-            nationality: "", // Add if available from API
-            religion: "", // Add if available from API
-            motherTongue: "", // Add if available from API
+            sex: profile.Gender || "",
+            motherTongue: profile.MotherTounge || "",
+            profilePictureURL: profile.ProfilePictureURL || "",
           });
         }
       } catch (err) {
@@ -196,15 +232,10 @@ const Profile = () => {
       {/* Tab Content */}
       {activeTab === "profile" ? (
         <div className="grid grid-cols-1 gap-6 max-w-7xl">
-          {/* FIXED: No userId prop needed - API uses authentication token */}
           <ProfileInfo
             profileData={profileData}
             setProfileData={setProfileData}
           />
-          {/* <MedicalInfo
-            medicalData={medicalData}
-            setMedicalData={setMedicalData}
-          /> */}
         </div>
       ) : (
         <div className="max-w-7xl">

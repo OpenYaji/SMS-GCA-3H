@@ -2,14 +2,16 @@
 // Prevent any output before JSON
 ob_start();
 
+// Only include configuration files initially. 
+// Classes/Models that might throw fatal errors should be included later.
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/fee_structure.php';
-require_once __DIR__ . '/../../models/Applicant.php';
 
-// Clear any previous output
+// Clear any previous output, including potential BOM or whitespaces from includes
 ob_clean();
 
+// Set the header ONLY after ensuring all potential preceding output is cleared
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -22,24 +24,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$applicantId) {
         echo json_encode(['success' => false, 'message' => 'Applicant ID is required']);
+        ob_end_flush();
         exit;
     }
 
     $conn = null;
 
     try {
+        // *** MOVED INSIDE TRY-CATCH BLOCK ***
+        // Ensure Applicant model is available before trying to instantiate it
+        require_once __DIR__ . '/../../models/Applicant.php';
+
         $applicantModel = new Applicant();
         $conn = $applicantModel->conn;
+
+        // Check if connection is established before proceeding
+        if (!$conn) {
+            // Throwing an exception is cleaner than a raw connection failure
+            throw new Exception("Database connection failed or Applicant model failed to initialize.");
+        }
 
         $conn->beginTransaction();
 
         $applicant = $applicantModel->getApplicantById($applicantId);
 
         if (!$applicant) {
+            $conn->rollBack();
             echo json_encode(['success' => false, 'message' => 'Applicant not found']);
+            ob_end_flush();
             exit;
         }
 
+        // FeeStructure is usually a static class and was included earlier.
+        // If FeeStructure failed, it would have been a 500 already.
         $fees = FeeStructure::getFeesByGrade($applicant['grade']);
         $totalFee = $fees['full_payment'];
         $outstandingBalance = $totalFee - $downPayment;
@@ -51,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ");
 
         $schoolYearId = $applicant['SchoolYearID'];
+        // Status 2: Pending/Partial Payment, Status 3: Paid/Completed
         $statusId = ($outstandingBalance > 0) ? 2 : 3;
 
         $stmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
@@ -81,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
 
-        // Record down payment with 'Verified' status
+        // Record down payment
         if ($downPayment > 0) {
             $refNumber = 'DOWNPAY-' . $applicantId . '-' . time();
 
@@ -96,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
 
-        // Update application with payment info and transaction ID
+        // Update application
         $stmt = $conn->prepare("
             UPDATE application 
             SET 
@@ -119,20 +137,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Send email notification
         $emailSent = false;
         try {
+            // *** MOVED INSIDE TRY-CATCH BLOCK ***
             require_once __DIR__ . '/../../config/mailer.php';
+            
+            // Check for the mailer function before calling it
+            if (!function_exists('getMailer')) {
+                 throw new Exception("Mailer configuration function 'getMailer' not found.");
+            }
+
             $mail = getMailer();
-            $mail->addAddress($applicant['GuardianEmail']);
-            $mail->Subject = 'Application Approved - Gymnazo Christian Academy';
+            
+            // Basic sanitization for email content
+            $guardianEmail = filter_var($applicant['GuardianEmail'], FILTER_SANITIZE_EMAIL);
+            $guardianFirstName = htmlspecialchars($applicant['GuardianFirstName']);
+            $guardianLastName = htmlspecialchars($applicant['GuardianLastName']);
+            $studentFirstName = htmlspecialchars($applicant['StudentFirstName']);
+            $studentLastName = htmlspecialchars($applicant['StudentLastName']);
+            $applicantGrade = htmlspecialchars($applicant['grade']);
 
-            $requiredDocs = FeeStructure::getRequiredDocuments($applicant['EnrolleeType']);
-            $docsList = implode("\n", array_map(fn($doc) => "• $doc", $requiredDocs));
+            if ($guardianEmail) {
+                $mail->addAddress($guardianEmail);
+                $mail->Subject = 'Application Approved - Gymnazo Christian Academy';
 
-            $paymentModeText = ucfirst($paymentMode);
+                $requiredDocs = FeeStructure::getRequiredDocuments($applicant['EnrolleeType']);
+                $docsList = implode("\n", array_map(fn($doc) => "• " . htmlspecialchars($doc), $requiredDocs));
 
-            $mail->Body = "
-Dear {$applicant['GuardianFirstName']} {$applicant['GuardianLastName']},
+                $paymentModeText = ucfirst($paymentMode);
 
-Congratulations! We are pleased to inform you that the application for {$applicant['StudentFirstName']} {$applicant['StudentLastName']} has been APPROVED for enrollment in {$applicant['grade']} for School Year 2025-2026.
+                $mail->Body = "
+Dear {$guardianFirstName} {$guardianLastName},
+
+Congratulations! We are pleased to inform you that the application for {$studentFirstName} {$studentLastName} has been APPROVED for enrollment in {$applicantGrade} for School Year 2025-2026.
 
 PAYMENT INFORMATION:
 --------------------
@@ -158,11 +193,15 @@ For any concerns, please contact our Registrar's Office.
 Best regards,
 Gymnazo Christian Academy
 Registrar's Office
-            ";
+                ";
 
-            $mail->send();
-            $emailSent = true;
+                $mail->send();
+                $emailSent = true;
+            } else {
+                error_log("Email sending failed: Invalid guardian email address in DB.");
+            }
         } catch (Exception $mailError) {
+            // Email failure is logged but does not stop the overall process success.
             error_log("Email sending failed: " . $mailError->getMessage());
         }
 
@@ -180,19 +219,24 @@ Registrar's Office
             ]
         ]);
     } catch (Exception $e) {
+        // This catch block handles all PDO and general exceptions.
         if ($conn && $conn->inTransaction()) {
             $conn->rollBack();
         }
 
-        error_log("Validation Error: " . $e->getMessage());
+        // Log the full error details to the server log
+        error_log("Validation Fatal Error: " . $e->getMessage() . " on line " . $e->getLine());
 
+        // Output a generic 500 error message to the client 
+        // (the server status is already 500, this ensures valid JSON is sent with the error)
         echo json_encode([
             'success' => false,
-            'message' => 'Error: ' . $e->getMessage()
+            'message' => 'An internal server error occurred. Please check server logs for details.'
         ]);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
 
+// Final flush to send the content
 ob_end_flush();

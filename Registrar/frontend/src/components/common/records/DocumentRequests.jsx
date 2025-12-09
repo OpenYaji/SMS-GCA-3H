@@ -167,41 +167,41 @@ const DocumentRequests = () => {
           })}
         </div>
 
-        {/* Table */}
+                {/* Table */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-x-auto hover:shadow-2xl transition-all duration-300">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-900">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left w-12">
+                <th className="px-6 py-4 text-left">
                   <input
                     type="checkbox"
-                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700"
                     checked={
                       students.length > 0 &&
                       selectedStudents.length === students.length
                     }
                     onChange={handleSelectAll}
+                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                   />
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Student Name
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Document Type
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Purpose
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Request Date
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Actions
                 </th>
               </tr>
@@ -210,20 +210,20 @@ const DocumentRequests = () => {
               {students.map((student) => (
                 <tr
                   key={student.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-[1.01]"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
                 >
-                  <td className="px-6 py-4 w-12">
+                  <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                     <input
                       type="checkbox"
-                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700"
                       checked={selectedStudents.includes(student.id)}
                       onChange={() => handleSelectStudent(student.id)}
+                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                     />
                   </td>
                   <td className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">
                     {student.studentName}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
+                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
                     {student.email}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
@@ -240,10 +240,10 @@ const DocumentRequests = () => {
                       {student.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => handleProcessRequest(student)}
-                      className="px-4 py-1.5 text-xs font-semibold bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors shadow-sm"
+                      className="px-3 py-1.5 text-xs font-semibold bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-400 rounded-lg shadow-sm transition-all duration-300 hover:-translate-y-0.5"
                     >
                       📝 Process
                     </button>

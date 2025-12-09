@@ -170,8 +170,8 @@ const ArchiveSearch = () => {
             >
               <option value="all">All Types</option>
               <option value="transfer">Transfer Out</option>
-              <option value="graduation">Graduation</option>
-              <option value="dropped">Dropped</option>
+              <option value="scholarship">Graduation</option>
+              <option value="Others">Dropped</option>
             </select>
     
           </div>

@@ -1,4 +1,5 @@
 <?php
+// C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\records\archive_request.php
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/cors.php';
 
@@ -30,12 +31,12 @@ try {
     $conn->beginTransaction();
 
     try {
-        // Get the request data
+        // FIXED: Get the request data with REAL grade level from application table
         $getQuery = "
             SELECT 
                 sp.StudentNumber as student_id,
                 CONCAT(p.FirstName, ' ', IFNULL(p.MiddleName, ''), ' ', p.LastName) as full_name,
-                'Grade 7' as grade_level,
+                CONCAT('Grade ', IFNULL(app.ApplyingForGradeLevelID, '7')) as grade_level,
                 dr.DocumentType,
                 dr.Purpose,
                 dr.DateRequested,
@@ -44,6 +45,11 @@ try {
             LEFT JOIN studentprofile sp ON dr.StudentProfileID = sp.StudentProfileID
             LEFT JOIN profile p ON sp.ProfileID = p.ProfileID
             LEFT JOIN user u ON p.UserID = u.UserID
+            LEFT JOIN application app ON (
+                app.StudentFirstName = p.FirstName 
+                AND app.StudentLastName = p.LastName
+                AND app.ApplicationStatus = 'Enrolled'
+            )
             WHERE dr.RequestID = :requestId AND dr.RequestStatus = 'Completed'
         ";
 

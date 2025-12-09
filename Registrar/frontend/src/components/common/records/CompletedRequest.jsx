@@ -299,12 +299,11 @@ const CompletedRequestHistory = () => {
                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
               >
                 <option value="all">All Grades</option>
-                {[3,4,5,6,7,8].map(grade => (
+                {[1,2,3,4,5,6].map(grade => (
                   <option key={grade} value={grade.toString()}>Grade {grade}</option>
                 ))}
               </select>
             </div>
-
             <div className="flex items-center gap-2">
               <label className="text-white text-sm font-bold">Date Range:</label>
               <select

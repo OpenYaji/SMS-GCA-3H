@@ -47,6 +47,13 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
   const [profileImage, setProfileImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
+  // Set initial image preview from profile data
+  useEffect(() => {
+    if (profileData.profilePicture) {
+      setImagePreview(profileData.profilePicture);
+    }
+  }, [profileData.profilePicture]);
+
   // Function to calculate age from birthday
   const calculateAge = (birthday) => {
     if (!birthday) return "";
@@ -154,6 +161,9 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
         setImagePreview(e.target.result);
       };
       reader.readAsDataURL(file);
+
+      // Clear any previous errors
+      setError(null);
     }
   };
 
@@ -192,7 +202,7 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
     setProfileData(updatedData);
   };
 
-  // FIXED: Function to map frontend fields to backend API fields
+  // Function to map frontend fields to backend API fields
   const mapToApiFormat = (data) => {
     // Split fullName into FirstName, MiddleName, and LastName
     const nameParts = data.fullName?.trim().split(" ") || [];
@@ -212,22 +222,33 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
       lastName = nameParts.slice(2).join(" ");
     }
 
-    // Match your API documentation - send what the API expects
-    return {
-      EmailAddress: data.email,
-      FirstName: firstName,
-      LastName: lastName,
-      MiddleName: middleName,
-      PhoneNumber: data.phoneNumber,
-      Address: data.address,
-      // Add these if your API supports them:
-      // Age: data.age,
-      // Birthday: data.birthday,
-      // Sex: data.sex,
-      // Nationality: data.nationality,
-      // Religion: data.religion,
-      // MotherTongue: data.motherTongue,
-    };
+    // Validate required fields before creating FormData
+    if (
+      !data.email ||
+      !firstName ||
+      !lastName ||
+      !data.phoneNumber ||
+      !data.address
+    ) {
+      throw new Error("Please fill in all required fields");
+    }
+
+    // Create FormData for file upload
+    const formData = new FormData();
+
+    formData.append("EmailAddress", data.email || "");
+    formData.append("FirstName", firstName || "");
+    formData.append("LastName", lastName || "");
+    formData.append("MiddleName", middleName || "");
+    formData.append("PhoneNumber", data.phoneNumber || "");
+    formData.append("Address", data.address || "");
+
+    // Add profile picture if a new one was selected
+    if (profileImage) {
+      formData.append("ProfilePicture", profileImage);
+    }
+
+    return formData;
   };
 
   const handleSaveProfile = async () => {
@@ -235,28 +256,40 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
     setError(null);
 
     try {
-      // Map the data to API format
+      // Log current profile data for debugging
+      console.log("Current profile data:", profileData);
+
+      // Map the data to API format (returns FormData)
       const apiData = mapToApiFormat(profileData);
 
-      // Log for debugging
-      console.log("Sending profile update to API:");
-      console.log("Endpoint: PUT /api/v1/profile (authenticated user)");
-      console.log("API Data:", apiData);
-
-      // If there's a new profile image, you would upload it here
-      if (profileImage) {
-        console.log("New profile image selected:", profileImage.name);
-        // Add your image upload logic here
-        // const formData = new FormData();
-        // formData.append('profile_image', profileImage);
-        // await profileService.uploadProfileImage(formData);
+      // Log FormData contents for debugging
+      console.log("FormData being sent:");
+      for (let [key, value] of apiData.entries()) {
+        console.log(`${key}:`, value);
       }
 
-      // FIXED: Use updateProfile WITHOUT ID - it uses the authenticated user's token
+      // Call the API to update profile
       const response = await profileService.updateProfile(apiData);
 
-      console.log("Profile saved successfully:", response);
+      console.log("Profile updated successfully:", response);
+
+      // Update local profile data with the response
+      if (response.data) {
+        const updatedProfile = response.data;
+
+        // Update profile picture URL if returned
+        if (updatedProfile.ProfilePictureURL) {
+          setImagePreview(updatedProfile.ProfilePictureURL);
+          setProfileData((prev) => ({
+            ...prev,
+            profilePicture: updatedProfile.ProfilePictureURL,
+          }));
+        }
+      }
+
+      // Reset form state
       setIsEditing(false);
+      setProfileImage(null); // Clear the file object but keep preview
 
       // Optionally show success message
       // You can add a success toast/notification here
@@ -274,7 +307,12 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
     setIsEditing(false);
     setError(null);
     setProfileImage(null);
-    setImagePreview(null);
+    // Reset image preview to original
+    if (profileData.profilePicture) {
+      setImagePreview(profileData.profilePicture);
+    } else {
+      setImagePreview(null);
+    }
   };
 
   return (
@@ -354,7 +392,7 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
             {imagePreview ? (
               <img
                 src={imagePreview}
-                alt="Profile preview"
+                alt="Profile"
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -420,7 +458,7 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
             isEditing={isEditing}
             onProfileChange={handleProfileChange}
           />
-          <ProfileInfoItem
+          {/* <ProfileInfoItem
             label="Age"
             value={profileData.age}
             field="age"
@@ -442,7 +480,7 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
               if (!isEditing) return;
               handleProfileChange(field, value);
             }}
-          />
+          /> */}
           <ProfileInfoItem
             label="Address"
             value={profileData.address}
@@ -457,33 +495,10 @@ const ProfileInfo = ({ profileData, setProfileData, userId }) => {
             isEditing={isEditing}
             onProfileChange={handleProfileChange}
           />
-          {/* Commented out fields */}
           {/* <ProfileInfoItem
-            label="Sex"
-            value={profileData.sex}
-            field="sex"
-            isEditing={isEditing}
-            type="select"
-            onProfileChange={handleProfileChange}
-          /> */}
-          <ProfileInfoItem
             label="Nationality"
             value={profileData.nationality}
             field="nationality"
-            isEditing={isEditing}
-            onProfileChange={handleProfileChange}
-          />
-          {/* <ProfileInfoItem
-            label="Religion"
-            value={profileData.religion}
-            field="religion"
-            isEditing={isEditing}
-            onProfileChange={handleProfileChange}
-          />
-          <ProfileInfoItem
-            label="Mother Tongue"
-            value={profileData.motherTongue}
-            field="motherTongue"
             isEditing={isEditing}
             onProfileChange={handleProfileChange}
           /> */}

@@ -32,6 +32,7 @@ const Profile = () => {
     nationality: "",
     religion: "",
     motherTongue: "",
+    profilePicture: null, // Add profile picture field
   });
 
   // Fetch profile data from API using profileService
@@ -57,6 +58,7 @@ const Profile = () => {
             nationality: "", // Add if available from API
             religion: "", // Add if available from API
             motherTongue: "", // Add if available from API
+            profilePicture: profile.ProfilePictureURL || null, // Add profile picture
           });
         }
       } catch (err) {
@@ -196,15 +198,10 @@ const Profile = () => {
       {/* Tab Content */}
       {activeTab === "profile" ? (
         <div className="grid grid-cols-1 gap-6 max-w-7xl">
-          {/* FIXED: No userId prop needed - API uses authentication token */}
           <ProfileInfo
             profileData={profileData}
             setProfileData={setProfileData}
           />
-          {/* <MedicalInfo
-            medicalData={medicalData}
-            setMedicalData={setMedicalData}
-          /> */}
         </div>
       ) : (
         <div className="max-w-7xl">

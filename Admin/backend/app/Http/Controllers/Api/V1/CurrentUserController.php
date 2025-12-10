@@ -45,17 +45,32 @@ class CurrentUserController extends Controller
             return response()->json(['message' => 'Profile not found'], 404);
         }
 
+        $profilePictureURL = $adminprofile->profile->ProfilePictureURL;
+
+        // Handle profile picture upload
+        if ($request->hasFile('ProfilePicture')) {
+            // Delete old picture if exists
+            if ($adminprofile->profile->ProfilePictureURL) {
+                $oldPath = str_replace(asset('storage/'), '', $adminprofile->profile->ProfilePictureURL);
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+            }
+            
+            // Store new picture
+            $path = $request->file('ProfilePicture')->store('profiles', 'public');
+            $profilePictureURL = asset('storage/' . $path);
+        }
+
         // Update Profile fields
         if ($adminprofile->profile) {
-        $adminprofile->profile->update([
-            'FirstName' => $request->FirstName,
-            'LastName' => $request->LastName,
-            'MiddleName' => $request->MiddleName,
-            'PhoneNumber' => $request->PhoneNumber,
-            'Address' => $request->Address,
-            'ProfilePictureURL' => $request->ProfilePictureURL,
-        ]);
-    }
+            $adminprofile->profile->update([
+                'FirstName' => $request->FirstName,
+                'LastName' => $request->LastName,
+                'MiddleName' => $request->MiddleName,
+                'EncryptedPhoneNumber' => \App\Helpers\EncryptionHelper::encrypt($request->PhoneNumber),
+                'EncryptedAddress' => \App\Helpers\EncryptionHelper::encrypt($request->Address),
+                'ProfilePictureURL' => $profilePictureURL,
+            ]);
+        }
 
         // Update User email if provided
         if ($adminprofile->profile && $adminprofile->profile->user && $request->has('EmailAddress')) {

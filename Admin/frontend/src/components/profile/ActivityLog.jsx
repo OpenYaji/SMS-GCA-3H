@@ -70,7 +70,10 @@ const ActivityLog = () => {
     "description",
     "targetUser",
   ]);
-  const sorted = useSort(searched, "newest");
+
+  // Sort by newest first (LIFO - Last In, First Out)
+  // Use "Newest First" to match useSort's expected parameter
+  const sorted = useSort(searched, "Newest First");
 
   const displayedActivities = sorted.slice(0, displayCount);
 
@@ -79,10 +82,13 @@ const ActivityLog = () => {
 
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
 
+    // Trigger load more when user is within 100px from bottom
     if (scrollHeight - scrollTop - clientHeight < 100) {
-      setDisplayCount((prev) => prev + 20);
+      if (displayCount < sorted.length) {
+        setDisplayCount((prev) => Math.min(prev + 20, sorted.length));
+      }
     }
-  }, []);
+  }, [displayCount, sorted.length]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -94,7 +100,7 @@ const ActivityLog = () => {
 
   useEffect(() => {
     setDisplayCount(20);
-  }, [searchTerm]);
+  }, [searchTerm, userRoleFilter]);
 
   // const handleSaveSettings = () => {
   //   setShowSettingsModal(false);
@@ -209,61 +215,56 @@ const ActivityLog = () => {
             fill="currentColor"
             className="text-gray-500"
           >
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z" />
           </svg>
         );
     }
   };
 
   const formatTimestamp = (timestamp) => {
-    return new Date(timestamp).toLocaleDateString("en-US", {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
+    if (diffHours < 24)
+      return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+
+    return date.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
+      year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
+      hour: "numeric",
       minute: "2-digit",
     });
   };
 
-  if (loading && activities.length === 0) {
-    return (
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 font-kumbh transition-colors duration-300">
-        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-          Loading activities...
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 font-kumbh transition-colors duration-300">
-        <div className="text-center py-8 text-red-500">{error}</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 font-kumbh flex flex-col transition-colors duration-300">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 font-kumbh flex flex-col h-full transition-colors duration-300">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           Activity Log
         </h2>
-        <div className="flex items-center gap-4">
-          {/* Real-time indicator */}
-          <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
             Live
           </div>
           <button
-            onClick={() => refreshActivities()}
+            onClick={refreshActivities}
             className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-            title="Refresh Activities"
+            title="Refresh activities"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -271,13 +272,9 @@ const ActivityLog = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M21 2v6h-6" />
-              <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
-              <path d="M3 22v-6h6" />
-              <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
             </svg>
           </button>
-          {/* Commented out settings button */}
           {/* <button
             onClick={() => setShowSettingsModal(true)}
             className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -385,71 +382,116 @@ const ActivityLog = () => {
         </div>
       </div>
 
+      {/* Activities List with proper scrolling */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto max-h-[600px] border border-gray-200 dark:border-gray-700 rounded-lg"
+        className="flex-1 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg"
+        style={{
+          minHeight: "400px",
+          maxHeight: "calc(100vh - 400px)",
+        }}
       >
-        <div className="space-y-2">
-          {displayedActivities.length > 0 ? (
-            <>
-              {displayedActivities.map((activity, index) => (
-                <div
-                  key={`${activity.id}-${index}`}
-                  className="flex items-start gap-2 p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded-lg"
-                >
-                  <div className="flex-shrink-0 mt-1">
-                    {getActivityIcon(activity.type)}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold text-gray-900 dark:text-white">
-                        {activity.user}
-                      </span>
-                      <span className="text-gray-600 dark:text-gray-400">
-                        {activity.action}
-                      </span>
-                      {activity.targetUser && (
+        {loading && displayedActivities.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500 mx-auto mb-4"></div>
+              <p className="text-gray-500 dark:text-gray-400">
+                Loading activities...
+              </p>
+            </div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center py-8 text-red-500">
+              <p>Error loading activities: {error}</p>
+              <button
+                onClick={refreshActivities}
+                className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-0">
+            {displayedActivities.length > 0 ? (
+              <>
+                {displayedActivities.map((activity, index) => (
+                  <div
+                    key={`${activity.id}-${index}`}
+                    className="flex items-start gap-3 p-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <div className="flex-shrink-0 mt-1">
+                      {getActivityIcon(activity.type)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <span className="font-semibold text-gray-900 dark:text-white">
-                          @{activity.targetUser}
+                          {activity.user}
                         </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                      {activity.description}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {formatTimestamp(activity.timestamp)}
-                      </span>
+                        <span className="text-gray-600 dark:text-gray-400">
+                          {activity.action}
+                        </span>
+                        {activity.targetUser && (
+                          <span className="font-semibold text-gray-900 dark:text-white">
+                            @{activity.targetUser}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        {activity.description}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {formatTimestamp(activity.timestamp)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              {loading && (
-                <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-                  Loading more activities...
-                </div>
-              )}
-
-              {displayedActivities.length === sorted.length &&
-                sorted.length > 0 && (
-                  <div className="text-center py-2 text-gray-500 dark:text-gray-400 text-sm">
-                    All activities loaded ({sorted.length} total)
+                {displayCount < sorted.length && (
+                  <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+                    <div className="animate-pulse">
+                      Loading more activities...
+                    </div>
                   </div>
                 )}
-            </>
-          ) : (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              No activities found matching your criteria.
-            </div>
-          )}
-        </div>
+
+                {displayedActivities.length === sorted.length &&
+                  sorted.length > 0 && (
+                    <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-sm">
+                      All activities loaded ({sorted.length} total)
+                    </div>
+                  )}
+              </>
+            ) : (
+              <div className="flex items-center justify-center h-full py-8">
+                <div className="text-center text-gray-500 dark:text-gray-400">
+                  <svg
+                    className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  <p>No activities found matching your criteria.</p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Show items count */}
       {displayedActivities.length > 0 && (
-        <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">
+        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 text-center">
           Showing {displayedActivities.length} of {sorted.length} activities
           {displayedActivities.length < sorted.length &&
             " (scroll to load more)"}

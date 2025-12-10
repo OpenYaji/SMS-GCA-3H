@@ -9,9 +9,9 @@ import { API_ENDPOINTS } from '../../../config/api';
  * Allows users to customize theme and accent colors
  */
 export default function AppearancesTab() {
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const [selectedTheme, setSelectedTheme] = useState('light');
-  const [selectedAccent, setSelectedAccent] = useState('#22c55e'); // Green default
+  const { isDarkMode, toggleDarkMode, setDarkMode } = useDarkMode(); // Add setDarkMode if available
+  const [selectedTheme, setSelectedTheme] = useState(isDarkMode ? 'dark' : 'light'); // Initialize from context
+  const [selectedAccent, setSelectedAccent] = useState('#22c55e');
   const [saving, setSaving] = useState(false);
 
   // Accent color options
@@ -64,16 +64,15 @@ export default function AppearancesTab() {
         setSelectedTheme(theme || 'light');
         setSelectedAccent(accentColor || '#22c55e');
         
-        // Apply theme immediately on load
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
+        // REMOVE the direct DOM manipulation - let the context handle it
+        // Instead, sync with context only if there's a mismatch
+        const shouldBeDark = theme === 'dark';
+        if (shouldBeDark !== isDarkMode) {
+          toggleDarkMode();
         }
       }
     } catch (error) {
       console.error('Error fetching preferences:', error);
-      // Use defaults if fetch fails
     }
   };
 

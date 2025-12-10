@@ -80,7 +80,7 @@ function App() {
               <Route path="settings" element={<SettingsPage />} />
             </Route>
 
-            {/* Catch-all route - redirect to login for any unknown paths */}
+            {/* Catch-all route - redirect t  o login for any unknown paths */}
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </DarkModeProvider>

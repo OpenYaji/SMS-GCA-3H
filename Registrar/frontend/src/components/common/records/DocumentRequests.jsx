@@ -1,5 +1,3 @@
-// C:\xampp\htdocs\SMS-GCA-3H\Registrar\frontend\src\components\common\records\DocumentRequests.jsx
-
 import React, { useState, useEffect } from "react";
 import ProcessRequestModal from "./ProcessRequestModal";
 import { useDarkMode } from "../../DarkModeProvider";
@@ -108,7 +106,7 @@ const DocumentRequests = () => {
 
   if (loading) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-4">⏳</div>
           <p className="text-gray-600 dark:text-gray-300 font-medium">Loading requests...</p>
@@ -119,7 +117,7 @@ const DocumentRequests = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 flex items-center justify-center">
         <div className="text-center bg-red-50 dark:bg-red-900/20 p-6 rounded-xl border-2 border-red-200 dark:border-red-800">
           <div className="text-5xl mb-4">⚠️</div>
           <h3 className="text-lg font-bold text-red-900 dark:text-red-300 mb-2">Error Loading Requests</h3>
@@ -136,19 +134,17 @@ const DocumentRequests = () => {
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans">
-      <div className="max-w-7xl mx-auto animate-fadeIn">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0">
+      <div className="max-w-full mx-auto px-0 py-0 animate-fadeIn">
         {/* Header Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6 transition-all duration-300">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
             📋 Document Requests
           </h2>
-
-          
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6 px-0 py-0">
           {[stats.pending, stats.form137, stats.certificates, stats.other].map((stat, index) => {
             const titles = ["Pending Requests", "Form 137 Requests", "Certificates", "Other Documents"];
             return (
@@ -167,41 +163,38 @@ const DocumentRequests = () => {
           })}
         </div>
 
-                {/* Table */}
+        {/* Table */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-x-auto hover:shadow-2xl transition-all duration-300">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
-                <th className="px-6 py-4 text-left">
+                <th className="px-6 py-3 text-left w-12">
                   <input
                     type="checkbox"
-                    checked={
-                      students.length > 0 &&
-                      selectedStudents.length === students.length
-                    }
+                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700"
+                    checked={students.length > 0 && selectedStudents.length === students.length}
                     onChange={handleSelectAll}
-                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                   />
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Student Name
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Email
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Document Type
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Purpose
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Request Date
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Actions
                 </th>
               </tr>
@@ -210,20 +203,20 @@ const DocumentRequests = () => {
               {students.map((student) => (
                 <tr
                   key={student.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-[1.01]"
                 >
-                  <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                  <td className="px-6 py-4 w-12">
                     <input
                       type="checkbox"
+                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700"
                       checked={selectedStudents.includes(student.id)}
                       onChange={() => handleSelectStudent(student.id)}
-                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                     />
                   </td>
                   <td className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">
                     {student.studentName}
                   </td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {student.email}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
@@ -240,10 +233,10 @@ const DocumentRequests = () => {
                       {student.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                  <td className="px-6 py-4">
                     <button
                       onClick={() => handleProcessRequest(student)}
-                      className="px-3 py-1.5 text-xs font-semibold bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-400 rounded-lg shadow-sm transition-all duration-300 hover:-translate-y-0.5"
+                      className="px-4 py-1.5 text-xs font-semibold bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors shadow-sm"
                     >
                       📝 Process
                     </button>

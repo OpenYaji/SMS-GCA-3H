@@ -104,7 +104,7 @@ class AuthController {
                     $dashboardRoute = '/';
             }
 
-            $redirectUrl = "http://10.153.119.17:" . $port . $dashboardRoute;
+            $redirectUrl = "http://localhost:" . $port . $dashboardRoute;
 
             return [
                 'success' => true, 

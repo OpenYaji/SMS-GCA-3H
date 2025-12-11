@@ -31,9 +31,6 @@ class UpdateCurrentUserRequest extends FormRequest
             'MiddleName' => 'nullable|string|max:50',
             'PhoneNumber' => 'required|string|max:20',
             'Address' => 'required|string|max:255',
-            
-            // Profile picture - allow both file upload and URL
-            'ProfilePicture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'ProfilePictureURL' => 'nullable|url|max:2048',
         ];
     }

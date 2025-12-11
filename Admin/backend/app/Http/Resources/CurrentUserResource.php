@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
-use App\Helpers\EncryptionHelper;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CurrentUserResource extends JsonResource
@@ -26,8 +26,12 @@ class CurrentUserResource extends JsonResource
             'FirstName' => $this->profile?->FirstName,
             'LastName' => $this->profile?->LastName,
             'MiddleName' => $this->profile?->MiddleName,
-            'PhoneNumber' => EncryptionHelper::decrypt($this->profile?->EncryptedPhoneNumber),
-            'Address' => EncryptionHelper::decrypt($this->profile?->EncryptedAddress),
+            'PhoneNumber' => $this->profile?->EncryptedPhoneNumber 
+                ? Crypt::decryptString($this->profile->EncryptedPhoneNumber) 
+                : null,
+            'Address' => $this->profile?->EncryptedAddress 
+                ? Crypt::decryptString($this->profile->EncryptedAddress) 
+                : null,
             'ProfilePictureURL' => $this->profile?->ProfilePictureURL,
 
             'User' => [

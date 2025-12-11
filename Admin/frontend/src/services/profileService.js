@@ -49,21 +49,8 @@ export const profileService = {
   // Update profile (without ID - uses current user)
   updateProfile: async (profileData) => {
     try {
-      const isFormData = profileData instanceof FormData;
-
-      if (isFormData) {
-        profileData.append("_method", "PUT");
-
-        const response = await api.post("/profile", profileData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        return response.data;
-      } else {
-        const response = await api.put("/profile", profileData);
-        return response.data;
-      }
+      const response = await api.put("/profile", profileData);
+      return response.data;
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Failed to update profile"
@@ -74,21 +61,8 @@ export const profileService = {
   // Update profile by ID (new method)
   updateProfileById: async (id, profileData) => {
     try {
-      const isFormData = profileData instanceof FormData;
-
-      if (isFormData) {
-        profileData.append("_method", "PUT");
-
-        const response = await api.post(`/profile/${id}`, profileData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        return response.data;
-      } else {
-        const response = await api.put(`/profile/${id}`, profileData);
-        return response.data;
-      }
+      const response = await api.put(`/profile/${id}`, profileData);
+      return response.data;
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Failed to update profile"

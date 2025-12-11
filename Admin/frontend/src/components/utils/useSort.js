@@ -176,10 +176,10 @@ export default function useSort(data, sortOption) {
       case "Newest First":
         filtered.sort((a, b) => {
           const dateA = new Date(
-            a.timestamp || a.rawData?.HireDate || a.createdAt || a.date || 0
+            a.rawData?.HireDate || a.createdAt || a.date || 0
           );
           const dateB = new Date(
-            b.timestamp || b.rawData?.HireDate || b.createdAt || b.date || 0
+            b.rawData?.HireDate || b.createdAt || b.date || 0
           );
           return dateB - dateA;
         });
@@ -189,10 +189,10 @@ export default function useSort(data, sortOption) {
       case "Oldest First":
         filtered.sort((a, b) => {
           const dateA = new Date(
-            a.timestamp || a.rawData?.HireDate || a.createdAt || a.date || 0
+            a.rawData?.HireDate || a.createdAt || a.date || 0
           );
           const dateB = new Date(
-            b.timestamp || b.rawData?.HireDate || b.createdAt || b.date || 0
+            b.rawData?.HireDate || b.createdAt || b.date || 0
           );
           return dateA - dateB;
         });

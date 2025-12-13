@@ -184,7 +184,7 @@ const ArchiveSearch = () => {
 
   if (loading) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-4">⏳</div>
           <p className="text-gray-600 dark:text-gray-300 font-medium">Loading archived records...</p>
@@ -195,7 +195,7 @@ const ArchiveSearch = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans flex items-center justify-center">
         <div className="text-center bg-red-50 dark:bg-red-900/20 p-6 rounded-xl border-2 border-red-200 dark:border-red-800">
           <div className="text-5xl mb-4">⚠️</div>
           <h3 className="text-lg font-bold text-red-900 dark:text-red-300 mb-2">Error Loading Archives</h3>
@@ -212,9 +212,10 @@ const ArchiveSearch = () => {
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans">
-      <div className="max-w-7xl mx-auto animate-fadeIn">
-        {/* Header with Title and Buttons */}
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans">
+      {/* Flush Left & Top - matching CompletedRequest layout */}
+      <div className="max-w-full mx-auto px-0 py-0 animate-fadeIn">
+        {/* Header with Title and Button - matching CompletedRequest flush layout */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6 transition-all duration-300">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
@@ -235,7 +236,7 @@ const ArchiveSearch = () => {
             </div>
           </div>
 
-          {/* Search Box */}
+          {/* Search Box - Original style, not gradient bar */}
           <div className="bg-gradient-to-br from-blue-50 dark:from-blue-900/20 via-white dark:via-gray-800 to-blue-50 dark:to-blue-900/20 p-6 rounded-xl border-2 border-blue-100 dark:border-blue-800/30">
             <label className="block text-sm font-bold text-gray-800 dark:text-gray-300 mb-3">
               Search Student Records
@@ -275,7 +276,7 @@ const ArchiveSearch = () => {
                   <option value="transfer">Transfer Out</option>
                   <option value="dropped">Dropped</option>
                 </select>
-                
+               
               </div>
             </div>
           </div>

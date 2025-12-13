@@ -9,7 +9,7 @@ const Doct = () => {
   const tabs = [
     { id: 'dr', label: 'Document Request' },
     { id: 'crr', label: 'Completed Request' },
-    { id: 'ass', label: 'Archive Search' }
+    { id: 'ass', label: 'Archive Request' }
   ];
 
   return (

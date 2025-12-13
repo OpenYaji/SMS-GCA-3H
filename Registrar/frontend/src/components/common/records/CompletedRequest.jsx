@@ -1,7 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+// Assuming CompletedRequestInfoModal is in a separate file
 import CompletedRequestInfoModal from "./CompletedRequestInfo";
+// Assuming DarkModeProvider is correctly implemented
 import { useDarkMode } from "../../DarkModeProvider";
+// Import icons for the new card style (copied from DocumentRequests)
+import { Clock, FileText, CheckCircle, Package, Eye, Archive, Download } from 'lucide-react'; 
 
+// --- MODAL PLACEHOLDERS (Keeping from the previous attempt for completeness) ---
+const BulkArchiveModal = ({ isOpen, onClose, onConfirm, selectedCount, archiving }) => {
+    if (!isOpen) return null;
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[60] p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-2xl">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Confirm Bulk Archive</h3>
+                <p className="text-gray-700 dark:text-gray-300 mb-6">Archive **{selectedCount}** selected request{selectedCount !== 1 ? 's' : ''}?</p>
+                <div className="flex justify-end gap-3">
+                    <button onClick={onClose} disabled={archiving} className="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded-lg text-gray-800 dark:text-white">Cancel</button>
+                    <button onClick={onConfirm} disabled={archiving} className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700">
+                        {archiving ? 'Archiving...' : `Archive ${selectedCount}`}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const SuccessNotificationModal = ({ isOpen, onClose, title, message, icon = "✅" }) => {
+    if (!isOpen) return null;
+    useEffect(() => {
+        const timer = setTimeout(onClose, 2000);
+        return () => clearTimeout(timer);
+    }, [onClose]);
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-0 flex items-center justify-center z-[70] p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-sm p-8 text-center animate-bounce-in">
+                <div className="mb-4 text-6xl">{icon}</div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{title}</h3>
+                <p className="text-gray-600 dark:text-gray-300">{message}</p>
+            </div>
+        </div>
+    );
+};
+
+// --- MAIN COMPONENT ---
 const API_BASE_URL = "http://localhost/SMS-GCA-3H/Registrar/backend/api/records";
 
 const CompletedRequestHistory = () => {
@@ -20,20 +62,19 @@ const CompletedRequestHistory = () => {
     gradeLevel: "all",
     dateRange: "all",
   });
+  // State for slide-up animation (copied from DocumentRequests/InboxTable)
+  const [animate, setAnimate] = useState(false);
 
   const { isDarkMode } = useDarkMode();
 
-  useEffect(() => {
-    fetchCompletedRequests();
-  }, []);
-
+  // --- Fetching Logic ---
   const fetchCompletedRequests = async () => {
     try {
       setLoading(true);
       const response = await fetch(`${API_BASE_URL}/get_completed_requests.php`);
       
       if (!response.ok) {
-        throw new Error("Failed to fetch completed requests");
+        throw new Error("Failed to fetch completed requests: HTTP " + response.status);
       }
       
       const data = await response.json();
@@ -42,7 +83,7 @@ const CompletedRequestHistory = () => {
         throw new Error(data.error);
       }
       
-      setRequests(data);
+      setRequests(Array.isArray(data) ? data : []);
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -52,52 +93,64 @@ const CompletedRequestHistory = () => {
     }
   };
 
-  const filteredRequests = requests.filter(req => {
-    const matchesSearch = !searchTerm || 
-      (req.studentName && req.studentName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (req.studentId && req.studentId.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (req.documentType && req.documentType.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (req.requestPurpose && req.requestPurpose.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesDocType = filters.documentType === 'all' || 
-      (req.documentType && req.documentType === filters.documentType);
-    
-    const matchesGradeLevel = filters.gradeLevel === 'all' || 
-      (req.gradeLevel && req.gradeLevel.toString() === filters.gradeLevel.toString());
-    
-    let matchesDateRange = true;
-    if (filters.dateRange !== 'all' && req.requestDate) {
-      const requestDate = new Date(req.requestDate);
-      const now = new Date();
-      
-      switch(filters.dateRange) {
-        case 'today':
-          matchesDateRange = requestDate.toDateString() === now.toDateString();
-          break;
-        case 'this-week':
-          const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-          matchesDateRange = requestDate >= startOfWeek;
-          break;
-        case 'this-month':
-          matchesDateRange = 
-            requestDate.getMonth() === now.getMonth() && 
-            requestDate.getFullYear() === now.getFullYear();
-          break;
-        case 'last-month':
-          const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-          const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-          matchesDateRange = requestDate >= lastMonth && requestDate <= endOfLastMonth;
-          break;
-        default:
-          matchesDateRange = true;
-      }
-    }
-    
-    return matchesSearch && matchesDocType && matchesGradeLevel && matchesDateRange;
-  });
+  useEffect(() => {
+    fetchCompletedRequests();
+    setAnimate(true); // Start animation
+  }, []);
 
+  // --- Filtering & Searching Logic (Memoized) ---
+  const filteredRequests = useMemo(() => {
+    return requests.filter(req => {
+      const matchesSearch = !searchTerm || 
+        (req.studentName && req.studentName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (req.studentId && req.studentId.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (req.documentType && req.documentType.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (req.requestPurpose && req.requestPurpose.toLowerCase().includes(searchTerm.toLowerCase()));
+      
+      const matchesDocType = filters.documentType === 'all' || 
+        (req.documentType && req.documentType === filters.documentType);
+      
+      const matchesGradeLevel = filters.gradeLevel === 'all' || 
+        (req.gradeLevel && req.gradeLevel.toString() === filters.gradeLevel.toString());
+      
+      let matchesDateRange = true;
+      if (filters.dateRange !== 'all' && req.requestDate) {
+        const requestDate = new Date(req.requestDate);
+        const now = new Date();
+        
+        switch(filters.dateRange) {
+          case 'today':
+            matchesDateRange = requestDate.toDateString() === now.toDateString();
+            break;
+          case 'this-week':
+            const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+            startOfWeek.setHours(0, 0, 0, 0); 
+            matchesDateRange = requestDate >= startOfWeek;
+            break;
+          case 'this-month':
+            matchesDateRange = 
+              requestDate.getMonth() === now.getMonth() && 
+              requestDate.getFullYear() === now.getFullYear();
+            break;
+          case 'last-month':
+            const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+            matchesDateRange = requestDate >= lastMonth && requestDate <= endOfLastMonth;
+            break;
+          default:
+            matchesDateRange = true;
+        }
+      }
+      
+      return matchesSearch && matchesDocType && matchesGradeLevel && matchesDateRange;
+    });
+  }, [requests, searchTerm, filters]);
+
+  // --- Handlers ---
   const handleSelectAll = (e) => {
-    setSelectedRequests(e.target.checked ? filteredRequests.map((r) => r.id) : []);
+    // Only select currently filtered requests
+    const allFilteredIds = filteredRequests.map((r) => r.id);
+    setSelectedRequests(e.target.checked ? allFilteredIds : []);
   };
 
   const handleSelectRequest = (requestId) => {
@@ -114,6 +167,7 @@ const CompletedRequestHistory = () => {
 
   const handleExportList = () => {
     try {
+      // Export logic remains the same
       const exportData = filteredRequests.map(req => ({
         'Student Name': req.studentName || 'N/A',
         'Student ID': req.studentId || 'N/A',
@@ -126,13 +180,18 @@ const CompletedRequestHistory = () => {
         'Status': req.status || 'Completed'
       }));
 
+      if (exportData.length === 0) {
+        alert("No data to export based on current filters."); 
+        return;
+      }
+
       const headers = Object.keys(exportData[0]);
       const csvContent = [
         headers.join(','),
         ...exportData.map(row => 
           headers.map(header => {
-            const cell = row[header];
-            return typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))
+            const cell = row[header] ? row[header].toString() : ''; 
+            return cell.includes(',') || cell.includes('"') || cell.includes('\n')
               ? `"${cell.replace(/"/g, '""')}"`
               : cell;
           }).join(',')
@@ -145,13 +204,17 @@ const CompletedRequestHistory = () => {
       
       link.setAttribute('href', url);
       link.setAttribute('download', `completed_requests_${new Date().toISOString().split('T')[0]}.csv`);
-      link.style.visibility = 'hidden';
-      
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
-      alert(`Successfully exported ${exportData.length} completed request(s) to CSV!`);
+      setShowSuccessModal({ 
+        message: `Successfully exported ${exportData.length} completed request(s) to CSV!`,
+        title: "Export Successful",
+        icon: "📄"
+      });
+      
     } catch (error) {
       console.error("Error exporting data:", error);
       alert("Error exporting data. Please try again.");
@@ -184,7 +247,11 @@ const CompletedRequestHistory = () => {
       const data = await response.json();
       
       if (data.success) {
-        setShowSuccessModal(true);
+        setShowSuccessModal({ 
+            message: `${selectedRequests.length} request(s) archived successfully!`, 
+            title: "Archive Successful", 
+            icon: "📦" 
+        });
         setTimeout(() => {
           setShowSuccessModal(false);
           setSelectedRequests([]);
@@ -195,7 +262,7 @@ const CompletedRequestHistory = () => {
       }
     } catch (error) {
       console.error("Error archiving requests:", error);
-      alert("Error: " + error.message);
+      alert("Error: " + error.message); 
       setShowBulkArchiveModal(false);
     } finally {
       setArchiving(false);
@@ -215,33 +282,68 @@ const CompletedRequestHistory = () => {
     setSearchTerm("");
   };
 
-  const stats = {
-    total: filteredRequests.length,
-    thisMonth: filteredRequests.filter(r => {
-      if (!r.requestDate) return false;
-      const requestDate = new Date(r.requestDate);
-      const now = new Date();
-      return requestDate.getMonth() === now.getMonth() && 
-             requestDate.getFullYear() === now.getFullYear();
-    }).length,
-    form137: filteredRequests.filter(r => r.documentType && r.documentType.includes('Form 137')).length,
-    certificates: filteredRequests.filter(r => r.documentType && r.documentType.includes('Certificate')).length,
-  };
+  // --- Statistics Calculation (Memoized) ---
+  const stats = useMemo(() => {
+    const now = new Date();
+    return {
+        total: filteredRequests.length,
+        thisMonth: filteredRequests.filter(r => {
+            if (!r.completedDate) return false;
+            const completedDate = new Date(r.completedDate); // Changed to completedDate for history
+            return completedDate.getMonth() === now.getMonth() && 
+                   completedDate.getFullYear() === now.getFullYear();
+        }).length,
+        form137: filteredRequests.filter(r => r.documentType && r.documentType.includes('Form 137')).length,
+        certificates: filteredRequests.filter(r => r.documentType && r.documentType.includes('Certificate')).length,
+    };
+  }, [filteredRequests]);
 
+  const statCardsData = [
+    { 
+        title: "Total Completed", 
+        value: stats.total, 
+        icon: CheckCircle, 
+        textColor: 'text-green-600 dark:text-green-400', 
+        bgLight: 'bg-green-100',
+    },
+    { 
+        title: "Requests This Month", 
+        value: stats.thisMonth, 
+        icon: Clock, // Using Clock for time-based metric
+        textColor: 'text-yellow-600 dark:text-yellow-400', 
+        bgLight: 'bg-yellow-100',
+    },
+    { 
+        title: "Form 137", 
+        value: stats.form137, 
+        icon: FileText, 
+        textColor: 'text-blue-600 dark:text-blue-400', 
+        bgLight: 'bg-blue-100',
+    },
+    { 
+        title: "Certificates", 
+        value: stats.certificates, 
+        icon: Package, // Using Package for general docs/certificates
+        textColor: 'text-purple-600 dark:text-purple-400', 
+        bgLight: 'bg-purple-100',
+    },
+  ];
+
+  // --- Render Loading/Error States ---
   if (loading) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-5xl mb-4">⏳</div>
+          <div className="text-5xl mb-4 text-gray-500 dark:text-gray-400 animate-spin">⏳</div>
           <p className="text-gray-600 dark:text-gray-300 font-medium">Loading completed requests...</p>
         </div>
       </div>
     );
   }
 
-  if (error) {
+  if (error && !requests.length) { 
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 flex items-center justify-center">
         <div className="text-center bg-red-50 dark:bg-red-900/20 p-6 rounded-xl border-2 border-red-200 dark:border-red-800">
           <div className="text-5xl mb-4">⚠️</div>
           <h3 className="text-lg font-bold text-red-900 dark:text-red-300 mb-2">Error Loading Completed Requests</h3>
@@ -256,53 +358,100 @@ const CompletedRequestHistory = () => {
       </div>
     );
   }
+  
+  const totalFilteredRequests = filteredRequests.length;
+  const isAllSelected = totalFilteredRequests > 0 && selectedRequests.length === totalFilteredRequests;
+
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans">
+      
+      {/* Custom style for slide-up animation (Copied from DocumentRequests) */}
+      <style>{`
+        @keyframes slideUp {
+          from { transform: translateY(30px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .slide-up { animation: slideUp 0.6s ease-out; }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-fadeIn-no-y { animation: fadeIn 0.6s ease-out; }
+        
+        /* Other modal animations from previous attempt */
+        @keyframes bounce-in {
+          0% { opacity: 0; transform: scale(0.5); }
+          50% { transform: scale(1.05); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        .animate-bounce-in { animation: bounce-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+      `}</style>
 
-      {/* Flush Left & Top */}
-      <div className="max-w-full mx-auto px-0 py-0 animate-fadeIn">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6 transition-all duration-300">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
-            ✅ Completed Request History
-          </h2>
+      <div className="max-w-full mx-auto px-0 py-0 animate-fadeIn-no-y">
+        
+        {/* Header Section */}
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          Completed Request History
+        </h1>
 
-          <div className="bg-gradient-to-r from-amber-900 via-amber-800 to-stone-900 rounded-xl p-4 flex flex-wrap gap-4 items-center shadow-xl">
-            <div className="flex items-center gap-2">
-              <label className="text-white text-sm font-bold">Document Type:</label>
+        {/* Statistics Cards (COPIED STYLE) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          {statCardsData.map((card, index) => {
+            const Icon = card.icon;
+            return (
+              <div
+                key={index}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 flex items-center space-x-4 hover:shadow-lg transition-shadow"
+              >
+                <div className={`${card.bgLight} dark:bg-opacity-20 p-4 rounded-lg`}>
+                  <Icon className={`${card.textColor} dark:text-white`} size={32} />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{card.title}</p>
+                  <p className="text-2xl font-bold text-gray-800 dark:text-white">{card.value || 0}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        
+        {/* Filter and Search Bar (Maintaining original filtering functionality) */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-300 dark:border-slate-600 p-4 mb-6 transition-all duration-300">
+          <div className="flex flex-wrap gap-4 items-center justify-between">
+            
+            <div className="flex flex-wrap gap-4">
+              {/* Document Type Filter */}
               <select
                 value={filters.documentType}
                 onChange={(e) => handleFilterChange("documentType", e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
               >
-                <option value="all">All Types</option>
+                <option value="all">All Document Types</option>
                 <option value="Form 137">Form 137</option>
                 <option value="Good Moral Certificate">Good Moral Certificate</option>
                 <option value="Certificate of Enrollment">Certificate of Enrollment</option>
                 <option value="Diploma">Diploma</option>
               </select>
-            </div>
 
-            <div className="flex items-center gap-2">
-              <label className="text-white text-sm font-bold">Grade Level:</label>
+              {/* Grade Level Filter */}
               <select
                 value={filters.gradeLevel}
                 onChange={(e) => handleFilterChange("gradeLevel", e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
               >
                 <option value="all">All Grades</option>
                 {[1,2,3,4,5,6].map(grade => (
                   <option key={grade} value={grade.toString()}>Grade {grade}</option>
                 ))}
               </select>
-            </div>
 
-            <div className="flex items-center gap-2">
-              <label className="text-white text-sm font-bold">Date Range:</label>
+              {/* Date Range Filter */}
               <select
                 value={filters.dateRange}
                 onChange={(e) => handleFilterChange("dateRange", e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all hover:shadow-md cursor-pointer"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
               >
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
@@ -311,247 +460,165 @@ const CompletedRequestHistory = () => {
                 <option value="last-month">Last Month</option>
               </select>
             </div>
-
-            <div className="ml-auto flex gap-2">
-              <button
-                onClick={handleExportList}
-                disabled={filteredRequests.length === 0}
-                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                <span className="text-lg">📄</span>
-                <span className="text-sm font-bold">Export Report</span>
-              </button>
-              <button
-                onClick={handleBulkArchiveClick}
-                disabled={selectedRequests.length === 0}
-                className="flex items-center gap-2 px-5 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                <span className="text-lg">📦</span>
-                <span className="text-sm font-bold">Archive Selected ({selectedRequests.length})</span>
-              </button>
-            </div>
           </div>
-
-          <div className="mt-6">
-            <div className="relative">
+          
+          <div className="mt-4 flex items-center justify-between gap-4">
+            <div className="relative flex-grow">
               <input
                 type="text"
                 placeholder="Search by name, ID, document type, or purpose..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 pl-12 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                className="w-full px-4 py-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm"
               />
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                 🔍
               </div>
-              {searchTerm && (
-                <button
-                  onClick={handleClearSearch}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                >
-                  ✕
-                </button>
-              )}
             </div>
-            {searchTerm && (
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Found {filteredRequests.length} request{filteredRequests.length !== 1 ? 's' : ''} matching "{searchTerm}"
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
-              Total Completed
-            </h3>
-            <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
-              {stats.total}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Filtered Results</p>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
-              This Month
-            </h3>
-            <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
-              {stats.thisMonth}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Requests</p>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
-              Form 137
-            </h3>
-            <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
-              {stats.form137}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Requests</p>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
-            <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
-              Certificates
-            </h3>
-            <p className="text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:scale-110 transition-transform">
-              {stats.certificates}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Requests</p>
-          </div>
-        </div>
-
-        {/* Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-x-auto hover:shadow-2xl transition-all duration-300">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700">
-              <tr>
-                <th className="px-6 py-4 text-left">
-                  <input
-                    type="checkbox"
-                    checked={filteredRequests.length > 0 && 
-                      filteredRequests.every(req => selectedRequests.includes(req.id))}
-                    onChange={handleSelectAll}
-                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
-                  />
-                </th>
-
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-                  Student Name
-                </th>
-
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-                  Student ID
-                </th>
-
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-                  Document Type
-                </th>
-
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-                  Request Purpose
-                </th>
-
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-                  Request Date
-                </th>
-
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-                  Completed Date
-                </th>
-
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-                  Pickup Date
-                </th>
-
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-                  Status
-                </th>
-
-                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredRequests.map((request) => (
-                <tr
-                  key={request.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
-                >
-                  <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
-                    <input
-                      type="checkbox"
-                      checked={selectedRequests.includes(request.id)}
-                      onChange={() => handleSelectRequest(request.id)}
-                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
-                    />
-                  </td>
-
-                  <td className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">
-                    {request.studentName || "N/A"}
-                  </td>
-
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
-                    {request.studentId || "N/A"}
-                  </td>
-
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.documentType || "N/A"}
-                  </td>
-
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.requestPurpose || "N/A"}
-                  </td>
-
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.requestDate || "N/A"}
-                  </td>
-
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.completedDate || "N/A"}
-                  </td>
-
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {request.pickupDate || "N/A"}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full shadow-sm">
-                      {request.status || "Completed"}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
-                    <button
-                      onClick={() => handleRowClick(request)}
-                      className="px-3 py-1.5 text-xs font-semibold bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-400 rounded-lg shadow-sm transition-all duration-300 hover:-translate-y-0.5"
-                    >
-                      👁️ View Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {filteredRequests.length === 0 && (
-          <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-6">
-            <div className="text-gray-400 text-5xl mb-4">
-              {searchTerm || Object.values(filters).some(f => f !== 'all') ? "🔍" : "📋"}
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              {searchTerm || Object.values(filters).some(f => f !== 'all') 
-                ? "No matching completed requests found" 
-                : "No completed requests found"}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              {searchTerm || Object.values(filters).some(f => f !== 'all') 
-                ? "Try adjusting your search or filters" 
-                : "Completed document requests will appear here."}
-            </p>
-            {(searchTerm || Object.values(filters).some(f => f !== 'all')) && (
+            
+            <div className="flex gap-2">
+              {/* Action: Export */}
               <button
-                onClick={() => {
-                  setSearchTerm("");
-                  setFilters({
-                    documentType: "all",
-                    gradeLevel: "all",
-                    dateRange: "all",
-                  });
-                }}
-                className="mt-4 px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                onClick={handleExportList}
+                disabled={totalFilteredRequests === 0}
+                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Clear All Filters
+                <Download className="w-4 h-4" /> Export
               </button>
-            )}
+
+              {/* Action: Bulk Archive */}
+              <button
+                onClick={handleBulkArchiveClick}
+                disabled={selectedRequests.length === 0}
+                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Archive className="w-4 h-4" /> Archive ({selectedRequests.length})
+              </button>
+            </div>
           </div>
-        )}
+        </div>
+
+        {/* Main Table Container (COPIED STYLE) */}
+        <div className={`mt-0 rounded-2xl shadow-md border border-gray-300 dark:border-slate-600 overflow-visible ${animate ? "slide-up" : ""}`}>
+          
+          {/* Display Counter (Header Bar - COPIED STYLE) */}
+          <div className="flex justify-between items-center px-4 py-3 bg-white dark:bg-slate-800 rounded-t-2xl border-b border-gray-300 dark:border-slate-600">
+            {/* Left Side: Display Counter (Showing X Requests) */}
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              {totalFilteredRequests > 0 ? (
+                <>
+                  Showing
+                  <span className="font-bold text-gray-800 dark:text-white mx-1">
+                    {totalFilteredRequests}
+                  </span>
+                  {` Completed Request${totalFilteredRequests > 1 ? 's' : ''}`}
+                </>
+              ) : (
+                'No Completed Request Found'
+              )}
+            </span>
+
+            {/* Right Side: Placeholder for Pagination (Empty) */}
+            <div className="h-6"></div> 
+          </div>
+
+          <div className="overflow-x-auto">
+            {/* Table structure with min-width and relative z-index (Copied from DocumentRequests/InboxTable) */}
+            <table className="min-w-[1200px] w-full border-collapse relative z-10">
+              
+              {/* Table Header (COPIED STYLE) */}
+              <thead className="bg-gray-100 dark:bg-slate-700 text-left border-b border-gray-400 dark:border-slate-500">
+                <tr>
+                  <th className="px-4 py-3 w-10">
+                    <input
+                        type="checkbox"
+                        checked={isAllSelected}
+                        onChange={handleSelectAll}
+                        className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
+                    />
+                  </th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Student Name</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Student ID</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Document Type</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Purpose</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Request Date</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Completed Date</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Pickup Date</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white text-center">Status</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white text-center">Actions</th>
+                </tr>
+              </thead>
+
+              {/* Table Body (Rows - COPIED STYLE) */}
+              <tbody>
+                {totalFilteredRequests > 0 ? (
+                  filteredRequests.map((request, index) => (
+                    <tr
+                      key={request.id}
+                      className={`transition-all duration-300
+                        ${index !== totalFilteredRequests - 1 ? "border-b border-gray-400 dark:border-slate-600" : ""}
+                        hover:bg-gray-50 dark:hover:bg-slate-700
+                        ${selectedRequests.includes(request.id) ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
+                      `}
+                    >
+                      {/* Checkbox */}
+                      <td className="px-4 py-3 w-10" onClick={(e) => e.stopPropagation()}>
+                        <input
+                            type="checkbox"
+                            checked={selectedRequests.includes(request.id)}
+                            onChange={() => handleSelectRequest(request.id)}
+                            className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
+                        />
+                      </td>
+                      {/* Name */}
+                      <td className="px-4 py-3 text-sm text-gray-800 dark:text-white font-medium">
+                        {request.studentName || "N/A"}
+                      </td>
+                      {/* ID */}
+                      <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.studentId || "N/A"}</td>
+                      {/* Document Type */}
+                      <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.documentType || "N/A"}</td>
+                      {/* Purpose */}
+                      <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.requestPurpose || "N/A"}</td>
+                      {/* Request Date */}
+                      <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.requestDate || "N/A"}</td>
+                      {/* Completed Date */}
+                      <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.completedDate || "N/A"}</td>
+                      {/* Pickup Date */}
+                      <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.pickupDate || "N/A"}</td>
+                      {/* Status (Badge Style - changed color to green for completed) */}
+                      <td className="px-4 py-3 text-center">
+                        <span className="text-xs font-semibold px-2 py-1 rounded-full bg-green-300 text-black">
+                          {request.status || "Completed"}
+                        </span>
+                      </td>
+                      {/* Actions (Button Style - COPIED STYLE) */}
+                      <td className="px-4 py-3 text-center relative" onClick={(e) => e.stopPropagation()}>
+                        <div className="relative flex flex-col items-center group">
+                          <button
+                            className="inline-flex items-center gap-2 border border-gray-400 text-black dark:text-white px-3 py-1.5 rounded-md text-sm font-semibold bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition cursor-pointer"
+                            onClick={() => handleRowClick(request)}
+                          >
+                            <Eye className="w-4 h-4" /> View
+                          </button>
+                          <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium rounded-md px-2 py-1 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-[9999]">
+                            View Details
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="10" className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                      No completed document requests found matching the current filters.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <CompletedRequestInfoModal
@@ -562,120 +629,24 @@ const CompletedRequestHistory = () => {
       />
 
       {/* Bulk Archive Modal */}
-      {showBulkArchiveModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-80 flex items-center justify-center z-[60] p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md transform transition-all">
-            <div className="bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 px-6 py-4 rounded-t-xl">
-              <div className="flex items-center gap-3">
-                <div className="text-3xl">⚠️</div>
-                <h3 className="text-xl font-bold text-white">Confirm Bulk Archive</h3>
-              </div>
-            </div>
-
-            <div className="p-6">
-              <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed mb-4">
-                Archive {selectedRequests.length} selected request{selectedRequests.length !== 1 ? 's' : ''}? This will move them to the Archive Search tab.
-              </p>
-              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-                <p className="text-sm text-amber-800 dark:text-amber-300 font-medium">
-                  📦 <strong>{selectedRequests.length}</strong> request{selectedRequests.length !== 1 ? 's' : ''} selected for archiving
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-gray-900 px-6 py-4 rounded-b-xl flex justify-end gap-3">
-              <button
-                onClick={() => setShowBulkArchiveModal(false)}
-                disabled={archiving}
-                className="px-5 py-2.5 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 font-semibold transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleBulkArchiveConfirm}
-                disabled={archiving}
-                className="px-5 py-2.5 bg-amber-600 dark:bg-amber-700 text-white rounded-lg hover:bg-amber-700 dark:hover:bg-amber-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                {archiving ? (
-                  <>
-                    <span className="inline-block animate-spin">⏳</span>
-                    Archiving...
-                  </>
-                ) : (
-                  <>
-                    📦 Archive {selectedRequests.length} Request{selectedRequests.length !== 1 ? 's' : ''}
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <BulkArchiveModal
+        isOpen={showBulkArchiveModal}
+        onClose={() => setShowBulkArchiveModal(false)}
+        onConfirm={handleBulkArchiveConfirm}
+        selectedCount={selectedRequests.length}
+        archiving={archiving}
+      />
 
       {/* Success Modal */}
       {showSuccessModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-80 flex items-center justify-center z-[70] p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md transform transition-all animate-bounce-in">
-            <div className="p-8 text-center">
-              <div className="mb-4 text-6xl animate-checkmark">✅</div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Success!
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 text-base">
-                {selectedRequests.length} request{selectedRequests.length !== 1 ? 's' : ''} archived successfully!
-              </p>
-            </div>
-          </div>
-        </div>
+        <SuccessNotificationModal
+            isOpen={!!showSuccessModal}
+            onClose={() => setShowSuccessModal(false)}
+            title={showSuccessModal.title}
+            message={showSuccessModal.message}
+            icon={showSuccessModal.icon}
+        />
       )}
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.6s ease-out;
-        }
-        @keyframes bounce-in {
-          0% {
-            opacity: 0;
-            transform: scale(0.5);
-          }
-          50% {
-            transform: scale(1.05);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        @keyframes checkmark {
-          0% {
-            transform: scale(0);
-            opacity: 0;
-          }
-          50% {
-            transform: scale(1.2);
-          }
-          100% {
-            transform: scale(1);
-            opacity: 1;
-          }
-        }
-        .animate-bounce-in {
-          animation: bounce-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        .animate-checkmark {
-          animation: checkmark 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-      `}</style>
     </div>
   );
 };

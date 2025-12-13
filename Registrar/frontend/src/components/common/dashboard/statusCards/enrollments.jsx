@@ -38,7 +38,7 @@ const Enrollments = () => {
     >
       <div className="flex flex-col">
         <span className="text-black dark:text-white text-sm font-semibold">
-          Active Enrollments
+          Enrolled Students
         </span>
         <span className="text-black dark:text-white text-2xl font-extrabold">
           {count}

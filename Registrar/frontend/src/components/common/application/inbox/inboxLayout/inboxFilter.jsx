@@ -9,7 +9,7 @@ const InboxFilter = ({ filtersState, setFiltersState }) => {
     setTimeout(() => setShow(true), 50);
   }, []);
 
-  // Define your filter options
+  // Define your filter options without Date Submitted
   const filters = [
     {
       label: "Student Type",
@@ -17,23 +17,13 @@ const InboxFilter = ({ filtersState, setFiltersState }) => {
       options: ["All Types", "New Student", "Transferee", "Returnee"],
     },
     {
-      label: "Date Submitted",
-      tooltip: "Select Date Submitted",
-      options: [
-        "All Dates",
-        "January 2025",
-        "February 2025",
-        "March 2025",
-        "April 2025",
-        "May 2025",
-        "November 2025",
-      ],
-    },
-    {
       label: "Grade Level",
       tooltip: "Select Grade Level",
       options: [
         "All Grades",
+        "Nursery",
+        "Kinder 1",
+        "Kinder 2",
         "Grade 1",
         "Grade 2",
         "Grade 3",
@@ -49,11 +39,10 @@ const InboxFilter = ({ filtersState, setFiltersState }) => {
     setFiltersState({ ...filtersState, [label]: value });
   };
 
-  // Handle clearing all filters
+  // Handle clearing all filters (excluding Date Submitted)
   const handleClearFilters = () => {
     setFiltersState({
       "Student Type": "All Types",
-      "Date Submitted": "All Dates",
       "Grade Level": "All Grades",
     });
   };

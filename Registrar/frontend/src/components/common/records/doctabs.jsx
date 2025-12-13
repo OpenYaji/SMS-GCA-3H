@@ -7,8 +7,8 @@ const Doct = () => {
   const [activeTab, setActiveTab] = useState('dr');
 
   const tabs = [
-    { id: 'dr', label: 'Doc Req' },
-    { id: 'crr', label: 'Comp Req' },
+    { id: 'dr', label: 'Document Request' },
+    { id: 'crr', label: 'Completed Request' },
     { id: 'ass', label: 'Archive Search' }
   ];
 

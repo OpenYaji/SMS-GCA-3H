@@ -502,7 +502,7 @@ class Mailer
 
                     <div class='highlight-box warning-box'>
                         <h3 style='margin-top:0; color: #dc2626;'>Student Portal Login Credentials</h3>
-                        <p style='font-size: 13px; color: #7f1d1d;'>**Important:** You must change your default password immediately upon first login for security.</p>
+                        <p style='font-size: 13px; color: #7f1d1d;'>**Important:** Students are required to change the default password upon their first login. The student number may be used as the username.</p>
                         
                         <table style='width: 100%; margin-top: 10px;'>
                             <tr>

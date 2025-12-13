@@ -78,7 +78,7 @@ const ReviewTable = ({ statusUpdates = {}, triggerSectionUpdate = () => {} }) =>
                 if (JSON.stringify(prevDataRef.current) !== JSON.stringify(newData)) {
                     setApplicants(newData);
                     prevDataRef.current = newData;
-                     setCurrentPage(1); 
+                    setCurrentPage(1); 
                 }
                 setError(null);
             } else {
@@ -98,7 +98,7 @@ const ReviewTable = ({ statusUpdates = {}, triggerSectionUpdate = () => {} }) =>
         return () => clearInterval(interval);
     }, []); 
 
-      useEffect(() => setAnimate(true), []);
+    useEffect(() => setAnimate(true), []);
 
     // Pagination logic
     const totalPages = Math.ceil(applicants.length / itemsPerPage);
@@ -233,7 +233,7 @@ const ReviewTable = ({ statusUpdates = {}, triggerSectionUpdate = () => {} }) =>
                 type={toast.type}
                 onClose={() => setToast({ ...toast, isVisible: false })}
             />
-  <style>{`
+            <style>{`
                 @keyframes slideUp {
                     from { transform: translateY(30px); opacity: 0; }
                     to { transform: translateY(0); opacity: 1; }
@@ -246,7 +246,7 @@ const ReviewTable = ({ statusUpdates = {}, triggerSectionUpdate = () => {} }) =>
             {/* START: Main Table Container - Only hide if loading or error */}
             {!loading && !error && (
                 <div className={`mt-5 rounded-2xl shadow-md border border-gray-300 dark:border-slate-600 overflow-visible ${animate ? "slide-up" : ""}`}>
-                   
+                    
                     {/* Header Bar with Count and Pagination */}
                     <div className="flex justify-between items-center px-4 py-3 bg-white dark:bg-slate-800 rounded-t-2xl border-b border-gray-300 dark:border-slate-600">
                         <span className="text-sm text-gray-600 dark:text-gray-400">
@@ -264,7 +264,7 @@ const ReviewTable = ({ statusUpdates = {}, triggerSectionUpdate = () => {} }) =>
                                 <tr className="bg-gray-100 dark:bg-slate-700 text-left border-b border-gray-400 dark:border-slate-500">
                                     
                                     <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Applicant Name</th>
-                                    <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Payment Method</th>
+                                    {/* REMOVED: <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Payment Method</th> */}
                                     <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Student Type</th>
                                     <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Grade Level</th>
                                     <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white text-center">Status</th> 
@@ -274,7 +274,7 @@ const ReviewTable = ({ statusUpdates = {}, triggerSectionUpdate = () => {} }) =>
 
                             <tbody>
                                
-                                                     {currentApplicants.length > 0 ? (
+                                {currentApplicants.length > 0 ? (
                                     currentApplicants.map((a, index) => ( 
                                         <tr
                                             key={a.id}
@@ -286,14 +286,15 @@ const ReviewTable = ({ statusUpdates = {}, triggerSectionUpdate = () => {} }) =>
                                                 {a.StudentLastName}, {a.StudentFirstName} {a.StudentMiddleName || ""}
                                             </td>
 
-                                            <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
+                                            {/* REMOVED: Payment Method Column */}
+                                            {/* <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
                                                 {a.paymentMethod || "—"}
-                                            </td>
+                                            </td> */}
 
                                             <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
                                                 {a.EnrolleeType || "—"}
                                             </td>
-                                               
+                                                
                                             <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
                                                 {a.grade || "—"}
                                             </td>
@@ -317,21 +318,22 @@ const ReviewTable = ({ statusUpdates = {}, triggerSectionUpdate = () => {} }) =>
                                                             Change
                                                         </button>
                                                     </div>
-                                                             ) : (
+                                                ) : (
                                                     <button
                                                         onClick={() => handleAssignSectionClick(a)}
                                                          className="w-auto text-xs px-3 py-1 rounded-full bg-green-500 text-white hover:bg-green-600 transition shadow-md"
                                                     >
-                                                          Assign Section
+                                                         Assign Section
                                                     </button>
-                                                 )}
+                                                )}
                                             </td>
                                         </tr>
                                     ))
                                 ) : (
                                     /* Show this row if applicants.length === 0 */
                                     <tr>
-                                        <td colSpan="6" className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                                        {/* colSpan updated from 6 to 5 */}
+                                        <td colSpan="5" className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                                             No validated applicants found.
                                         </td>
                                     </tr>

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import ReviewHeader from "./reviewLayout/reviewHeader";
 import ReviewSection from "./reviewLayout/reviewSection";
-import ReviewFilter from "./reviewLayout/reviewFilter";
+// import ReviewFilter from "./reviewLayout/reviewFilter";
 import ReviewTable from "./reviewLayout/reviewTable";
 
 
@@ -16,7 +16,7 @@ const Review = ({ reviewApplicants = [] }) => {
         <>
             <ReviewHeader/>
             <ReviewSection sectionUpdateTrigger={sectionUpdateTrigger} />
-            <ReviewFilter/>
+            {/* <ReviewFilter/> */}
             <ReviewTable 
                 applicants={reviewApplicants}
                 triggerSectionUpdate={triggerSectionUpdate} 

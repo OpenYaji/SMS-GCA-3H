@@ -126,7 +126,7 @@ const ScreeningModal = ({ applicant, onClose, onValidate, isProcessing }) => {
         const t = type.toLowerCase();
 
         if (t === "new student" || t === "new") {
-            return ["Birth Certificate", "Report Card", "Good Moral Certificate", "Certificate of Completion", "Form 137"];
+            return ["Birth Certificate"];
         } else if (t === "old student" || t === "old") {
             return ["Report Card"];
         } else if (t === "transferee" || t === "transfer" || t === "transferree") {
@@ -247,24 +247,25 @@ const ScreeningModal = ({ applicant, onClose, onValidate, isProcessing }) => {
                         </p>
                     </div>
 
-                    {/* PARENT/GUARDIAN */}
-                    <div className="space-y-2">
-                        <h3 className="text-sm font-semibold">Parent / Guardian Information</h3>
+                   {/* Parent / Guardian Info */}
+<div className="space-y-2">
+  <h3 className="text-sm font-semibold">Parent / Guardian Information</h3>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
-                            {[
-                                { label: "Guardian Name", value: `${fieldValue(applicant.GuardianFirstName)} ${fieldValue(applicant.GuardianLastName)}` },
-                                { label: "Relationship", value: fieldValue(applicant.GuardianRelationship) },
-                                { label: "Contact Number", value: fieldValue(applicant.GuardianContact) },
-                                { label: "Email", value: fieldValue(applicant.GuardianEmail) },
-                            ].map((item, idx) => (
-                                <div key={idx}>
-                                    <label className="block font-semibold text-sm mb-1">{item.label}</label>
-                                    <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm">{item.value}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+  <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+    {[
+      { label: "Guardian Name", value: `${fieldValue(applicant.GuardianFirstName)} ${fieldValue(applicant.GuardianLastName)}` },
+      { label: "Relationship", value: fieldValue(applicant.GuardianRelationship) },
+      { label: "Contact Number", value: fieldValue(applicant.GuardianContact) },
+      { label: "Email", value: fieldValue(applicant.GuardianEmail) },
+    ].map((item, idx) => (
+      <div key={idx}>
+        <label className="block font-semibold text-sm mb-1">{item.label}</label>
+        <p className="border border-gray-400 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-slate-700 text-sm overflow-hidden truncate">{item.value}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
                     {/* PAYMENT SECTION */}
                     {feeStructure && (
                         <div className="border-t pt-4 mt-4">

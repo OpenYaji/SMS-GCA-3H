@@ -54,7 +54,7 @@ try {
         }
         
         // Skip if already approved or not in submitted state
-        if ($submission['SubmissionStatus'] === 'Approved' || 
+        if ($submission['SubmissionStatus'] === 'Released' || 
             !in_array($submission['SubmissionStatus'], ['Submitted', 'Resubmitted'])) {
             $skippedCount++;
             continue;
@@ -63,7 +63,7 @@ try {
         // Update submission status
         $updateQuery = "
             UPDATE gradesubmission 
-            SET SubmissionStatus = 'Approved',
+            SET SubmissionStatus = 'Released',
                 ReviewedByUserID = :userId,
                 ReviewedDate = NOW(),
                 RegistrarNotes = :notes
@@ -79,7 +79,7 @@ try {
         $updateGradesQuery = "
             UPDATE grade g
             JOIN enrollment e ON g.EnrollmentID = e.EnrollmentID
-            SET g.GradeStatusID = (SELECT StatusID FROM gradestatus WHERE StatusName = 'Approved' LIMIT 1)
+            SET g.GradeStatusID = (SELECT StatusID FROM gradestatus WHERE StatusName = 'Released' LIMIT 1)
             WHERE e.SectionID = :sectionId
             AND e.SchoolYearID = :schoolYearId
             AND g.Quarter = :quarter

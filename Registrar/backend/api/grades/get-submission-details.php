@@ -24,14 +24,25 @@ try {
     
     $submissionId = (int)$_GET['submissionId'];
     
-    // Get submission details
+    // --- START: MODIFIED SUBMISSION DETAILS QUERY ---
     $subQuery = "
-        SELECT gs.*, s.SectionName, gl.LevelName, gl.GradeLevelID
+        SELECT 
+            gs.*, 
+            s.SectionName, 
+            gl.LevelName, 
+            gl.GradeLevelID,
+            -- I-select ang pangalan ng Adviser/Teacher
+            CONCAT(tp.FirstName, ' ', tp.LastName) as AdviserName 
         FROM gradesubmission gs
         JOIN section s ON gs.SectionID = s.SectionID
         JOIN gradelevel gl ON s.GradeLevelID = gl.GradeLevelID
+        -- Idagdag ang joins para makuha ang Adviser/Teacher name
+        LEFT JOIN teacherprofile tprof ON s.AdviserTeacherID = tprof.TeacherProfileID
+        LEFT JOIN profile tp ON tprof.ProfileID = tp.ProfileID
         WHERE gs.SubmissionID = :submissionId
     ";
+    // --- END: MODIFIED SUBMISSION DETAILS QUERY ---
+    
     $subStmt = $db->prepare($subQuery);
     $subStmt->bindParam(':submissionId', $submissionId, PDO::PARAM_INT);
     $subStmt->execute();
@@ -42,6 +53,7 @@ try {
     }
     
     // Get all students with their grades for this section and quarter
+    // ... (Walang pagbabago sa Grades Query) ...
     $gradesQuery = "
         SELECT 
             sp.StudentProfileID,
@@ -73,6 +85,7 @@ try {
     $grades = $gradesStmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Organize grades by student
+    // ... (Walang pagbabago sa Grade Organization at Average Calculation) ...
     $students = [];
     foreach ($grades as $grade) {
         $studentId = $grade['StudentProfileID'];
@@ -111,6 +124,7 @@ try {
     echo json_encode([
         'success' => true,
         'data' => [
+            // --- START: MODIFIED JSON OUTPUT ---
             'submission' => [
                 'id' => $submission['SubmissionID'],
                 'sectionName' => $submission['SectionName'],
@@ -119,8 +133,11 @@ try {
                 'status' => $submission['SubmissionStatus'],
                 'submittedDate' => $submission['SubmittedDate'],
                 'totalStudents' => $submission['TotalStudents'],
-                'teacherNotes' => $submission['TeacherNotes']
+                'teacherNotes' => $submission['TeacherNotes'],
+                // Idinagdag ang Teacher Name dito:
+                'teacher' => $submission['AdviserName'] 
             ],
+            // --- END: MODIFIED JSON OUTPUT ---
             'students' => array_values($students)
         ]
     ]);

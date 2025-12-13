@@ -1,4 +1,6 @@
 <?php
+// File: api/registrar/grade_submissions_archive.php
+
 session_start();
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/cors.php';
@@ -18,11 +20,12 @@ try {
     $db = $database->getConnection();
     
     // Get filter parameters
+    $schoolYearId = isset($_GET['schoolYearId']) ? (int)$_GET['schoolYearId'] : null;
     $gradingPeriod = isset($_GET['gradingPeriod']) ? $_GET['gradingPeriod'] : '';
     $gradeLevel = isset($_GET['gradeLevel']) ? $_GET['gradeLevel'] : '';
     $status = isset($_GET['status']) ? $_GET['status'] : '';
     
-    // Build query to fetch grade submissions
+    // Build query to fetch grade submissions for INACTIVE school years
     $query = "
         SELECT 
             gs.SubmissionID,
@@ -47,25 +50,26 @@ try {
         JOIN gradelevel gl ON s.GradeLevelID = gl.GradeLevelID
         JOIN schoolyear sy ON gs.SchoolYearID = sy.SchoolYearID
         LEFT JOIN user u ON gs.SubmittedByUserID = u.UserID
-        LEFT JOIN profile p ON u.UserID = p.UserID
+        LEFT JOIN profile p ON u.UserID = p.ProfileID -- Adjusted for common practice, check your schema
         LEFT JOIN teacherprofile tprof ON s.AdviserTeacherID = tprof.TeacherProfileID
         LEFT JOIN profile tp ON tprof.ProfileID = tp.ProfileID
-        WHERE sy.IsActive = 1
+        WHERE sy.IsActive = 0 -- <<< KEY CHANGE: Fetching from inactive school years
     ";
     
     $params = [];
     
     // Apply filters
+    if ($schoolYearId) {
+        $query .= " AND gs.SchoolYearID = :schoolYearId";
+        $params[':schoolYearId'] = $schoolYearId;
+    }
+
     if (!empty($gradingPeriod)) {
+        // ... (quarter mapping logic here, same as your original script)
         $quarterMap = [
-            'Q1' => 'First Quarter',
-            'Q2' => 'Second Quarter',
-            'Q3' => 'Third Quarter',
-            'Q4' => 'Fourth Quarter',
-            'First Quarter' => 'First Quarter',
-            'Second Quarter' => 'Second Quarter',
-            'Third Quarter' => 'Third Quarter',
-            'Fourth Quarter' => 'Fourth Quarter'
+            'Q1' => 'First Quarter', 'Q2' => 'Second Quarter', 'Q3' => 'Third Quarter', 'Q4' => 'Fourth Quarter',
+            'First Quarter' => 'First Quarter', 'Second Quarter' => 'Second Quarter', 
+            'Third Quarter' => 'Third Quarter', 'Fourth Quarter' => 'Fourth Quarter'
         ];
         $quarterValue = isset($quarterMap[$gradingPeriod]) ? $quarterMap[$gradingPeriod] : $gradingPeriod;
         $query .= " AND gs.Quarter = :quarter";
@@ -82,7 +86,7 @@ try {
         $params[':status'] = $status;
     }
     
-    $query .= " ORDER BY gs.SubmittedDate DESC";
+    $query .= " ORDER BY sy.YearName DESC, gs.SubmittedDate DESC";
     
     $stmt = $db->prepare($query);
     foreach ($params as $key => $value) {
@@ -91,17 +95,14 @@ try {
     $stmt->execute();
     $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Format the data for frontend
+    // Format the data for frontend (same as your original script)
     $formattedSubmissions = [];
+    $quarterMapShort = [
+        'First Quarter' => 'Q1', 'Second Quarter' => 'Q2', 
+        'Third Quarter' => 'Q3', 'Fourth Quarter' => 'Q4'
+    ];
+    
     foreach ($submissions as $sub) {
-        // Convert quarter to short format
-        $quarterMap = [
-            'First Quarter' => 'Q1',
-            'Second Quarter' => 'Q2',
-            'Third Quarter' => 'Q3',
-            'Fourth Quarter' => 'Q4'
-        ];
-        
         $formattedSubmissions[] = [
             'id' => $sub['SubmissionID'],
             'sectionId' => $sub['SectionID'],
@@ -111,7 +112,7 @@ try {
             'section' => $sub['SectionName'],
             'studentCount' => $sub['TotalStudents'],
             'studentsWithGrades' => $sub['StudentsWithGrades'],
-            'gradingPeriod' => $quarterMap[$sub['Quarter']] ?? $sub['Quarter'],
+            'gradingPeriod' => $quarterMapShort[$sub['Quarter']] ?? $sub['Quarter'],
             'quarter' => $sub['Quarter'],
             'status' => $sub['SubmissionStatus'],
             'submittedDate' => $sub['SubmittedDate'] ? date('Y-m-d', strtotime($sub['SubmittedDate'])) : null,
@@ -119,47 +120,16 @@ try {
             'reviewedDate' => $sub['ReviewedDate'],
             'registrarNotes' => $sub['RegistrarNotes'],
             'teacherNotes' => $sub['TeacherNotes'],
-            'schoolYear' => $sub['YearName']
+            'schoolYear' => $sub['YearName'] // Important: Display the School Year
         ];
     }
-    
-    // Get summary stats
-    $statsQuery = "
-        SELECT 
-            COUNT(CASE WHEN gs.SubmissionStatus = 'Submitted' OR gs.SubmissionStatus = 'Resubmitted' THEN 1 END) as submitted,
-            COUNT(CASE WHEN gs.SubmissionStatus = 'Released' THEN 1 END) as approved,
-            COUNT(CASE WHEN gs.SubmissionStatus = 'Rejected' THEN 1 END) as rejected,
-            COUNT(*) as total
-        FROM gradesubmission gs
-        JOIN schoolyear sy ON gs.SchoolYearID = sy.SchoolYearID
-        WHERE sy.IsActive = 1
-    ";
-    $statsStmt = $db->prepare($statsQuery);
-    $statsStmt->execute();
-    $stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
-    
-    // Get total enrolled students
-    $enrolledQuery = "
-        SELECT COUNT(DISTINCT e.StudentProfileID) as total
-        FROM enrollment e
-        JOIN schoolyear sy ON e.SchoolYearID = sy.SchoolYearID
-        WHERE sy.IsActive = 1
-    ";
-    $enrolledStmt = $db->prepare($enrolledQuery);
-    $enrolledStmt->execute();
-    $enrolled = $enrolledStmt->fetch(PDO::FETCH_ASSOC);
     
     http_response_code(200);
     echo json_encode([
         'success' => true,
         'data' => $formattedSubmissions,
-        'stats' => [
-            'submittedGrades' => (int)$stats['submitted'],
-            'approvedGrades' => (int)$stats['approved'],
-            'pendingReview' => (int)$stats['submitted'], // Submitted + Resubmitted are pending
-            'rejectedGrades' => (int)$stats['rejected'],
-            'totalStudents' => (int)$enrolled['total']
-        ]
+        // Optional: Include a list of INACTIVE School Years for filter dropdown
+        'schoolYears' => $db->query("SELECT SchoolYearID as id, YearName as name FROM schoolyear WHERE IsActive = 0 ORDER BY YearName DESC")->fetchAll(PDO::FETCH_ASSOC)
     ]);
     
 } catch (Exception $e) {

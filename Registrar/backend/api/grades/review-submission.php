@@ -47,7 +47,7 @@ try {
         throw new Exception('Submission not found');
     }
     
-    if ($submission['SubmissionStatus'] === 'Approved') {
+    if ($submission['SubmissionStatus'] === 'Released') {
         throw new Exception('This submission has already been approved');
     }
     
@@ -56,7 +56,7 @@ try {
     }
     
     // Update submission status
-    $newStatus = ($action === 'approve') ? 'Approved' : 'Rejected';
+    $newStatus = ($action === 'approve') ? 'Released' : 'Rejected';
     
     $updateQuery = "
         UPDATE gradesubmission 

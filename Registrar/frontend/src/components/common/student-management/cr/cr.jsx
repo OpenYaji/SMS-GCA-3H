@@ -9,7 +9,9 @@ const CR = () => {
 
   return (
     <div className="w-full h-full space-y-6 text-white">
-      
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                     Sections Class List
+                    </h1>
       {/* Pass search & setSearch to Filters */}
       <Filters search={search} setSearch={setSearch} />
 

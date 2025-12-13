@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 
 class Grade {
     private $conn;
@@ -8,35 +8,24 @@ class Grade {
     }
 
     /**
-     * ==================================================
-     * STUDENT: Get grades (VISIBLE ONLY IF RELEASED)
-     * ==================================================
+     * Get all grades for a student by user ID for the active school year
      */
     public function getStudentGradesByUserId($userId) {
         $query = "
             SELECT 
                 s.SubjectID AS id,
                 s.SubjectName AS name,
-                MAX(CASE WHEN g.Quarter = 'First Quarter' THEN g.GradeValue END) AS q1,
-                MAX(CASE WHEN g.Quarter = 'Second Quarter' THEN g.GradeValue END) AS q2,
-                MAX(CASE WHEN g.Quarter = 'Third Quarter' THEN g.GradeValue END) AS q3,
-                MAX(CASE WHEN g.Quarter = 'Fourth Quarter' THEN g.GradeValue END) AS q4
+                MAX(CASE WHEN g.Quarter = 'First Quarter' THEN g.GradeValue ELSE NULL END) AS q1,
+                MAX(CASE WHEN g.Quarter = 'Second Quarter' THEN g.GradeValue ELSE NULL END) AS q2,
+                MAX(CASE WHEN g.Quarter = 'Third Quarter' THEN g.GradeValue ELSE NULL END) AS q3,
+                MAX(CASE WHEN g.Quarter = 'Fourth Quarter' THEN g.GradeValue ELSE NULL END) AS q4
             FROM grade g
             JOIN subject s ON g.SubjectID = s.SubjectID
             JOIN enrollment e ON g.EnrollmentID = e.EnrollmentID
             JOIN schoolyear sy ON e.SchoolYearID = sy.SchoolYearID
-
-            -- 🔑 WORKFLOW CONTROL
-            JOIN gradesubmission gs 
-                ON gs.SectionID = e.SectionID
-               AND gs.SchoolYearID = e.SchoolYearID
-               AND gs.Quarter = g.Quarter
-
             JOIN studentprofile sp ON e.StudentProfileID = sp.StudentProfileID
             JOIN profile p ON sp.ProfileID = p.ProfileID
-            WHERE p.UserID = :user_id
-              AND sy.IsActive = 1
-              AND gs.SubmissionStatus = 'released'
+            WHERE p.UserID = :user_id AND sy.IsActive = 1
             GROUP BY s.SubjectID, s.SubjectName
             ORDER BY s.SubjectID
         ";
@@ -47,43 +36,27 @@ class Grade {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getStudentGradesByUserId: " . $e->getMessage());
+            error_log("Error in getStudentGradesByUserId: " . $e->getMessage());
             return false;
         }
     }
 
     /**
-     * ==================================================
-     * STUDENT: Latest Quarter GWA (RELEASED ONLY)
-     * ==================================================
+     * Get GWA (General Weighted Average) for the latest quarter
      */
     public function getLatestQuarterGWA($userId) {
         $query = "
             SELECT 
-                AVG(g.GradeValue) AS generalAverage,
-                g.Quarter
+                AVG(g.GradeValue) as generalAverage,
+                g.Quarter as quarter
             FROM grade g
             JOIN enrollment e ON g.EnrollmentID = e.EnrollmentID
             JOIN schoolyear sy ON e.SchoolYearID = sy.SchoolYearID
-
-            JOIN gradesubmission gs
-                ON gs.SectionID = e.SectionID
-               AND gs.SchoolYearID = e.SchoolYearID
-               AND gs.Quarter = g.Quarter
-
             JOIN studentprofile sp ON e.StudentProfileID = sp.StudentProfileID
             JOIN profile p ON sp.ProfileID = p.ProfileID
-            WHERE p.UserID = :user_id
-              AND sy.IsActive = 1
-              AND gs.SubmissionStatus = 'released'
+            WHERE p.UserID = :user_id AND sy.IsActive = 1
             GROUP BY g.Quarter
-            ORDER BY FIELD(
-                g.Quarter,
-                'First Quarter',
-                'Second Quarter',
-                'Third Quarter',
-                'Fourth Quarter'
-            ) DESC
+            ORDER BY FIELD(g.Quarter, 'First Quarter', 'Second Quarter', 'Third Quarter', 'Fourth Quarter') DESC
             LIMIT 1
         ";
 
@@ -93,15 +66,13 @@ class Grade {
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getLatestQuarterGWA: " . $e->getMessage());
+            error_log("Error in getLatestQuarterGWA: " . $e->getMessage());
             return false;
         }
     }
 
     /**
-     * ==================================================
-     * STUDENT: Grades per subject (RELEASED ONLY)
-     * ==================================================
+     * Get grades for a specific subject and student
      */
     public function getGradesBySubject($userId, $subjectId) {
         $query = "
@@ -115,25 +86,13 @@ class Grade {
             JOIN subject s ON g.SubjectID = s.SubjectID
             JOIN enrollment e ON g.EnrollmentID = e.EnrollmentID
             JOIN schoolyear sy ON e.SchoolYearID = sy.SchoolYearID
-
-            JOIN gradesubmission gs
-                ON gs.SectionID = e.SectionID
-               AND gs.SchoolYearID = e.SchoolYearID
-               AND gs.Quarter = g.Quarter
-
             JOIN studentprofile sp ON e.StudentProfileID = sp.StudentProfileID
             JOIN profile p ON sp.ProfileID = p.ProfileID
-            WHERE p.UserID = :user_id
-              AND s.SubjectID = :subject_id
-              AND sy.IsActive = 1
-              AND gs.SubmissionStatus = 'released'
-            ORDER BY FIELD(
-                g.Quarter,
-                'First Quarter',
-                'Second Quarter',
-                'Third Quarter',
-                'Fourth Quarter'
-            )
+            WHERE p.UserID = :user_id 
+                AND s.SubjectID = :subject_id 
+                AND sy.IsActive = 1
+            ORDER BY 
+                FIELD(g.Quarter, 'First Quarter', 'Second Quarter', 'Third Quarter', 'Fourth Quarter')
         ";
 
         try {
@@ -143,24 +102,19 @@ class Grade {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getGradesBySubject: " . $e->getMessage());
+            error_log("Error in getGradesBySubject: " . $e->getMessage());
             return false;
         }
     }
 
-    /**
-     * ==================================================
-     * STUDENT: Previous school years (RELEASED ONLY)
-     * ==================================================
-     */
     public function getPreviousGradesByUserId($userId) {
         $query = "
             SELECT 
-                sy.YearName AS schoolYear,
-                sy.SchoolYearID AS schoolYearId,
-                gl.LevelName AS gradeLevel,
-                s.SubjectID AS subjectId,
-                s.SubjectName AS subjectName,
+                sy.YearName as schoolYear,
+                sy.SchoolYearID as schoolYearId, -- <-- MODIFICATION: Added this line
+                gl.LevelName as gradeLevel,
+                s.SubjectID as subjectId,
+                s.SubjectName as subjectName,
                 g.Quarter,
                 g.GradeValue
             FROM grade g
@@ -169,17 +123,9 @@ class Grade {
             JOIN schoolyear sy ON e.SchoolYearID = sy.SchoolYearID
             JOIN section sec ON e.SectionID = sec.SectionID
             JOIN gradelevel gl ON sec.GradeLevelID = gl.GradeLevelID
-
-            JOIN gradesubmission gs
-                ON gs.SectionID = e.SectionID
-               AND gs.SchoolYearID = e.SchoolYearID
-               AND gs.Quarter = g.Quarter
-
             JOIN studentprofile sp ON e.StudentProfileID = sp.StudentProfileID
             JOIN profile p ON sp.ProfileID = p.ProfileID
-            WHERE p.UserID = :user_id
-              AND sy.IsActive = 0
-              AND gs.SubmissionStatus = 'released'
+            WHERE p.UserID = :user_id AND sy.IsActive = 0
             ORDER BY sy.StartDate DESC, s.SubjectID, g.Quarter
         ";
 
@@ -189,16 +135,11 @@ class Grade {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("getPreviousGradesByUserId: " . $e->getMessage());
+            error_log("Error in getPreviousGradesByUserId: " . $e->getMessage());
             return false;
         }
     }
-
-    /**
-     * ==================================================
-     * ATTENDANCE & PARTICIPATION (NO CHANGE)
-     * ==================================================
-     */
+    
     public function getAttendanceSummary($userId) {
         $query = "
             SELECT 
@@ -212,13 +153,18 @@ class Grade {
             WHERE p.UserID = :user_id AND sy.IsActive = 1
             LIMIT 1
         ";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error in getAttendanceSummary: " . $e->getMessage());
+            return false;
+        }
     }
-
+    
     public function getParticipationRating($userId) {
         $query = "
             SELECT 
@@ -231,13 +177,18 @@ class Grade {
             WHERE p.UserID = :user_id AND sy.IsActive = 1
             LIMIT 1
         ";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error in getParticipationRating: " . $e->getMessage());
+            return false;
+        }
     }
-
+    
     public function getAttendanceSummaryBySchoolYear($userId, $schoolYearId) {
         $query = "
             SELECT 
@@ -250,12 +201,17 @@ class Grade {
             WHERE p.UserID = :user_id AND ats.SchoolYearID = :school_year_id
             LIMIT 1
         ";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-        $stmt->bindParam(':school_year_id', $schoolYearId, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+            $stmt->bindParam(':school_year_id', $schoolYearId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error in getAttendanceSummaryBySchoolYear: " . $e->getMessage());
+            return false;
+        }
     }
 }
-?>
+?> -->

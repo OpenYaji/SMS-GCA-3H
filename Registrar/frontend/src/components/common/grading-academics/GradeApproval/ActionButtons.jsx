@@ -11,13 +11,13 @@ const ActionButtons = ({ selectedCount, onExport, onApproveAll }) => {
         )}
       </div>
       <div className="flex gap-3">
-        <button 
+        {/* <button 
           className="bg-[#3C2F2F] hover:bg-amber-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-4 py-2 rounded transition-colors flex items-center gap-2"
           onClick={onExport}
         >
           <div className="i-tabler-download text-lg" />
           Export Grades
-        </button>
+        </button> */}
         
         <button 
           className="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white px-4 py-2 rounded transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"

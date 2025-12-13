@@ -52,24 +52,19 @@ const CompletedRequestHistory = () => {
     }
   };
 
-  // Filtering logic
   const filteredRequests = requests.filter(req => {
-    // Search term filter
     const matchesSearch = !searchTerm || 
       (req.studentName && req.studentName.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (req.studentId && req.studentId.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (req.documentType && req.documentType.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (req.requestPurpose && req.requestPurpose.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    // Document type filter
     const matchesDocType = filters.documentType === 'all' || 
       (req.documentType && req.documentType === filters.documentType);
     
-    // Grade level filter - Fixed to handle both string and number comparisons
     const matchesGradeLevel = filters.gradeLevel === 'all' || 
       (req.gradeLevel && req.gradeLevel.toString() === filters.gradeLevel.toString());
     
-    // Date range filter
     let matchesDateRange = true;
     if (filters.dateRange !== 'all' && req.requestDate) {
       const requestDate = new Date(req.requestDate);
@@ -119,7 +114,6 @@ const CompletedRequestHistory = () => {
 
   const handleExportList = () => {
     try {
-      // Prepare data for export
       const exportData = filteredRequests.map(req => ({
         'Student Name': req.studentName || 'N/A',
         'Student ID': req.studentId || 'N/A',
@@ -132,14 +126,12 @@ const CompletedRequestHistory = () => {
         'Status': req.status || 'Completed'
       }));
 
-      // Convert to CSV
       const headers = Object.keys(exportData[0]);
       const csvContent = [
         headers.join(','),
         ...exportData.map(row => 
           headers.map(header => {
             const cell = row[header];
-            // Escape cells that contain commas or quotes
             return typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))
               ? `"${cell.replace(/"/g, '""')}"`
               : cell;
@@ -147,7 +139,6 @@ const CompletedRequestHistory = () => {
         )
       ].join('\n');
 
-      // Create blob and download
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       const url = URL.createObjectURL(blob);
@@ -224,7 +215,6 @@ const CompletedRequestHistory = () => {
     setSearchTerm("");
   };
 
-  // Calculate stats based on filtered requests
   const stats = {
     total: filteredRequests.length,
     thisMonth: filteredRequests.filter(r => {
@@ -240,7 +230,7 @@ const CompletedRequestHistory = () => {
 
   if (loading) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-4">⏳</div>
           <p className="text-gray-600 dark:text-gray-300 font-medium">Loading completed requests...</p>
@@ -251,7 +241,7 @@ const CompletedRequestHistory = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans flex items-center justify-center">
         <div className="text-center bg-red-50 dark:bg-red-900/20 p-6 rounded-xl border-2 border-red-200 dark:border-red-800">
           <div className="text-5xl mb-4">⚠️</div>
           <h3 className="text-lg font-bold text-red-900 dark:text-red-300 mb-2">Error Loading Completed Requests</h3>
@@ -268,8 +258,10 @@ const CompletedRequestHistory = () => {
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-8 font-sans">
-      <div className="max-w-7xl mx-auto animate-fadeIn">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans">
+
+      {/* Flush Left & Top */}
+      <div className="max-w-full mx-auto px-0 py-0 animate-fadeIn">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 mb-6 transition-all duration-300">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
             ✅ Completed Request History
@@ -304,6 +296,7 @@ const CompletedRequestHistory = () => {
                 ))}
               </select>
             </div>
+
             <div className="flex items-center gap-2">
               <label className="text-white text-sm font-bold">Date Range:</label>
               <select
@@ -339,7 +332,6 @@ const CompletedRequestHistory = () => {
             </div>
           </div>
 
-          {/* Search Bar */}
           <div className="mt-6">
             <div className="relative">
               <input
@@ -380,6 +372,7 @@ const CompletedRequestHistory = () => {
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Filtered Results</p>
           </div>
+
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
             <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
               This Month
@@ -389,6 +382,7 @@ const CompletedRequestHistory = () => {
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Requests</p>
           </div>
+
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
             <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
               Form 137
@@ -398,6 +392,7 @@ const CompletedRequestHistory = () => {
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Requests</p>
           </div>
+
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
             <h3 className="text-gray-600 dark:text-gray-300 text-sm font-bold mb-2 tracking-wide uppercase">
               Certificates
@@ -423,35 +418,45 @@ const CompletedRequestHistory = () => {
                     className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                   />
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Student Name
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Student ID
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Document Type
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Request Purpose
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Request Date
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Completed Date
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Pickup Date
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Status
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-bold text-gray-900 dark:text-white tracking-wide">
                   Actions
                 </th>
               </tr>
             </thead>
+
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {filteredRequests.map((request) => (
                 <tr
@@ -466,32 +471,41 @@ const CompletedRequestHistory = () => {
                       className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                     />
                   </td>
+
                   <td className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">
                     {request.studentName || "N/A"}
                   </td>
+
                   <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
                     {request.studentId || "N/A"}
                   </td>
+
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.documentType || "N/A"}
                   </td>
+
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.requestPurpose || "N/A"}
                   </td>
+
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.requestDate || "N/A"}
                   </td>
+
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.completedDate || "N/A"}
                   </td>
+
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
                     {request.pickupDate || "N/A"}
                   </td>
+
                   <td className="px-6 py-4">
                     <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full shadow-sm">
                       {request.status || "Completed"}
                     </span>
                   </td>
+
                   <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => handleRowClick(request)}
@@ -547,11 +561,10 @@ const CompletedRequestHistory = () => {
         onArchived={handleArchived}
       />
 
-      {/* Bulk Archive Confirmation Modal */}
+      {/* Bulk Archive Modal */}
       {showBulkArchiveModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 dark:bg-opacity-80 flex items-center justify-center z-[60] p-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md transform transition-all">
-            {/* Modal Header */}
             <div className="bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 px-6 py-4 rounded-t-xl">
               <div className="flex items-center gap-3">
                 <div className="text-3xl">⚠️</div>
@@ -559,7 +572,6 @@ const CompletedRequestHistory = () => {
               </div>
             </div>
 
-            {/* Modal Body */}
             <div className="p-6">
               <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed mb-4">
                 Archive {selectedRequests.length} selected request{selectedRequests.length !== 1 ? 's' : ''}? This will move them to the Archive Search tab.
@@ -571,7 +583,6 @@ const CompletedRequestHistory = () => {
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div className="bg-gray-50 dark:bg-gray-900 px-6 py-4 rounded-b-xl flex justify-end gap-3">
               <button
                 onClick={() => setShowBulkArchiveModal(false)}

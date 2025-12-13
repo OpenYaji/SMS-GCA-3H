@@ -1314,6 +1314,20 @@ export default function StudentInformationModal({
           studentDetails?.emergencyContactNumber
       );
 
+      // Track which guardians need to be deleted
+      const originalGuardianIDs = (studentDetails.guardians || [])
+        .filter((g) => g.guardianID !== null && g.guardianID !== undefined)
+        .map((g) => g.guardianID);
+
+      const currentGuardianIDs = (editData.guardians || [])
+        .filter((g) => g.guardianID !== null && g.guardianID !== undefined)
+        .map((g) => g.guardianID);
+
+      // Find guardians that were removed (existed before but not anymore)
+      const guardiansToDelete = originalGuardianIDs.filter(
+        (id) => !currentGuardianIDs.includes(id)
+      );
+
       // Format guardians with proper validation
       const formattedGuardians = (editData.guardians || [])
         .filter((guardian) => {
@@ -1381,8 +1395,11 @@ export default function StudentInformationModal({
             "",
         Medications: editData.medications || studentDetails.medications || "",
 
-        // Only include guardians if there are valid ones
+        // Guardians - send current list
         Guardians: formattedGuardians.length > 0 ? formattedGuardians : [],
+
+        // GuardiansToDelete - IDs of guardians to remove from database
+        GuardiansToDelete: guardiansToDelete,
 
         // Optional fields
         // Religion: editData.religion || studentDetails.religion || "",
@@ -1393,6 +1410,8 @@ export default function StudentInformationModal({
 
       console.log("=== Update Data Being Sent ===");
       console.log(JSON.stringify(updateData, null, 2));
+      console.log("=== Guardians to Delete ===");
+      console.log(guardiansToDelete);
 
       // Add profile picture if selected
       if (selectedImage) {

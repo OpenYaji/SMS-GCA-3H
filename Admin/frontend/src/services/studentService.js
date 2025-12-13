@@ -426,6 +426,20 @@ export const studentService = {
           }
         });
 
+        // Handle GuardiansToDelete - IDs of guardians to remove
+        if (
+          studentData.GuardiansToDelete &&
+          Array.isArray(studentData.GuardiansToDelete)
+        ) {
+          if (studentData.GuardiansToDelete.length > 0) {
+            // Send as JSON string since FormData doesn't handle arrays well
+            formData.append(
+              "GuardiansToDelete",
+              JSON.stringify(studentData.GuardiansToDelete)
+            );
+          }
+        }
+
         // Handle Guardians - append each field individually
         if (hasGuardians && studentData.Guardians.length > 0) {
           const formattedGuardians = formatGuardiansForAPI(

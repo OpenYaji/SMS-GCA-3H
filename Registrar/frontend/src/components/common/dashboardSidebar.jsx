@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LogoutConfirmationModal from "./logoutConfirmation";
 import Logo from "../../assets/img/gymnazu.png";
+import Toast from "../ui/Toast";
 
 import {
   LayoutDashboard,
@@ -28,6 +29,7 @@ export default function DashboardSidebar({
 }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,7 +43,12 @@ export default function DashboardSidebar({
   const handleConfirmLogout = () => {
     console.log("Logging out...");
     setLogoutModalOpen(false);
-    console.log("Logged out successfully.Session Destroyed na lods");
+    setShowToast(true);
+
+    // Navigate after showing toast
+    setTimeout(() => {
+      window.location.href = "http://localhost:5173";
+    }, 2000);
   };
 
   const handleCloseModal = () => {
@@ -66,7 +73,7 @@ export default function DashboardSidebar({
       icon: <FileUser size={18} />,
       path: "/registrar-dashboard/application-management",
     },
-     {
+    {
       name: "Transaction",
       icon: <BadgeDollarSign size={18} />,
       path: "/registrar-dashboard/transaction",
@@ -119,11 +126,10 @@ export default function DashboardSidebar({
             setMobileOpen(false);
           }
         }}
-        className={`flex items-center gap-3 p-2 rounded-xl transition-colors text-base ${
-          isActive && item.name !== "Logout"
+        className={`flex items-center gap-3 p-2 rounded-xl transition-colors text-base ${isActive && item.name !== "Logout"
             ? "bg-[#F3D67D] text-black font-bold"
             : "hover:bg-white/10"
-        } ${isCollapsed ? "justify-center" : ""}`}
+          } ${isCollapsed ? "justify-center" : ""}`}
       >
         {item.icon}
         {!isCollapsed && (
@@ -195,9 +201,8 @@ export default function DashboardSidebar({
 
     return (
       <aside
-        className={`h-screen bg-transparent dark:bg-slate-900 text-white flex flex-col flex-shrink-0 transition-all duration-300 ${
-          collapsed ? "w-28" : "w-72"
-        }`}
+        className={`h-screen bg-transparent dark:bg-slate-900 text-white flex flex-col flex-shrink-0 transition-all duration-300 ${collapsed ? "w-28" : "w-72"
+          }`}
       >
         {collapsed ? (
           <div className="flex flex-col h-full items-center p-3 gap-3">
@@ -292,9 +297,8 @@ export default function DashboardSidebar({
         <SidebarContent />
       </div>
       <div
-        className={`md:hidden fixed inset-0 z-40 transition-transform duration-300 ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`md:hidden fixed inset-0 z-40 transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <SidebarContent isMobileView={true} />
       </div>
@@ -310,6 +314,13 @@ export default function DashboardSidebar({
         onClose={handleCloseModal}
         onConfirm={handleConfirmLogout}
       />
+
+      {showToast && (
+        <Toast
+          message="Logged out successfully!"
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </>
   );
 }

@@ -450,7 +450,7 @@ useEffect(() => {
 
     return (
         <div
-            className={`sticky top-0 bg-yellow-500 rounded-xl mb-4 p-4 transform transition-all duration-500 ease-out ${
+            className={`sticky top-0 bg-[#F3D67D] rounded-xl mb-4 p-4 transform transition-all duration-500 ease-out ${
                 show ? "opacity-100 scale-100" : "opacity-0 scale-90"
             } z-40 shadow-xl`}
         >

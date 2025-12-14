@@ -50,10 +50,6 @@ const ScreeningTable = ({ filterOptions = {}, onValidated }) => {
         if (t.includes("new"))
             return [
                 "Birth Certificate",
-                "Report Card",
-                "Good Moral Certificate",
-                "Certificate of Completion",
-                "Form 137",
             ];
         if (t.includes("old")) return ["Report Card"];
         if (t.includes("transf"))

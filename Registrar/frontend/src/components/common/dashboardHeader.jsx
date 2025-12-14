@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Search, Sun, Moon, Bell, User, ArrowLeft } from 'lucide-react';
-import DefaultProfilePic from '../../assets/img/jhego.jpg';
+import DefaultProfilePic from '../../assets/img/registrar.png';
 
 const Tooltip = ({ text }) => (
     <span className="
@@ -80,8 +80,8 @@ const DashboardHeader = ({ setMobileOpen }) => {
 
         // Mock user data
         const user = {
-                fullName: 'John Doe',
-                studentNumber: '2024-00001',
+                fullName: '',
+                studentNumber: '',
                 profilePictureURL: null
         };
 

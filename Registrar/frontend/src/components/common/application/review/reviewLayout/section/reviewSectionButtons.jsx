@@ -49,13 +49,13 @@ const ReviewSectionButtons = ({
       <div className="flex items-center">
         {/* Reset Sections Button */}
         <div className="relative group mr-2">
-          <button
+{/*           <button
             onClick={() => setResetModalOpen(true)}
             className="bg-rose-500 text-white p-2 rounded-lg font-semibold shadow-md hover:bg-rose-600 transition"
             title="Reset All Sections for New SY"
           >
             <RotateCcw size={24} aria-label="Reset All Sections" />
-          </button>
+          </button> */}
 
           <span
             className="absolute bottom-1/2 right-full mr-2 translate-y-1/2

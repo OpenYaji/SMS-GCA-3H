@@ -36,7 +36,6 @@ try {
             p.Gender,
             p.BirthDate,
             p.Religion,
-            p.MotherTongue,
             p.EncryptedPhoneNumber,
             p.EncryptedAddress,
             p.ProfilePictureURL,

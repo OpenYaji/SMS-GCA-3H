@@ -24,7 +24,7 @@ const ScreeningFilter = ({ onFilterChange }) => {
 
   return (
     <div
-      className={`bg-yellow-400 p-4 rounded-lg shadow-sm flex flex-wrap items-center justify-between gap-4 transform transition-all duration-500 ease-out ${
+      className={`bg-[#F3D67D] p-4 rounded-lg shadow-sm flex flex-wrap items-center justify-between gap-4 transform transition-all duration-500 ease-out ${
         visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
       }`}
     >

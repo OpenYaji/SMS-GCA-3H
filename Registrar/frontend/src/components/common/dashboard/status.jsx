@@ -2,6 +2,7 @@ import React from "react";
 import Applications from "./statusCards/applications";
 import Enrollments from "./statusCards/enrollments";
 import Financial from "./statusCards/financial";
+// import TotalTuitionCollected from "./statusCards/tasks";
 import Tasks from "./statusCards/tasks";
 
 const status = () => {
@@ -10,9 +11,11 @@ const status = () => {
       <Applications />
       <Enrollments />
       <Financial />
-      <Tasks />
+      {/* <TotalTuitionCollected /> */}
+      <Tasks/>
     </section>
   );
 };
 
 export default status;
+

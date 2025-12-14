@@ -202,32 +202,32 @@ const ViewStudentInfoModal = ({ isOpen, onClose, student }) => {
                     <p className="text-sm text-gray-600 dark:text-gray-300">{getData('birthDate')}</p>
                   </div>
 
-                  <div>
+                  {/* <div>
                     <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                       Birthplace
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{getData('birthPlace')}</p>
                     <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Religion</p>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{getData('religion')}</p>
-                  </div>
+                  </div> */}
 
-                  <div>
+                  {/* <div>
                     <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                       Mother Tongue
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{getData('motherTongue')}</p>
                     <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Height</p>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{getData('height')}</p>
-                  </div>
+                  </div> */}
 
-                  <div>
+                  {/* <div>
                     <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                       Nationality
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{getData('nationality')}</p>
                     <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Weight</p>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{getData('weight')}</p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -266,7 +266,7 @@ const ViewStudentInfoModal = ({ isOpen, onClose, student }) => {
                     <p className="text-sm text-gray-600 dark:text-gray-300">{getData('guardianEmail')}</p>
                   </div>
 
-                  <div className="pt-4">
+                  {/* <div className="pt-4">
                     <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                       Father's Name
                     </p>
@@ -286,7 +286,7 @@ const ViewStudentInfoModal = ({ isOpen, onClose, student }) => {
                     </p>
                     <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Occupation</p>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{getData('motherOccupation')}</p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

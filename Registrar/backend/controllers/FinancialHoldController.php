@@ -29,7 +29,9 @@ class FinancialHoldController
             ];
 
             $holds = $this->financialHold->getFinancialHolds($filters);
-            $stats = $this->financialHold->getSummaryStats();
+            // This method now returns an array containing 'totalTuitionCollected' 
+            // instead of 'finalExamHolds' because of the change in FinancialHold.php
+            $stats = $this->financialHold->getSummaryStats(); 
 
             if ($holds === false) {
                 http_response_code(500);
@@ -41,7 +43,7 @@ class FinancialHoldController
             echo json_encode([
                 'success' => true,
                 'holds' => $holds,
-                'stats' => $stats,
+                'stats' => $stats, // Sends the updated stats array
                 'count' => count($holds)
             ]);
         } catch (Exception $e) {

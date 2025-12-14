@@ -61,20 +61,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $totalFee = $fees['full_payment'];
         $outstandingBalance = $totalFee - $downPayment;
 
-        // Create transaction record WITHOUT StudentProfileID
-        $stmt = $conn->prepare("
-            INSERT INTO transaction (StudentProfileID, SchoolYearID, IssueDate, DueDate, TotalAmount, PaidAmount, TransactionStatusID)
-            VALUES (NULL, :schoolYearId, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), :totalAmount, :paidAmount, :statusId)
-        ");
-
+        // Create transaction record with payment mode
         $schoolYearId = $applicant['SchoolYearID'];
         // Status 2: Pending/Partial Payment, Status 3: Paid/Completed
         $statusId = ($outstandingBalance > 0) ? 2 : 3;
 
+        $stmt = $conn->prepare("
+            INSERT INTO transaction (
+                StudentProfileID, 
+                SchoolYearID, 
+                IssueDate, 
+                DueDate, 
+                TotalAmount, 
+                PaidAmount, 
+                TransactionStatusID,
+                PaymentMode
+            ) VALUES (:studentProfileId, :schoolYearId, NOW(), NOW(), :totalAmount, :paidAmount, :statusId, :paymentMode)
+        ");
+
+        $studentProfileId = $applicant['StudentProfileID'] ?? null;
+        $stmt->bindParam(':studentProfileId', $studentProfileId, PDO::PARAM_INT);
         $stmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
         $stmt->bindParam(':totalAmount', $totalFee);
         $stmt->bindParam(':paidAmount', $downPayment);
         $stmt->bindParam(':statusId', $statusId, PDO::PARAM_INT);
+        $stmt->bindParam(':paymentMode', $paymentMode);
         $stmt->execute();
 
         $transactionId = $conn->lastInsertId();
@@ -139,14 +150,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             // *** MOVED INSIDE TRY-CATCH BLOCK ***
             require_once __DIR__ . '/../../config/mailer.php';
-            
+
             // Check for the mailer function before calling it
             if (!function_exists('getMailer')) {
-                 throw new Exception("Mailer configuration function 'getMailer' not found.");
+                throw new Exception("Mailer configuration function 'getMailer' not found.");
             }
 
             $mail = getMailer();
-            
+
             // Basic sanitization for email content
             $guardianEmail = filter_var($applicant['GuardianEmail'], FILTER_SANITIZE_EMAIL);
             $guardianFirstName = htmlspecialchars($applicant['GuardianFirstName']);

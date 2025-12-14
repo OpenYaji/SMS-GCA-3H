@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { GraduationCap, UserCog, ClipboardList, BookOpen, Shield, ArrowRight } from 'lucide-react';
-import Bg from '../../../assets/img/school2.png';
+import Bg from '../../../assets/img/tryBG7.png';
 import Logo from '../../../assets/img/gymnazu.png';
 import SuccessModal from "../../modals/SuccessModal";
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Bg from '../../../assets/img/school2.png';
+import Bg from '../../../assets/img/tryBG7.png';
 import { useNavigate } from 'react-router-dom';
 
 const API_URL = 'http://localhost/SMS-GCA-3H/Student/backend/api/admission.php';

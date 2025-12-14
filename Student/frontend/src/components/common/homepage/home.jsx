@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Girl from '../../../assets/img/finalmodel.png';
 import Logo from '../../../assets/img/gymnazu.png';
-import SchoolBg from '../../../assets/img/tryBG9.png';
+import SchoolBg from '../../../assets/img/tryBG7.png';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
@@ -25,9 +25,9 @@ const Home = () => {
 
             {/* Main Content Container - Moved down with padding */}
             <div className="relative z-10 container mx-auto px-6 sm:px-10 lg:px-16 xl:px-20 pt-32 lg:pt-40 h-full flex items-center">
-                <div className="flex justify-center items-center w-full">
+                <div className="flex justify-center lg:justify-between items-center w-full gap-8">
 
-                    {/* Left Content Column */}
+                    {/* Center Content Column */}
                     <motion.div
                         className="space-y-5 lg:space-y-6 text-center"
                         initial={{ opacity: 0, y: 30 }}
@@ -87,15 +87,16 @@ const Home = () => {
                         </motion.div>
                     </motion.div>
 
-                    {/* Right Image Column */}
+                    {/* Right Image Column - Logo and Model */}
                     <motion.div
                         className="relative hidden lg:flex items-center justify-center h-[450px] xl:h-[550px]"
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 1, ease: "easeOut", delay: 0.4 }}
                     >
-                        {/* Glow Effect Behind Image */}
-
+                        {/* Logo behind the model - Adjust size: w-[500px] xl:w-[600px], opacity: opacity-30 */}
+                        <img src={Logo} alt="Gymnazo Logo" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] xl:w-[600px] h-auto object-contain opacity-80 z-0" />
+                        <img src={Girl} alt="Student Model" className="relative h-full w-auto object-contain z-10" />
                     </motion.div>
                 </div>
             </div>

@@ -177,7 +177,7 @@ const [toastMessage, setToastMessage] = useState('');
                 */}<th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[120px]">Payment Method</th>{/* 
                 */}<th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[100px]">Amount</th>{/* 
                 */}<th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[150px]">Payment Details</th>{/* 
-                */}<th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[120px]">Date Added</th>{/* 
+                */}<th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[120px]">Payment Date</th>{/* 
                 */}<th className="px-4 py-3 text-center text-xs font-medium text-white uppercase tracking-wider min-w-[120px]">Status</th>{/* 
                 */}<th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[120px]">Actions</th>{/* 
               */}</tr>

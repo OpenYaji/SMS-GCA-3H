@@ -126,8 +126,7 @@ if ($action === 'proceed' && $applicant['GuardianEmail']) {
         
         if (strpos($enrolleeType, 'new') !== false) {
             $requiredDocuments = [
-                'Birth Certificate (PSA)', 'Report Card (Form 138)', 'Good Moral Certificate', 
-                'Certificate of Completion', 'Form 137'
+                'Birth Certificate (PSA)'
             ];
         } elseif (strpos($enrolleeType, 'transf') !== false) {
             $requiredDocuments = [

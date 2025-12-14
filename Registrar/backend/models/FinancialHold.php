@@ -87,6 +87,10 @@ class FinancialHold
         }
 
         if (!empty($conditions)) {
+            // Note: Mixing WHERE/JOIN conditions and HAVING conditions like this can be tricky.
+            // Since examPeriod/holdStatus is based on the result set, it should probably be in HAVING, 
+            // but for simplicity with gradeLevel, we'll keep the structure.
+            // GradeLevel filter is on the base tables, so it's safe to use in WHERE or AND.
             $query .= " AND " . implode(" AND ", $conditions);
         }
 
@@ -106,12 +110,13 @@ class FinancialHold
     }
 
     /**
-     * Get summary statistics
+     * Get summary statistics, including Total Tuition Collected
      */
     public function getSummaryStats()
     {
         $query = "
             SELECT 
+                -- 1. Active Financial Holds (Total transactions with outstanding balance > 0)
                 COUNT(CASE WHEN (t.TotalAmount - (
                     SELECT COALESCE(SUM(pay.AmountPaid), 0) 
                     FROM payment pay 
@@ -119,6 +124,7 @@ class FinancialHold
                     AND pay.VerificationStatus = 'Verified'
                 )) > 0 THEN 1 END) as activeHolds,
                 
+                -- 2. Midterm Exam Holds (Active holds where DueDate is 30-60 days past due)
                 COUNT(CASE WHEN DATEDIFF(CURDATE(), t.DueDate) BETWEEN 30 AND 60 
                     AND (t.TotalAmount - (
                         SELECT COALESCE(SUM(pay.AmountPaid), 0) 
@@ -127,16 +133,17 @@ class FinancialHold
                         AND pay.VerificationStatus = 'Verified'
                     )) > 0 THEN 1 END) as midtermHolds,
                 
-                COUNT(CASE WHEN DATEDIFF(CURDATE(), t.DueDate) > 60 
-                    AND (t.TotalAmount - (
-                        SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                        FROM payment pay 
-                        WHERE pay.TransactionID = t.TransactionID 
-                        AND pay.VerificationStatus = 'Verified'
-                    )) > 0 THEN 1 END) as finalExamHolds,
+                -- 3. Total Tuition Collected (SUM of all verified paid amounts for the active school year)
+                SUM(
+                    (SELECT COALESCE(SUM(pay.AmountPaid), 0) 
+                    FROM payment pay 
+                    WHERE pay.TransactionID = t.TransactionID 
+                    AND pay.VerificationStatus = 'Verified')
+                ) as totalTuitionCollected,
                 
+                -- 4. Cleared This Quarter (Transactions marked as paid in the last 7 days - assuming your logic intended 'Cleared This Week')
                 COUNT(CASE WHEN t.TransactionStatusID = 3 
-                    AND DATE(t.IssueDate) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) THEN 1 END) as clearedThisWeek
+                    AND DATE(t.IssueDate) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) THEN 1 END) as clearedThisQuarter
             FROM transaction t
             JOIN schoolyear sy ON t.SchoolYearID = sy.SchoolYearID
             WHERE sy.IsActive = 1

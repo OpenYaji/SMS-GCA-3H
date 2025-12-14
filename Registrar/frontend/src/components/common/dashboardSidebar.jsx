@@ -101,11 +101,6 @@ export default function DashboardSidebar({
   ];
 
   const bottomMenuItems = [
-    {
-      name: "Help Support",
-      icon: <LifeBuoy size={18} />,
-      path: "/registrar-dashboard/help-and-support",
-    },
     { name: "Logout", icon: <LogOut size={18} /> },
   ];
 

@@ -151,7 +151,7 @@ const InboxView = ({ applicant, onClose, onProceedToScreening, onRejectSuccess, 
             {/* Name and Birth Info */}
             <div className="space-y-2">
               {[
-                { label: "Student Name", value: `${fieldValue(applicant.StudentLastName)} ${fieldValue(applicant.StudentFirstName)} ${fieldValue(applicant.StudentMiddleName)}.` },
+                { label: "Student Name", value: `${fieldValue(applicant.StudentLastName)} ${fieldValue(applicant.StudentFirstName)} ${fieldValue(applicant.StudentMiddleName)}` },
                 { label: "Birthdate", value: fieldValue(applicant.DateOfBirth) },
                 { label: "Birthplace", value: fieldValue(applicant.birthPlace) },
               ].map((item, idx) => (

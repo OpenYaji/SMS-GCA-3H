@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Tabs from "@/components/ui/Tabs";
 import DocumentRequests from './DocumentRequests';
 import CompletedRequestHistory from './CompletedRequest';
-import ArchiveSearch from './ArchiveSearch';
+import ArchiveSearch from './archivesearch';
 const Doct = () => {
   const [activeTab, setActiveTab] = useState('dr');
 

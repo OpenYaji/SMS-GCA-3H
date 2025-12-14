@@ -7,7 +7,7 @@ class FinancialHoldController
 {
     private $db;
     private $financialHold;
-    private $auth;
+    private $auth; // Assuming AuthMiddleware handles user authentication and session management
 
     public function __construct($db)
     {
@@ -17,10 +17,13 @@ class FinancialHoldController
     }
 
     /**
-     * Get all financial holds with filters
+     * Get all financial holds for the ACTIVE school year, along with summary statistics.
+     * Uses the default behavior of FinancialHold::getFinancialHolds (IsActive = 1).
      */
     public function getFinancialHolds()
     {
+        // TODO: Add Authorization Check here, e.g., $this->auth->requirePermission('read_financial_holds');
+        
         try {
             $filters = [
                 'examPeriod' => $_GET['examPeriod'] ?? '',
@@ -28,14 +31,15 @@ class FinancialHoldController
                 'holdStatus' => $_GET['holdStatus'] ?? ''
             ];
 
+            // 1. Get the list of students with holds (Only from Active SY)
             $holds = $this->financialHold->getFinancialHolds($filters);
-            // This method now returns an array containing 'totalTuitionCollected' 
-            // instead of 'finalExamHolds' because of the change in FinancialHold.php
+            
+            // 2. Get the summary statistics (Includes Active SY check for zeroing cards)
             $stats = $this->financialHold->getSummaryStats(); 
 
-            if ($holds === false) {
+            if ($holds === false || $stats === false) {
                 http_response_code(500);
-                echo json_encode(['success' => false, 'message' => 'Failed to fetch financial holds']);
+                echo json_encode(['success' => false, 'message' => 'Failed to fetch financial data. Check model and database connection.']);
                 return;
             }
 
@@ -43,7 +47,79 @@ class FinancialHoldController
             echo json_encode([
                 'success' => true,
                 'holds' => $holds,
-                'stats' => $stats, // Sends the updated stats array
+                'stats' => $stats, // Sends the updated stats array: totalRemainingBalance, isSchoolYearActive, etc.
+                'count' => count($holds)
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Get financial holds archive data (Summary stats for all INACTIVE school years).
+     */
+    public function getArchiveFinancialHolds()
+    {
+        // TODO: Add Authorization Check here, e.g., $this->auth->requirePermission('read_financial_archives');
+
+        try {
+            // Get all INACTIVE school year stats for the archive page
+            $archiveStats = $this->financialHold->getArchiveStats(); 
+
+            if ($archiveStats === false) {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Failed to fetch archive statistics']);
+                return;
+            }
+
+            http_response_code(200);
+            echo json_encode([
+                'success' => true,
+                'archiveStats' => $archiveStats
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Get detailed financial holds (individual student balances) for a specific archived School Year.
+     * This method uses the optional $schoolYearId parameter in FinancialHold::getFinancialHolds().
+     */
+    public function getDetailedArchivedHolds()
+    {
+        // TODO: Add Authorization Check here
+
+        $schoolYearId = $_GET['schoolYearId'] ?? null;
+
+        if (!$schoolYearId) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'School Year ID is required for detailed archives.']);
+            return;
+        }
+
+        try {
+            $filters = [
+                'examPeriod' => $_GET['examPeriod'] ?? '',
+                'gradeLevel' => $_GET['gradeLevel'] ?? '',
+                'holdStatus' => $_GET['holdStatus'] ?? ''
+            ];
+
+            // Fetch holds for the specified, usually inactive, school year ID
+            $holds = $this->financialHold->getFinancialHolds($filters, $schoolYearId); 
+
+            if ($holds === false) {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Failed to fetch detailed archive financial data.']);
+                return;
+            }
+
+            http_response_code(200);
+            echo json_encode([
+                'success' => true,
+                'holds' => $holds,
                 'count' => count($holds)
             ]);
         } catch (Exception $e) {
@@ -57,6 +133,7 @@ class FinancialHoldController
      */
     public function getHoldDetails()
     {
+        // TODO: Add Authorization Check here
         $holdId = $_GET['holdId'] ?? null;
 
         if (!$holdId) {
@@ -87,6 +164,8 @@ class FinancialHoldController
      */
     public function clearHold()
     {
+        // TODO: Add Authorization Check here, e.g., $this->auth->requirePermission('clear_financial_holds');
+        
         $input = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($input['holdId'])) {
@@ -96,7 +175,9 @@ class FinancialHoldController
         }
 
         try {
-            $clearedBy = 1; // TODO: Get from session
+            // Placeholder: Replace '1' with actual authenticated user ID from session/token
+            $clearedBy = 1; 
+            
             $result = $this->financialHold->clearHold(
                 $input['holdId'],
                 $clearedBy,
@@ -121,6 +202,8 @@ class FinancialHoldController
      */
     public function extendDeadline()
     {
+        // TODO: Add Authorization Check here
+        
         $input = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($input['holdId']) || !isset($input['newDeadline'])) {
@@ -154,6 +237,8 @@ class FinancialHoldController
      */
     public function sendNotification()
     {
+        // TODO: Add Authorization Check here
+        
         $input = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($input['holdId']) || !isset($input['message'])) {

@@ -6,14 +6,19 @@ class FinancialHold
 
     public function __construct($db)
     {
+        // Constructor: Initializes the database connection.
         $this->conn = $db;
     }
 
     /**
-     * Get all students with outstanding balances (financial holds)
+     * Get all students with outstanding balances (financial holds).
+     * Filters are applied either to a specific School Year ID or default to the active school year.
+     * * @param array $filters Additional filtering criteria (gradeLevel, examPeriod, holdStatus).
+     * @param int|null $schoolYearId Specific SchoolYearID to query. If null, defaults to active year.
      */
-    public function getFinancialHolds($filters = [])
+    public function getFinancialHolds($filters = [], $schoolYearId = null)
     {
+        // SQL query to fetch detailed transaction records (financial holds)
         $query = "
             SELECT 
                 t.TransactionID as FinancialHoldID,
@@ -23,27 +28,19 @@ class FinancialHold
                 gl.LevelName as gradeLevel,
                 s.SectionName as section,
                 
-                -- Calculate Real Outstanding Balance
-                (t.TotalAmount - (
-                    SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                    FROM payment pay 
-                    WHERE pay.TransactionID = t.TransactionID 
-                    AND pay.VerificationStatus = 'Verified'
-                )) as outstandingBalance,
+                t.PaidAmount,
+                t.BalanceAmount as outstandingBalance,
                 
+                -- Dynamic classification of exam period based on due date
                 CASE 
                     WHEN DATEDIFF(CURDATE(), t.DueDate) > 60 THEN 'Final'
                     WHEN DATEDIFF(CURDATE(), t.DueDate) > 30 THEN 'Midterm'
                     ELSE 'Quarterly'
                 END as examPeriod,
                 
+                -- Hold Status based on BalanceAmount
                 CASE 
-                    WHEN (t.TotalAmount - (
-                        SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                        FROM payment pay 
-                        WHERE pay.TransactionID = t.TransactionID 
-                        AND pay.VerificationStatus = 'Verified'
-                    )) > 0 THEN 'Active'
+                    WHEN t.BalanceAmount > 0 THEN 'Active'
                     ELSE 'Cleared'
                 END as holdStatus,
                 
@@ -64,36 +61,54 @@ class FinancialHold
             LEFT JOIN transactionstatus ts ON t.TransactionStatusID = ts.StatusID
             LEFT JOIN studentguardian sg ON sp.StudentProfileID = sg.StudentProfileID AND sg.IsPrimaryContact = 1
             LEFT JOIN guardian g ON sg.GuardianID = g.GuardianID
-            WHERE sy.IsActive = 1
-            HAVING outstandingBalance > 0
+            WHERE 1=1 -- Base condition
         ";
 
         $conditions = [];
         $params = [];
 
-        if (!empty($filters['examPeriod'])) {
-            $conditions[] = "examPeriod = :examPeriod";
-            $params[':examPeriod'] = $filters['examPeriod'];
+        // Condition based on School Year: specific ID (for archives) or IsActive = 1 (for dashboard)
+        if ($schoolYearId !== null) {
+            $conditions[] = "sy.SchoolYearID = :schoolYearId";
+            $params[':schoolYearId'] = $schoolYearId;
+        } else {
+            // Default: Filter only for the currently Active School Year
+            $conditions[] = "sy.IsActive = 1";
         }
 
+        // Grade Level (WHERE clause condition)
         if (!empty($filters['gradeLevel'])) {
             $conditions[] = "gl.LevelName = :gradeLevel";
             $params[':gradeLevel'] = $filters['gradeLevel'];
         }
 
+        // Apply WHERE conditions
+        if (!empty($conditions)) {
+            $query .= " AND " . implode(" AND ", $conditions);
+        }
+        
+        // Start HAVING clause to filter transactions that still have an outstanding balance
+        $query .= " HAVING outstandingBalance > 0 "; 
+
+        $havingConditions = [];
+        
+        // Exam Period (HAVING clause condition - computed field)
+        if (!empty($filters['examPeriod'])) {
+            $havingConditions[] = "examPeriod = :examPeriod";
+            $params[':examPeriod'] = $filters['examPeriod'];
+        }
+
+        // Hold Status (HAVING clause condition - computed field)
         if (!empty($filters['holdStatus'])) {
-            $conditions[] = "holdStatus = :holdStatus";
+            $havingConditions[] = "holdStatus = :holdStatus";
             $params[':holdStatus'] = $filters['holdStatus'];
         }
 
-        if (!empty($conditions)) {
-            // Note: Mixing WHERE/JOIN conditions and HAVING conditions like this can be tricky.
-            // Since examPeriod/holdStatus is based on the result set, it should probably be in HAVING, 
-            // but for simplicity with gradeLevel, we'll keep the structure.
-            // GradeLevel filter is on the base tables, so it's safe to use in WHERE or AND.
-            $query .= " AND " . implode(" AND ", $conditions);
+        // Apply HAVING conditions
+        if (!empty($havingConditions)) {
+            $query .= " AND " . implode(" AND ", $havingConditions);
         }
-
+        
         $query .= " ORDER BY outstandingBalance DESC, t.DueDate ASC";
 
         try {
@@ -110,40 +125,25 @@ class FinancialHold
     }
 
     /**
-     * Get summary statistics, including Total Tuition Collected
+     * Get summary statistics for the ACTIVE school year.
+     * Returns zero values if no active school year or no transactions are found.
      */
     public function getSummaryStats()
     {
         $query = "
             SELECT 
-                -- 1. Active Financial Holds (Total transactions with outstanding balance > 0)
-                COUNT(CASE WHEN (t.TotalAmount - (
-                    SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                    FROM payment pay 
-                    WHERE pay.TransactionID = t.TransactionID 
-                    AND pay.VerificationStatus = 'Verified'
-                )) > 0 THEN 1 END) as activeHolds,
+                -- 1. Active Financial Holds (Count transactions with remaining BalanceAmount > 0)
+                COALESCE(COUNT(CASE WHEN t.BalanceAmount > 0 THEN 1 END), 0) as activeHolds,
                 
-                -- 2. Midterm Exam Holds (Active holds where DueDate is 30-60 days past due)
-                COUNT(CASE WHEN DATEDIFF(CURDATE(), t.DueDate) BETWEEN 30 AND 60 
-                    AND (t.TotalAmount - (
-                        SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                        FROM payment pay 
-                        WHERE pay.TransactionID = t.TransactionID 
-                        AND pay.VerificationStatus = 'Verified'
-                    )) > 0 THEN 1 END) as midtermHolds,
+                -- 2. Total Remaining Balance (SUM of all outstanding BalanceAmount)
+                COALESCE(SUM(t.BalanceAmount), 0) AS totalRemainingBalance,
                 
-                -- 3. Total Tuition Collected (SUM of all verified paid amounts for the active school year)
-                SUM(
-                    (SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                    FROM payment pay 
-                    WHERE pay.TransactionID = t.TransactionID 
-                    AND pay.VerificationStatus = 'Verified')
-                ) as totalTuitionCollected,
+                -- 3. Total Tuition Collected (SUM of the PaidAmount column across all transactions)
+                COALESCE(SUM(t.PaidAmount), 0) AS totalTuitionCollected,
                 
-                -- 4. Cleared This Quarter (Transactions marked as paid in the last 7 days - assuming your logic intended 'Cleared This Week')
-                COUNT(CASE WHEN t.TransactionStatusID = 3 
-                    AND DATE(t.IssueDate) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) THEN 1 END) as clearedThisQuarter
+                -- 4. Cleared This Quarter (Assuming 'Cleared This Week/Last 7 Days')
+                COALESCE(COUNT(CASE WHEN t.TransactionStatusID = 3 
+                    AND DATE(t.IssueDate) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) THEN 1 END), 0) as clearedThisQuarter
             FROM transaction t
             JOIN schoolyear sy ON t.SchoolYearID = sy.SchoolYearID
             WHERE sy.IsActive = 1
@@ -152,13 +152,81 @@ class FinancialHold
         try {
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $stats = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Check for active school year status
+            if (!$stats || $stats['totalTuitionCollected'] === null || $stats['totalTuitionCollected'] === '0') {
+                $sy_check_query = "SELECT COUNT(*) FROM schoolyear WHERE IsActive = 1";
+                $sy_stmt = $this->conn->query($sy_check_query);
+                $has_active_sy = $sy_stmt->fetchColumn() > 0;
+                
+                if (!$has_active_sy) {
+                    // No active school year, force all values to zero and flag the status
+                    return [
+                        'activeHolds' => 0,
+                        'totalRemainingBalance' => 0.00,
+                        'totalTuitionCollected' => 0.00,
+                        'clearedThisQuarter' => 0,
+                        'isSchoolYearActive' => false // Flag for the frontend
+                    ];
+                }
+            }
+
+            // Ensure types are consistent
+            $stats['activeHolds'] = (int)$stats['activeHolds'];
+            $stats['clearedThisQuarter'] = (int)$stats['clearedThisQuarter'];
+            $stats['totalRemainingBalance'] = (float)$stats['totalRemainingBalance'];
+            $stats['totalTuitionCollected'] = (float)$stats['totalTuitionCollected'];
+            $stats['isSchoolYearActive'] = true; // Flag for the frontend
+            
+            return $stats;
+            
         } catch (PDOException $e) {
             error_log("Error in getSummaryStats: " . $e->getMessage());
             return false;
         }
     }
 
+    /**
+     * Get summary statistics for *INACTIVE* school years ONLY (for archives).
+     * Filters for 2025-2026 and later (SchoolYearID > 6) to exclude older, empty data.
+     */
+    public function getArchiveStats()
+    {
+        $query = "
+            SELECT 
+                sy.SchoolYearID,
+                sy.YearName AS schoolYearName, -- Using the correct column name YearName
+                sy.IsActive,
+                
+                -- Total collections for the specific school year
+                COALESCE(SUM(t.PaidAmount), 0) AS totalCollectionsSY,
+                
+                -- Total transactions (students with a bill)
+                COUNT(t.TransactionID) AS totalTransactionsSY,
+                
+                -- Total balance still outstanding for this school year
+                COALESCE(SUM(t.BalanceAmount), 0) AS remainingBalanceSY
+            FROM schoolyear sy
+            LEFT JOIN transaction t ON sy.SchoolYearID = t.SchoolYearID
+            WHERE sy.IsActive = 0 
+            AND sy.SchoolYearID > 6 -- Filter: Include only ID > 6 (i.e., 2025-2026 and later)
+            GROUP BY sy.SchoolYearID, sy.YearName, sy.IsActive
+            ORDER BY sy.SchoolYearID DESC
+        ";
+
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error in getArchiveStats: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    // ... (rest of the class methods remain the same)
+    
     /**
      * Get hold details by Transaction ID
      */
@@ -174,26 +242,9 @@ class FinancialHold
                 s.SectionName as section,
                 t.TotalAmount,
                 
-                -- Calculate Real Paid Amount
-                (SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                 FROM payment pay 
-                 WHERE pay.TransactionID = t.TransactionID 
-                 AND pay.VerificationStatus = 'Verified') as PaidAmount,
-                
-                -- Calculate Real Balance
-                (t.TotalAmount - (
-                    SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                    FROM payment pay 
-                    WHERE pay.TransactionID = t.TransactionID 
-                    AND pay.VerificationStatus = 'Verified'
-                )) as BalanceAmount,
-                
-                (t.TotalAmount - (
-                    SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                    FROM payment pay 
-                    WHERE pay.TransactionID = t.TransactionID 
-                    AND pay.VerificationStatus = 'Verified'
-                )) as OutstandingAmount,
+                t.PaidAmount,
+                t.BalanceAmount,
+                t.BalanceAmount as OutstandingAmount,
                 
                 CASE 
                     WHEN DATEDIFF(CURDATE(), t.DueDate) > 60 THEN 'Final'
@@ -202,14 +253,9 @@ class FinancialHold
                 END as HoldType,
                 
                 CASE 
-                    WHEN (t.TotalAmount - (
-                        SELECT COALESCE(SUM(pay.AmountPaid), 0) 
-                        FROM payment pay 
-                        WHERE pay.TransactionID = t.TransactionID 
-                        AND pay.VerificationStatus = 'Verified'
-                    )) > 0 THEN 'Active'
+                    WHEN t.BalanceAmount > 0 THEN 'Active'
                     ELSE 'Cleared'
-                END as HoldStatus,
+                    END as HoldStatus,
                 
                 t.IssueDate as HoldAppliedDate,
                 NULL as HoldClearedDate,
@@ -246,7 +292,7 @@ class FinancialHold
      */
     public function clearHold($transactionId, $clearedBy, $remarks = null)
     {
-        // In this case, clearing means marking transaction as paid
+        // Set TransactionStatusID to 3 (Cleared/Paid)
         $query = "
             UPDATE transaction 
             SET TransactionStatusID = 3
@@ -290,12 +336,9 @@ class FinancialHold
      */
     public function sendNotification($transactionId, $type, $email, $phone, $subject, $message)
     {
-        // Optional: If you want to keep notification logs, create a simple log table
-        // For now, we'll just return true as notification would be sent externally
+        // Placeholder logic for sending notification (e.g., integrating with external service)
         try {
-            // Here you would integrate with email/SMS service
-            // For now, just log it
-            error_log("Notification sent for Transaction ID: $transactionId");
+            error_log("Notification sent for Transaction ID: $transactionId via $type.");
             return true;
         } catch (Exception $e) {
             error_log("Error in sendNotification: " . $e->getMessage());

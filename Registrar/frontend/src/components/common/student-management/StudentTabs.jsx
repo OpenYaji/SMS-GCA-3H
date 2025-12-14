@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import Tabs from "@/components/ui/Tabs";
 import CR from './cr/cr';
 import AS from './as/as';
+import StudentsArchive from './as/components/StudentsArchive';
 const StudentTabs = () => {
   const [activeTab, setActiveTab] = useState('cr');
 
   const tabs = [
     { id: 'cr', label: 'Class Rosters' },
-      { id: 'as', label: 'All Students' }
+      { id: 'as', label: 'All Students' },
+      {id: 'sa', label: 'Archived Students'}
   ];
 
   return (
@@ -22,6 +24,7 @@ const StudentTabs = () => {
       <div className="py-4">
         {activeTab === 'cr' && <CR />}
         {activeTab === 'as' && <AS />}
+        {activeTab === 'sa' && <StudentsArchive/>}
 
       </div>
     </div>

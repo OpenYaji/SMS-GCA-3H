@@ -93,11 +93,11 @@ export default function DashboardSidebar({
       icon: <FileSearch size={18} />,
       path: "/registrar-dashboard/record-and-archives",
     },
-    {
-      name: "Report and Analytics",
-      icon: <ChartArea size={18} />,
-      path: "/registrar-dashboard/report-and-analytics",
-    },
+    // {
+    //   name: "Report and Analytics",
+    //   icon: <ChartArea size={18} />,
+    //   path: "/registrar-dashboard/report-and-analytics",
+    // },
   ];
 
   const bottomMenuItems = [

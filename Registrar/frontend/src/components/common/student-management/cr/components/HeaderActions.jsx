@@ -24,12 +24,12 @@ const HeaderActions = ({ sectionId }) => {
 
   return (
     <div className="flex gap-3 mb-4">
-      <button
+      {/* <button
         onClick={() => window.print()}
         className="px-4 py-2 bg-gray-700 rounded"
       >
         Print Roster
-      </button>
+      </button> */}
     </div>
   );
 };

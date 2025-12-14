@@ -6,18 +6,66 @@ import { useDarkMode } from "../../DarkModeProvider";
 // Import icons for the new card style (copied from DocumentRequests)
 import { Clock, FileText, CheckCircle, Package, Eye, Archive, Download } from 'lucide-react'; 
 
-// --- MODAL PLACEHOLDERS (Keeping from the previous attempt for completeness) ---
+// --- MODAL PLACEHOLDERS ---
 const BulkArchiveModal = ({ isOpen, onClose, onConfirm, selectedCount, archiving }) => {
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[60] p-4">
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-2xl">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Confirm Bulk Archive</h3>
-                <p className="text-gray-700 dark:text-gray-300 mb-6">Archive **{selectedCount}** selected request{selectedCount !== 1 ? 's' : ''}?</p>
+                <p className="text-gray-700 dark:text-gray-300 mb-6">Archive <strong>{selectedCount}</strong> selected request{selectedCount !== 1 ? 's' : ''}?</p>
                 <div className="flex justify-end gap-3">
-                    <button onClick={onClose} disabled={archiving} className="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded-lg text-gray-800 dark:text-white">Cancel</button>
+                    <button onClick={onClose} disabled={archiving} className="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded-lg text-gray-800 dark:text-white hover:bg-gray-400 dark:hover:bg-gray-500">Cancel</button>
                     <button onClick={onConfirm} disabled={archiving} className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700">
                         {archiving ? 'Archiving...' : `Archive ${selectedCount}`}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const ExportConfirmationModal = ({ isOpen, onClose, onConfirm, recordCount, exporting }) => {
+    if (!isOpen) return null;
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[60] p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-2xl">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
+                        <Download className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">Confirm Export</h3>
+                </div>
+                <p className="text-gray-700 dark:text-gray-300 mb-2">
+                    You are about to export <strong>{recordCount}</strong> completed request{recordCount !== 1 ? 's' : ''} to PDF format.
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                    The exported file will include student names, IDs, document types, dates, and other relevant information.
+                </p>
+                <div className="flex justify-end gap-3">
+                    <button 
+                        onClick={onClose} 
+                        disabled={exporting} 
+                        className="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded-lg text-gray-800 dark:text-white hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        onClick={onConfirm} 
+                        disabled={exporting} 
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                    >
+                        {exporting ? (
+                            <>
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Exporting...
+                            </>
+                        ) : (
+                            <>
+                                <Download className="w-4 h-4" />
+                                Export PDF
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
@@ -55,14 +103,15 @@ const CompletedRequestHistory = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showBulkArchiveModal, setShowBulkArchiveModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [archiving, setArchiving] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [filters, setFilters] = useState({
     documentType: "all",
     gradeLevel: "all",
     dateRange: "all",
   });
-  // State for slide-up animation (copied from DocumentRequests/InboxTable)
   const [animate, setAnimate] = useState(false);
 
   const { isDarkMode } = useDarkMode();
@@ -95,7 +144,7 @@ const CompletedRequestHistory = () => {
 
   useEffect(() => {
     fetchCompletedRequests();
-    setAnimate(true); // Start animation
+    setAnimate(true);
   }, []);
 
   // --- Filtering & Searching Logic (Memoized) ---
@@ -146,9 +195,186 @@ const CompletedRequestHistory = () => {
     });
   }, [requests, searchTerm, filters]);
 
+  // --- PDF Generation Function ---
+  const generatePDF = (data) => {
+    // Create a new window for printing
+    const printWindow = window.open('', '', 'width=800,height=600');
+    
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Completed Requests Report</title>
+        <style>
+          @page {
+            size: A4 landscape;
+            margin: 20mm;
+          }
+          
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            font-size: 12px;
+          }
+          
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 15px;
+          }
+          
+          .header h1 {
+            margin: 0;
+            color: #1e40af;
+            font-size: 24px;
+          }
+          
+          .header p {
+            margin: 5px 0;
+            color: #6b7280;
+            font-size: 14px;
+          }
+          
+          .meta-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f3f4f6;
+            border-radius: 5px;
+          }
+          
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+          }
+          
+          th {
+            background-color: #2563eb;
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 11px;
+          }
+          
+          td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 11px;
+          }
+          
+          tr:nth-child(even) {
+            background-color: #f9fafb;
+          }
+          
+          tr:hover {
+            background-color: #eff6ff;
+          }
+          
+          .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            background-color: #86efac;
+            color: #000;
+          }
+          
+          .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px solid #e5e7eb;
+            text-align: center;
+            color: #6b7280;
+            font-size: 10px;
+          }
+          
+          @media print {
+            body {
+              padding: 0;
+            }
+            .no-print {
+              display: none;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Completed Document Requests Report</h1>
+          <p>Generated on ${new Date().toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}</p>
+        </div>
+        
+        <div class="meta-info">
+          <div><strong>Total Records:</strong> ${data.length}</div>
+          <div><strong>Report Type:</strong> Completed Requests</div>
+        </div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Student ID</th>
+              <th>Grade Level</th>
+              <th>Document Type</th>
+              <th>Purpose</th>
+              <th>Request Date</th>
+              <th>Completed Date</th>
+              <th>Pickup Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.map(req => `
+              <tr>
+                <td>${req.studentName || 'N/A'}</td>
+                <td>${req.studentId || 'N/A'}</td>
+                <td>${req.gradeLevel || 'N/A'}</td>
+                <td>${req.documentType || 'N/A'}</td>
+                <td>${req.requestPurpose || 'N/A'}</td>
+                <td>${req.requestDate || 'N/A'}</td>
+                <td>${req.completedDate || 'N/A'}</td>
+                <td>${req.pickupDate || 'N/A'}</td>
+                <td><span class="status-badge">${req.status || 'Completed'}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        
+        <div class="footer">
+          <p>This is a system-generated report from the Student Management System.</p>
+          <p>© ${new Date().getFullYear()} - All Rights Reserved</p>
+        </div>
+        
+        <script>
+          window.onload = function() {
+            window.print();
+            setTimeout(function() {
+              window.close();
+            }, 500);
+          };
+        </script>
+      </body>
+      </html>
+    `;
+    
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+  };
+
   // --- Handlers ---
   const handleSelectAll = (e) => {
-    // Only select currently filtered requests
     const allFilteredIds = filteredRequests.map((r) => r.id);
     setSelectedRequests(e.target.checked ? allFilteredIds : []);
   };
@@ -165,52 +391,25 @@ const CompletedRequestHistory = () => {
     setFilters({ ...filters, [filterName]: value });
   };
 
-  const handleExportList = () => {
+  const handleExportClick = () => {
+    if (filteredRequests.length === 0) {
+      alert("No data to export based on current filters."); 
+      return;
+    }
+    setShowExportModal(true);
+  };
+
+  const handleExportConfirm = async () => {
     try {
-      // Export logic remains the same
-      const exportData = filteredRequests.map(req => ({
-        'Student Name': req.studentName || 'N/A',
-        'Student ID': req.studentId || 'N/A',
-        'Grade Level': req.gradeLevel || 'N/A',
-        'Document Type': req.documentType || 'N/A',
-        'Request Purpose': req.requestPurpose || 'N/A',
-        'Request Date': req.requestDate || 'N/A',
-        'Completed Date': req.completedDate || 'N/A',
-        'Pickup Date': req.pickupDate || 'N/A',
-        'Status': req.status || 'Completed'
-      }));
-
-      if (exportData.length === 0) {
-        alert("No data to export based on current filters."); 
-        return;
-      }
-
-      const headers = Object.keys(exportData[0]);
-      const csvContent = [
-        headers.join(','),
-        ...exportData.map(row => 
-          headers.map(header => {
-            const cell = row[header] ? row[header].toString() : ''; 
-            return cell.includes(',') || cell.includes('"') || cell.includes('\n')
-              ? `"${cell.replace(/"/g, '""')}"`
-              : cell;
-          }).join(',')
-        )
-      ].join('\n');
-
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      const url = URL.createObjectURL(blob);
+      setExporting(true);
       
-      link.setAttribute('href', url);
-      link.setAttribute('download', `completed_requests_${new Date().toISOString().split('T')[0]}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      await new Promise(resolve => setTimeout(resolve, 500));
 
+      generatePDF(filteredRequests);
+
+      setShowExportModal(false);
       setShowSuccessModal({ 
-        message: `Successfully exported ${exportData.length} completed request(s) to CSV!`,
+        message: `Successfully exported ${filteredRequests.length} completed request(s) to PDF!`,
         title: "Export Successful",
         icon: "📄"
       });
@@ -218,6 +417,9 @@ const CompletedRequestHistory = () => {
     } catch (error) {
       console.error("Error exporting data:", error);
       alert("Error exporting data. Please try again.");
+      setShowExportModal(false);
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -289,7 +491,7 @@ const CompletedRequestHistory = () => {
         total: filteredRequests.length,
         thisMonth: filteredRequests.filter(r => {
             if (!r.completedDate) return false;
-            const completedDate = new Date(r.completedDate); // Changed to completedDate for history
+            const completedDate = new Date(r.completedDate);
             return completedDate.getMonth() === now.getMonth() && 
                    completedDate.getFullYear() === now.getFullYear();
         }).length,
@@ -309,7 +511,7 @@ const CompletedRequestHistory = () => {
     { 
         title: "Requests This Month", 
         value: stats.thisMonth, 
-        icon: Clock, // Using Clock for time-based metric
+        icon: Clock,
         textColor: 'text-yellow-600 dark:text-yellow-400', 
         bgLight: 'bg-yellow-100',
     },
@@ -323,7 +525,7 @@ const CompletedRequestHistory = () => {
     { 
         title: "Certificates", 
         value: stats.certificates, 
-        icon: Package, // Using Package for general docs/certificates
+        icon: Package,
         textColor: 'text-purple-600 dark:text-purple-400', 
         bgLight: 'bg-purple-100',
     },
@@ -362,11 +564,9 @@ const CompletedRequestHistory = () => {
   const totalFilteredRequests = filteredRequests.length;
   const isAllSelected = totalFilteredRequests > 0 && selectedRequests.length === totalFilteredRequests;
 
-
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans">
       
-      {/* Custom style for slide-up animation (Copied from DocumentRequests) */}
       <style>{`
         @keyframes slideUp {
           from { transform: translateY(30px); opacity: 0; }
@@ -380,7 +580,6 @@ const CompletedRequestHistory = () => {
         }
         .animate-fadeIn-no-y { animation: fadeIn 0.6s ease-out; }
         
-        /* Other modal animations from previous attempt */
         @keyframes bounce-in {
           0% { opacity: 0; transform: scale(0.5); }
           50% { transform: scale(1.05); }
@@ -391,12 +590,10 @@ const CompletedRequestHistory = () => {
 
       <div className="max-w-full mx-auto px-0 py-0 animate-fadeIn-no-y">
         
-        {/* Header Section */}
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           Completed Request History
         </h1>
 
-        {/* Statistics Cards (COPIED STYLE) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           {statCardsData.map((card, index) => {
             const Icon = card.icon;
@@ -417,12 +614,10 @@ const CompletedRequestHistory = () => {
           })}
         </div>
         
-        {/* Filter and Search Bar (Maintaining original filtering functionality) */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-300 dark:border-slate-600 p-4 mb-6 transition-all duration-300">
           <div className="flex flex-wrap gap-4 items-center justify-between">
             
             <div className="flex flex-wrap gap-4">
-              {/* Document Type Filter */}
               <select
                 value={filters.documentType}
                 onChange={(e) => handleFilterChange("documentType", e.target.value)}
@@ -435,7 +630,6 @@ const CompletedRequestHistory = () => {
                 <option value="Diploma">Diploma</option>
               </select>
 
-              {/* Grade Level Filter */}
               <select
                 value={filters.gradeLevel}
                 onChange={(e) => handleFilterChange("gradeLevel", e.target.value)}
@@ -447,7 +641,6 @@ const CompletedRequestHistory = () => {
                 ))}
               </select>
 
-              {/* Date Range Filter */}
               <select
                 value={filters.dateRange}
                 onChange={(e) => handleFilterChange("dateRange", e.target.value)}
@@ -477,16 +670,14 @@ const CompletedRequestHistory = () => {
             </div>
             
             <div className="flex gap-2">
-              {/* Action: Export */}
               <button
-                onClick={handleExportList}
+                onClick={handleExportClick}
                 disabled={totalFilteredRequests === 0}
                 className="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Download className="w-4 h-4" /> Export
+                <Download className="w-4 h-4" /> Export PDF
               </button>
 
-              {/* Action: Bulk Archive */}
               <button
                 onClick={handleBulkArchiveClick}
                 disabled={selectedRequests.length === 0}
@@ -498,12 +689,9 @@ const CompletedRequestHistory = () => {
           </div>
         </div>
 
-        {/* Main Table Container (COPIED STYLE) */}
         <div className={`mt-0 rounded-2xl shadow-md border border-gray-300 dark:border-slate-600 overflow-visible ${animate ? "slide-up" : ""}`}>
           
-          {/* Display Counter (Header Bar - COPIED STYLE) */}
           <div className="flex justify-between items-center px-4 py-3 bg-white dark:bg-slate-800 rounded-t-2xl border-b border-gray-300 dark:border-slate-600">
-            {/* Left Side: Display Counter (Showing X Requests) */}
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {totalFilteredRequests > 0 ? (
                 <>
@@ -517,16 +705,12 @@ const CompletedRequestHistory = () => {
                 'No Completed Request Found'
               )}
             </span>
-
-            {/* Right Side: Placeholder for Pagination (Empty) */}
             <div className="h-6"></div> 
           </div>
 
           <div className="overflow-x-auto">
-            {/* Table structure with min-width and relative z-index (Copied from DocumentRequests/InboxTable) */}
             <table className="min-w-[1200px] w-full border-collapse relative z-10">
               
-              {/* Table Header (COPIED STYLE) */}
               <thead className="bg-gray-100 dark:bg-slate-700 text-left border-b border-gray-400 dark:border-slate-500">
                 <tr>
                   <th className="px-4 py-3 w-10">
@@ -549,7 +733,6 @@ const CompletedRequestHistory = () => {
                 </tr>
               </thead>
 
-              {/* Table Body (Rows - COPIED STYLE) */}
               <tbody>
                 {totalFilteredRequests > 0 ? (
                   filteredRequests.map((request, index) => (
@@ -561,7 +744,6 @@ const CompletedRequestHistory = () => {
                         ${selectedRequests.includes(request.id) ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
                       `}
                     >
-                      {/* Checkbox */}
                       <td className="px-4 py-3 w-10" onClick={(e) => e.stopPropagation()}>
                         <input
                             type="checkbox"
@@ -570,29 +752,20 @@ const CompletedRequestHistory = () => {
                             className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
                         />
                       </td>
-                      {/* Name */}
                       <td className="px-4 py-3 text-sm text-gray-800 dark:text-white font-medium">
                         {request.studentName || "N/A"}
                       </td>
-                      {/* ID */}
                       <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.studentId || "N/A"}</td>
-                      {/* Document Type */}
                       <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.documentType || "N/A"}</td>
-                      {/* Purpose */}
                       <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.requestPurpose || "N/A"}</td>
-                      {/* Request Date */}
                       <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.requestDate || "N/A"}</td>
-                      {/* Completed Date */}
                       <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.completedDate || "N/A"}</td>
-                      {/* Pickup Date */}
                       <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{request.pickupDate || "N/A"}</td>
-                      {/* Status (Badge Style - changed color to green for completed) */}
                       <td className="px-4 py-3 text-center">
                         <span className="text-xs font-semibold px-2 py-1 rounded-full bg-green-300 text-black">
                           {request.status || "Completed"}
                         </span>
                       </td>
-                      {/* Actions (Button Style - COPIED STYLE) */}
                       <td className="px-4 py-3 text-center relative" onClick={(e) => e.stopPropagation()}>
                         <div className="relative flex flex-col items-center group">
                           <button
@@ -628,7 +801,6 @@ const CompletedRequestHistory = () => {
         onArchived={handleArchived}
       />
 
-      {/* Bulk Archive Modal */}
       <BulkArchiveModal
         isOpen={showBulkArchiveModal}
         onClose={() => setShowBulkArchiveModal(false)}
@@ -637,7 +809,14 @@ const CompletedRequestHistory = () => {
         archiving={archiving}
       />
 
-      {/* Success Modal */}
+      <ExportConfirmationModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onConfirm={handleExportConfirm}
+        recordCount={totalFilteredRequests}
+        exporting={exporting}
+      />
+
       {showSuccessModal && (
         <SuccessNotificationModal
             isOpen={!!showSuccessModal}

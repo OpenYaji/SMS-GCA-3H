@@ -166,61 +166,6 @@ const AddClassModal = ({
             </div>
           )}
 
-          {/* Room Number */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Room Number
-            </label>
-            <input
-              type="text"
-              value={formData.roomNumber}
-              onChange={(e) => onChange({ ...formData, roomNumber: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-colors"
-              placeholder="e.g., Room 101 (optional)"
-            />
-          </div>
-
-          {/* Class Shift */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Class Shift *
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              <label
-                className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.classShift === 'Morning'
-                  ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20'
-                  : 'border-gray-300 dark:border-gray-600 hover:border-amber-300'
-                  }`}
-              >
-                <input
-                  type="radio"
-                  name="classShift"
-                  value="Morning"
-                  checked={formData.classShift === 'Morning'}
-                  onChange={(e) => onChange({ ...formData, classShift: e.target.value })}
-                  className="w-4 h-4 text-amber-500 focus:ring-amber-500"
-                />
-                <span className="text-gray-900 dark:text-white font-medium">🌅 Morning</span>
-              </label>
-              <label
-                className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.classShift === 'Afternoon'
-                  ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20'
-                  : 'border-gray-300 dark:border-gray-600 hover:border-amber-300'
-                  }`}
-              >
-                <input
-                  type="radio"
-                  name="classShift"
-                  value="Afternoon"
-                  checked={formData.classShift === 'Afternoon'}
-                  onChange={(e) => onChange({ ...formData, classShift: e.target.value })}
-                  className="w-4 h-4 text-amber-500 focus:ring-amber-500"
-                />
-                <span className="text-gray-900 dark:text-white font-medium">🌇 Afternoon</span>
-              </label>
-            </div>
-          </div>
-
           {/* Info Box */}
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
             <p className="text-sm text-blue-700 dark:text-blue-300">

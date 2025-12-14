@@ -7,6 +7,7 @@ import TeacherSchedules from '../schedules/TeacherSchedules';
 import EditScheduleModal from '../schedules/EditScheduleModal';
 import CreateScheduleModal from '../schedules/CreateScheduleModal';
 import AddClassModal from '../schedules/AddClassModal';
+import SuccessModal from '../common/SuccessModal';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
@@ -27,6 +28,8 @@ const TeachingSchedulePage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isAddClassModalOpen, setIsAddClassModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState(null);
   const [gradeLevels, setGradeLevels] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -45,8 +48,6 @@ const TeachingSchedulePage = () => {
     teacherId: '',
     gradeLevelId: '',
     sectionId: '',
-    roomNumber: '',
-    classShift: 'Morning',
     teachers: []
   });
 
@@ -318,7 +319,8 @@ const TeachingSchedulePage = () => {
       );
 
       if (response.data?.success) {
-        toast.success('Schedule deleted successfully!');
+        setSuccessMessage('Schedule deleted successfully!');
+        setIsSuccessModalOpen(true);
         fetchData();
       } else {
         toast.error(response.data?.message || 'Failed to delete schedule');
@@ -336,7 +338,7 @@ const TeachingSchedulePage = () => {
 
   const handleCancelAddClass = () => {
     setIsAddClassModalOpen(false);
-    setAddClassFormData({ teacherId: '', gradeLevelId: '', sectionId: '', roomNumber: '', classShift: 'Morning', teachers: teachers || [] });
+    setAddClassFormData({ teacherId: '', gradeLevelId: '', sectionId: '', teachers: teachers || [] });
     setSectionsData([]);
   };
 
@@ -358,9 +360,7 @@ const TeachingSchedulePage = () => {
         API_ENDPOINTS.ASSIGN_TEACHER_TO_SECTION,
         {
           teacherId: addClassFormData.teacherId,
-          sectionId: addClassFormData.sectionId,
-          roomNumber: addClassFormData.roomNumber || 'TBD',
-          classShift: addClassFormData.classShift || 'Morning'
+          sectionId: addClassFormData.sectionId
         },
         { withCredentials: true }
       );
@@ -442,18 +442,43 @@ const TeachingSchedulePage = () => {
 
     if (!selectedSectionData) {
       // If still not found (shouldn't happen with the new modal logic, but good for safety)
-      // We might be in a state where we just selected a grade level and then a section.
-      // But wait, if sectionData is passed from the modal, we are good.
-      // If it's NOT passed, and teacherSections is empty, we can't construct the full name easily without fetching or looking up gradeLevels.
-
-      // However, we can try to find the grade level name from gradeLevels state if we have the gradeLevelId in formData
+      // Try to find the grade level name from gradeLevels state if we have the gradeLevelId in formData
       const gradeLevel = gradeLevels.find(g => g.id == createFormData.gradeLevelId);
       const gradeName = gradeLevel ? gradeLevel.name : 'Grade Level';
 
-      // We don't have section name if sectionData is null.
-      // But let's assume sectionData IS passed from the modal now.
-      setCreateFormData(prev => ({ ...prev, sectionId: sectionId, gradeSection: '', schedule: [] }));
-      // We can try to fetch section details if we really need them, but for now let's rely on what we have.
+      // Fetch schedule anyway
+      try {
+        const response = await axios.get(
+          `${API_ENDPOINTS.GET_SECTION_SCHEDULE}?sectionId=${sectionId}`,
+          { withCredentials: true }
+        );
+
+        if (response.data?.success) {
+          console.log('Fetched existing schedule (no section data):', response.data.data);
+          setCreateFormData(prev => ({
+            ...prev,
+            sectionId: sectionId,
+            gradeSection: response.data.data.gradeSection || '',
+            schedule: response.data.data.schedule || []
+          }));
+        } else {
+          console.log('No existing schedule found');
+          setCreateFormData(prev => ({
+            ...prev,
+            sectionId: sectionId,
+            gradeSection: '',
+            schedule: []
+          }));
+        }
+      } catch (err) {
+        console.error('Error fetching section schedule:', err?.response || err);
+        setCreateFormData(prev => ({
+          ...prev,
+          sectionId: sectionId,
+          gradeSection: '',
+          schedule: []
+        }));
+      }
     } else {
       // We have section data.
       // Check if it has gradeLevel name. The object from get-sections-by-grade.php does NOT have gradeLevel name.
@@ -468,27 +493,39 @@ const TeachingSchedulePage = () => {
 
       const sectionName = selectedSectionData.sectionName || selectedSectionData.name; // Handle different property names
 
-      setCreateFormData(prev => ({
-        ...prev,
-        sectionId: sectionId,
-        gradeSection: `${gradeName} - Section ${sectionName}`
-      }));
-    }
+      // Fetch schedule first, then update formData with both section info and schedule
+      try {
+        const response = await axios.get(
+          `${API_ENDPOINTS.GET_SECTION_SCHEDULE}?sectionId=${sectionId}`,
+          { withCredentials: true }
+        );
 
-    try {
-      const response = await axios.get(
-        `${API_ENDPOINTS.GET_SECTION_SCHEDULE}?sectionId=${sectionId}`,
-        { withCredentials: true }
-      );
-
-      if (response.data?.success && (response.data.data?.schedule || []).length > 0) {
-        setCreateFormData(prev => ({ ...prev, schedule: response.data.data.schedule }));
-      } else {
-        setCreateFormData(prev => ({ ...prev, schedule: [] }));
+        if (response.data?.success) {
+          console.log('Fetched existing schedule:', response.data.data);
+          setCreateFormData(prev => ({
+            ...prev,
+            sectionId: sectionId,
+            gradeSection: `${gradeName} - Section ${sectionName}`,
+            schedule: response.data.data.schedule || []
+          }));
+        } else {
+          console.log('No existing schedule found for section');
+          setCreateFormData(prev => ({
+            ...prev,
+            sectionId: sectionId,
+            gradeSection: `${gradeName} - Section ${sectionName}`,
+            schedule: []
+          }));
+        }
+      } catch (err) {
+        console.error('Error fetching section schedule:', err?.response || err);
+        setCreateFormData(prev => ({
+          ...prev,
+          sectionId: sectionId,
+          gradeSection: `${gradeName} - Section ${sectionName}`,
+          schedule: []
+        }));
       }
-    } catch (err) {
-      console.error('Error fetching section schedule:', err?.response || err);
-      setCreateFormData(prev => ({ ...prev, schedule: [] }));
     }
   };
 
@@ -530,7 +567,7 @@ const TeachingSchedulePage = () => {
   };
 
   const handleAddTimeSlot = () => {
-    setCreateFormData(prev => ({ ...prev, schedule: [...prev.schedule, { startTime: '', endTime: '', subject: '' }] }));
+    setCreateFormData(prev => ({ ...prev, schedule: [...prev.schedule, { day: 'Monday', startTime: '', endTime: '', subject: '', teacherId: '', room: '' }] }));
   };
 
   const handleRemoveTimeSlot = (index) => {
@@ -752,6 +789,13 @@ const TeachingSchedulePage = () => {
         onTimeChange={handleTimeChange}
         onGradeLevelChange={handleGradeLevelChange}
         onSlotTeacherChange={handleSlotTeacherChange}
+      />
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        message={successMessage}
+        onClose={() => setIsSuccessModalOpen(false)}
+        duration={2000}
       />
     </div>
   );

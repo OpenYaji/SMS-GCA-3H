@@ -112,7 +112,8 @@ try {
             'rawStartTime' => $schedule['StartTime'],
             'rawEndTime' => $schedule['EndTime'],
             'day' => $schedule['DayOfWeek'],
-            'teacherId' => $schedule['TeacherProfileID']
+            'teacherId' => $schedule['TeacherProfileID'],
+            'room' => $schedule['RoomNumber'] ?? 'TBD'
         ];
     }
     

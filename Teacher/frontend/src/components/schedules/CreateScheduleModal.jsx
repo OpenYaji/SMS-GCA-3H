@@ -201,12 +201,20 @@ const CreateScheduleModal = ({
           <div className="bg-transparent rounded-2xl mb-4">
             {/* Table Header */}
             <div className="flex items-center justify-between border-b border-white pb-2 mb-3">
-              <div className="text-sm font-bold text-white">Time Slots & Subjects</div>
+              <div className="text-sm font-bold text-white">
+                Time Slots & Subjects
+                {formData.schedule.length > 0 && (
+                  <span className="ml-2 text-xs font-normal text-[#f4d77d]">
+                    ({formData.schedule.length} existing schedule{formData.schedule.length !== 1 ? 's' : ''})
+                  </span>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={onAddTimeSlot}
                 className="flex items-center gap-1 px-2.5 py-1.5 bg-[#f4d77d] text-[#342825] rounded-lg text-xs font-medium hover:bg-[#f4d77d]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!formData.sectionId}
+                title={formData.schedule.length > 0 ? "Add another time slot to existing schedule" : "Add a new time slot"}
               >
                 <Plus className="w-3 h-3" />
                 Add Time Slot
@@ -224,11 +232,17 @@ const CreateScheduleModal = ({
                       : 'No time slots added. Click "Add Time Slot" to create a schedule.'}
                 </div>
               ) : (
-                formData.schedule.map((slot, index) => (
+                formData.schedule.map((slot, index) => {
+                  // Debug: Log the slot data to console
+                  if (index === 0) {
+                    console.log('Rendering schedule slot:', slot);
+                  }
+                  
+                  return (
                   <div key={index} className="bg-white/5 rounded-lg p-3 border border-white/10">
-                    <div className="grid grid-cols-12 gap-2 items-start">
+                    <div className="grid grid-cols-[auto_1fr_1fr_2fr_1.5fr_1fr_auto] gap-2 items-end">
                       {/* Day */}
-                      <div className="col-span-2">
+                      <div className="">
                         <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">Day</label>
                         <div className="relative">
                           <select
@@ -245,7 +259,7 @@ const CreateScheduleModal = ({
                       </div>
 
                       {/* Start Time */}
-                      <div className="col-span-2">
+                      <div className="">
                         <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">Start Time</label>
                         <TimePicker
                           value={slot.startTime}
@@ -255,7 +269,7 @@ const CreateScheduleModal = ({
                       </div>
 
                       {/* End Time */}
-                      <div className="col-span-2">
+                      <div className="">
                         <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">End Time</label>
                         <TimePicker
                           value={slot.endTime}
@@ -265,7 +279,7 @@ const CreateScheduleModal = ({
                       </div>
 
                       {/* Subject */}
-                      <div className="col-span-3">
+                      <div className="">
                         <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">Subject</label>
                         <div className="relative">
                           <select
@@ -292,7 +306,7 @@ const CreateScheduleModal = ({
                       </div>
 
                       {/* Teacher */}
-                      <div className="col-span-2">
+                      <div className="">
                         <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">Teacher</label>
                         <div className="relative">
                           <select
@@ -319,8 +333,20 @@ const CreateScheduleModal = ({
                         </div>
                       </div>
 
+                      {/* Room Number */}
+                      <div className="">
+                        <label className="block text-xs text-[#f4d77d] mb-1.5 font-medium">Room</label>
+                        <input
+                          type="text"
+                          value={slot.room || ''}
+                          onChange={(e) => onTimeChange(index, 'room', e.target.value)}
+                          placeholder="e.g., 101"
+                          className="w-full h-[34px] px-2.5 text-xs rounded border border-white/20 bg-[#342825] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#f4d77d] focus:border-transparent outline-none hover:border-[#f4d77d]/50 transition-colors"
+                        />
+                      </div>
+
                       {/* Delete Button */}
-                      <div className="col-span-1 flex items-end justify-center">
+                      <div className="flex items-end justify-center">
                         <button
                           type="button"
                           onClick={() => onRemoveTimeSlot(index)}
@@ -332,7 +358,8 @@ const CreateScheduleModal = ({
                       </div>
                     </div>
                   </div>
-                ))
+                  );
+                })
               )}
             </div>
           </div>

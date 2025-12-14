@@ -25,6 +25,8 @@ export default function MyAccountTab() {
     motherTongue: '',
     profilePicture: null,
   });
+  const [profilePicturePreview, setProfilePicturePreview] = useState(null);
+  const [imageTimestamp, setImageTimestamp] = useState(Date.now());
 
   const [originalData, setOriginalData] = useState({});
 
@@ -64,6 +66,8 @@ export default function MyAccountTab() {
         console.log('Formatted profile data:', formattedData);
         setProfileData(formattedData);
         setOriginalData(formattedData);
+        setProfilePicturePreview(null);
+        setImageTimestamp(Date.now());
       } else {
         console.error('Profile fetch failed:', response.data.message);
         toast.error(response.data.message || 'Failed to fetch profile');
@@ -109,7 +113,11 @@ export default function MyAccountTab() {
       if (response.data.success) {
         toast.success('Profile updated successfully!', { id: loadingToast });
         setOriginalData(profileData);
+        setProfilePicturePreview(null);
         setIsEditing(false);
+        
+        // Update image timestamp to force reload
+        setImageTimestamp(Date.now());
         
         // Refresh user data in AuthContext to update header
         try {
@@ -135,6 +143,7 @@ export default function MyAccountTab() {
   // Handle cancel
   const handleCancel = () => {
     setProfileData(originalData);
+    setProfilePicturePreview(null);
     setIsEditing(false);
   };
 
@@ -142,8 +151,21 @@ export default function MyAccountTab() {
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select an image file');
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size must be less than 5MB');
+        return;
+      }
+      
       const reader = new FileReader();
       reader.onloadend = () => {
+        setProfilePicturePreview(reader.result);
         handleChange('profilePicture', reader.result);
       };
       reader.readAsDataURL(file);
@@ -207,12 +229,14 @@ export default function MyAccountTab() {
               {/* Profile Picture */}
               <div className="relative w-[200px] h-[200px]">
                 <div className="w-full h-full rounded-full overflow-hidden border-4 border-white dark:border-gray-800 bg-gray-200 dark:bg-gray-700">
-                  {profileData.profilePicture ? (
+                  {(profilePicturePreview || profileData.profilePicture) ? (
                     <img
                       src={
-                        profileData.profilePicture.startsWith('data:') 
-                          ? profileData.profilePicture 
-                          : `${API_URL}/${profileData.profilePicture}`
+                        profilePicturePreview 
+                          ? profilePicturePreview
+                          : profileData.profilePicture.startsWith('data:') 
+                            ? profileData.profilePicture 
+                            : `${API_URL}/${profileData.profilePicture}?t=${imageTimestamp}`
                       }
                       alt="Profile"
                       className="w-full h-full object-cover"

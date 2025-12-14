@@ -25,6 +25,7 @@ const DashboardHeader = ({ setMobileOpen }) => {
         const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
         const [notifications, setNotifications] = useState([]);
         const [unreadCount, setUnreadCount] = useState(0);
+        const [imageTimestamp, setImageTimestamp] = useState(Date.now());
         
         const [isDarkMode, setIsDarkMode] = useState(() => {
                 if (typeof window !== 'undefined') {
@@ -79,6 +80,13 @@ const DashboardHeader = ({ setMobileOpen }) => {
                         localStorage.theme = 'light';
                 }
         }, [isDarkMode]);
+
+        // Update image timestamp when user profile picture changes
+        useEffect(() => {
+                if (user?.profilePictureURL) {
+                        setImageTimestamp(Date.now());
+                }
+        }, [user?.profilePictureURL]);
 
         useEffect(() => {
                 const handleClickOutside = (event) => {
@@ -224,7 +232,7 @@ const DashboardHeader = ({ setMobileOpen }) => {
                                                                         src={
                                                                                 user.profilePictureURL.startsWith('data:') || user.profilePictureURL.startsWith('http')
                                                                                         ? user.profilePictureURL 
-                                                                                        : `${API_URL}/${user.profilePictureURL}`
+                                                                                        : `${API_URL}/${user.profilePictureURL}?t=${imageTimestamp}`
                                                                         }
                                                                         alt='Profile' 
                                                                         className='w-full h-full object-cover'

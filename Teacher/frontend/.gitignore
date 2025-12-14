@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # File seeders
-backend/seed_teachers.php
+backend/scripts

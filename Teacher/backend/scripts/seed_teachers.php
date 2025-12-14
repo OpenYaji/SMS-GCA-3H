@@ -11,6 +11,7 @@ $teachers = [
         'LastName' => 'Santos',
         'Email' => 'maria.santos@gca.edu.ph',
         'EmployeeNumber' => 'T-2025-001',
+        'UserType' => 'Head Teacher',
         'Specialization' => 'Mathematics'
     ],
     [
@@ -18,6 +19,7 @@ $teachers = [
         'LastName' => 'Reyes',
         'Email' => 'jose.reyes@gca.edu.ph',
         'EmployeeNumber' => 'T-2025-002',
+        'UserType' => 'Teacher',
         'Specialization' => 'Science'
     ],
     [
@@ -25,6 +27,7 @@ $teachers = [
         'LastName' => 'Dela Cruz',
         'Email' => 'ana.delacruz@gca.edu.ph',
         'EmployeeNumber' => 'T-2025-003',
+        'UserType' => 'Teacher',
         'Specialization' => 'English'
     ],
     [
@@ -32,6 +35,7 @@ $teachers = [
         'LastName' => 'Garcia',
         'Email' => 'pedro.garcia@gca.edu.ph',
         'EmployeeNumber' => 'T-2025-004',
+        'UserType' => 'Teacher',
         'Specialization' => 'History'
     ],
     [
@@ -39,6 +43,7 @@ $teachers = [
         'LastName' => 'Bautista',
         'Email' => 'clara.bautista@gca.edu.ph',
         'EmployeeNumber' => 'T-2025-005',
+        'UserType' => 'Teacher',
         'Specialization' => 'Filipino'
     ]
 ];
@@ -53,8 +58,8 @@ foreach ($teachers as $teacher) {
         $db->beginTransaction();
 
         // 1. Insert into user
-        $stmt = $db->prepare("INSERT INTO user (EmailAddress, UserType, AccountStatus) VALUES (?, 'Teacher', 'Active')");
-        $stmt->execute([$teacher['Email']]);
+        $stmt = $db->prepare("INSERT INTO user (EmailAddress, UserType, AccountStatus) VALUES (?, ?, 'Active')");
+        $stmt->execute([$teacher['Email'], $teacher['UserType']]);
         $userId = $db->lastInsertId();
 
         // 2. Insert into profile

@@ -72,13 +72,16 @@ try {
     $day = $input['day'] ?? 'Monday';
     $scheduleSlots = $input['schedule'];
     
-    // Get room number from section table
-    $sectionQuery = "SELECT RoomNumber FROM section WHERE SectionID = :sectionId";
-    $stmt = $db->prepare($sectionQuery);
-    $stmt->bindParam(':sectionId', $sectionId);
-    $stmt->execute();
-    $sectionData = $stmt->fetch(PDO::FETCH_ASSOC);
-    $room = $sectionData['RoomNumber'] ?? 'TBD';
+    // Get a valid ScheduleStatusID or set to NULL
+    $statusId = null;
+    $statusQuery = "SELECT StatusID FROM schedulestatus LIMIT 1";
+    $statusStmt = $db->prepare($statusQuery);
+    if ($statusStmt->execute()) {
+        $statusResult = $statusStmt->fetch(PDO::FETCH_ASSOC);
+        if ($statusResult) {
+            $statusId = $statusResult['StatusID'];
+        }
+    }
     
     // Delete existing schedules for this section to avoid duplicates/conflicts
     // Since the frontend sends the COMPLETE schedule for the section, we can safely replace it.
@@ -100,6 +103,9 @@ try {
         $slotDay = $slot['day'] ?? $day;
         $teacherProfileId = $slot['teacherId'];
         
+        // Get room number from slot, default to 'TBD' if not provided
+        $room = $slot['room'] ?? 'TBD';
+        
         // Convert time to 24-hour format
         $startTime = date('H:i:s', strtotime($slot['startTime']));
         $endTime = date('H:i:s', strtotime($slot['endTime']));
@@ -114,7 +120,7 @@ try {
             INSERT INTO classschedule 
             (SectionID, SubjectID, TeacherProfileID, DayOfWeek, StartTime, EndTime, RoomNumber, ScheduleStatusID)
             VALUES 
-            (:sectionId, :subjectId, :teacherProfileId, :dayOfWeek, :startTime, :endTime, :room, 1)
+            (:sectionId, :subjectId, :teacherProfileId, :dayOfWeek, :startTime, :endTime, :room, :statusId)
         ";
         
         $stmt = $db->prepare($insertQuery);
@@ -125,6 +131,7 @@ try {
         $stmt->bindParam(':startTime', $startTime, PDO::PARAM_STR);
         $stmt->bindParam(':endTime', $endTime, PDO::PARAM_STR);
         $stmt->bindParam(':room', $room, PDO::PARAM_STR);
+        $stmt->bindParam(':statusId', $statusId, PDO::PARAM_INT);
         $stmt->execute();
         
         $insertedCount++;

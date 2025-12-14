@@ -85,7 +85,6 @@ const ArchiveSearch = () => {
     schoolYear: "all",
     exitType: "all",
   });
-  const [selectedRecords, setSelectedRecords] = useState([]);
   const [animate, setAnimate] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -437,20 +436,6 @@ const ArchiveSearch = () => {
   }, [filteredRecords]);
 
   // --- Handlers ---
-  const handleSelectAll = (e) => {
-    setSelectedRecords(
-      e.target.checked ? filteredRecords.map((r) => r.id) : []
-    );
-  };
-
-  const handleSelectRecord = (recordId) => {
-    setSelectedRecords((prev) =>
-      prev.includes(recordId)
-        ? prev.filter((id) => id !== recordId)
-        : [...prev, recordId]
-    );
-  };
-
   const handleFilterChange = (filterName, value) => {
     setFilters({ ...filters, [filterName]: value });
   };
@@ -561,7 +546,6 @@ const ArchiveSearch = () => {
   }
   
   const totalFilteredRecords = filteredRecords.length;
-  const isAllSelected = totalFilteredRecords > 0 && selectedRecords.length === totalFilteredRecords;
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-0 sm:p-0 font-sans">
@@ -697,14 +681,7 @@ const ArchiveSearch = () => {
               {/* Table Header */}
               <thead className="bg-gray-100 dark:bg-slate-700 text-left border-b border-gray-400 dark:border-slate-500">
                 <tr>
-                  <th className="px-4 py-3 w-10">
-                    <input
-                        type="checkbox"
-                        checked={isAllSelected}
-                        onChange={handleSelectAll}
-                        className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
-                    />
-                  </th>
+                  {/* Removed checkbox column */}
                   <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Student Name</th>
                   <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Student ID</th>
                   <th className="px-4 py-3 text-sm font-semibold text-gray-800 dark:text-white">Last Grade Level</th>
@@ -724,17 +701,9 @@ const ArchiveSearch = () => {
                       className={`transition-all duration-300
                         ${index !== totalFilteredRecords - 1 ? "border-b border-gray-400 dark:border-slate-600" : ""}
                         hover:bg-gray-50 dark:hover:bg-slate-700
-                        ${selectedRecords.includes(record.id) ? 'bg-blue-50 dark:bg-blue-900/20' : ''}
                       `}
                     >
-                      <td className="px-4 py-3 w-10" onClick={(e) => e.stopPropagation()}>
-                        <input
-                            type="checkbox"
-                            checked={selectedRecords.includes(record.id)}
-                            onChange={() => handleSelectRecord(record.id)}
-                            className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 w-4 h-4 cursor-pointer bg-white dark:bg-gray-700"
-                        />
-                      </td>
+                      {/* Removed checkbox cell */}
                       <td className="px-4 py-3 text-sm text-gray-800 dark:text-white font-medium">
                         {record.studentName || "N/A"}
                       </td>
@@ -770,7 +739,7 @@ const ArchiveSearch = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="8" className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                    <td colSpan="7" className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                       No archived records found matching the current filters.
                     </td>
                   </tr>

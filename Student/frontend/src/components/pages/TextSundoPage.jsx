@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, UserPlus, CheckCircle, Clock, XCircle, User } from 'lucide-react';
+import { ArrowLeft, UserPlus, CheckCircle, Clock, XCircle, User, QrCode, Download, X } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import { QRCodeCanvas } from 'qrcode.react';
 
 const TextSundoPage = () => {
-    const { user } = useAuth();
+    const { user, updateUser } = useAuth(); // Add updateUser from context
     const [loading, setLoading] = useState(false);
     const [escorts, setEscorts] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
-    const [error, setError] = useState('');
+    const [formError, setFormError] = useState('');
+    const [qrError, setQrError] = useState('');
+    const [showQRModal, setShowQRModal] = useState(false);
+    const [generatingQR, setGeneratingQR] = useState(false);
+    const qrRef = useRef(null);
 
     const [formData, setFormData] = useState({
         fullName: '',
@@ -45,12 +50,12 @@ const TextSundoPage = () => {
             if (response.data.success) {
                 setEscorts(response.data.escorts || []);
             } else {
-                setError(response.data.message || 'Failed to load escorts');
+                setFormError(response.data.message || 'Failed to load escorts');
             }
         } catch (err) {
             console.error('Error fetching escorts:', err);
             console.error('Error response:', err.response?.data);
-            setError(err.response?.data?.message || 'Failed to load escorts');
+            setFormError(err.response?.data?.message || 'Failed to load escorts');
         }
     };
 
@@ -64,7 +69,7 @@ const TextSundoPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setFormError('');
         setLoading(true);
 
         const finalRelationship = formData.relationship === 'Other'
@@ -72,7 +77,7 @@ const TextSundoPage = () => {
             : formData.relationship;
 
         if (!formData.fullName || !finalRelationship || !formData.contactNumber) {
-            setError('Please fill in all required fields');
+            setFormError('Please fill in all required fields');
             setLoading(false);
             return;
         }
@@ -111,14 +116,79 @@ const TextSundoPage = () => {
                 fetchEscorts();
                 setTimeout(() => setSubmitSuccess(false), 5000);
             } else {
-                setError(response.data.message || 'Failed to submit escort request');
+                setFormError(response.data.message || 'Failed to submit escort request');
             }
         } catch (err) {
             console.error('Error submitting escort:', err);
             console.error('Error response:', err.response?.data);
-            setError(err.response?.data?.message || 'Failed to submit escort request');
+            setFormError(err.response?.data?.message || 'Failed to submit escort request');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleGenerateQR = async () => {
+        setGeneratingQR(true);
+        setQrError('');
+
+        try {
+            const response = await axios.post(
+                '/backend/api/qrcode/generateQRCode.php',
+                {},
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            );
+
+            if (response.data.success) {
+                // Update the user context with the new QR code ID
+                if (updateUser && response.data.qrCodeID) {
+                    updateUser({ qrCodeID: response.data.qrCodeID });
+                } else {
+                    // Fallback: reload if updateUser is not available
+                    window.location.reload();
+                }
+            } else {
+                setQrError(response.data.message || 'Failed to generate QR code');
+            }
+        } catch (err) {
+            console.error('Error generating QR code:', err);
+            console.error('Full error response:', err.response);
+            setQrError(err.response?.data?.message || 'Failed to generate QR code');
+        } finally {
+            setGeneratingQR(false);
+        }
+    };
+
+    const handleDownloadQR = () => {
+        const canvas = qrRef.current?.querySelector('canvas');
+        if (!canvas) {
+            setQrError('Unable to generate QR code image');
+            return;
+        }
+
+        try {
+            // Convert canvas to blob for better quality
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                const fileName = `${user?.firstName || 'student'}-${user?.lastName || 'qr'}-${user?.studentNumber || 'code'}.png`;
+
+                link.href = url;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+
+                // Cleanup
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }, 'image/png', 1.0); // Maximum quality
+        } catch (error) {
+            console.error('Error downloading QR code:', error);
+            setQrError('Failed to download QR code');
         }
     };
 
@@ -163,10 +233,47 @@ const TextSundoPage = () => {
                         <ArrowLeft size={20} />
                         <span className="font-medium">Back to Dashboard</span>
                     </Link>
-                    <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Text Sundo - Verified Escorts</h1>
-                    <p className="text-gray-600 dark:text-gray-400">
-                        Manage authorized persons who can pick up your child from school
-                    </p>
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                        <div>
+                            <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Text Sundo - Verified Escorts</h1>
+                            <p className="text-gray-600 dark:text-gray-400">
+                                Manage authorized persons who can pick up your child from school
+                            </p>
+                        </div>
+                        {/* QR Code Buttons */}
+                        <div>
+                            {user?.qrCodeID ? (
+                                <button
+                                    onClick={() => setShowQRModal(true)}
+                                    className="inline-flex items-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-300 shadow-md"
+                                >
+                                    <QrCode size={20} />
+                                    My QR Code
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleGenerateQR}
+                                    disabled={generatingQR}
+                                    className="inline-flex items-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {generatingQR ? (
+                                        <>
+                                            <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            <span>Generating...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <QrCode size={20} />
+                                            <span>Generate QR Code</span>
+                                        </>
+                                    )}
+                                </button>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 {/* Info Banner */}
@@ -186,6 +293,13 @@ const TextSundoPage = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* QR Error Message */}
+                {qrError && (
+                    <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500 rounded-lg text-red-700 dark:text-red-200 text-sm">
+                        {qrError}
+                    </div>
+                )}
 
                 {/* Success Message */}
                 {submitSuccess && (
@@ -223,9 +337,9 @@ const TextSundoPage = () => {
                             </button>
                         </div>
 
-                        {error && (
+                        {formError && (
                             <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500 rounded-lg text-red-700 dark:text-red-200 text-sm">
-                                {error}
+                                {formError}
                             </div>
                         )}
 
@@ -407,6 +521,68 @@ const TextSundoPage = () => {
                     )}
                 </div>
             </div>
+
+            {/* QR Code Modal */}
+            {showQRModal && user?.qrCodeID && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-sm w-full p-4 relative">
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setShowQRModal(false)}
+                            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"
+                        >
+                            <X size={20} />
+                        </button>
+
+                        {/* Modal Content */}
+                        <div className="text-center">
+                            <div className="bg-blue-100 dark:bg-blue-900/20 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <QrCode size={24} className="text-blue-600 dark:text-blue-400" />
+                            </div>
+
+                            <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-1">
+                                Student QR Code
+                            </h2>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-4">
+                                Show this to authorized escorts for pickup
+                            </p>
+
+                            {/* QR Code Display */}
+                            <div className="bg-white p-4 rounded-lg inline-block shadow-inner mb-3" ref={qrRef}>
+                                <QRCodeCanvas
+                                    value={user.qrCodeID}
+                                    size={200}
+                                    level="H"
+                                    includeMargin={true}
+                                />
+                            </div>
+
+                            {/* Student Info */}
+                            <div className="bg-gray-50 dark:bg-slate-700 rounded-lg p-3 mb-3">
+                                <p className="text-xs text-gray-600 dark:text-gray-400">Student Number</p>
+                                <p className="text-sm font-semibold text-gray-800 dark:text-white">{user.studentNumber}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    {user.firstName} {user.lastName}
+                                </p>
+                            </div>
+
+                            {/* Download Button */}
+                            <button
+                                onClick={handleDownloadQR}
+                                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#F4D77D] hover:bg-[#f0cd5e] text-gray-800 font-semibold rounded-lg transition duration-300 text-sm"
+                            >
+                                <Download size={16} />
+                                Download QR Code
+                            </button>
+
+                            {/* Info Text */}
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                Save for offline access
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, X } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 
@@ -10,16 +10,21 @@ const DocumentPage = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [error, setError] = useState('');
   const [requestHistory, setRequestHistory] = useState([]);
+  const [studentInfo, setStudentInfo] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [loadingModal, setLoadingModal] = useState(false);
 
   const [formData, setFormData] = useState({
     documentType: '',
     purpose: '',
+    customPurpose: '',
     quantity: 1,
     deliveryMethod: 'pickup',
     additionalNotes: ''
   });
 
-  const documentTypes = [
+  const allDocumentTypes = [
     { value: 'form137', label: 'Form 137 (Permanent Record)', singleCopy: true },
     { value: 'grades', label: 'Certificate of Grades', singleCopy: false },
     { value: 'goodMoral', label: 'Certificate of Good Moral', singleCopy: true },
@@ -33,6 +38,45 @@ const DocumentPage = () => {
     'Scholarship application',
     'Other'
   ];
+
+  // Document availability rules based on grade level/status
+  const getAvailableDocuments = () => {
+    if (!studentInfo) return [];
+
+    const gradeLevel = studentInfo.gradeLevel?.toLowerCase();
+    const status = studentInfo.status?.toLowerCase();
+
+    const documentsByLevel = {
+      'nursery': ['enrollment', 'grades'],
+      'k1': ['enrollment', 'grades'],
+      'k2': ['enrollment', 'grades'],
+      'grade 1': ['enrollment', 'grades'],
+      'grade 2': ['enrollment', 'grades'],
+      'grade 3': ['enrollment', 'grades'],
+      'grade 4': ['enrollment', 'grades'],
+      'grade 5': ['enrollment', 'grades'],
+      'grade 6': ['enrollment', 'grades', 'form137', 'goodMoral', 'completion'],
+      'graduated': ['form137', 'grades', 'goodMoral', 'completion', 'honorable'],
+      'withdrawn': ['form137', 'grades', 'goodMoral', 'honorable']
+    };
+
+    // Check status first
+    if (status === 'graduated') {
+      return documentsByLevel['graduated'];
+    } else if (status === 'withdrawn') {
+      return documentsByLevel['withdrawn'];
+    } else if (documentsByLevel[gradeLevel]) {
+      return documentsByLevel[gradeLevel];
+    }
+
+    return [];
+  };
+
+  // Filter document types based on available documents
+  const availableDocuments = getAvailableDocuments();
+  const documentTypes = allDocumentTypes.filter(doc =>
+    availableDocuments.includes(doc.value)
+  );
 
   // Check if selected document type is single copy only
   const isSingleCopyDocument = () => {
@@ -58,9 +102,33 @@ const DocumentPage = () => {
       });
       if (response.data.success) {
         setRequestHistory(response.data.requests || []);
+        if (response.data.studentInfo) {
+          setStudentInfo(response.data.studentInfo);
+        }
       }
     } catch (err) {
       console.error('Error fetching request history:', err);
+    }
+  };
+
+  const fetchRequestDetails = async (requestID) => {
+    setLoadingModal(true);
+    try {
+      const response = await axios.get(
+        `http://localhost/SMS-GCA-3H/Student/backend/api/documents/getRequestDetails.php?requestID=${requestID}`,
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        setSelectedRequest(response.data.request);
+        setShowModal(true);
+      } else {
+        setError(response.data.message || 'Failed to load request details');
+      }
+    } catch (err) {
+      console.error('Error fetching request details:', err);
+      setError('Failed to load request details');
+    } finally {
+      setLoadingModal(false);
     }
   };
 
@@ -83,6 +151,13 @@ const DocumentPage = () => {
       return;
     }
 
+    // Validate custom purpose if "Other" is selected
+    if (formData.purpose === 'Other' && !formData.customPurpose.trim()) {
+      setError('Please specify the purpose for your request');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(
         'http://localhost/SMS-GCA-3H/Student/backend/api/documents/postDocumentRequest.php',
@@ -100,6 +175,7 @@ const DocumentPage = () => {
         setFormData({
           documentType: '',
           purpose: '',
+          customPurpose: '',
           quantity: 1,
           deliveryMethod: 'pickup',
           additionalNotes: ''
@@ -129,8 +205,13 @@ const DocumentPage = () => {
   };
 
   const getDocumentLabel = (value) => {
-    const doc = documentTypes.find(d => d.value === value);
+    const doc = allDocumentTypes.find(d => d.value === value);
     return doc?.label || value;
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedRequest(null);
   };
 
   return (
@@ -147,7 +228,14 @@ const DocumentPage = () => {
             <span className="font-medium">Back to Dashboard</span>
           </Link>
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Document Request</h1>
-          <p className="text-gray-600 dark:text-gray-400">Request official school documents for elementary students</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Request official school documents for elementary students
+            {studentInfo && (
+              <span className="ml-2 text-sm">
+                (Grade Level: {studentInfo.gradeLevel} - Status: {studentInfo.status})
+              </span>
+            )}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -196,6 +284,11 @@ const DocumentPage = () => {
                       </option>
                     ))}
                   </select>
+                  {documentTypes.length === 0 && (
+                    <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+                      ⚠️ No documents available for your current grade level or status
+                    </p>
+                  )}
                   {isSingleCopyDocument() && (
                     <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
                       ⚠️ This document type only allows 1 original copy
@@ -221,6 +314,24 @@ const DocumentPage = () => {
                     ))}
                   </select>
                 </div>
+
+                {/* Custom Purpose (shown when "Other" is selected) */}
+                {formData.purpose === 'Other' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Please specify purpose <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="customPurpose"
+                      value={formData.customPurpose}
+                      onChange={handleInputChange}
+                      placeholder="Enter the purpose for your request"
+                      className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-[#F4D77D] focus:border-[#F4D77D] transition"
+                      required
+                    />
+                  </div>
+                )}
 
                 {/* Quantity and Delivery Method */}
                 <div className="grid grid-cols-2 gap-4">
@@ -276,7 +387,7 @@ const DocumentPage = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || documentTypes.length === 0}
                   className="w-full py-3 px-6 bg-[#F4D77D] hover:bg-[#f0cd5e] text-gray-800 dark:text-gray-900 font-semibold rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {loading ? (
@@ -394,9 +505,12 @@ const DocumentPage = () => {
                       <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">{request.Quantity}</td>
                       <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">{request.dateRequested}</td>
                       <td className="py-3 px-4">
-                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(request.status)}`}>
+                        <button
+                          onClick={() => fetchRequestDetails(request.RequestID)}
+                          className={`inline-block px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(request.status)} cursor-pointer hover:opacity-80 transition`}
+                        >
                           {request.status}
-                        </span>
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -406,6 +520,140 @@ const DocumentPage = () => {
           )}
         </div>
       </div>
+
+      {/* Request Details Modal */}
+      {showModal && selectedRequest && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-slate-700">
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                Request Details - #{selectedRequest.RequestID}
+              </h3>
+              <button
+                onClick={closeModal}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4">
+              {/* Status */}
+              <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-slate-700">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Status</span>
+                <span className={`px-4 py-2 rounded-full text-sm font-medium border ${getStatusColor(selectedRequest.RequestStatus)}`}>
+                  {selectedRequest.RequestStatus}
+                </span>
+              </div>
+
+              {/* Document Details */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Document Type</p>
+                  <p className="text-base font-medium text-gray-800 dark:text-white">
+                    {getDocumentLabel(selectedRequest.DocumentType)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Quantity</p>
+                  <p className="text-base font-medium text-gray-800 dark:text-white">
+                    {selectedRequest.Quantity}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Purpose</p>
+                <p className="text-base font-medium text-gray-800 dark:text-white">
+                  {selectedRequest.Purpose}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Delivery Method</p>
+                <p className="text-base font-medium text-gray-800 dark:text-white capitalize">
+                  {selectedRequest.DeliveryMethod}
+                </p>
+              </div>
+
+              {selectedRequest.AdditionalNotes && (
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Additional Notes</p>
+                  <p className="text-base text-gray-800 dark:text-white">
+                    {selectedRequest.AdditionalNotes}
+                  </p>
+                </div>
+              )}
+
+              {/* Dates */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Date Requested</p>
+                  <p className="text-base font-medium text-gray-800 dark:text-white">
+                    {selectedRequest.formattedDateRequested}
+                  </p>
+                </div>
+                {selectedRequest.formattedDateCompleted && (
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Date Completed</p>
+                    <p className="text-base font-medium text-gray-800 dark:text-white">
+                      {selectedRequest.formattedDateCompleted}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Scheduled Pickup */}
+              {selectedRequest.scheduledPickupDate && (
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500 rounded-lg p-4">
+                  <h4 className="text-sm font-semibold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Scheduled Pickup
+                  </h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-blue-600 dark:text-blue-400">Date</p>
+                      <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        {selectedRequest.scheduledPickupDate}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-blue-600 dark:text-blue-400">Time</p>
+                      <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        {selectedRequest.ScheduledPickupTime || 'Not specified'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Rejection Reason */}
+              {selectedRequest.RejectionReason && (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500 rounded-lg p-4">
+                  <h4 className="text-sm font-semibold text-red-800 dark:text-red-300 mb-2">Rejection Reason</h4>
+                  <p className="text-sm text-red-700 dark:text-red-200">
+                    {selectedRequest.RejectionReason}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-gray-200 dark:border-slate-700 flex justify-end">
+              <button
+                onClick={closeModal}
+                className="px-6 py-2 bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-slate-600 transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

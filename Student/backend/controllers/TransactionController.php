@@ -74,6 +74,9 @@ class TransactionController
             'balanceAmount'  => $currentTransaction ? (float)$currentTransaction['BalanceAmount'] : 0.00
         ];
 
+        // Debug log
+        error_log("TransactionController - Balance: {$currentBalance}, BalanceAmount: {$balanceBreakdown['balanceAmount']}");
+
         $responseData = [
             'currentBalance'   => (float)$currentBalance,
             'balanceBreakdown' => $balanceBreakdown,

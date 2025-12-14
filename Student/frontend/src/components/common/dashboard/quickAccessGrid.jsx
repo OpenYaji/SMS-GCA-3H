@@ -72,7 +72,10 @@ const QuickAccessGrid = () => {
       ]);
 
       if (balanceResponse.data.success) {
-        setCurrentBalance(balanceResponse.data.data.currentBalance || 0);
+        // Use balanceBreakdown.balanceAmount instead of currentBalance
+        const balance = balanceResponse.data.data?.balanceBreakdown?.balanceAmount || 0;
+        console.log('Fetched balance:', balance); // Debug log
+        setCurrentBalance(balance);
       }
 
       if (enrollmentResponse.data.success) {

@@ -35,9 +35,6 @@ class Transaction
 
     /**
      * Get total unpaid balance for a student
-     */
-    /**
-     * Get total unpaid balance for a student
      * FIX: Calculates dynamically to match the Breakdown Card
      */
     public function getTotalBalance($studentProfileId)
@@ -65,7 +62,12 @@ class Transaction
 
             // Ensure result is not negative (just in case)
             $balance = $result['totalBalance'] ?? 0.00;
-            return max(0, floatval($balance));
+            $calculatedBalance = max(0, floatval($balance));
+            
+            // Debug log
+            error_log("getTotalBalance for StudentProfileID {$studentProfileId}: {$calculatedBalance}");
+            
+            return $calculatedBalance;
         } catch (PDOException $e) {
             error_log("Error in getTotalBalance: " . $e->getMessage());
             return 0.00;

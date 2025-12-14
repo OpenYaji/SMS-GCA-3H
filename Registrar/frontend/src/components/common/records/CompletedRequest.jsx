@@ -408,11 +408,7 @@ const CompletedRequestHistory = () => {
       generatePDF(filteredRequests);
 
       setShowExportModal(false);
-      setShowSuccessModal({ 
-        message: `Successfully exported ${filteredRequests.length} completed request(s) to PDF!`,
-        title: "Export Successful",
-        icon: "📄"
-      });
+     
       
     } catch (error) {
       console.error("Error exporting data:", error);

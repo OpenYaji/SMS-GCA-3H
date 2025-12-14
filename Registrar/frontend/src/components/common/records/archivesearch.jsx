@@ -460,15 +460,9 @@ const ArchiveSearch = () => {
       generatePDF(filteredRecords);
 
       setShowExportModal(false);
-      setShowSuccessModal({ 
-        message: `Successfully exported ${filteredRecords.length} archived record(s) to PDF!`,
-        title: "Export Successful",
-        icon: "📄"
-      });
       
-      setTimeout(() => {
-        setShowSuccessModal(false);
-      }, 2000);
+      
+      
       
     } catch (error) {
       console.error("Error exporting data:", error);

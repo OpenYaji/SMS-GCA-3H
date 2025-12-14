@@ -1,7 +1,6 @@
 <?php
 // C:\xampp\htdocs\SMS-GCA-3H\Registrar\backend\api\records\get_student_info.php
 
-// Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
@@ -26,27 +25,90 @@ try {
         throw new Exception("Student ID is required");
     }
 
-    // Get student profile data (using ACTUAL column names)
+    // Main query to get comprehensive student information
     $query = "
         SELECT 
-            sp.StudentProfileID,
+            -- User & Profile Info
+            u.UserID,
+            u.EmailAddress,
+            u.AccountStatus,
+            p.ProfileID,
             p.FirstName,
             p.MiddleName,
             p.LastName,
-            p.Gender,
-            p.BirthDate,
+            p.Gender AS ProfileGender,
+            p.BirthDate AS ProfileBirthDate,
+            p.Age AS ProfileAge,
             p.Religion,
+            p.MotherTongue,
             p.EncryptedPhoneNumber,
             p.EncryptedAddress,
             p.ProfilePictureURL,
+            
+            -- Student Profile Info
+            sp.StudentProfileID,
             sp.StudentNumber,
+            sp.QRCodeID,
             sp.DateOfBirth,
+            sp.Gender AS StudentGender,
             sp.Nationality,
             sp.StudentStatus,
-            u.EmailAddress
+            
+            -- Current Enrollment Info
+            e.EnrollmentID,
+            e.EnrollmentDate,
+            e.OutstandingBalance,
+            
+            -- Section & Grade Level
+            sec.SectionID,
+            sec.SectionName,
+            gl.GradeLevelID,
+            gl.LevelName AS GradeLevel,
+            
+            -- School Year
+            sy.SchoolYearID,
+            sy.YearName AS SchoolYear,
+            sy.IsActive AS IsActiveSchoolYear,
+            
+            -- Adviser Info
+            tp.TeacherProfileID AS AdviserID,
+            adv_prof.FirstName AS AdviserFirstName,
+            adv_prof.LastName AS AdviserLastName,
+            
+            -- Medical Info
+            mi.Weight,
+            mi.Height,
+            mi.EncryptedAllergies,
+            mi.EncryptedMedicalConditions,
+            mi.EncryptedMedications,
+            
+            -- Emergency Contact
+            ec.ContactPerson AS EmergencyContactPerson,
+            ec.EncryptedContactNumber AS EmergencyContactNumber,
+            
+            -- Attendance Summary
+            ats.TotalDaysPresent,
+            ats.TotalSchoolDays,
+            ats.AttendancePercentage
+            
         FROM studentprofile sp
         LEFT JOIN profile p ON sp.ProfileID = p.ProfileID
         LEFT JOIN user u ON p.UserID = u.UserID
+        LEFT JOIN enrollment e ON sp.StudentProfileID = e.StudentProfileID 
+            AND e.EnrollmentID = (
+                SELECT MAX(EnrollmentID) 
+                FROM enrollment 
+                WHERE StudentProfileID = sp.StudentProfileID
+            )
+        LEFT JOIN section sec ON e.SectionID = sec.SectionID
+        LEFT JOIN gradelevel gl ON sec.GradeLevelID = gl.GradeLevelID
+        LEFT JOIN schoolyear sy ON e.SchoolYearID = sy.SchoolYearID
+        LEFT JOIN teacherprofile tp ON sec.AdviserTeacherID = tp.TeacherProfileID
+        LEFT JOIN profile adv_prof ON tp.ProfileID = adv_prof.ProfileID
+        LEFT JOIN medicalinfo mi ON sp.StudentProfileID = mi.StudentProfileID
+        LEFT JOIN emergencycontact ec ON sp.StudentProfileID = ec.StudentProfileID
+        LEFT JOIN attendancesummary ats ON sp.StudentProfileID = ats.StudentProfileID 
+            AND ats.SchoolYearID = e.SchoolYearID
         WHERE sp.StudentNumber = :studentNumber
         LIMIT 1
     ";
@@ -62,7 +124,7 @@ try {
 
     // Calculate age
     $age = null;
-    $dob = $student['BirthDate'] ?? $student['DateOfBirth'];
+    $dob = $student['DateOfBirth'] ?? $student['ProfileBirthDate'];
     if ($dob && $dob !== 'NULL' && $dob !== '') {
         try {
             $birthDate = new DateTime($dob);
@@ -73,16 +135,31 @@ try {
         }
     }
 
-    // Get guardian info from application table (best match)
-    $guardianInfo = [
-        'guardianName' => 'N/A',
-        'guardianRelationship' => 'N/A',
-        'guardianContact' => 'N/A',
-        'guardianEmail' => 'N/A',
-        'previousSchool' => 'N/A'
-    ];
+    // Get guardian information
+    $guardianQuery = "
+        SELECT 
+            g.GuardianID,
+            g.FullName,
+            g.EncryptedPhoneNumber,
+            g.EncryptedEmailAddress,
+            g.Occupation,
+            g.WorkAddress,
+            sg.RelationshipType,
+            sg.IsPrimaryContact,
+            sg.IsEmergencyContact,
+            sg.IsAuthorizedPickup
+        FROM studentguardian sg
+        JOIN guardian g ON sg.GuardianID = g.GuardianID
+        WHERE sg.StudentProfileID = :studentProfileID
+        ORDER BY sg.IsPrimaryContact DESC, sg.SortOrder ASC
+    ";
 
-    // Try to match application by student name
+    $guardianStmt = $conn->prepare($guardianQuery);
+    $guardianStmt->bindParam(':studentProfileID', $student['StudentProfileID'], PDO::PARAM_INT);
+    $guardianStmt->execute();
+    $guardians = $guardianStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Get application info for previous school and other details
     $appQuery = "
         SELECT 
             GuardianFirstName,
@@ -90,7 +167,9 @@ try {
             GuardianRelationship,
             GuardianContact,
             GuardianEmail,
-            PreviousSchool
+            PreviousSchool,
+            ApplicationStatus,
+            EnrolleeType
         FROM application
         WHERE (StudentFirstName = :firstName AND StudentLastName = :lastName)
            OR TrackingNumber LIKE CONCAT('%', :studentNumberShort, '%')
@@ -98,66 +177,115 @@ try {
         LIMIT 1
     ";
 
-    // Extract short code (e.g., "15774" from "GCA-2025-00002" vs "GCA-2025-15774")
     $studentNumberShort = substr($studentNumber, strrpos($studentNumber, '-') + 1);
-
     $appStmt = $conn->prepare($appQuery);
     $appStmt->bindParam(':firstName', $student['FirstName'], PDO::PARAM_STR);
     $appStmt->bindParam(':lastName', $student['LastName'], PDO::PARAM_STR);
     $appStmt->bindParam(':studentNumberShort', $studentNumberShort, PDO::PARAM_STR);
+    $appStmt->execute();
+    $appData = $appStmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($appStmt->execute()) {
-        $appData = $appStmt->fetch(PDO::FETCH_ASSOC);
+    // Find primary guardian
+    $primaryGuardian = null;
+    $fatherName = 'N/A';
+    $motherName = 'N/A';
 
-        if ($appData) {
-            $guardianInfo['guardianName'] = trim(
-                ($appData['GuardianFirstName'] ?? '') . ' ' .
-                    ($appData['GuardianLastName'] ?? '')
-            );
-            $guardianInfo['guardianRelationship'] = $appData['GuardianRelationship'] ?? 'N/A';
-            $guardianInfo['guardianContact'] = $appData['GuardianContact'] ?? 'N/A';
-            $guardianInfo['guardianEmail'] = $appData['GuardianEmail'] ?? 'N/A';
-            $guardianInfo['previousSchool'] = $appData['PreviousSchool'] ?? 'N/A';
+    foreach ($guardians as $guardian) {
+        if ($guardian['RelationshipType'] === 'Father') {
+            $fatherName = $guardian['FullName'];
+        }
+        if ($guardian['RelationshipType'] === 'Mother') {
+            $motherName = $guardian['FullName'];
+        }
+        if ($guardian['IsPrimaryContact'] == 1) {
+            $primaryGuardian = $guardian;
         }
     }
 
-    // Transform to camelCase for React
+    // If no primary guardian found, use first guardian or application data
+    if (!$primaryGuardian && count($guardians) > 0) {
+        $primaryGuardian = $guardians[0];
+    } elseif (!$primaryGuardian && $appData) {
+        $primaryGuardian = [
+            'FullName' => trim(($appData['GuardianFirstName'] ?? '') . ' ' . ($appData['GuardianLastName'] ?? '')),
+            'RelationshipType' => $appData['GuardianRelationship'] ?? 'N/A',
+            'EncryptedPhoneNumber' => $appData['GuardianContact'] ?? 'N/A',
+            'EncryptedEmailAddress' => $appData['GuardianEmail'] ?? 'N/A'
+        ];
+    }
+
+    // Build response
     $response = [
+        // Personal Information
         'firstName' => $student['FirstName'] ?? '',
         'middleName' => $student['MiddleName'] ?? '',
         'lastName' => $student['LastName'] ?? '',
-        'gender' => $student['Gender'] ?? 'N/A',
-        'birthDate' => $student['BirthDate'] ?? $student['DateOfBirth'] ?? '',
+        'fullName' => trim(($student['FirstName'] ?? '') . ' ' . ($student['MiddleName'] ?? '') . ' ' . ($student['LastName'] ?? '')),
+        'gender' => $student['StudentGender'] ?? $student['ProfileGender'] ?? 'N/A',
+        'birthDate' => $dob ?? '',
         'age' => $age,
         'religion' => $student['Religion'] ?? 'N/A',
         'motherTongue' => $student['MotherTongue'] ?? 'N/A',
         'nationality' => $student['Nationality'] ?? 'N/A',
-        // Use actual column names from profile table
+
+        // Contact Information
         'contactNumber' => $student['EncryptedPhoneNumber'] ?? 'N/A',
         'address' => $student['EncryptedAddress'] ?? 'N/A',
         'emailAddress' => $student['EmailAddress'] ?? 'N/A',
-        'photoUrl' => $student['ProfilePictureURL'] ?? null,
+
+        // Student Information
         'studentId' => $student['StudentNumber'] ?? '',
+        'studentNumber' => $student['StudentNumber'] ?? '',
+        'qrCodeId' => $student['QRCodeID'] ?? '',
         'studentStatus' => $student['StudentStatus'] ?? 'N/A',
-        'previousSchool' => $guardianInfo['previousSchool'],
-        'guardianName' => $guardianInfo['guardianName'],
-        'guardianRelationship' => $guardianInfo['guardianRelationship'],
-        'guardianContact' => $guardianInfo['guardianContact'],
-        'guardianEmail' => $guardianInfo['guardianEmail'],
-        // Placeholders for fields not in your tables
-        'fatherFirstName' => 'N/A',
-        'fatherMiddleName' => 'N/A',
-        'fatherLastName' => 'N/A',
-        'fatherOccupation' => 'N/A',
-        'motherFirstName' => 'N/A',
-        'motherMiddleName' => 'N/A',
-        'motherLastName' => 'N/A',
-        'motherOccupation' => 'N/A',
-        'currentGradeLevel' => 'N/A',
-        'section' => 'N/A',
+        'accountStatus' => $student['AccountStatus'] ?? 'N/A',
+        'photoUrl' => $student['ProfilePictureURL'] ?? null,
+
+        // Academic Information
+        'currentGradeLevel' => $student['GradeLevel'] ?? 'N/A',
+        'gradeLevel' => $student['GradeLevel'] ?? 'N/A',
+        'section' => $student['SectionName'] ?? 'N/A',
+        'sectionName' => $student['SectionName'] ?? 'N/A',
+        'schoolYear' => $student['SchoolYear'] ?? 'N/A',
+        'enrollmentDate' => $student['EnrollmentDate'] ?? 'N/A',
         'status' => $student['StudentStatus'] ?? 'N/A',
-        'schoolYear' => 'N/A',
-        'documents' => []
+        'previousSchool' => $appData['PreviousSchool'] ?? 'N/A',
+        'enrolleeType' => $appData['EnrolleeType'] ?? 'N/A',
+
+        // Adviser Information
+        'adviserName' => trim(($student['AdviserFirstName'] ?? '') . ' ' . ($student['AdviserLastName'] ?? '')) ?: 'N/A',
+        'adviserFirstName' => $student['AdviserFirstName'] ?? 'N/A',
+        'adviserLastName' => $student['AdviserLastName'] ?? 'N/A',
+
+        // Guardian Information
+        'fatherName' => $fatherName,
+        'motherName' => $motherName,
+        'guardianName' => $primaryGuardian['FullName'] ?? 'N/A',
+        'guardianRelationship' => $primaryGuardian['RelationshipType'] ?? 'N/A',
+        'guardianContact' => $primaryGuardian['EncryptedPhoneNumber'] ?? 'N/A',
+        'guardianEmail' => $primaryGuardian['EncryptedEmailAddress'] ?? 'N/A',
+        'guardianOccupation' => $primaryGuardian['Occupation'] ?? 'N/A',
+        'guardianWorkAddress' => $primaryGuardian['WorkAddress'] ?? 'N/A',
+        'allGuardians' => $guardians,
+
+        // Emergency Contact
+        'emergencyContactPerson' => $student['EmergencyContactPerson'] ?? 'N/A',
+        'emergencyContactNumber' => $student['EmergencyContactNumber'] ?? 'N/A',
+
+        // Medical Information
+        'weight' => $student['Weight'] ?? 'N/A',
+        'height' => $student['Height'] ?? 'N/A',
+        'allergies' => $student['EncryptedAllergies'] ?? 'N/A',
+        'medicalConditions' => $student['EncryptedMedicalConditions'] ?? 'N/A',
+        'medications' => $student['EncryptedMedications'] ?? 'N/A',
+
+        // Attendance Information
+        'totalDaysPresent' => $student['TotalDaysPresent'] ?? 0,
+        'totalSchoolDays' => $student['TotalSchoolDays'] ?? 0,
+        'attendancePercentage' => $student['AttendancePercentage'] ?? 0,
+
+        // Financial Information
+        'outstandingBalance' => $student['OutstandingBalance'] ?? 0.00
     ];
 
     echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

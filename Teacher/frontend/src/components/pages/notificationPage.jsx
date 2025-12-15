@@ -227,8 +227,8 @@ const NotificationPage = () => {
       {/* Notifications Table */}
       <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg overflow-hidden">
         {/* Table Header */}
-        <div className="bg-[#F4D77D] dark:bg-amber-600 px-8 py-5">
-          <div className="grid grid-cols-[200px_1fr_150px_120px_150px] gap-6 text-center font-medium text-gray-700 dark:text-gray-900">
+        <div className="bg-amber-300 dark:bg-amber-600 px-8 py-5">
+          <div className="grid grid-cols-[200px_1fr_150px_120px_150px] gap-6 text-center font-medium text-gray-900 dark:text-gray-900">
             <div>Category</div>
             <div>Description</div>
             <div>Date</div>

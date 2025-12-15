@@ -55,7 +55,6 @@ try {
         SELECT 
             s.SectionID,
             CONCAT(gl.LevelName, ' - Section ', s.SectionName) as gradeSection,
-            s.RoomNumber as room,
             s.AdviserTeacherID
         FROM section s
         JOIN gradelevel gl ON s.GradeLevelID = gl.GradeLevelID
@@ -122,7 +121,6 @@ try {
         'success' => true,
         'data' => [
             'gradeSection' => $sectionInfo['gradeSection'],
-            'room' => $sectionInfo['room'],
             'sectionId' => $sectionInfo['SectionID'],
             'teacherProfileId' => $sectionInfo['AdviserTeacherID'],
             'day' => 'Monday to Friday',

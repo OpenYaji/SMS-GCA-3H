@@ -72,6 +72,11 @@ try {
     $day = $input['day'] ?? 'Monday';
     $scheduleSlots = $input['schedule'];
     
+    error_log("=== SUBMIT SCHEDULE DEBUG ===");
+    error_log("Section ID: " . $sectionId);
+    error_log("Number of schedules received: " . count($scheduleSlots));
+    error_log("Schedule data: " . json_encode($scheduleSlots));
+    
     // Get a valid ScheduleStatusID or set to NULL
     $statusId = null;
     $statusQuery = "SELECT StatusID FROM schedulestatus LIMIT 1";
@@ -83,12 +88,28 @@ try {
         }
     }
     
-    // Delete existing schedules for this section to avoid duplicates/conflicts
-    // Since the frontend sends the COMPLETE schedule for the section, we can safely replace it.
-    $deleteQuery = "DELETE FROM classschedule WHERE SectionID = :sectionId";
-    $stmt = $db->prepare($deleteQuery);
-    $stmt->bindParam(':sectionId', $sectionId);
-    $stmt->execute();
+    // Collect all unique days from the schedule slots
+    $daysToUpdate = [];
+    foreach ($scheduleSlots as $slot) {
+        $slotDay = $slot['day'] ?? $day;
+        if (!in_array($slotDay, $daysToUpdate)) {
+            $daysToUpdate[] = $slotDay;
+        }
+    }
+    
+    error_log("Days to update: " . json_encode($daysToUpdate));
+    
+    // Delete existing schedules ONLY for the days being updated
+    // This prevents accidentally deleting schedules for other days
+    if (!empty($daysToUpdate)) {
+        $placeholders = implode(',', array_fill(0, count($daysToUpdate), '?'));
+        $deleteQuery = "DELETE FROM classschedule WHERE SectionID = ? AND DayOfWeek IN ($placeholders)";
+        $stmt = $db->prepare($deleteQuery);
+        $params = array_merge([$sectionId], $daysToUpdate);
+        $deletedRows = $stmt->execute($params);
+        error_log("Deleted schedules for days: " . json_encode($daysToUpdate));
+        error_log("Rows affected: " . $stmt->rowCount());
+    }
     
     $insertedCount = 0;
     

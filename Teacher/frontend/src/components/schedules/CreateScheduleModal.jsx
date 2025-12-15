@@ -358,7 +358,7 @@ const CreateScheduleModal = ({
                       </div>
                     </div>
                   </div>
-                  );
+                  );  
                 })
               )}
             </div>

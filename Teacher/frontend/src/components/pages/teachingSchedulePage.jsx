@@ -433,11 +433,14 @@ const TeachingSchedulePage = () => {
   };
 
   const handleSectionChange = async (sectionId, sectionData = null) => {
+    console.log('🔵 handleSectionChange called:', { sectionId, sectionData });
+    
     let selectedSectionData = sectionData;
 
     // If sectionData is not passed (e.g. from teacherSections), try to find it in teacherSections
     if (!selectedSectionData) {
       selectedSectionData = teacherSections.find(s => s.id === parseInt(sectionId, 10));
+      console.log('🟡 Found in teacherSections:', selectedSectionData);
     }
 
     if (!selectedSectionData) {
@@ -499,6 +502,13 @@ const TeachingSchedulePage = () => {
           `${API_ENDPOINTS.GET_SECTION_SCHEDULE}?sectionId=${sectionId}`,
           { withCredentials: true }
         );
+
+        console.log('=== SECTION SCHEDULE FETCH ===');
+        console.log('Section ID:', sectionId);
+        console.log('Response success:', response.data?.success);
+        console.log('Number of schedules fetched:', response.data?.data?.schedule?.length || 0);
+        console.log('Fetched schedules:', response.data?.data?.schedule);
+        console.log('==============================');
 
         if (response.data?.success) {
           console.log('Fetched existing schedule:', response.data.data);
@@ -610,6 +620,12 @@ const TeachingSchedulePage = () => {
       toast.error('Please fill in start time, end time, and subject for all time slots');
       return;
     }
+
+    console.log('=== SUBMITTING SCHEDULE ===');
+    console.log('Section ID:', createFormData.sectionId);
+    console.log('Total schedules being sent:', createFormData.schedule.length);
+    console.log('Schedule data:', createFormData.schedule);
+    console.log('===========================');
 
     try {
       const response = await axios.post(

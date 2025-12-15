@@ -91,12 +91,29 @@ const EmergencyDismissalPage = () => {
           }
         });
 
+        const formattedStartTime = formatTime(earliestStart);
+        const formattedEndTime = formatTime(latestEnd);
+
         setCurrentSchedule(prev => ({
           ...prev,
           day: selectedDay,
-          startTime: formatTime(earliestStart),
-          endTime: formatTime(latestEnd)
+          startTime: formattedStartTime,
+          endTime: formattedEndTime
         }));
+
+        // Initialize dismissal time picker with the end time
+        if (latestEnd) {
+          const [hours, minutes] = latestEnd.split(':');
+          const hour = parseInt(hours);
+          const period = hour >= 12 ? 'PM' : 'AM';
+          const formattedHour = (hour % 12 || 12).toString().padStart(2, '0');
+          
+          setDismissalTime({
+            hour: formattedHour,
+            minute: minutes,
+            period: period
+          });
+        }
       } else {
         // No schedule for this day
         setCurrentSchedule(prev => ({
@@ -105,6 +122,13 @@ const EmergencyDismissalPage = () => {
           startTime: '-',
           endTime: '-'
         }));
+        
+        // Reset dismissal time
+        setDismissalTime({
+          hour: '00',
+          minute: '00',
+          period: 'PM'
+        });
       }
     }
   }, [selectedDay, allSchedules]);

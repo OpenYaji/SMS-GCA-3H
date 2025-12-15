@@ -95,8 +95,17 @@ const MySchedule = ({ schedules, loading, onToggleFavorite, onSectionClick }) =>
                       e.stopPropagation();
                       onSectionClick && onSectionClick(schedule, section, 'emergency');
                     }}
-                    className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 md:py-2.5 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white rounded-full transition-all shadow-md hover:shadow-lg transform hover:scale-105 text-xs md:text-sm font-semibold whitespace-nowrap w-full md:w-auto"
-                    title="Send Emergency Dismissal Notice"
+                    disabled={section.status !== 'Approved'}
+                    className={`flex items-center justify-center gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-full transition-all shadow-md text-xs md:text-sm font-semibold whitespace-nowrap w-full md:w-auto ${
+                      section.status === 'Approved'
+                        ? 'bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white hover:shadow-lg transform hover:scale-105 cursor-pointer'
+                        : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed opacity-60'
+                    }`}
+                    title={
+                      section.status === 'Approved'
+                        ? 'Send Emergency Dismissal Notice'
+                        : 'Cannot send dismissal - Section has no approved schedule'
+                    }
                   >
                     <Bell className="w-3 h-3 md:w-4 md:h-4" />
                     <span>Emergency Dismissal</span>

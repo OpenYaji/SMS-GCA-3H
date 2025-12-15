@@ -1,1 +1,7 @@
+# Logs
+*.log
 Registrar/backend/php-error.log
+
+# Dependency directories
+**/vendor/
+**/node_modules/

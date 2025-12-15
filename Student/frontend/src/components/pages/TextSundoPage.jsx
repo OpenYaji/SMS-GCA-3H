@@ -20,7 +20,7 @@ const TextSundoPage = () => {
     const [formData, setFormData] = useState({
         fullName: '',
         relationship: '',
-        customRelationship: '', // Added to store specific input (e.g., Driver)
+        customRelationship: '',
         contactNumber: '',
         address: '',
         additionalNotes: ''

@@ -6,10 +6,7 @@ header('Content-Type: application/json');
 
 // Check DB Connection
 if (!isset($pdo) || $pdo === null) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Database connection failed"
-    ]);
+    echo json_encode(["success" => false, "message" => "Database connection failed"]);
     exit;
 }
 
@@ -17,8 +14,7 @@ if (!isset($pdo) || $pdo === null) {
 $api_key = "ee4ec741b11ba5243f1f67bc1e173a0d";
 $sender_name = "FuxDevs";
 
-function sendSMS($recipient, $message, $api_key, $sender_name)
-{
+function sendSMS($recipient, $message, $api_key, $sender_name) {
     $url = 'https://api.semaphore.co/api/v4/messages';
     $data = [
         'apikey' => $api_key,
@@ -32,11 +28,8 @@ function sendSMS($recipient, $message, $api_key, $sender_name)
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Accept: application/json',
-        'Content-Type: application/x-www-form-urlencoded'
-    ]);
-
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/x-www-form-urlencoded']);
+    
     $response = curl_exec($ch);
     curl_close($ch);
     return $response;
@@ -51,18 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        // Fetch student info with their enrollment and section
+        // 1. Fetch student info
         $stmt = $pdo->prepare("
             SELECT 
-                sp.StudentProfileID,
-                sp.StudentNumber,
-                sp.QRCodeID,
-                sp.DateOfBirth,
-                sp.Gender,
-                sp.Nationality,
+                sp.StudentProfileID, sp.StudentNumber, sp.QRCodeID, 
                 CONCAT(p.FirstName, ' ', p.LastName) AS studentName,
-                p.FirstName,
-                p.LastName,
                 CAST(p.EncryptedPhoneNumber AS CHAR CHARACTER SET utf8mb4) AS PhoneNumber,
                 e.SectionID
             FROM studentprofile sp
@@ -86,45 +72,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $today = date('Y-m-d');
         $currentTime = date('Y-m-d H:i:s');
 
-        // Get or create a default class schedule for this section
-        $scheduleID = null;
-
-        if ($sectionID) {
-            // Try to find an existing active schedule for today
-            $scheduleStmt = $pdo->prepare("
-                SELECT ScheduleID 
-                FROM classschedule 
-                WHERE SectionID = ? 
-                AND ScheduleStatusID = 1
-                LIMIT 1
-            ");
-            $scheduleStmt->execute([$sectionID]);
-            $schedule = $scheduleStmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($schedule) {
-                $scheduleID = $schedule['ScheduleID'];
-            } else {
-                // Create a default schedule if none exists
-                $createSchedule = $pdo->prepare("
-                    INSERT INTO classschedule 
-                    (SectionID, SubjectID, DayOfWeek, StartTime, EndTime, ScheduleStatusID) 
-                    VALUES (?, 1, 'Monday', '07:00:00', '17:00:00', 1)
-                ");
-                $createSchedule->execute([$sectionID]);
-                $scheduleID = $pdo->lastInsertId();
-            }
+        // 2. Find ANY Active Schedule for this Section
+        if (!$sectionID) {
+            echo json_encode(["success" => false, "message" => "Student is not enrolled in a section."]);
+            exit;
         }
 
-        // If still no schedule, use NULL (will need to modify attendance table constraint)
-        if (!$scheduleID) {
+        // MODIFIED QUERY: Removed "AND ScheduleStatusID = 1"
+        // Now it just grabs the latest schedule created for this section.
+        $scheduleStmt = $pdo->prepare("
+            SELECT ScheduleID 
+            FROM classschedule 
+            WHERE SectionID = ? 
+            ORDER BY ScheduleID DESC 
+            LIMIT 1
+        ");
+        $scheduleStmt->execute([$sectionID]);
+        $schedule = $scheduleStmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$schedule) {
+            // This only happens if the 'classschedule' table is completely empty for this section
             echo json_encode([
-                "success" => false,
-                "message" => "No class schedule found for student. Please contact admin."
+                "success" => false, 
+                "message" => "No class schedule found for this section (Section ID: $sectionID). Please create at least one schedule."
             ]);
             exit;
         }
 
-        // Check if there's an existing attendance record for today
+        $scheduleID = $schedule['ScheduleID'];
+
+        // 3. Check Attendance (Check In / Check Out Logic)
         $checkStmt = $pdo->prepare("
             SELECT AttendanceID, CheckInTime, CheckOutTime 
             FROM attendance 
@@ -138,11 +115,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $action = '';
         $message = '';
+        
         $phone = $student['PhoneNumber'] ?? '';
         $recipient = ($phone && strlen($phone) > 1) ? "63" . substr($phone, 1) : '';
 
         if (!$existingAttendance) {
-            // First tap of the day - CHECK IN
+            // --- SCENARIO A: CHECK IN ---
             $insertStmt = $pdo->prepare("
                 INSERT INTO attendance 
                 (StudentProfileID, ClassScheduleID, AttendanceDate, CheckInTime, AttendanceStatus, AttendanceMethodID) 
@@ -152,15 +130,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $action = 'checked_in';
             $message = "{$student['studentName']} checked in at " . date("h:i A", strtotime($currentTime));
+            $smsMessage = "Good day! {$student['studentName']} has checked in at " . date("h:i A");
 
-            // Send SMS notification for check-in
-            if ($recipient) {
-                $smsMessage = "Good day! {$student['studentName']} has checked in at " . date("h:i A");
-                $smsResponse = sendSMS($recipient, $smsMessage, $api_key, $sender_name);
-                file_put_contents("sms_log.txt", date('Y-m-d H:i:s') . " - Check In: " . $smsResponse . PHP_EOL, FILE_APPEND);
-            }
         } elseif ($existingAttendance['CheckInTime'] && !$existingAttendance['CheckOutTime']) {
-            // Already checked in, now CHECK OUT
+            // --- SCENARIO B: CHECK OUT ---
             $updateStmt = $pdo->prepare("
                 UPDATE attendance 
                 SET CheckOutTime = ? 
@@ -170,17 +143,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $action = 'checked_out';
             $message = "{$student['studentName']} checked out at " . date("h:i A", strtotime($currentTime));
+            $smsMessage = "Good day! {$student['studentName']} has checked out at " . date("h:i A");
 
-            // Send SMS notification for check-out
-            if ($recipient) {
-                $smsMessage = "Good day! {$student['studentName']} has checked out at " . date("h:i A");
-                $smsResponse = sendSMS($recipient, $smsMessage, $api_key, $sender_name);
-                file_put_contents("sms_log.txt", date('Y-m-d H:i:s') . " - Check Out: " . $smsResponse . PHP_EOL, FILE_APPEND);
-            }
         } else {
-            // Already checked in AND checked out today
-            $action = 'already_completed';
-            $message = "{$student['studentName']} has already completed check-in and check-out for today";
+            // --- SCENARIO C: ALREADY COMPLETED ---
+            echo json_encode([
+                "success" => true,
+                "message" => "{$student['studentName']} has already completed attendance for today.",
+                "action" => "already_completed",
+                "student" => $student
+            ]);
+            exit;
+        }
+
+        // 4. Send SMS
+        if ($recipient && isset($smsMessage)) {
+            $smsResponse = sendSMS($recipient, $smsMessage, $api_key, $sender_name);
         }
 
         echo json_encode([
@@ -191,13 +169,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "attendance_date" => $today,
             "timestamp" => $currentTime
         ]);
+
     } catch (Exception $e) {
-        echo json_encode([
-            "success" => false,
-            "message" => "Database error: " . $e->getMessage()
-        ]);
+        echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
     }
     exit;
 }
 
 echo json_encode(["success" => false, "message" => "Invalid request method"]);
+?>

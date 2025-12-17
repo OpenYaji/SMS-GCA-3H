@@ -49,6 +49,12 @@ export default function StudentGradesPage({
   });
   const [saving, setSaving] = useState(false);
   const dropdownRef = useRef(null);
+  
+  // Deadline state
+  const [deadline, setDeadline] = useState(null);
+  const [canGrade, setCanGrade] = useState(false);
+  const [deadlineLoading, setDeadlineLoading] = useState(true);
+  const [currentQuarter, setCurrentQuarter] = useState('q1'); // Default to q1
 
   const fetchAllStudentData = async () => {
     setLoading(true);
@@ -69,8 +75,39 @@ export default function StudentGradesPage({
   useEffect(() => {
     if (student && classData) {
       fetchAllStudentData();
+      fetchGradingDeadline();
     }
   }, [student, classData]);
+  
+  // Fetch grading deadline
+  const fetchGradingDeadline = async () => {
+    try {
+      setDeadlineLoading(true);
+      const response = await axios.get(
+        `${API_ENDPOINTS.CHECK_GRADING_DEADLINE}?quarter=${currentQuarter}`,
+        { withCredentials: true }
+      );
+      
+      if (response.data.success) {
+        setDeadline(response.data.deadline);
+        setCanGrade(response.data.canGrade);
+      } else {
+        setCanGrade(false);
+      }
+    } catch (error) {
+      console.error('Error fetching deadline:', error);
+      setCanGrade(false);
+    } finally {
+      setDeadlineLoading(false);
+    }
+  };
+  
+  // Refetch deadline when quarter changes
+  useEffect(() => {
+    if (student && classData) {
+      fetchGradingDeadline();
+    }
+  }, [currentQuarter]);
 
   // Update form data when student changes
   useEffect(() => {
@@ -281,17 +318,101 @@ export default function StudentGradesPage({
         loading={loading}
         error={error}
       />
+      
+      {/* Grading Deadline Status */}
+      {!deadlineLoading && !canGrade && (
+        <div className="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div>
+              <p className="text-sm font-semibold text-red-700 dark:text-red-400">
+                Grading is currently disabled
+              </p>
+              <p className="text-sm text-red-600 dark:text-red-300 mt-1">
+                {!deadline 
+                  ? 'No grading deadline has been set by the administrator. Please contact your admin.'
+                  : deadline.status === 'not_started' 
+                    ? `Grading period starts on ${new Date(deadline.startDate).toLocaleDateString()}`
+                    : `Grading deadline expired on ${new Date(deadline.deadlineDate).toLocaleDateString()}`
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Grading Deadline Active Status */}
+      {!deadlineLoading && canGrade && deadline && (
+        <div className="mb-6 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p className="text-sm font-semibold text-green-700 dark:text-green-400">
+                Grading is open
+              </p>
+              <p className="text-sm text-green-600 dark:text-green-300 mt-1">
+                Deadline: {new Date(deadline.deadlineDate).toLocaleDateString()} at {new Date(deadline.deadlineDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex justify-between items-center gap-4">
         {/* Input Grade Button */}
         {!loading && !error && subjects.length > 0 && (
-          <button
-            onClick={() => onInputGrade(student)}
-            className="bg-amber-300 hover:bg-amber-400 text-gray-800 font-semibold py-3 px-6 rounded-lg flex items-center gap-2 transition-colors"
-          >
-            Input Grade
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => {
+                if (!canGrade) {
+                  return; // Do nothing if grading is disabled
+                }
+                onInputGrade(student);
+              }}
+              disabled={!canGrade || deadlineLoading}
+              className={`font-semibold py-3 px-6 rounded-lg flex items-center gap-2 transition-colors ${
+                canGrade && !deadlineLoading
+                  ? 'bg-amber-300 hover:bg-amber-400 text-gray-800 cursor-pointer'
+                  : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed opacity-60'
+              }`}
+            >
+              {deadlineLoading ? (
+                <>
+                  <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Checking...
+                </>
+              ) : (
+                <>
+                  {canGrade ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  )}
+                  {canGrade ? 'Input Grade' : 'Grading Closed'}
+                </>
+              )}
+            </button>
+            {!canGrade && !deadlineLoading && (
+              <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-64 p-2 bg-gray-800 dark:bg-gray-700 text-white text-xs rounded shadow-lg z-10">
+                {!deadline 
+                  ? 'No grading deadline set. Contact administrator.'
+                  : 'Grading deadline has passed or not started yet.'
+                }
+              </div>
+            )}
+          </div>
         )}
 
         <div className="flex gap-4">

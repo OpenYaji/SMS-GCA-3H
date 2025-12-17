@@ -75,10 +75,18 @@ export const API_ENDPOINTS = {
   GET_STUDENT_GRADES_ALL_SUBJECTS: getApiUrl('api/grades/get-student-grades-all-subjects.php'),
   GET_SUBMISSION_STATUS: getApiUrl('api/grades/get-submission-status.php'),
   SUBMIT_GRADES_TO_REGISTRAR: getApiUrl('api/grades/submit-grades-to-registrar.php'),
+  CHECK_GRADE_SUBMISSION_DEADLINE: getApiUrl('api/grades/check-grade-submission-deadline.php'),
 
   // Settings
   GET_APPEARANCE_SETTINGS: getApiUrl('api/teachers/get-appearance-settings.php'),
   UPDATE_APPEARANCE_SETTINGS: getApiUrl('api/teachers/update-appearance-settings.php'),
+  
+  // Grades
+  CHECK_GRADING_DEADLINE: getApiUrl('api/grades/check-grading-deadline.php'),
+  SUBMIT_GRADES_TO_REGISTRAR: getApiUrl('api/grades/submit-grades-to-registrar.php'),
+  
+  // Base URL for custom endpoints
+  BASE_URL: API_BASE_URL,
 };
 
 export default {

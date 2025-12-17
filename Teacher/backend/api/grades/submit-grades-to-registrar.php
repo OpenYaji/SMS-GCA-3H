@@ -70,6 +70,33 @@ try {
     
     $schoolYearId = $schoolYear['SchoolYearID'];
     
+    // Check if grading deadline is still active
+    $deadlineCheck = "
+        SELECT 
+            DeadlineDate,
+            CASE 
+                WHEN NOW() BETWEEN StartDate AND DeadlineDate THEN 'active'
+                ELSE 'expired'
+            END as status
+        FROM gradesubmissiondeadline
+        WHERE SchoolYearID = :schoolYearId
+        AND Quarter = :quarter
+        LIMIT 1
+    ";
+    $deadlineCheckStmt = $db->prepare($deadlineCheck);
+    $deadlineCheckStmt->bindParam(':schoolYearId', $schoolYearId, PDO::PARAM_INT);
+    $deadlineCheckStmt->bindParam(':quarter', $quarterValue, PDO::PARAM_STR);
+    $deadlineCheckStmt->execute();
+    $deadlineInfo = $deadlineCheckStmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$deadlineInfo) {
+        throw new Exception('No grading deadline has been set for this quarter. Please contact the administrator.');
+    }
+    
+    if ($deadlineInfo['status'] !== 'active') {
+        throw new Exception('The grading deadline for this quarter has passed. You can no longer submit grades.');
+    }
+    
     // Get section info and verify teacher has access
     $sectionQuery = "
         SELECT s.SectionID, s.SectionName, s.GradeLevelID, gl.LevelName

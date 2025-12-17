@@ -1,37 +1,13 @@
 <?php
+require_once __DIR__ . '/../config/cors.php';
+
 // Enable error reporting for debugging
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // Don't display errors (send to log only)
+ini_set('display_errors', 1); // Temporarily enable to see errors
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../logs/error.log');
 
 // Handle CORS
-$allowed_origins = [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://172.20.10.5:5173',
-    'https://localhost:5173',
-    'https://127.0.0.1:5173',
-    'https://172.20.10.5:5173'
-];
-
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-if (in_array($origin, $allowed_origins)) {
-    header('Access-Control-Allow-Origin: ' . $origin);
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
-    header('Access-Control-Max-Age: 86400');
-}
-
-// Handle preflight requests
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
-
-// Set JSON content type for all responses
-header('Content-Type: application/json; charset=utf-8');
 
 // Include dependencies
 require_once __DIR__ . '/../config/db.php';

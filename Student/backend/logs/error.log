@@ -1,0 +1,120 @@
+[16-Dec-2025 21:26:07 Europe/Berlin] Attempting to insert application with data: Array
+(
+    [:applicantProfileId] => 
+    [:schoolYearId] => 7
+    [:applyingForGradeLevelId] => 7
+    [:enrolleeType] => Old
+    [:previousSchool] => 
+    [:studentFirstName] => dasda
+    [:studentLastName] => dsada
+    [:studentMiddleName] => dsadas
+    [:dateOfBirth] => 2020-02-13
+    [:gender] => Female
+    [:address] => dasdasdadadasdada
+    [:contactNumber] => 00393123131
+    [:emailAddress] => 2das@gmail.comk
+    [:guardianFirstName] => dasdada
+    [:guardianLastName] => sdadada
+    [:guardianRelationship] => dsada
+    [:guardianContact] => 09131321313
+    [:guardianEmail] => dsa@gmail.com
+    [:trackingNumber] => GCA-2025-31432
+    [:privacyAgreement] => 1
+)
+
+[16-Dec-2025 21:28:44 Europe/Berlin] Attempting to insert application with data: Array
+(
+    [:applicantProfileId] => 
+    [:schoolYearId] => 7
+    [:applyingForGradeLevelId] => 7
+    [:enrolleeType] => New
+    [:previousSchool] => 
+    [:studentFirstName] => dasdada
+    [:studentLastName] => dasda
+    [:studentMiddleName] => dasda
+    [:dateOfBirth] => 2020-11-12
+    [:gender] => Female
+    [:address] => dasdsadadasdada
+    [:contactNumber] => 09123123312
+    [:emailAddress] => dsd@gmail.com
+    [:guardianFirstName] => dasdasda
+    [:guardianLastName] => dasdsada
+    [:guardianRelationship] => dsadsad
+    [:guardianContact] => 09132132321
+    [:guardianEmail] => dasd@gmail.com
+    [:trackingNumber] => GCA-2025-14238
+    [:privacyAgreement] => 1
+)
+
+[16-Dec-2025 21:54:10 Europe/Berlin] Attempting to insert application with data: Array
+(
+    [:applicantProfileId] => 
+    [:schoolYearId] => 7
+    [:applyingForGradeLevelId] => 5
+    [:enrolleeType] => New
+    [:previousSchool] => 
+    [:studentFirstName] => Ahhaa
+    [:studentLastName] => Haha
+    [:studentMiddleName] => Hahahah
+    [:dateOfBirth] => 2019-12-10
+    [:gender] => Male
+    [:address] => Hahahahahahhahah
+    [:contactNumber] => 09312422424
+    [:emailAddress] => johnreydev67@gmail.com
+    [:guardianFirstName] => Ahhaha
+    [:guardianLastName] => Hshah
+    [:guardianRelationship] => HHsha
+    [:guardianContact] => 09343434313
+    [:guardianEmail] => Hh@gmail.com
+    [:trackingNumber] => GCA-2025-70043
+    [:privacyAgreement] => 1
+)
+
+[17-Dec-2025 14:07:56 Europe/Berlin] Attempting to insert application with data: Array
+(
+    [:applicantProfileId] => 
+    [:schoolYearId] => 7
+    [:applyingForGradeLevelId] => 6
+    [:enrolleeType] => Transferee
+    [:previousSchool] => 
+    [:studentFirstName] => dasda
+    [:studentLastName] => dsada
+    [:studentMiddleName] => dsadas
+    [:dateOfBirth] => 2020-02-02
+    [:gender] => Female
+    [:address] => dadasdsaddsada
+    [:contactNumber] => 03213321321
+    [:emailAddress] => sada@gmail.com
+    [:guardianFirstName] => dasdada
+    [:guardianLastName] => dadsada
+    [:guardianRelationship] => sdadada
+    [:guardianContact] => 03293212312
+    [:guardianEmail] => dsada@gmail.com
+    [:trackingNumber] => GCA-2025-36442
+    [:privacyAgreement] => 1
+)
+
+[17-Dec-2025 14:25:25 Europe/Berlin] Attempting to insert application with data: Array
+(
+    [:applicantProfileId] => 
+    [:schoolYearId] => 8
+    [:applyingForGradeLevelId] => 3
+    [:enrolleeType] => New
+    [:previousSchool] => Fairview Daycare Center
+    [:studentFirstName] => Ningning
+    [:studentLastName] => Esperanza
+    [:studentMiddleName] => Epifanio
+    [:dateOfBirth] => 2018-01-15
+    [:gender] => Female
+    [:address] => 19 Dahlia Avenue, Brgy. Fairview, Novaliches, Quezon City
+    [:contactNumber] => 09123456789
+    [:emailAddress] => esperanza.ningning@example.com
+    [:guardianFirstName] => Giselle
+    [:guardianLastName] => Epifanio
+    [:guardianRelationship] => Mother
+    [:guardianContact] => 09123456789
+    [:guardianEmail] => epifanio.giselle@example.com
+    [:trackingNumber] => GCA-2025-30668
+    [:privacyAgreement] => 1
+)
+

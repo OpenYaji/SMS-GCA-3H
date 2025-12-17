@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Search, Sun, Moon, User, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import DefaultProfilePic from '../../assets/img/jhego.jpg';
+import DefaultProfilePic from '../../assets/img/userdef.png';
 import NotificationDropdown from './NotificationDropdown';
 
 const Tooltip = ({ text }) => (
@@ -230,9 +230,9 @@ const DashboardHeader = ({ setMobileOpen }) => {
                 <div className="relative group" ref={profileRef}>
                     <button onClick={() => toggleDropdown('profile')} className='flex items-center gap-2 cursor-pointer'>
                         <div className='w-10 h-10 rounded-full bg-gray-300 overflow-hidden'>
-                            <img 
-                                src={getProfilePictureUrl(user.profilePictureURL)} 
-                                alt='User' 
+                            <img
+                                src={getProfilePictureUrl(user.profilePictureURL)}
+                                alt='User'
                                 className='w-full h-full object-cover'
                                 onError={(e) => { e.target.src = DefaultProfilePic; }}
                             />

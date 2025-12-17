@@ -74,13 +74,31 @@ const Login = () => {
         console.log(`Redirecting to: ${result.redirectUrl}`);
 
         setTimeout(() => {
-          const currentPort = window.location.port;
-          const targetUrl = new URL(result.redirectUrl);
+          // Check if the response is already a relative path (e.g. "/student-dashboard")
+          if (result.redirectUrl.startsWith('/')) {
+             navigate(result.redirectUrl);
+             return;
+          }
 
-          if (targetUrl.port === currentPort) {
-            navigate(targetUrl.pathname);
-          } else {
-            window.location.href = result.redirectUrl;
+          // If it's a full URL (http://localhost...), let's check it safely
+          try {
+             const targetUrl = new URL(result.redirectUrl);
+
+             // --- CRITICAL FIX ---
+             // If the backend wants to send us to Port 5173 (Student App),
+             // we ignore the domain/port and just navigate to the PATH.
+             // This keeps us inside Ngrok!
+             if (targetUrl.port === '5173') {
+                navigate(targetUrl.pathname);
+             } 
+             else {
+                // For Admin (5175) or Registrar (5174), we must do a full redirect.
+                // Note: This will still fail on mobile for those specific roles.
+                window.location.href = result.redirectUrl;
+             }
+          } catch (e) {
+             // If URL parsing fails, fallback to simple navigation
+             navigate(result.redirectUrl);
           }
         }, 2000);
       } else {

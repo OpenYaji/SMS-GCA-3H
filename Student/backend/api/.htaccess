@@ -1,13 +1,12 @@
-
 RewriteEngine On
 
-RewriteBase /Gymazo-Student-Side/
+RewriteBase /SMS-GCA-3H/Student/
 
 
 Require all granted
 
 <IfModule mod_headers.c>
-    Header set Access-Control-Allow-Origin "http://172.20.10.5:5173"
+    Header set Access-Control-Allow-Origin "https://unsymmetrized-amara-nonnebulously.ngrok-free.dev:5173"
     Header set Access-Control-Allow-Credentials "true"
     Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization"

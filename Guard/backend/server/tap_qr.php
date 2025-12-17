@@ -10,11 +10,14 @@ if (!isset($pdo) || $pdo === null) {
     exit;
 }
 
-// Semaphore SMS Settings
-$api_key = "ee4ec741b11ba5243f1f67bc1e173a0d";
-$sender_name = "FuxDevs";
+//Semaphore SMS API credentials
 
-function sendSMS($recipient, $message, $api_key, $sender_name) {
+/*
+$api_key = "";
+$sender_name = "";
+ */
+
+/* function sendSMS($recipient, $message, $api_key, $sender_name) {
     $url = 'https://api.semaphore.co/api/v4/messages';
     $data = [
         'apikey' => $api_key,
@@ -34,6 +37,7 @@ function sendSMS($recipient, $message, $api_key, $sender_name) {
     curl_close($ch);
     return $response;
 }
+*/
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $qrCodeId = $_POST['qr_data'] ?? '';
@@ -158,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 4. Send SMS
         if ($recipient && isset($smsMessage)) {
-            $smsResponse = sendSMS($recipient, $smsMessage, $api_key, $sender_name);
+            //$smsResponse = sendSMS($recipient, $smsMessage, $api_key, $sender_name);
         }
 
         echo json_encode([

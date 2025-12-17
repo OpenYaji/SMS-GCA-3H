@@ -29,10 +29,9 @@ const Footer = () => {
               education among their learners by following these philosophical foundations
             </p>
             
-            <div className="pt-4 text-sm">
-            <a href="#">268 Zabala St. Cor. Luahati St. Tondo
-              <br />
-              Manila, Manila, Philippines
+            <div className="pt-4 text-sm hover:text-[#F7C236]">
+            <a href="https://maps.app.goo.gl/UoY31ApZ6DjNKxvm7">BLK. 52 LOT 3 JOSE ABAD SANTOS ST. BRGY. SANTA LUCIA<br />
+              Novaliches, Quezon City, Philippines
               </a>
             </div>
           </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Bg from '../../../assets/img/tryBG7.png';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = 'http://localhost/SMS-GCA-3H/Student/backend/api/admission.php';
+const API_URL = 'http://172.20.10.5/SMS-GCA-3H/Student/backend/api/admission.php';
 
 const PrivacyModal = ({ isOpen, onClose }) => {
     const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);

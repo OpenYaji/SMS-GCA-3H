@@ -39,7 +39,7 @@ class CurrentUserController extends Controller
         // TODO: Replace with actual authenticated user later
         // $adminprofile = AdminProfile::with(['profile.user'])->where('ProfileID', auth()->id())->first();
 
-       $adminprofile = AdminProfile::with(['profile.user'])->where('ProfileID', 1)->first();
+       $adminprofile = AdminProfile::with(['profile.user'])->where('ProfileID', 1 )->first();
 
         if (!$adminprofile) {
             return response()->json(['message' => 'Profile not found'], 404);

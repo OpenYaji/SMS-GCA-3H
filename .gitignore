@@ -1,1 +1,5 @@
+# Logs
 Registrar/backend/php-error.log
+
+# Node Modules
+node_modules

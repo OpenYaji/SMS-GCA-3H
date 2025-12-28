@@ -69,7 +69,7 @@ try {
     }
     
     $schoolYearId = $schoolYear['SchoolYearID'];
-    
+     
     // Check if grading deadline is still active
     $deadlineCheck = "
         SELECT 
